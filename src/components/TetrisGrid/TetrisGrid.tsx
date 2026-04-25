@@ -57,7 +57,7 @@ const BLOCKS = [
 ]
 
 export function TetrisGrid() {
-  const gridRef = useGridParallax(4)
+  const playfieldRef = useGridParallax(4)
 
   // Stable ref pairs for the gravity-drop and line-clear hooks.
   const blockRefs = useMemo<BlockRef[]>(
@@ -75,17 +75,19 @@ export function TetrisGrid() {
 
   return (
     <div className={styles.viewport}>
-      <div ref={gridRef} className={styles.grid}>
-        {BLOCKS.map((b, i) => (
-          <Block
-            key={b.id}
-            ref={(el) => {
-              blockRefs[i].ref.current = el
-            }}
-            onNavigate={playOutAndNavigate}
-            {...b}
-          />
-        ))}
+      <div ref={playfieldRef} className={styles.playfield}>
+        <div className={styles.grid}>
+          {BLOCKS.map((b, i) => (
+            <Block
+              key={b.id}
+              ref={(el) => {
+                blockRefs[i].ref.current = el
+              }}
+              onNavigate={playOutAndNavigate}
+              {...b}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )

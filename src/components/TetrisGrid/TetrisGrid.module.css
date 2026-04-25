@@ -1,19 +1,46 @@
 .viewport {
   min-height: 100dvh;
   width: 100%;
-  padding: clamp(2rem, 4vw, 3.5rem);
+  padding: clamp(1rem, 3vw, 2.5rem);
   display: grid;
-  place-items: stretch;
+  place-items: center;
   perspective: 1400px;
   perspective-origin: 50% 35%;
+}
+
+/* Hinted 3D container the blocks fall into. Deliberately minimal so the
+   block-level bevels, shadows, and hover lift remain the dominant visual
+   language — just a translucent tint, a hairline rim, an inner top shadow
+   for back-wall recession, and an outer drop shadow to ground it.
+
+   IMPORTANT: nothing here may create a stacking context (no backdrop-filter,
+   no mix-blend-mode, no filter). Those properties prevent
+   transform-style: preserve-3d from applying, which flattens the blocks
+   inside the playfield and kills the per-block hover lift. */
+.playfield {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  padding: clamp(0.75rem, 1.6vw, 1.5rem);
+  border-radius: clamp(1rem, 1.6vw, 1.5rem);
+  background: color-mix(in srgb, var(--fg) 3%, transparent);
+  border: 1px solid color-mix(in srgb, var(--fg) 12%, transparent);
+  box-shadow:
+    inset 0 30px 50px -20px color-mix(in srgb, var(--bg) 45%, transparent),
+    0 30px 60px rgba(0, 0, 0, 0.35);
+  transform-style: preserve-3d;
+  transition: transform 200ms ease-out;
+  /* Defaults if useGridParallax hasn't set these (e.g. SSR, reduced motion). */
+  --parallax-x: 0deg;
+  --parallax-y: 0deg;
 }
 
 .grid {
   display: grid;
   width: 100%;
   height: 100%;
-  min-height: calc(100dvh - clamp(4rem, 8vw, 7rem));
-  gap: clamp(1rem, 1.5vw, 1.5rem);
+  min-height: calc(100dvh - clamp(6rem, 14vw, 10rem));
+  gap: clamp(0.75rem, 1.2vw, 1.25rem);
   /* Mobile-first: 2 columns × 7 rows vertical stack. */
   grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(7, minmax(70px, 1fr));
@@ -25,11 +52,6 @@
     'services services'
     'process process'
     'contact contact';
-  transform-style: preserve-3d;
-  transition: transform 200ms ease-out;
-  /* Defaults if useGridParallax hasn't set these (e.g. SSR, reduced motion). */
-  --parallax-x: 0deg;
-  --parallax-y: 0deg;
 }
 
 /* Tablet: 4 columns × 6 rows. */
@@ -48,8 +70,12 @@
 }
 
 /* Desktop: 6 columns × 4 rows — Hero-Left Asymmetric (the user-approved A layout).
-   Adds the base isometric tilt + mouse-driven parallax (Step 5). */
+   The whole playfield carries the base isometric tilt + parallax — the well and
+   its blocks rotate together as one 3D object. */
 @media (min-width: 1024px) {
+  .playfield {
+    transform: rotateX(calc(6deg + var(--parallax-x))) rotateY(calc(-3deg + var(--parallax-y)));
+  }
   .grid {
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(4, 1fr);
@@ -58,12 +84,11 @@
       'hero hero hero work  about    about'
       'hero hero hero work  services services'
       'process process process contact contact contact';
-    transform: rotateX(calc(6deg + var(--parallax-x))) rotateY(calc(-3deg + var(--parallax-y)));
   }
 }
 
-/* Reduced-motion users get a flat, untilted grid with no parallax response. */
+/* Reduced-motion users get a flat, untilted well with no parallax response. */
 @media (prefers-reduced-motion: reduce) {
   .viewport { perspective: none; }
-  .grid { transform: none !important; transition: none !important; }
+  .playfield { transform: none !important; transition: none !important; }
 }
