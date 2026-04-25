@@ -4,60 +4,73 @@
 
 :root,
 [data-theme="modern-vibrant"] {
-  --bg: #0a0a1a;
-  --fg: #f5f5fa;
-  --fg-muted: #a8a8c0;
-  --accent: #ff3d7f;
-  --focus-ring: #ff9d4a;
+  --bg: #2E294E;
+  --fg: #F1E9DA;
+  --fg-muted: #B8A8C8;
+  --accent: #D90368;
+  --focus-ring: #FFD400;
 
-  --c-hero: linear-gradient(135deg, #ff3d7f, #ff9d4a);
-  --c-hero-fg: #fff;
-  --c-brand: #ffffff;
-  --c-brand-fg: #0a0a1a;
-  --c-about: #4ad4ff;
-  --c-about-fg: #0a0a1a;
-  --c-work: #ffd93d;
-  --c-work-fg: #0a0a1a;
-  --c-services: #7ef078;
-  --c-services-fg: #0a0a1a;
-  --c-process: #c678ff;
-  --c-process-fg: #fff;
-  --c-contact: #ff6b6b;
-  --c-contact-fg: #fff;
+  /* Display font — used for all "things you read as a title" (page headers,
+     block titles, card titles). Body copy uses Bricolage Grotesque (set on
+     html in globals.css). Token-scoped to make a future font swap a
+     one-line change instead of a hunt across three CSS modules. */
+  --font-display: 'Syne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
-  /* Glass cube — per-block solid colors used by the floor bloom.
-     Hero is a gradient, so the bloom uses the dominant warm-pink stop. */
-  --c-hero-bloom:     #ff3d7f;
-  --c-brand-bloom:    #ffffff;
-  --c-about-bloom:    #4ad4ff;
-  --c-work-bloom:     #ffd93d;
-  --c-services-bloom: #7ef078;
-  --c-process-bloom:  #c678ff;
-  --c-contact-bloom:  #ff6b6b;
+  --c-hero: linear-gradient(135deg, #D90368, #541388);
+  --c-hero-fg: #F1E9DA;
+  --c-brand: #F1E9DA;
+  --c-brand-fg: #2E294E;
+  --c-about: #FFD400;
+  --c-about-fg: #2E294E;
+  --c-work: #1F6F50;
+  --c-work-fg: #F1E9DA;
+  --c-services: #00B4AA;
+  --c-services-fg: #2E294E;
+  --c-process: #C47820;
+  --c-process-fg: #F1E9DA;
+  --c-contact: #D90368;
+  --c-contact-fg: #F1E9DA;
 
-  /* Glass cube — viewport atmospheric tints (Approach B intensities). */
-  --cube-ceiling:    rgba(168, 168, 192, 0.45);
-  --cube-floor-glow: rgba(255, 157, 74, 0.30);
-  --cube-caustic:    rgba(74, 212, 255, 0.50);
+  /* Bloom tokens — match block colors exactly */
+  --c-hero-bloom:     #D90368;
+  --c-brand-bloom:    #F1E9DA;
+  --c-about-bloom:    #FFD400;
+  --c-work-bloom:     #1F6F50;
+  --c-services-bloom: #00B4AA;
+  --c-process-bloom:  #C47820;
+  --c-contact-bloom:  #D90368;
+
+  /* Glass cube — tuned for warm indigo background */
+  --cube-ceiling:    rgba(200, 180, 230, 0.40);
+  --cube-floor-glow: rgba(217, 3, 104, 0.28);
+  --cube-caustic:    rgba(255, 212, 0, 0.45);
   --cube-vignette:   rgba(0, 0, 0, 0.70);
-
-  /* Glass cube — front-face edge light (rim catching light at the cube's
-     near edges) and back-wall tint (the receding far face of the cube). */
-  --cube-edge-light: rgba(255, 255, 255, 0.18);
+  --cube-edge-light: rgba(255, 255, 255, 0.15);
+  --cube-edge-shadow: rgba(20, 10, 30, 0.32);
   --cube-back-wall: linear-gradient(
     to bottom,
-    rgba(20, 20, 40, 0.85) 0%,
-    rgba(10, 10, 26, 0.92) 50%,
-    rgba(20, 15, 30, 0.85) 100%
+    rgba(30, 20, 50, 0.88) 0%,
+    rgba(20, 15, 40, 0.93) 50%,
+    rgba(28, 18, 45, 0.88) 100%
   );
 
-  --bevel-light: rgba(255, 255, 255, 0.5);
-  --bevel-dark: rgba(0, 0, 0, 0.25);
-  --shadow-base: 0 8px 0 rgba(0, 0, 0, 0.4), 0 24px 32px rgba(0, 0, 0, 0.5);
-  --shadow-hover: 0 20px 0 rgba(0, 0, 0, 0.45), 0 40px 60px rgba(0, 0, 0, 0.5);
+  /* Ambient shadow stack — multi-layer drop shadow used by directional-light
+     surfaces (.block in TetrisGrid, .header in Page). Each theme defines its
+     own values to suit its visual depth (e.g. arcade-neon uses neon glow rings
+     instead of soft ambient drops). */
+  --shadow-base: 0 4px 0 rgba(0,0,0,0.32), 0 8px 20px rgba(0,0,0,0.28), 0 24px 48px rgba(0,0,0,0.16);
+  --shadow-hover: 0 20px 0 rgba(0,0,0,0.38), 0 32px 60px rgba(0,0,0,0.30), 0 56px 80px rgba(0,0,0,0.18);
 
-  --toggler-bg: rgba(0, 0, 0, 0.4);
-  --toggler-border: rgba(255, 255, 255, 0.1);
+  /* Directional-light specular edges — used by any "elevated surface"
+     (TetrisGrid blocks, inner-page headers). Top + left edges catch the
+     top-left light source. Bright variants are for hover/focus states. */
+  --surface-specular-top: rgba(255, 255, 255, 0.40);
+  --surface-specular-left: rgba(255, 255, 255, 0.18);
+  --surface-specular-top-bright: rgba(255, 255, 255, 0.45);
+  --surface-specular-left-bright: rgba(255, 255, 255, 0.22);
+
+  --toggler-bg: rgba(0, 0, 0, 0.45);
+  --toggler-border: rgba(255, 255, 255, 0.12);
 }
 
 [data-theme="classic"] {
@@ -106,8 +119,6 @@
     rgba(15, 15, 15, 0.92) 100%
   );
 
-  --bevel-light: rgba(255, 255, 255, 0.55);
-  --bevel-dark: rgba(0, 0, 0, 0.45);
   --shadow-base: 0 8px 0 rgba(0, 0, 0, 0.6), 0 24px 32px rgba(0, 0, 0, 0.7);
   --shadow-hover: 0 20px 0 rgba(0, 0, 0, 0.65), 0 40px 60px rgba(0, 0, 0, 0.72);
 
@@ -165,8 +176,6 @@
     rgba(245, 220, 215, 0.90) 100%
   );
 
-  --bevel-light: rgba(255, 255, 255, 0.7);
-  --bevel-dark: rgba(0, 0, 0, 0.12);
   --shadow-base: 0 6px 0 rgba(0, 0, 0, 0.08), 0 16px 24px rgba(0, 0, 0, 0.12);
   --shadow-hover: 0 16px 0 rgba(0, 0, 0, 0.1), 0 32px 50px rgba(0, 0, 0, 0.18);
 
@@ -223,8 +232,6 @@
     rgba(20, 0, 35, 0.92) 100%
   );
 
-  --bevel-light: transparent;
-  --bevel-dark: transparent;
   --shadow-base: 0 0 0 2px currentColor, 0 0 12px currentColor, inset 0 0 12px currentColor;
   --shadow-hover: 0 0 0 2px currentColor, 0 0 40px currentColor, 0 0 70px currentColor, inset 0 0 20px currentColor;
 

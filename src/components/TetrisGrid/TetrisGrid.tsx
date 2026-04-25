@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Block } from './Block'
 import type { BlockId } from './Block'
 import { useGridParallax } from './useGridParallax'
+import { useGyroParallax } from './useGyroParallax'
 import { useGravityDrop } from './useGravityDrop'
 import { useLineClearController } from './useLineClear'
 import type { BlockRef } from './useLineClear'
@@ -28,7 +29,8 @@ const BLOCKS = [
     id: 'work' as const,
     to: '/work',
     title: 'Work',
-    subtitle: 'Pinpoint · Payback · RentHarbor · Feng Shui · Yap United',
+    subtitle: '5 solo builds · iOS · Android · Web · AI-integrated',
+    tags: ['Civic Tech', 'Privacy', 'PropTech', 'Spatial AI', 'Translation'],
   },
   {
     id: 'services' as const,
@@ -60,6 +62,7 @@ const BLOCKS = [
 export function TetrisGrid() {
   const { theme } = useTheme()
   const playfieldRef = useGridParallax(4)
+  useGyroParallax(playfieldRef)
 
   // Stable ref pairs for the gravity-drop and line-clear hooks.
   const blockRefs = useMemo<BlockRef[]>(

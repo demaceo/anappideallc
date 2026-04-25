@@ -18,6 +18,18 @@ const DROP_DELAY: Record<string, number> = {
   hero:     600,
 }
 
+// Mobile: hero drops first (top of viewport), then cascade top-to-bottom.
+// brand + about share delay 80 because on a 2-col grid they occupy the same row.
+const DROP_DELAY_MOBILE: Record<string, number> = {
+  hero:     0,
+  brand:    80,
+  about:    80,
+  work:     160,
+  services: 220,
+  process:  280,
+  contact:  340,
+}
+
 // Each keyframe string includes ALL transform functions so the browser
 // interpolates cleanly without converting to matrix form.
 const NON_HERO_FRAMES: Keyframe[] = [
@@ -84,6 +96,9 @@ export function useGravityDrop(
       return
     }
 
+    const isMobile = matchMedia('(max-width: 1023px)').matches
+    const delays = isMobile ? DROP_DELAY_MOBILE : DROP_DELAY
+
     const animations: Animation[] = []
 
     refs.forEach((ref) => {
@@ -91,7 +106,7 @@ export function useGravityDrop(
       if (!el) return
       const blockId = el.dataset.blockId ?? ''
       const isHero  = blockId === 'hero'
-      const delay   = DROP_DELAY[blockId] ?? 0
+      const delay   = delays[blockId] ?? 0
       const duration = isHero ? 840 + Math.random() * 20 : 780 + Math.random() * 80
 
       const anim = el.animate(isHero ? HERO_FRAMES : NON_HERO_FRAMES, {

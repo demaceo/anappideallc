@@ -5,17 +5,25 @@ import { RouteTracker } from './components/RouteTracker'
 import { RouteFocusReset } from './components/RouteFocusReset'
 import { HomeIcon } from './components/HomeIcon/HomeIcon'
 import { ThemeSwitcher } from './components/ThemeSwitcher/ThemeSwitcher'
+import { useKonamiCode } from './lib/useKonamiCode'
+
+function AppShell() {
+  const konamiUnlocked = useKonamiCode()
+  return (
+    <LayoutGroup>
+      <RouteTracker />
+      <RouteFocusReset />
+      <HomeIcon />
+      {konamiUnlocked && <ThemeSwitcher />}
+      <Outlet />
+    </LayoutGroup>
+  )
+}
 
 export default function App() {
   return (
     <ThemeProvider>
-      <LayoutGroup>
-        <RouteTracker />
-        <RouteFocusReset />
-        <HomeIcon />
-        <ThemeSwitcher />
-        <Outlet />
-      </LayoutGroup>
+      <AppShell />
     </ThemeProvider>
   )
 }
