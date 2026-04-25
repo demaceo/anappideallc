@@ -1,3 +1,15 @@
+/* Inner-page typography hierarchy:
+   - .header        Syne (display) — page title, theme-tinted block
+   - .lede          Bricolage     — subtitle paragraph
+   - .sectionHeading Bricolage uppercase — small-caps section labels
+   - .cardTitle     Syne (display) — card heading, mixed-case (softer
+                                     than the uppercase grid block titles)
+   - .cardDesc, .list, body  Bricolage — all body copy
+
+   Bricolage handles every line you read; Syne marks every line you
+   recognize as a title. Page-context titles stay mixed-case — uppercase
+   Syne is reserved for the home grid blocks, where the louder treatment
+   suits the "control panel" feel. Inner pages prioritize readability. */
 .page {
   max-width: 880px;
   margin: 0 auto;
@@ -8,7 +20,7 @@
 }
 
 .header {
-  font-family: 'Syne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-display);
   background: var(--block-bg, var(--accent));
   color: var(--block-fg, var(--bg));
   padding: clamp(1.25rem, 3vw, 2.25rem);
@@ -24,6 +36,9 @@
     inset 0 1px 0 var(--surface-specular-top),
     inset 1px 0 0 var(--surface-specular-left),
     var(--shadow-base);
+  /* Match .block's transition so theme switches (Konami code) fade the
+     header smoothly instead of snapping to the new palette. */
+  transition: background 200ms, color 200ms;
 }
 
 .lede {
@@ -64,7 +79,7 @@
 }
 
 .cardTitle {
-  font-family: 'Syne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-display);
   font-size: 1.15rem;
   font-weight: 800;
   letter-spacing: -0.01em;
@@ -79,7 +94,7 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
   color: var(--fg-muted);
   line-height: 1.45;
 }
@@ -97,6 +112,10 @@
   gap: 0.4rem;
 }
 
+/* Page-context pill (sits on the page bg, derives from --fg). Sibling of
+   .tag in Block.module.css which sits on a colored block and derives from
+   --block-fg. Kept separate intentionally: the contexts and contrast
+   ratios differ enough that consolidation would force compromise on both. */
 .chip {
   font-size: 0.78rem;
   font-weight: 600;

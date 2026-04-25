@@ -41,7 +41,7 @@
 }
 
 .title {
-  font-family: 'Syne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.1rem, 1.4vw + 0.5rem, 1.6rem);
   text-transform: uppercase;
   letter-spacing: 0.02em;
@@ -98,14 +98,15 @@
   align-self: flex-start;
 }
 
+/* Block-context pill (sits on a colored block, derives from --block-fg).
+   Sibling of .chip in Page.module.css which sits on the page bg and
+   derives from --fg. Kept separate intentionally: the contexts and
+   contrast ratios differ enough that consolidation would force compromise. */
 .tag {
   font-size: 0.7rem;
   font-weight: 600;
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
-  /* Derive from --block-fg so tags re-tint with the active theme — keeps
-     pills legible on every theme's work-block bg (Pine Core in Regal
-     Builder, but classic/pastel/arcade-neon use entirely different bgs). */
   background: color-mix(in srgb, var(--block-fg) 15%, transparent);
   color: color-mix(in srgb, var(--block-fg) 90%, transparent);
   letter-spacing: 0.02em;
