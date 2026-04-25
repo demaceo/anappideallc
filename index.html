@@ -8,20 +8,15 @@
     <!--
       Theme bootstrap — runs synchronously before paint to set
       data-theme on <html>, preventing a flash of the wrong theme on
-      hydration. Reads localStorage first, then falls back to the OS
-      color-scheme preference. Mirrors the theme list in src/lib/theme.tsx.
+      hydration. Regal Builder (modern-vibrant) is the canonical theme.
+      Alternate themes are accessible via Konami code only.
     -->
     <script>
       (function () {
         try {
           var ALLOWED = ['modern-vibrant', 'classic', 'pastel', 'arcade-neon'];
           var saved = localStorage.getItem('theme');
-          var initial =
-            saved && ALLOWED.indexOf(saved) > -1
-              ? saved
-              : matchMedia('(prefers-color-scheme: dark)').matches
-                ? 'arcade-neon'
-                : 'modern-vibrant';
+          var initial = saved && ALLOWED.indexOf(saved) > -1 ? saved : 'modern-vibrant';
           document.documentElement.dataset.theme = initial;
         } catch (e) {
           document.documentElement.dataset.theme = 'modern-vibrant';
