@@ -50,6 +50,11 @@ export function useGyroParallax(ref: RefObject<HTMLElement | null>) {
     }
 
     const requestGyroPermission = async () => {
+      // Guard against browsers without the DeviceOrientationEvent API
+      // (some embedded webviews, older non-mobile browsers). Without this
+      // guard the very next line would throw ReferenceError on first touch.
+      if (typeof DeviceOrientationEvent === 'undefined') return
+
       // iOS 13+ requires explicit permission for DeviceOrientationEvent.
       // Request lazily on first touchstart — never on page load.
       const DOE = DeviceOrientationEvent as unknown as {
@@ -69,7 +74,10 @@ export function useGyroParallax(ref: RefObject<HTMLElement | null>) {
       }
     }
 
-    document.addEventListener('touchstart', requestGyroPermission, { once: true })
+    // passive: true — we never call preventDefault on touchstart, so flagging
+    // it lets the browser scroll without waiting for the listener (best
+    // practice for mobile responsiveness).
+    document.addEventListener('touchstart', requestGyroPermission, { once: true, passive: true })
 
     return () => {
       unmounted = true

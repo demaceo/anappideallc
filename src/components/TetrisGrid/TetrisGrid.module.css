@@ -181,6 +181,19 @@
   }
 }
 
+/* Mobile: useGyroParallax writes --parallax-x/y from device tilt. Apply
+   them as a flat 2D rotation on the playfield so the whole grid feels
+   like it tilts with the phone — no isometric base offset (mobile blocks
+   are 2D, no preserve-3d depth). Gated on no-preference so reduced-motion
+   users don't get a transform context they don't need. */
+@media (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
+  .playfield {
+    transform:
+      rotateX(var(--parallax-x))
+      rotateY(var(--parallax-y));
+  }
+}
+
 /* Desktop: 6 columns × 4 rows — Hero-Left Asymmetric (the user-approved A layout).
    The whole playfield carries the base isometric tilt + parallax — the floor
    and its blocks rotate together as one 3D object. */
