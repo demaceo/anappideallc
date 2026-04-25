@@ -20,6 +20,7 @@ export function useGridParallax(maxDeg = 4) {
     let pendingY = 0
 
     const apply = () => {
+      // pendingX (horizontal mouse offset) drives rotateY; pendingY (vertical) drives rotateX
       el.style.setProperty('--parallax-y', `${pendingX}deg`)
       el.style.setProperty('--parallax-x', `${pendingY}deg`)
       frame = 0
