@@ -37,8 +37,10 @@
     inset 1px 0 0 var(--surface-specular-left),
     var(--shadow-base);
   /* Match .block's transition so theme switches (Konami code) fade the
-     header smoothly instead of snapping to the new palette. */
-  transition: background 200ms, color 200ms;
+     header smoothly instead of snapping. box-shadow is included because
+     --shadow-base is theme-reactive (each theme defines its own value);
+     without it the shadow snaps even though bg/color fade. */
+  transition: background 200ms, color 200ms, box-shadow 200ms ease-out;
 }
 
 .lede {

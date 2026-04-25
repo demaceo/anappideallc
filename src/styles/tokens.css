@@ -54,9 +54,10 @@
     rgba(28, 18, 45, 0.88) 100%
   );
 
-  /* Bevel + shadow — kept for reduced-motion fallback; overridden by C2 */
-  --bevel-light: rgba(255, 255, 255, 0.35);
-  --bevel-dark: rgba(0, 0, 0, 0.22);
+  /* Ambient shadow stack — multi-layer drop shadow used by directional-light
+     surfaces (.block in TetrisGrid, .header in Page). Each theme defines its
+     own values to suit its visual depth (e.g. arcade-neon uses neon glow rings
+     instead of soft ambient drops). */
   --shadow-base: 0 4px 0 rgba(0,0,0,0.32), 0 8px 20px rgba(0,0,0,0.28), 0 24px 48px rgba(0,0,0,0.16);
   --shadow-hover: 0 20px 0 rgba(0,0,0,0.38), 0 32px 60px rgba(0,0,0,0.30), 0 56px 80px rgba(0,0,0,0.18);
 
@@ -118,8 +119,6 @@
     rgba(15, 15, 15, 0.92) 100%
   );
 
-  --bevel-light: rgba(255, 255, 255, 0.55);
-  --bevel-dark: rgba(0, 0, 0, 0.45);
   --shadow-base: 0 8px 0 rgba(0, 0, 0, 0.6), 0 24px 32px rgba(0, 0, 0, 0.7);
   --shadow-hover: 0 20px 0 rgba(0, 0, 0, 0.65), 0 40px 60px rgba(0, 0, 0, 0.72);
 
@@ -177,8 +176,6 @@
     rgba(245, 220, 215, 0.90) 100%
   );
 
-  --bevel-light: rgba(255, 255, 255, 0.7);
-  --bevel-dark: rgba(0, 0, 0, 0.12);
   --shadow-base: 0 6px 0 rgba(0, 0, 0, 0.08), 0 16px 24px rgba(0, 0, 0, 0.12);
   --shadow-hover: 0 16px 0 rgba(0, 0, 0, 0.1), 0 32px 50px rgba(0, 0, 0, 0.18);
 
@@ -235,8 +232,6 @@
     rgba(20, 0, 35, 0.92) 100%
   );
 
-  --bevel-light: transparent;
-  --bevel-dark: transparent;
   --shadow-base: 0 0 0 2px currentColor, 0 0 12px currentColor, inset 0 0 12px currentColor;
   --shadow-hover: 0 0 0 2px currentColor, 0 0 40px currentColor, 0 0 70px currentColor, inset 0 0 20px currentColor;
 
