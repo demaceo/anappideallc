@@ -12,9 +12,11 @@
   background: var(--block-bg, transparent);
   color: var(--block-fg, currentColor);
   box-shadow:
-    inset 4px 4px 0 var(--bevel-light),
-    inset -4px -4px 0 var(--bevel-dark),
-    var(--shadow-base);
+    inset 0 1px 0 rgba(255, 255, 255, 0.40),
+    inset 1px 0 0 rgba(255, 255, 255, 0.18),
+    0 4px 0 rgba(0, 0, 0, 0.32),
+    0 8px 20px rgba(0, 0, 0, 0.28),
+    0 24px 48px rgba(0, 0, 0, 0.16);
   transition:
     background 200ms,
     color 200ms,
@@ -116,14 +118,15 @@
   inset: 0;
   border-radius: inherit;
   background: linear-gradient(
-    135deg,
+    145deg,
     rgba(255, 255, 255, 0.18) 0%,
-    rgba(255, 255, 255, 0.05) 45%,
-    transparent 70%
+    rgba(255, 255, 255, 0.06) 40%,
+    transparent 70%,
+    rgba(0, 0, 0, 0.08) 100%
   );
-  opacity: 0;
-  transition: opacity 300ms ease-out;
+  opacity: 1;
   pointer-events: none;
+  transition: none;
 }
 
 /* Neon theme uses glow rings, not surface highlights */
@@ -141,8 +144,8 @@
                rotateX(var(--hover-rx, 0deg))
                rotateY(var(--hover-ry, 0deg));
     box-shadow:
-      inset 4px 4px 0 var(--bevel-light),
-      inset -4px -4px 0 var(--bevel-dark),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      inset 1px 0 0 rgba(255, 255, 255, 0.22),
       var(--shadow-hover),
       0 40px 80px rgba(0, 0, 0, 0.22);
     /* Fast tracking during hover; the base 240ms cubic easing applies on exit */
@@ -168,8 +171,8 @@
   outline-offset: 4px;
   transform: translateZ(calc(var(--block-z, 20px) + 30px)) rotateX(-4deg) rotateY(4deg);
   box-shadow:
-    inset 4px 4px 0 var(--bevel-light),
-    inset -4px -4px 0 var(--bevel-dark),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 1px 0 0 rgba(255, 255, 255, 0.22),
     var(--shadow-hover);
 }
 
