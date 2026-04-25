@@ -40,6 +40,7 @@
   --cube-caustic:    rgba(255, 212, 0, 0.45);
   --cube-vignette:   rgba(0, 0, 0, 0.70);
   --cube-edge-light: rgba(255, 255, 255, 0.15);
+  --cube-edge-shadow: rgba(20, 10, 30, 0.32);
   --cube-back-wall: linear-gradient(
     to bottom,
     rgba(30, 20, 50, 0.88) 0%,
