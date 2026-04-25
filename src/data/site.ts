@@ -19,5 +19,5 @@ export const SITE = {
   },
   tagline: 'Got an app idea? Let’s build it.',
   description:
-    'Solo dev studio in Denver helping founders ship mobile apps and websites — from interface to database to launch.',
+    'Dev studio in Denver helping founders ship mobile apps and websites — from interface to database to launch.',
 } as const

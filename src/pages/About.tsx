@@ -18,7 +18,7 @@ export default function About() {
       </motion.h1>
 
       <p className={styles.lede}>
-        {SITE.name} is a solo dev studio in {SITE.founder.location}, run by{' '}
+        {SITE.name} is a dev studio in {SITE.founder.location}, run by{' '}
         {SITE.founder.name}. I help founders take an app or website idea from
         sketch to shipped product — interface, backend, and the operational
         plumbing that makes it credible.
