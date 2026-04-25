@@ -94,19 +94,15 @@
 .block-hero .title { font-family: 'Syne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
 .block-brand     { --block-bg: var(--c-brand);    --block-fg: var(--c-brand-fg);    --block-z: 15px; }
-.block-brand .title { font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+.block-brand .title { font-family: 'Syne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
 .block-about     { --block-bg: var(--c-about);    --block-fg: var(--c-about-fg);    --block-z: 40px; }
-.block-about .title { font-family: 'Cabinet Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
 .block-work      { --block-bg: var(--c-work);     --block-fg: var(--c-work-fg);     --block-z: 30px; }
-.block-work .title { font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
 .block-services  { --block-bg: var(--c-services); --block-fg: var(--c-services-fg); --block-z: 35px; }
-.block-services .title { font-family: 'Oxanium', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
 .block-process   { --block-bg: var(--c-process);  --block-fg: var(--c-process-fg);  --block-z: 25px; }
-.block-process .title { font-family: 'Space Mono', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
 .block-contact   { --block-bg: var(--c-contact);  --block-fg: var(--c-contact-fg);  --block-z: 45px; }
 .block-contact .title { font-family: 'Syne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
@@ -156,10 +152,6 @@
       transform 100ms ease-out;
   }
 
-  .block:hover::before {
-    opacity: 1;
-  }
-
   .block:hover .cta {
     transform: translateX(4px);
   }
@@ -174,42 +166,6 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.45),
     inset 1px 0 0 rgba(255, 255, 255, 0.22),
     var(--shadow-hover);
-}
-
-/* Theme-specific font overrides — each theme remixes the block fonts
-   for visual cohesion with the overall aesthetic. */
-
-/* Pastel theme: soften geometric fonts, favor organic readability */
-[data-theme="pastel"] .block-services .title {
-  font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-[data-theme="pastel"] .block-process .title {
-  font-family: 'Cabinet Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-/* Arcade-neon theme: bold geometric, aggressive personality */
-[data-theme="arcade-neon"] .block-brand .title {
-  font-family: 'Oxanium', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-[data-theme="arcade-neon"] .block-about .title {
-  font-family: 'Oxanium', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-[data-theme="arcade-neon"] .block-work .title {
-  font-family: 'Oxanium', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-/* Classic theme: clean & stark, favor Outfit + monospace accents */
-[data-theme="classic"] .block-hero .title {
-  font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-[data-theme="classic"] .block-about .title {
-  font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-[data-theme="classic"] .block-work .title {
-  font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-[data-theme="classic"] .block-contact .title {
-  font-family: 'Space Mono', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* Reduced-motion: collapse the entire 3D layer to flat. */
