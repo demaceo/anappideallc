@@ -84,8 +84,8 @@ Concrete values per theme will be tuned during implementation. Suggested startin
 ```jsx
 <div className={styles.viewport}>
   <div ref={playfieldRef} className={styles.playfield}>
-    <div className={styles.floor} aria-hidden="true" />
-    <div className={styles.grid}>
+    <div className={styles.floor} data-floor aria-hidden="true" />
+    <div className={styles.grid} data-grid>
       {/* blocks */}
     </div>
   </div>
