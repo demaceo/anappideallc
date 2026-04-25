@@ -1,6 +1,6 @@
 import { useRef } from 'react'
-import { THEMES, useTheme } from '../../lib/theme'
-import type { ThemeId } from '../../lib/theme'
+import { THEMES, useTheme } from '../../lib/theme-context'
+import type { ThemeId } from '../../lib/theme-context'
 import styles from './ThemeSwitcher.module.css'
 
 // 4 color swatches in a glassmorphic pill, top-right corner.

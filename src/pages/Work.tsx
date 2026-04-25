@@ -1,10 +1,13 @@
 import { motion } from 'motion/react'
 import { caseStudies } from '../data/case-studies'
+import { RouteHead } from '../components/SEO/RouteHead'
+import { META } from '../lib/seo'
 import styles from '../components/Page/Page.module.css'
 
 export default function Work() {
   return (
     <main className={styles.page}>
+      <RouteHead {...META['/work']} />
       <motion.h1
         layoutId="block-work"
         className={styles.header}

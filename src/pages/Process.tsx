@@ -1,10 +1,13 @@
 import { motion } from 'motion/react'
 import { processSteps } from '../data/process'
+import { RouteHead } from '../components/SEO/RouteHead'
+import { META } from '../lib/seo'
 import styles from '../components/Page/Page.module.css'
 
 export default function Process() {
   return (
     <main className={styles.page}>
+      <RouteHead {...META['/process']} />
       <motion.h1
         layoutId="block-process"
         className={styles.header}

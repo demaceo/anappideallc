@@ -34,6 +34,18 @@
       name="description"
       content="Solo dev studio in Denver helping founders ship mobile apps and websites — from interface to database to launch."
     />
+
+    <!--
+      Plausible analytics — privacy-friendly, cookieless, GDPR-safe.
+      TODO: register anappidea.llc at plausible.io to start receiving
+      events. Until then this script 204s silently. Self-host via
+      Vercel rewrites if Lighthouse complains about the 3rd-party.
+    -->
+    <script
+      defer
+      data-domain="anappidea.llc"
+      src="https://plausible.io/js/script.js"
+    ></script>
   </head>
   <body>
     <div id="root"></div>

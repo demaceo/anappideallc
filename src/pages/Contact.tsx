@@ -1,5 +1,7 @@
 import { motion } from 'motion/react'
 import { SITE } from '../data/site'
+import { RouteHead } from '../components/SEO/RouteHead'
+import { META } from '../lib/seo'
 import styles from '../components/Page/Page.module.css'
 
 export default function Contact() {
@@ -10,6 +12,7 @@ export default function Contact() {
 
   return (
     <main className={styles.page}>
+      <RouteHead {...META['/contact']} />
       <motion.h1
         layoutId="block-contact"
         className={styles.header}

@@ -1,10 +1,13 @@
 import { motion } from 'motion/react'
 import { services } from '../data/services'
+import { RouteHead } from '../components/SEO/RouteHead'
+import { META } from '../lib/seo'
 import styles from '../components/Page/Page.module.css'
 
 export default function Services() {
   return (
     <main className={styles.page}>
+      <RouteHead {...META['/services']} />
       <motion.h1
         layoutId="block-services"
         className={styles.header}
