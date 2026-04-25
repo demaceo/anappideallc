@@ -6,12 +6,28 @@
   place-items: center;
   perspective: 1400px;
   perspective-origin: 50% 35%;
+  position: relative;
+  overflow: hidden;
+
+  /* The viewport is "the room you're standing in." Layered radial gradients
+     paint the cube atmospherics flat-to-camera (they don't tilt with the
+     playfield). Order: caustic on top, then ceiling light, then floor glow,
+     then vignette underneath. */
+  background:
+    radial-gradient(ellipse 30% 30% at 100% 0%,
+      var(--cube-caustic) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% 0%,
+      var(--cube-ceiling) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 30% at 50% 100%,
+      var(--cube-floor-glow) 0%, transparent 75%),
+    radial-gradient(closest-side at 50% 50%,
+      transparent 50%, var(--cube-vignette) 100%),
+    var(--bg);
 }
 
-/* Hinted 3D container the blocks fall into. Deliberately minimal so the
-   block-level bevels, shadows, and hover lift remain the dominant visual
-   language — just a translucent tint, a hairline rim, an inner top shadow
-   for back-wall recession, and an outer drop shadow to ground it.
+/* The playfield is the invisible 3D transform host. Its chrome (background,
+   border, shadows, padding) was removed so the blocks read as suspended
+   inside the cube rather than sitting in a tray.
 
    IMPORTANT: nothing here may create a stacking context (no backdrop-filter,
    no mix-blend-mode, no filter). Those properties prevent
@@ -21,18 +37,53 @@
   position: relative;
   width: 100%;
   max-width: 1280px;
-  padding: clamp(0.75rem, 1.6vw, 1.5rem);
-  border-radius: clamp(1rem, 1.6vw, 1.5rem);
-  background: color-mix(in srgb, var(--fg) 3%, transparent);
-  border: 1px solid color-mix(in srgb, var(--fg) 12%, transparent);
-  box-shadow:
-    inset 0 30px 50px -20px color-mix(in srgb, var(--bg) 45%, transparent),
-    0 30px 60px rgba(0, 0, 0, 0.35);
   transform-style: preserve-3d;
   transition: transform 200ms ease-out;
   /* Defaults if useGridParallax hasn't set these (e.g. SSR, reduced motion). */
   --parallax-x: 0deg;
   --parallax-y: 0deg;
+}
+
+/* The glass floor — a child of .playfield (preserve-3d), rotated 90deg to
+   lay flat. Carries seven radial-gradient blooms calibrated to the desktop
+   grid layout: each bloom is positioned where its block sits, painted in
+   that block's color via the --c-*-bloom token. After rotateX(90deg), the
+   plane's original Y axis maps to depth — blocks higher in the grid project
+   blooms further into the cube. Hidden below desktop and under reduced
+   motion (the floor's effect comes from the parallax tilt). */
+.floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60%;
+  pointer-events: none;
+  opacity: 0.35;
+  display: none; /* Default hidden — only desktop turns it on. */
+  transform: rotateX(90deg) translateZ(-1px);
+  transform-origin: bottom center;
+  background:
+    radial-gradient(ellipse 35% 25% at 25% 35%,
+      color-mix(in srgb, var(--c-hero-bloom) 60%, transparent) 0%,
+      transparent 70%),
+    radial-gradient(ellipse 30% 20% at 58% 12%,
+      color-mix(in srgb, var(--c-brand-bloom) 60%, transparent) 0%,
+      transparent 70%),
+    radial-gradient(ellipse 30% 22% at 83% 30%,
+      color-mix(in srgb, var(--c-about-bloom) 60%, transparent) 0%,
+      transparent 70%),
+    radial-gradient(ellipse 28% 22% at 58% 55%,
+      color-mix(in srgb, var(--c-work-bloom) 60%, transparent) 0%,
+      transparent 70%),
+    radial-gradient(ellipse 30% 22% at 83% 60%,
+      color-mix(in srgb, var(--c-services-bloom) 60%, transparent) 0%,
+      transparent 70%),
+    radial-gradient(ellipse 35% 22% at 25% 88%,
+      color-mix(in srgb, var(--c-process-bloom) 60%, transparent) 0%,
+      transparent 70%),
+    radial-gradient(ellipse 35% 22% at 75% 88%,
+      color-mix(in srgb, var(--c-contact-bloom) 60%, transparent) 0%,
+      transparent 70%);
 }
 
 .grid {
@@ -70,8 +121,8 @@
 }
 
 /* Desktop: 6 columns × 4 rows — Hero-Left Asymmetric (the user-approved A layout).
-   The whole playfield carries the base isometric tilt + parallax — the well and
-   its blocks rotate together as one 3D object. */
+   The whole playfield carries the base isometric tilt + parallax — the floor
+   and its blocks rotate together as one 3D object. */
 @media (min-width: 1024px) {
   .playfield {
     transform: rotateX(calc(6deg + var(--parallax-x))) rotateY(calc(-3deg + var(--parallax-y)));
@@ -85,10 +136,15 @@
       'hero hero hero work  services services'
       'process process process contact contact contact';
   }
+  .floor {
+    display: block;
+  }
 }
 
-/* Reduced-motion users get a flat, untilted well with no parallax response. */
+/* Reduced-motion users get a flat, untilted scene with no parallax response
+   and no floor (the floor's effect comes from the parallax tilt). */
 @media (prefers-reduced-motion: reduce) {
   .viewport { perspective: none; }
   .playfield { transform: none !important; transition: none !important; }
+  .floor { display: none !important; }
 }
