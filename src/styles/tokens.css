@@ -25,6 +25,22 @@
   --c-contact: #ff6b6b;
   --c-contact-fg: #fff;
 
+  /* Glass cube — per-block solid colors used by the floor bloom.
+     Hero is a gradient, so the bloom uses the dominant warm-pink stop. */
+  --c-hero-bloom:     #ff3d7f;
+  --c-brand-bloom:    #ffffff;
+  --c-about-bloom:    #4ad4ff;
+  --c-work-bloom:     #ffd93d;
+  --c-services-bloom: #7ef078;
+  --c-process-bloom:  #c678ff;
+  --c-contact-bloom:  #ff6b6b;
+
+  /* Glass cube — viewport atmospheric tints. */
+  --cube-ceiling:    rgba(168, 168, 192, 0.18);
+  --cube-floor-glow: rgba(255, 157, 74, 0.10);
+  --cube-caustic:    rgba(74, 212, 255, 0.22);
+  --cube-vignette:   rgba(0, 0, 0, 0.45);
+
   --bevel-light: rgba(255, 255, 255, 0.5);
   --bevel-dark: rgba(0, 0, 0, 0.25);
   --shadow-base: 0 8px 0 rgba(0, 0, 0, 0.4), 0 24px 32px rgba(0, 0, 0, 0.5);
@@ -55,6 +71,21 @@
   --c-process-fg: #000;
   --c-contact: #f00000;
   --c-contact-fg: #fff;
+
+  /* Glass cube — per-block solid colors used by the floor bloom. */
+  --c-hero-bloom:     #00f0f0;
+  --c-brand-bloom:    #ffffff;
+  --c-about-bloom:    #f0f000;
+  --c-work-bloom:     #a000f0;
+  --c-services-bloom: #00f000;
+  --c-process-bloom:  #f0a000;
+  --c-contact-bloom:  #f00000;
+
+  /* Glass cube — viewport atmospheric tints. */
+  --cube-ceiling:    rgba(136, 136, 136, 0.14);
+  --cube-floor-glow: rgba(0, 240, 240, 0.08);
+  --cube-caustic:    rgba(0, 240, 240, 0.20);
+  --cube-vignette:   rgba(0, 0, 0, 0.45);
 
   --bevel-light: rgba(255, 255, 255, 0.55);
   --bevel-dark: rgba(0, 0, 0, 0.45);
@@ -87,6 +118,23 @@
   --c-contact: #ffc9c9;
   --c-contact-fg: #2a2a2a;
 
+  /* Glass cube — per-block solid colors used by the floor bloom.
+     Hero is a gradient, so the bloom uses the dominant peach stop. */
+  --c-hero-bloom:     #ffb5a7;
+  --c-brand-bloom:    #f8edeb;
+  --c-about-bloom:    #a7d8ff;
+  --c-work-bloom:     #ffe5a1;
+  --c-services-bloom: #b8e8b8;
+  --c-process-bloom:  #d8b9ff;
+  --c-contact-bloom:  #ffc9c9;
+
+  /* Glass cube — viewport atmospheric tints. Pastel uses gentler vignette
+     since the bg is cream and aggressive darkening would muddy the palette. */
+  --cube-ceiling:    rgba(255, 255, 255, 0.30);
+  --cube-floor-glow: rgba(255, 181, 167, 0.14);
+  --cube-caustic:    rgba(255, 181, 167, 0.18);
+  --cube-vignette:   rgba(42, 42, 42, 0.20);
+
   --bevel-light: rgba(255, 255, 255, 0.7);
   --bevel-dark: rgba(0, 0, 0, 0.12);
   --shadow-base: 0 6px 0 rgba(0, 0, 0, 0.08), 0 16px 24px rgba(0, 0, 0, 0.12);
@@ -118,6 +166,22 @@
   --c-process-fg: #ff00ff;
   --c-contact: #0a0018;
   --c-contact-fg: #ff0066;
+
+  /* Glass cube — neon theme blocks have bg = page color and the visible
+     glow color is on --c-*-fg. The bloom uses the glow color, not the bg. */
+  --c-hero-bloom:     #ff00ff;
+  --c-brand-bloom:    #00ffff;
+  --c-about-bloom:    #00ff88;
+  --c-work-bloom:     #ffff00;
+  --c-services-bloom: #ff8800;
+  --c-process-bloom:  #ff00ff;
+  --c-contact-bloom:  #ff0066;
+
+  /* Glass cube — viewport atmospheric tints. */
+  --cube-ceiling:    rgba(255, 0, 255, 0.16);
+  --cube-floor-glow: rgba(255, 0, 255, 0.12);
+  --cube-caustic:    rgba(0, 255, 255, 0.26);
+  --cube-vignette:   rgba(0, 0, 0, 0.50);
 
   --bevel-light: transparent;
   --bevel-dark: transparent;
