@@ -28,7 +28,7 @@
   --bevel-light: rgba(255, 255, 255, 0.5);
   --bevel-dark: rgba(0, 0, 0, 0.25);
   --shadow-base: 0 8px 0 rgba(0, 0, 0, 0.4), 0 24px 32px rgba(0, 0, 0, 0.5);
-  --shadow-hover: 0 12px 0 rgba(0, 0, 0, 0.4), 0 30px 40px rgba(0, 0, 0, 0.55);
+  --shadow-hover: 0 20px 0 rgba(0, 0, 0, 0.45), 0 40px 60px rgba(0, 0, 0, 0.5);
 
   --toggler-bg: rgba(0, 0, 0, 0.4);
   --toggler-border: rgba(255, 255, 255, 0.1);
@@ -59,7 +59,7 @@
   --bevel-light: rgba(255, 255, 255, 0.55);
   --bevel-dark: rgba(0, 0, 0, 0.45);
   --shadow-base: 0 8px 0 rgba(0, 0, 0, 0.6), 0 24px 32px rgba(0, 0, 0, 0.7);
-  --shadow-hover: 0 12px 0 rgba(0, 0, 0, 0.6), 0 30px 40px rgba(0, 0, 0, 0.75);
+  --shadow-hover: 0 20px 0 rgba(0, 0, 0, 0.65), 0 40px 60px rgba(0, 0, 0, 0.72);
 
   --toggler-bg: rgba(255, 255, 255, 0.08);
   --toggler-border: rgba(255, 255, 255, 0.15);
@@ -90,7 +90,7 @@
   --bevel-light: rgba(255, 255, 255, 0.7);
   --bevel-dark: rgba(0, 0, 0, 0.12);
   --shadow-base: 0 6px 0 rgba(0, 0, 0, 0.08), 0 16px 24px rgba(0, 0, 0, 0.12);
-  --shadow-hover: 0 10px 0 rgba(0, 0, 0, 0.08), 0 22px 32px rgba(0, 0, 0, 0.16);
+  --shadow-hover: 0 16px 0 rgba(0, 0, 0, 0.1), 0 32px 50px rgba(0, 0, 0, 0.18);
 
   --toggler-bg: rgba(255, 255, 255, 0.6);
   --toggler-border: rgba(0, 0, 0, 0.08);
@@ -122,7 +122,7 @@
   --bevel-light: transparent;
   --bevel-dark: transparent;
   --shadow-base: 0 0 0 2px currentColor, 0 0 12px currentColor, inset 0 0 12px currentColor;
-  --shadow-hover: 0 0 0 2px currentColor, 0 0 24px currentColor, inset 0 0 16px currentColor;
+  --shadow-hover: 0 0 0 2px currentColor, 0 0 40px currentColor, 0 0 70px currentColor, inset 0 0 20px currentColor;
 
   --toggler-bg: rgba(0, 0, 0, 0.6);
   --toggler-border: rgba(255, 0, 255, 0.3);

@@ -69,6 +69,7 @@
   border-radius: 999px;
   font-size: 0.85rem;
   letter-spacing: 0.02em;
+  transition: transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .block-brand {
@@ -108,16 +109,68 @@
 .block-contact   { --block-bg: var(--c-contact);  --block-fg: var(--c-contact-fg);  --block-z: 45px; }
 .block-contact .title { font-family: 'Syne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
+/* Gloss overlay — simulates a top-left light source catching the lifted surface */
+.block::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.05) 45%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+  pointer-events: none;
+}
+
+/* Neon theme uses glow rings, not surface highlights */
+[data-theme="arcade-neon"] .block::before {
+  display: none;
+}
+
 /* Per-block hover lift — only on devices that actually have a hover state.
    Touch devices skip it so the block doesn't get stuck in the lifted state. */
 @media (hover: hover) {
   .block:hover {
-    transform: translateZ(calc(var(--block-z, 20px) + 30px)) rotateX(-6deg) rotateY(4deg);
+    /* --hover-rx/ry set by JS mousemove handler; 0deg fallbacks mean the block
+       lifts straight up on initial entry, then tilts as the cursor moves */
+    transform: translateZ(calc(var(--block-z, 20px) + 30px))
+               rotateX(var(--hover-rx, 0deg))
+               rotateY(var(--hover-ry, 0deg));
     box-shadow:
       inset 4px 4px 0 var(--bevel-light),
       inset -4px -4px 0 var(--bevel-dark),
-      var(--shadow-hover);
+      var(--shadow-hover),
+      0 40px 80px rgba(0, 0, 0, 0.22);
+    /* Fast tracking during hover; the base 240ms cubic easing applies on exit */
+    transition:
+      background 200ms,
+      color 200ms,
+      box-shadow 240ms ease-out,
+      transform 100ms ease-out;
   }
+
+  .block:hover::before {
+    opacity: 1;
+  }
+
+  .block:hover .cta {
+    transform: translateX(4px);
+  }
+}
+
+/* Keyboard focus: same visual lift as hover so pointer and keyboard UX are equivalent */
+.block:focus-visible {
+  outline: 3px solid var(--block-fg);
+  outline-offset: 4px;
+  transform: translateZ(calc(var(--block-z, 20px) + 30px)) rotateX(-4deg) rotateY(4deg);
+  box-shadow:
+    inset 4px 4px 0 var(--bevel-light),
+    inset -4px -4px 0 var(--bevel-dark),
+    var(--shadow-hover);
 }
 
 /* Theme-specific font overrides — each theme remixes the block fonts
@@ -167,4 +220,5 @@
 @media (max-width: 1023px) {
   .block { transform: none; }
   .block:hover { transform: none; }
+  .block:focus-visible { transform: none; }
 }
