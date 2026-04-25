@@ -11,22 +11,32 @@
   letter-spacing: -0.01em;
   background: var(--block-bg, transparent);
   color: var(--block-fg, currentColor);
+
+  /* Directional-light specular edges (top + left) — hover state redefines
+     these with brighter values, so the box-shadow rule below picks them up
+     automatically without re-specifying the inset structure. */
+  --block-specular-top: rgba(255, 255, 255, 0.40);
+  --block-specular-left: rgba(255, 255, 255, 0.18);
+
+  /* Focus tilt — fixed angles for keyboard users (hover gets cursor-driven
+     tilt via JS-set --hover-rx/ry). Promoted to vars so they live alongside
+     .playfield's --cube-tilt-x/y for consistency. */
+  --focus-tilt-x: -4deg;
+  --focus-tilt-y: 4deg;
+
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.40),
-    inset 1px 0 0 rgba(255, 255, 255, 0.18),
-    0 4px 0 rgba(0, 0, 0, 0.32),
-    0 8px 20px rgba(0, 0, 0, 0.28),
-    0 24px 48px rgba(0, 0, 0, 0.16);
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    var(--shadow-base);
   transition:
     background 200ms,
     color 200ms,
-    box-shadow 240ms ease-out,
+    box-shadow 200ms ease-out,
     transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1);
   overflow: hidden;
   isolation: isolate;
   transform-style: preserve-3d;
   transform: translateZ(var(--block-z, 20px));
-  will-change: transform;
 }
 
 .title {
@@ -66,8 +76,13 @@
   align-self: flex-end;
   margin-top: 0.5rem;
   padding: 0.6rem 1.1rem;
+  /* CTA pill is the inverse of the block: foreground becomes the pill's
+     background so it punches against the block. The pill's text uses the
+     page bg (--bg) — works for the hero (only block with a CTA today)
+     because hero's --block-fg is Eggshell against a Berry/Indigo gradient,
+     and --bg is Space Indigo, giving an inverse-pair pill. */
   background: var(--block-fg);
-  color: var(--block-bg-solid, var(--bg));
+  color: var(--bg);
   border-radius: 999px;
   font-size: 0.85rem;
   letter-spacing: 0.02em;
@@ -87,8 +102,11 @@
   font-weight: 600;
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
-  background: rgba(241, 233, 218, 0.15);
-  color: rgba(241, 233, 218, 0.9);
+  /* Derive from --block-fg so tags re-tint with the active theme — keeps
+     pills legible on every theme's work-block bg (Pine Core in Regal
+     Builder, but classic/pastel/arcade-neon use entirely different bgs). */
+  background: color-mix(in srgb, var(--block-fg) 15%, transparent);
+  color: color-mix(in srgb, var(--block-fg) 90%, transparent);
   letter-spacing: 0.02em;
 }
 
@@ -109,19 +127,12 @@
 /* Per-block color binding via CSS custom property + per-block translateZ
    so blocks float at staggered depths in the 3D scene. */
 .block-hero      { --block-bg: var(--c-hero);     --block-fg: var(--c-hero-fg);     --block-z: 60px; }
-
 .block-brand     { --block-bg: var(--c-brand);    --block-fg: var(--c-brand-fg);    --block-z: 15px; }
-
 .block-about     { --block-bg: var(--c-about);    --block-fg: var(--c-about-fg);    --block-z: 40px; }
-
 .block-work      { --block-bg: var(--c-work);     --block-fg: var(--c-work-fg);     --block-z: 30px; }
-
 .block-services  { --block-bg: var(--c-services); --block-fg: var(--c-services-fg); --block-z: 35px; }
-
 .block-process   { --block-bg: var(--c-process);  --block-fg: var(--c-process-fg);  --block-z: 25px; }
-
 .block-contact   { --block-bg: var(--c-contact);  --block-fg: var(--c-contact-fg);  --block-z: 45px; }
-.block-contact .title { font-family: 'Syne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
 /* Gloss overlay — simulates a top-left light source catching the lifted surface */
 .block::before {
@@ -138,7 +149,6 @@
   );
   opacity: 1;
   pointer-events: none;
-  transition: none;
 }
 
 /* Neon theme uses glow rings, not surface highlights */
@@ -150,21 +160,26 @@
    Touch devices skip it so the block doesn't get stuck in the lifted state. */
 @media (hover: hover) {
   .block:hover {
+    /* Brighter specular edges on hover — the base box-shadow rule picks up
+       these redefined values automatically via cascade. */
+    --block-specular-top: rgba(255, 255, 255, 0.45);
+    --block-specular-left: rgba(255, 255, 255, 0.22);
+
     /* --hover-rx/ry set by JS mousemove handler; 0deg fallbacks mean the block
        lifts straight up on initial entry, then tilts as the cursor moves */
     transform: translateZ(calc(var(--block-z, 20px) + 30px))
                rotateX(var(--hover-rx, 0deg))
                rotateY(var(--hover-ry, 0deg));
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.45),
-      inset 1px 0 0 rgba(255, 255, 255, 0.22),
+      inset 0 1px 0 var(--block-specular-top),
+      inset 1px 0 0 var(--block-specular-left),
       var(--shadow-hover),
       0 40px 80px rgba(0, 0, 0, 0.22);
     /* Fast tracking during hover; the base 240ms cubic easing applies on exit */
     transition:
       background 200ms,
       color 200ms,
-      box-shadow 240ms ease-out,
+      box-shadow 200ms ease-out,
       transform 100ms ease-out;
   }
 
@@ -175,12 +190,17 @@
 
 /* Keyboard focus: same visual lift as hover so pointer and keyboard UX are equivalent */
 .block:focus-visible {
+  --block-specular-top: rgba(255, 255, 255, 0.45);
+  --block-specular-left: rgba(255, 255, 255, 0.22);
+
   outline: 3px solid var(--block-fg);
   outline-offset: 4px;
-  transform: translateZ(calc(var(--block-z, 20px) + 30px)) rotateX(-4deg) rotateY(4deg);
+  transform: translateZ(calc(var(--block-z, 20px) + 30px))
+             rotateX(var(--focus-tilt-x))
+             rotateY(var(--focus-tilt-y));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    inset 1px 0 0 rgba(255, 255, 255, 0.22),
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
     var(--shadow-hover);
 }
 
