@@ -35,11 +35,21 @@
   --c-process-bloom:  #c678ff;
   --c-contact-bloom:  #ff6b6b;
 
-  /* Glass cube — viewport atmospheric tints. */
-  --cube-ceiling:    rgba(168, 168, 192, 0.18);
-  --cube-floor-glow: rgba(255, 157, 74, 0.10);
-  --cube-caustic:    rgba(74, 212, 255, 0.22);
-  --cube-vignette:   rgba(0, 0, 0, 0.45);
+  /* Glass cube — viewport atmospheric tints (Approach B intensities). */
+  --cube-ceiling:    rgba(168, 168, 192, 0.45);
+  --cube-floor-glow: rgba(255, 157, 74, 0.30);
+  --cube-caustic:    rgba(74, 212, 255, 0.50);
+  --cube-vignette:   rgba(0, 0, 0, 0.70);
+
+  /* Glass cube — front-face edge light (rim catching light at the cube's
+     near edges) and back-wall tint (the receding far face of the cube). */
+  --cube-edge-light: rgba(255, 255, 255, 0.18);
+  --cube-back-wall: linear-gradient(
+    to bottom,
+    rgba(20, 20, 40, 0.85) 0%,
+    rgba(10, 10, 26, 0.92) 50%,
+    rgba(20, 15, 30, 0.85) 100%
+  );
 
   --bevel-light: rgba(255, 255, 255, 0.5);
   --bevel-dark: rgba(0, 0, 0, 0.25);
@@ -81,11 +91,20 @@
   --c-process-bloom:  #f0a000;
   --c-contact-bloom:  #f00000;
 
-  /* Glass cube — viewport atmospheric tints. */
-  --cube-ceiling:    rgba(136, 136, 136, 0.14);
-  --cube-floor-glow: rgba(0, 240, 240, 0.08);
-  --cube-caustic:    rgba(0, 240, 240, 0.20);
-  --cube-vignette:   rgba(0, 0, 0, 0.45);
+  /* Glass cube — viewport atmospheric tints (Approach B intensities). */
+  --cube-ceiling:    rgba(180, 180, 180, 0.35);
+  --cube-floor-glow: rgba(0, 240, 240, 0.22);
+  --cube-caustic:    rgba(0, 240, 240, 0.45);
+  --cube-vignette:   rgba(0, 0, 0, 0.75);
+
+  /* Glass cube — edge light + back-wall tint. */
+  --cube-edge-light: rgba(0, 240, 240, 0.20);
+  --cube-back-wall: linear-gradient(
+    to bottom,
+    rgba(15, 15, 15, 0.92) 0%,
+    rgba(0, 0, 0, 0.95) 50%,
+    rgba(15, 15, 15, 0.92) 100%
+  );
 
   --bevel-light: rgba(255, 255, 255, 0.55);
   --bevel-dark: rgba(0, 0, 0, 0.45);
@@ -128,12 +147,23 @@
   --c-process-bloom:  #d8b9ff;
   --c-contact-bloom:  #ffc9c9;
 
-  /* Glass cube — viewport atmospheric tints. Pastel uses gentler vignette
-     since the bg is cream and aggressive darkening would muddy the palette. */
-  --cube-ceiling:    rgba(255, 255, 255, 0.30);
-  --cube-floor-glow: rgba(255, 181, 167, 0.14);
-  --cube-caustic:    rgba(255, 181, 167, 0.18);
-  --cube-vignette:   rgba(42, 42, 42, 0.20);
+  /* Glass cube — viewport atmospheric tints (Approach B intensities).
+     Pastel uses gentler vignette since the bg is cream and aggressive
+     darkening would muddy the palette — but bumped on every other axis. */
+  --cube-ceiling:    rgba(255, 255, 255, 0.55);
+  --cube-floor-glow: rgba(255, 181, 167, 0.35);
+  --cube-caustic:    rgba(255, 181, 167, 0.40);
+  --cube-vignette:   rgba(42, 42, 42, 0.30);
+
+  /* Glass cube — edge light + back-wall tint. Light theme uses a soft
+     cream backdrop instead of a dark wall. */
+  --cube-edge-light: rgba(80, 60, 70, 0.18);
+  --cube-back-wall: linear-gradient(
+    to bottom,
+    rgba(255, 240, 230, 0.90) 0%,
+    rgba(248, 237, 235, 0.92) 50%,
+    rgba(245, 220, 215, 0.90) 100%
+  );
 
   --bevel-light: rgba(255, 255, 255, 0.7);
   --bevel-dark: rgba(0, 0, 0, 0.12);
@@ -177,11 +207,21 @@
   --c-process-bloom:  #ff00ff;
   --c-contact-bloom:  #ff0066;
 
-  /* Glass cube — viewport atmospheric tints. */
-  --cube-ceiling:    rgba(255, 0, 255, 0.16);
-  --cube-floor-glow: rgba(255, 0, 255, 0.12);
-  --cube-caustic:    rgba(0, 255, 255, 0.26);
-  --cube-vignette:   rgba(0, 0, 0, 0.50);
+  /* Glass cube — viewport atmospheric tints (Approach B intensities). */
+  --cube-ceiling:    rgba(255, 0, 255, 0.40);
+  --cube-floor-glow: rgba(255, 0, 255, 0.32);
+  --cube-caustic:    rgba(0, 255, 255, 0.55);
+  --cube-vignette:   rgba(0, 0, 0, 0.78);
+
+  /* Glass cube — edge light + back-wall tint. Neon uses cyan edges and a
+     deep violet back wall to match the theme's vibe. */
+  --cube-edge-light: rgba(0, 255, 255, 0.30);
+  --cube-back-wall: linear-gradient(
+    to bottom,
+    rgba(15, 0, 30, 0.92) 0%,
+    rgba(10, 0, 24, 0.95) 50%,
+    rgba(20, 0, 35, 0.92) 100%
+  );
 
   --bevel-light: transparent;
   --bevel-dark: transparent;

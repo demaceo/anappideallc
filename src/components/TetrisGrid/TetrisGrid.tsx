@@ -80,6 +80,7 @@ export function TetrisGrid() {
   return (
     <div className={styles.viewport}>
       <div ref={playfieldRef} className={styles.playfield}>
+        <div className={styles.backWall} data-back-wall aria-hidden="true" />
         <div className={styles.floor} data-floor aria-hidden="true" />
         <div className={styles.grid} data-grid>
           {BLOCKS.map((b, i) => (

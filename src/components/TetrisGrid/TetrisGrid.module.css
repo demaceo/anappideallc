@@ -25,14 +25,16 @@
     var(--bg);
 }
 
-/* The playfield is the invisible 3D transform host. Its chrome (background,
-   border, shadows, padding) was removed so the blocks read as suspended
-   inside the cube rather than sitting in a tray.
+/* The playfield is the 3D transform host AND defines the cube's near face.
+   The original chunky chrome (tray bg, border, drop shadow) was removed in
+   favor of a 1px gradient rim — picks out the cube's front edges as glass
+   refraction, not as a tray.
 
    IMPORTANT: nothing here may create a stacking context (no backdrop-filter,
    no mix-blend-mode, no filter). Those properties prevent
    transform-style: preserve-3d from applying, which flattens the blocks
-   inside the playfield and kills the per-block hover lift. */
+   inside the playfield and kills the per-block hover lift. box-shadow is
+   safe — it doesn't create a stacking context. */
 .playfield {
   position: relative;
   width: 100%;
@@ -42,6 +44,30 @@
   /* Defaults if useGridParallax hasn't set these (e.g. SSR, reduced motion). */
   --parallax-x: 0deg;
   --parallax-y: 0deg;
+  /* Glass edge light — the front-face rectangle of the cube. The outer ring
+     is the rim catching light; the inset top/bottom add a subtle highlight
+     and shadow that read as refraction at the front edges. */
+  box-shadow:
+    0 0 0 1px var(--cube-edge-light),
+    inset 0 1px 0 var(--cube-edge-light),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* The back wall — receded plane behind the blocks. Lives inside .playfield
+   so it inherits the parallax tilt and feels like part of the same cube.
+   translateZ(-300px) pushes it deep behind the blocks (which sit at +15 to
+   +60). The gradient gives it depth (slight darker at top/bottom, vague
+   horizon mid-height) without competing with the blocks for attention.
+   Hidden below desktop and under reduced-motion. */
+.backWall {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: none; /* Default hidden — only desktop turns it on. */
+  transform: translateZ(-300px) scale(1.4);
+  transform-origin: 50% 50%;
+  background: var(--cube-back-wall);
+  border-radius: clamp(8px, 1.2vw, 16px);
 }
 
 /* The glass floor — a child of .playfield (preserve-3d), rotated 90deg to
@@ -58,31 +84,31 @@
   bottom: 0;
   height: 60%;
   pointer-events: none;
-  opacity: 0.35;
+  opacity: 0.7;
   display: none; /* Default hidden — only desktop turns it on. */
   transform: rotateX(90deg) translateZ(-1px);
   transform-origin: bottom center;
   background:
     radial-gradient(ellipse 35% 25% at 25% 35%,
-      color-mix(in srgb, var(--c-hero-bloom) 60%, transparent) 0%,
+      color-mix(in srgb, var(--c-hero-bloom) 85%, transparent) 0%,
       transparent 70%),
     radial-gradient(ellipse 30% 20% at 58% 12%,
-      color-mix(in srgb, var(--c-brand-bloom) 60%, transparent) 0%,
+      color-mix(in srgb, var(--c-brand-bloom) 85%, transparent) 0%,
       transparent 70%),
     radial-gradient(ellipse 30% 22% at 83% 30%,
-      color-mix(in srgb, var(--c-about-bloom) 60%, transparent) 0%,
+      color-mix(in srgb, var(--c-about-bloom) 85%, transparent) 0%,
       transparent 70%),
     radial-gradient(ellipse 28% 22% at 58% 55%,
-      color-mix(in srgb, var(--c-work-bloom) 60%, transparent) 0%,
+      color-mix(in srgb, var(--c-work-bloom) 85%, transparent) 0%,
       transparent 70%),
     radial-gradient(ellipse 30% 22% at 83% 60%,
-      color-mix(in srgb, var(--c-services-bloom) 60%, transparent) 0%,
+      color-mix(in srgb, var(--c-services-bloom) 85%, transparent) 0%,
       transparent 70%),
     radial-gradient(ellipse 35% 22% at 25% 88%,
-      color-mix(in srgb, var(--c-process-bloom) 60%, transparent) 0%,
+      color-mix(in srgb, var(--c-process-bloom) 85%, transparent) 0%,
       transparent 70%),
     radial-gradient(ellipse 35% 22% at 75% 88%,
-      color-mix(in srgb, var(--c-contact-bloom) 60%, transparent) 0%,
+      color-mix(in srgb, var(--c-contact-bloom) 85%, transparent) 0%,
       transparent 70%);
 }
 
@@ -136,15 +162,18 @@
       'hero hero hero work  services services'
       'process process process contact contact contact';
   }
-  .floor {
+  .floor,
+  .backWall {
     display: block;
   }
 }
 
-/* Reduced-motion users get a flat, untilted scene with no parallax response
-   and no floor (the floor's effect comes from the parallax tilt). */
+/* Reduced-motion users get a flat, untilted scene with no parallax response,
+   no floor, and no back wall (the cube's depth illusion comes from parallax;
+   without it, the back wall would just float as a flat dark rectangle). */
 @media (prefers-reduced-motion: reduce) {
   .viewport { perspective: none; }
   .playfield { transform: none !important; transition: none !important; }
-  .floor { display: none !important; }
+  .floor,
+  .backWall { display: none !important; }
 }
