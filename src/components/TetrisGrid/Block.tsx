@@ -3,6 +3,19 @@ import { motion } from 'motion/react'
 import { Link } from 'react-router'
 import styles from './Block.module.css'
 
+function applyTilt(e: React.MouseEvent<HTMLAnchorElement>) {
+  const rect = e.currentTarget.getBoundingClientRect()
+  const relX = ((e.clientX - rect.left) / rect.width - 0.5) * 2
+  const relY = ((e.clientY - rect.top) / rect.height - 0.5) * 2
+  e.currentTarget.style.setProperty('--hover-rx', `${(-relY * 12).toFixed(1)}deg`)
+  e.currentTarget.style.setProperty('--hover-ry', `${(relX * 8).toFixed(1)}deg`)
+}
+
+function resetTilt(e: React.MouseEvent<HTMLAnchorElement>) {
+  e.currentTarget.style.setProperty('--hover-rx', '0deg')
+  e.currentTarget.style.setProperty('--hover-ry', '0deg')
+}
+
 export type BlockId =
   | 'hero'
   | 'brand'
@@ -12,7 +25,7 @@ export type BlockId =
   | 'process'
   | 'contact'
 
-interface BlockProps {
+export interface BlockProps {
   id: BlockId
   to: string
   title: string
@@ -39,6 +52,8 @@ export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
       className={className}
       style={{ gridArea: id }}
       aria-label={ariaLabel ?? title}
+      onMouseMove={applyTilt}
+      onMouseLeave={resetTilt}
       onClick={(e) => {
         if (!onNavigate) return
         // Let modifier-clicks (cmd/ctrl/middle) keep their default
@@ -48,9 +63,9 @@ export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
         onNavigate(id, to)
       }}
     >
-      <span className={styles.title}>{title}</span>
-      {subtitle ? <span className={styles.subtitle}>{subtitle}</span> : null}
-      {cta ? <span className={styles.cta}>{cta} →</span> : null}
+      <span data-reveal="title" className={styles.title}>{title}</span>
+      {subtitle ? <span data-reveal="subtitle" className={styles.subtitle}>{subtitle}</span> : null}
+      {cta ? <span data-reveal="cta" className={styles.cta}>{cta} →</span> : null}
     </MotionLink>
   )
 })
