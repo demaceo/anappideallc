@@ -109,10 +109,8 @@
 /* Per-block color binding via CSS custom property + per-block translateZ
    so blocks float at staggered depths in the 3D scene. */
 .block-hero      { --block-bg: var(--c-hero);     --block-fg: var(--c-hero-fg);     --block-z: 60px; }
-.block-hero .title { font-family: 'Syne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
 .block-brand     { --block-bg: var(--c-brand);    --block-fg: var(--c-brand-fg);    --block-z: 15px; }
-.block-brand .title { font-family: 'Syne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
 .block-about     { --block-bg: var(--c-about);    --block-fg: var(--c-about-fg);    --block-z: 40px; }
 

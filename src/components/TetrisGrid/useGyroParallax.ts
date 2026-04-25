@@ -16,6 +16,7 @@ export function useGyroParallax(ref: RefObject<HTMLElement | null>) {
     const el = ref.current
     if (!el) return
 
+    let unmounted = false
     let frame = 0
     let pendingX = 0
     let pendingY = 0
@@ -57,7 +58,7 @@ export function useGyroParallax(ref: RefObject<HTMLElement | null>) {
       if (typeof DOE.requestPermission === 'function') {
         try {
           const result = await DOE.requestPermission()
-          if (result === 'granted') startListening()
+          if (!unmounted && result === 'granted') startListening()
           // Denied or error — silent fallback, no parallax
         } catch {
           // Unsupported — silent fallback
@@ -71,6 +72,7 @@ export function useGyroParallax(ref: RefObject<HTMLElement | null>) {
     document.addEventListener('touchstart', requestGyroPermission, { once: true })
 
     return () => {
+      unmounted = true
       document.removeEventListener('touchstart', requestGyroPermission)
       window.removeEventListener('deviceorientation', onOrientation)
       if (frame) cancelAnimationFrame(frame)
