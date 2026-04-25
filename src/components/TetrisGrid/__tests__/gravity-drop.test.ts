@@ -181,4 +181,20 @@ describe('useGravityDrop', () => {
     renderHook(() => useGravityDrop([{ current: el }]))
     expect(animateSpy).not.toHaveBeenCalled()
   })
+
+  it('replays animation when replayKey changes (e.g. theme switch)', () => {
+    sessionStorage.setItem('introPlayed', '1')
+    const el = makeBlockEl('brand')
+    const { rerender } = renderHook(
+      ({ k }: { k: string }) => useGravityDrop([{ current: el }], k),
+      { initialProps: { k: 'modern-vibrant' } },
+    )
+    // First render with already-played flag and matching key — should skip.
+    expect(animateSpy).not.toHaveBeenCalled()
+
+    rerender({ k: 'pastel' })
+    // Key changed → SESSION_KEY cleared → animation replays.
+    expect(animateSpy).toHaveBeenCalled()
+    expect(sessionStorage.getItem('introPlayed')).toBe(null)
+  })
 })

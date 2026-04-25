@@ -5,6 +5,7 @@ import { useGridParallax } from './useGridParallax'
 import { useGravityDrop } from './useGravityDrop'
 import { useLineClearController } from './useLineClear'
 import type { BlockRef } from './useLineClear'
+import { useTheme } from '../../lib/theme-context'
 import { SITE } from '../../data/site'
 import styles from './TetrisGrid.module.css'
 
@@ -57,6 +58,7 @@ const BLOCKS = [
 ]
 
 export function TetrisGrid() {
+  const { theme } = useTheme()
   const playfieldRef = useGridParallax(4)
 
   // Stable ref pairs for the gravity-drop and line-clear hooks.
@@ -70,7 +72,9 @@ export function TetrisGrid() {
   )
 
   const gravityRefs = useMemo(() => blockRefs.map((b) => b.ref), [blockRefs])
-  useGravityDrop(gravityRefs)
+  // Pass theme as the replayKey — switching themes clears the once-per-session
+  // intro flag and replays the drop animation in the new color palette.
+  useGravityDrop(gravityRefs, theme)
   const { playOutAndNavigate } = useLineClearController(blockRefs)
 
   return (

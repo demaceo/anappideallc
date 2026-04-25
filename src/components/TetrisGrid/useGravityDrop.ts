@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import type { RefObject } from 'react'
 
 const SESSION_KEY = 'introPlayed'
@@ -54,9 +54,22 @@ function animateReveal(el: HTMLElement, settleMs: number): Animation[] {
   )
 }
 
-export function useGravityDrop(refs: RefObject<HTMLElement | null>[]) {
+// `replayKey` lets callers force a replay of the drop animation. When the value
+// changes between renders (e.g. user picks a new theme), the once-per-session
+// `introPlayed` flag is cleared so the drop plays again in the new theme.
+export function useGravityDrop(
+  refs: RefObject<HTMLElement | null>[],
+  replayKey?: string | number,
+) {
+  const lastReplayKey = useRef(replayKey)
+
   useEffect(() => {
     if (typeof window === 'undefined') return
+
+    if (replayKey !== lastReplayKey.current) {
+      try { sessionStorage.removeItem(SESSION_KEY) } catch { /* ignore */ }
+      lastReplayKey.current = replayKey
+    }
 
     let alreadyPlayed = false
     try { alreadyPlayed = sessionStorage.getItem(SESSION_KEY) === '1' } catch { /* ignore */ }
@@ -102,5 +115,5 @@ export function useGravityDrop(refs: RefObject<HTMLElement | null>[]) {
       cancelled = true
       animations.forEach((a) => { if (a.playState !== 'finished') a.cancel() })
     }
-  }, [refs])
+  }, [refs, replayKey])
 }
