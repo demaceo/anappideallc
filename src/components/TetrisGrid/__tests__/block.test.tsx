@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
-import { describe, it, expect } from 'vitest'
 import { Block } from '../Block'
 import type { BlockProps } from '../Block'
 
@@ -31,5 +30,10 @@ describe('Block', () => {
   it('renders no data-reveal="subtitle" when subtitle is absent', () => {
     const { container } = renderBlock()
     expect(container.querySelector('[data-reveal="subtitle"]')).toBeNull()
+  })
+
+  it('renders no data-reveal="cta" when cta is absent', () => {
+    const { container } = renderBlock()
+    expect(container.querySelector('[data-reveal="cta"]')).toBeNull()
   })
 })
