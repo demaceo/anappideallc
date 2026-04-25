@@ -31,6 +31,7 @@ export interface BlockProps {
   title: string
   subtitle?: string
   cta?: string
+  tags?: string[]
   ariaLabel?: string
   onNavigate?: (id: BlockId, to: string) => void
 }
@@ -38,7 +39,7 @@ export interface BlockProps {
 const MotionLink = motion.create(Link)
 
 export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
-  { id, to, title, subtitle, cta, ariaLabel, onNavigate },
+  { id, to, title, subtitle, cta, tags, ariaLabel, onNavigate },
   ref,
 ) {
   const className = `${styles.block} ${styles[`block-${id}`]}`
@@ -65,7 +66,17 @@ export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
     >
       <span data-reveal="title" className={styles.title}>{title}</span>
       {subtitle ? <span data-reveal="subtitle" className={styles.subtitle}>{subtitle}</span> : null}
-      {cta ? <span data-reveal="cta" className={styles.cta}>{cta} →</span> : null}
+      {tags && tags.length > 0
+        ? (
+          <span data-reveal="tags" className={styles.tags}>
+            {tags.map((tag) => (
+              <span key={tag} className={styles.tag}>{tag}</span>
+            ))}
+          </span>
+        )
+        : cta
+          ? <span data-reveal="cta" className={styles.cta}>{cta} →</span>
+          : null}
     </MotionLink>
   )
 })

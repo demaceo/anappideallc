@@ -28,7 +28,8 @@ const BLOCKS = [
     id: 'work' as const,
     to: '/work',
     title: 'Work',
-    subtitle: 'Pinpoint · Payback · RentHarbor · Feng Shui · Yap United',
+    subtitle: '5 solo builds · iOS · Android · Web · AI-integrated',
+    tags: ['Civic Tech', 'Privacy', 'PropTech', 'Spatial AI', 'Translation'],
   },
   {
     id: 'services' as const,

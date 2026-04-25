@@ -36,4 +36,23 @@ describe('Block', () => {
     const { container } = renderBlock()
     expect(container.querySelector('[data-reveal="cta"]')).toBeNull()
   })
+
+  it('renders tag elements when tags prop is provided', () => {
+    const { container } = renderBlock({ tags: ['Civic Tech', 'Privacy', 'PropTech'] })
+    const tags = container.querySelectorAll('[data-reveal="tags"] span')
+    expect(tags).toHaveLength(3)
+    expect(tags[0]).toHaveTextContent('Civic Tech')
+    expect(tags[1]).toHaveTextContent('Privacy')
+    expect(tags[2]).toHaveTextContent('PropTech')
+  })
+
+  it('renders no tags container when tags prop is absent', () => {
+    const { container } = renderBlock()
+    expect(container.querySelector('[data-reveal="tags"]')).toBeNull()
+  })
+
+  it('does not render cta when tags are provided', () => {
+    const { container } = renderBlock({ cta: 'View work', tags: ['Civic Tech'] })
+    expect(container.querySelector('[data-reveal="cta"]')).toBeNull()
+  })
 })
