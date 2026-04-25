@@ -12,11 +12,12 @@
   background: var(--block-bg, transparent);
   color: var(--block-fg, currentColor);
 
-  /* Directional-light specular edges (top + left) — hover state redefines
-     these with brighter values, so the box-shadow rule below picks them up
-     automatically without re-specifying the inset structure. */
-  --block-specular-top: rgba(255, 255, 255, 0.40);
-  --block-specular-left: rgba(255, 255, 255, 0.18);
+  /* Directional-light specular edges (top + left) — pull from global
+     surface tokens so .block and .header (Page.module.css) stay in sync.
+     Hover/focus redefine these locally with the -bright variants so the
+     box-shadow rule below picks them up automatically via cascade. */
+  --block-specular-top: var(--surface-specular-top);
+  --block-specular-left: var(--surface-specular-left);
 
   /* Focus tilt — fixed angles for keyboard users (hover gets cursor-driven
      tilt via JS-set --hover-rx/ry). Promoted to vars so they live alongside
@@ -162,8 +163,8 @@
   .block:hover {
     /* Brighter specular edges on hover — the base box-shadow rule picks up
        these redefined values automatically via cascade. */
-    --block-specular-top: rgba(255, 255, 255, 0.45);
-    --block-specular-left: rgba(255, 255, 255, 0.22);
+    --block-specular-top: var(--surface-specular-top-bright);
+    --block-specular-left: var(--surface-specular-left-bright);
 
     /* --hover-rx/ry set by JS mousemove handler; 0deg fallbacks mean the block
        lifts straight up on initial entry, then tilts as the cursor moves */
@@ -190,8 +191,8 @@
 
 /* Keyboard focus: same visual lift as hover so pointer and keyboard UX are equivalent */
 .block:focus-visible {
-  --block-specular-top: rgba(255, 255, 255, 0.45);
-  --block-specular-left: rgba(255, 255, 255, 0.22);
+  --block-specular-top: var(--surface-specular-top-bright);
+  --block-specular-left: var(--surface-specular-left-bright);
 
   outline: 3px solid var(--block-fg);
   outline-offset: 4px;
