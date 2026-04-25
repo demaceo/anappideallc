@@ -61,7 +61,7 @@
 }
 
 .cta {
-  align-self: flex-start;
+  align-self: flex-end;
   margin-top: 0.5rem;
   padding: 0.6rem 1.1rem;
   background: var(--block-fg);
