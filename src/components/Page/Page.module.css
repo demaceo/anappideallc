@@ -1,0 +1,102 @@
+.page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.header {
+  background: var(--block-bg, var(--accent));
+  color: var(--block-fg, var(--bg));
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  border-radius: clamp(8px, 1vw, 14px);
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1;
+  box-shadow:
+    inset 4px 4px 0 var(--bevel-light),
+    inset -4px -4px 0 var(--bevel-dark),
+    var(--shadow-base);
+}
+
+.lede {
+  font-size: clamp(1.1rem, 1.5vw + 0.6rem, 1.5rem);
+  color: var(--fg);
+  max-width: 60ch;
+  line-height: 1.4;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sectionHeading {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--fg) 12%, transparent);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cardTitle {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.cardDesc {
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  color: var(--fg-muted);
+  line-height: 1.45;
+}
+
+.list li::before {
+  content: '→';
+  color: var(--accent);
+  margin-right: 0.5rem;
+  font-weight: 800;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--fg) 8%, transparent);
+  color: var(--fg);
+  letter-spacing: 0.01em;
+}

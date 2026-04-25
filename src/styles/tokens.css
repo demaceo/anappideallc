@@ -1,0 +1,137 @@
+/* Theme tokens — every theme defines the same set of variables.
+   The active theme is selected via the [data-theme] attribute on <html>,
+   set by the inline bootstrap script in index.html before first paint. */
+
+:root,
+[data-theme="modern-vibrant"] {
+  --bg: #0a0a1a;
+  --fg: #f5f5fa;
+  --fg-muted: #a8a8c0;
+  --accent: #ff3d7f;
+  --focus-ring: #ff9d4a;
+
+  --c-hero: linear-gradient(135deg, #ff3d7f, #ff9d4a);
+  --c-hero-fg: #fff;
+  --c-brand: #ffffff;
+  --c-brand-fg: #0a0a1a;
+  --c-about: #4ad4ff;
+  --c-about-fg: #0a0a1a;
+  --c-work: #ffd93d;
+  --c-work-fg: #0a0a1a;
+  --c-services: #7ef078;
+  --c-services-fg: #0a0a1a;
+  --c-process: #c678ff;
+  --c-process-fg: #fff;
+  --c-contact: #ff6b6b;
+  --c-contact-fg: #fff;
+
+  --bevel-light: rgba(255, 255, 255, 0.5);
+  --bevel-dark: rgba(0, 0, 0, 0.25);
+  --shadow-base: 0 8px 0 rgba(0, 0, 0, 0.4), 0 24px 32px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 12px 0 rgba(0, 0, 0, 0.4), 0 30px 40px rgba(0, 0, 0, 0.55);
+
+  --toggler-bg: rgba(0, 0, 0, 0.4);
+  --toggler-border: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="classic"] {
+  --bg: #000;
+  --fg: #fff;
+  --fg-muted: #888;
+  --accent: #f0f000;
+  --focus-ring: #00f0f0;
+
+  --c-hero: #00f0f0;
+  --c-hero-fg: #000;
+  --c-brand: #ffffff;
+  --c-brand-fg: #000;
+  --c-about: #f0f000;
+  --c-about-fg: #000;
+  --c-work: #a000f0;
+  --c-work-fg: #fff;
+  --c-services: #00f000;
+  --c-services-fg: #000;
+  --c-process: #f0a000;
+  --c-process-fg: #000;
+  --c-contact: #f00000;
+  --c-contact-fg: #fff;
+
+  --bevel-light: rgba(255, 255, 255, 0.55);
+  --bevel-dark: rgba(0, 0, 0, 0.45);
+  --shadow-base: 0 8px 0 rgba(0, 0, 0, 0.6), 0 24px 32px rgba(0, 0, 0, 0.7);
+  --shadow-hover: 0 12px 0 rgba(0, 0, 0, 0.6), 0 30px 40px rgba(0, 0, 0, 0.75);
+
+  --toggler-bg: rgba(255, 255, 255, 0.08);
+  --toggler-border: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="pastel"] {
+  --bg: #fffaf0;
+  --fg: #2a2a2a;
+  --fg-muted: #6a6a6a;
+  --accent: #ffb5a7;
+  --focus-ring: #a7d8ff;
+
+  --c-hero: linear-gradient(135deg, #ffb5a7, #ffe5a1);
+  --c-hero-fg: #2a2a2a;
+  --c-brand: #f8edeb;
+  --c-brand-fg: #2a2a2a;
+  --c-about: #a7d8ff;
+  --c-about-fg: #2a2a2a;
+  --c-work: #ffe5a1;
+  --c-work-fg: #2a2a2a;
+  --c-services: #b8e8b8;
+  --c-services-fg: #2a2a2a;
+  --c-process: #d8b9ff;
+  --c-process-fg: #2a2a2a;
+  --c-contact: #ffc9c9;
+  --c-contact-fg: #2a2a2a;
+
+  --bevel-light: rgba(255, 255, 255, 0.7);
+  --bevel-dark: rgba(0, 0, 0, 0.12);
+  --shadow-base: 0 6px 0 rgba(0, 0, 0, 0.08), 0 16px 24px rgba(0, 0, 0, 0.12);
+  --shadow-hover: 0 10px 0 rgba(0, 0, 0, 0.08), 0 22px 32px rgba(0, 0, 0, 0.16);
+
+  --toggler-bg: rgba(255, 255, 255, 0.6);
+  --toggler-border: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="arcade-neon"] {
+  --bg: #0a0018;
+  --fg: #fff;
+  --fg-muted: #b8a8d8;
+  --accent: #ff00ff;
+  --focus-ring: #00ffff;
+
+  /* Neon theme: each block's "color" is the glow ring; bg matches page. */
+  --c-hero: #0a0018;
+  --c-hero-fg: #ff00ff;
+  --c-brand: #0a0018;
+  --c-brand-fg: #00ffff;
+  --c-about: #0a0018;
+  --c-about-fg: #00ff88;
+  --c-work: #0a0018;
+  --c-work-fg: #ffff00;
+  --c-services: #0a0018;
+  --c-services-fg: #ff8800;
+  --c-process: #0a0018;
+  --c-process-fg: #ff00ff;
+  --c-contact: #0a0018;
+  --c-contact-fg: #ff0066;
+
+  --bevel-light: transparent;
+  --bevel-dark: transparent;
+  --shadow-base: 0 0 0 2px currentColor, 0 0 12px currentColor, inset 0 0 12px currentColor;
+  --shadow-hover: 0 0 0 2px currentColor, 0 0 24px currentColor, inset 0 0 16px currentColor;
+
+  --toggler-bg: rgba(0, 0, 0, 0.6);
+  --toggler-border: rgba(255, 0, 255, 0.3);
+}
+
+/* Reduced-motion: collapse the 3D layer entirely. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --parallax-x: 0deg;
+    --parallax-y: 0deg;
+  }
+}
