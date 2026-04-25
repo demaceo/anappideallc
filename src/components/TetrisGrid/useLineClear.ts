@@ -19,6 +19,7 @@ const FLY: Record<BlockId, { tx: number; ty: number; rot: number }> = {
 }
 
 // Return stagger: faster than entry (visitor already knows the grid).
+// Hero gets a double gap (300→420ms) so it lands as a dramatic finale.
 const RETURN_ORDER: Record<BlockId, number> = {
   brand:    0,
   about:    60,
@@ -31,7 +32,7 @@ const RETURN_ORDER: Record<BlockId, number> = {
 
 const CONTENT_FRAMES: Keyframe[] = [
   { opacity: 0, transform: 'translateY(6px)', filter: 'blur(2px)' },
-  { opacity: 1, transform: 'translateY(0)',   filter: 'blur(0)'   },
+  { opacity: 1, transform: 'translateY(0)',   filter: 'blur(0px)' },
 ]
 
 const reduced = () =>

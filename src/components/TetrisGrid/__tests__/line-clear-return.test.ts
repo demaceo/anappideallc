@@ -145,6 +145,25 @@ describe('useLineClear — return animation', () => {
     expect(childCalls.length).toBeGreaterThan(0)
   })
 
+  it('child reveal delays are staggered 80 ms apart', () => {
+    const el = document.createElement('a')
+    el.dataset.blockId = 'brand'
+    ;['title', 'subtitle', 'cta'].forEach((name) => {
+      const span = document.createElement('span')
+      span.dataset.reveal = name
+      el.appendChild(span)
+    })
+    const refs: BlockRef[] = [{ id: 'brand', ref: { current: el } }]
+    renderHook(() => useLineClearController(refs), {
+      wrapper: ({ children }) =>
+        React.createElement(MemoryRouter, { initialEntries: ['/'] }, children),
+    })
+    const children = Array.from(el.querySelectorAll('[data-reveal]'))
+    const delays = children.map((child) => callsForEl(child)[0]?.[1].delay as number)
+    expect(delays[1] - delays[0]).toBe(80)
+    expect(delays[2] - delays[1]).toBe(80)
+  })
+
   it('does not fire return animation when prefers-reduced-motion is set', () => {
     mockMatchMedia(true)
     const refs = runReturnHook()
