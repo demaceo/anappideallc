@@ -59,13 +59,18 @@ describe('useGravityDrop', () => {
     }, [])
   }
 
+  let randomSpy: ReturnType<typeof vi.spyOn>
+
   beforeEach(() => {
     sessionStorage.clear()
     mockMatchMedia(false)
+    // Pin Math.random so duration jitter is deterministic (hero: 840, non-hero: 780).
+    randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0)
     animateSpy = makeMockAnimate()
   })
 
   afterEach(() => {
+    randomSpy.mockRestore()
     animateSpy.mockRestore()
   })
 

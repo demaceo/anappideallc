@@ -69,7 +69,8 @@ export function TetrisGrid() {
     [],
   )
 
-  useGravityDrop(blockRefs.map((b) => b.ref))
+  const gravityRefs = useMemo(() => blockRefs.map((b) => b.ref), [blockRefs])
+  useGravityDrop(gravityRefs)
   const { playOutAndNavigate } = useLineClearController(blockRefs)
 
   return (
