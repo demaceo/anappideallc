@@ -59,8 +59,8 @@
      is the rim catching light; the inset top/bottom add a subtle highlight
      and shadow that read as refraction at the front edges. */
   box-shadow:
-    0 0 0 1px var(--cube-edge-light),
-    inset 0 1px 0 var(--cube-edge-light),
+    /* 0 0 0 1px var(--cube-edge-light),
+    inset 0 1px 0 var(--cube-edge-light), */
     inset 0 -1px 0 var(--cube-edge-shadow);
 }
 
