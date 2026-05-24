@@ -54,11 +54,34 @@
     rgba(28, 18, 45, 0.88) 100%
   );
 
-  /* Editorial Hardware material — v2.0 per-section bloom triples.
-     Each section gets three tokens: dark (outer-edge body), base (middle
-     of the diagonal gradient), bright (highlight stop). The Block
-     component reads these to render the Editorial Hardware multi-stop
-     gradient + caustic floor spill. */
+  /* Ambient shadow stack — multi-layer drop shadow used by directional-light
+     surfaces (.block in TetrisGrid, .header in Page). Each theme defines its
+     own values to suit its visual depth (e.g. arcade-neon uses neon glow rings
+     instead of soft ambient drops). */
+  --shadow-base: 0 4px 0 rgba(0,0,0,0.32), 0 8px 20px rgba(0,0,0,0.28), 0 24px 48px rgba(0,0,0,0.16);
+  --shadow-hover: 0 20px 0 rgba(0,0,0,0.38), 0 32px 60px rgba(0,0,0,0.30), 0 56px 80px rgba(0,0,0,0.18);
+
+  /* Directional-light specular edges — used by any "elevated surface"
+     (TetrisGrid blocks, inner-page headers). Top + left edges catch the
+     top-left light source. Bright variants are for hover/focus states. */
+  --surface-specular-top: rgba(255, 255, 255, 0.40);
+  --surface-specular-left: rgba(255, 255, 255, 0.18);
+  --surface-specular-top-bright: rgba(255, 255, 255, 0.45);
+  --surface-specular-left-bright: rgba(255, 255, 255, 0.22);
+
+  --toggler-bg: rgba(0, 0, 0, 0.45);
+  --toggler-border: rgba(255, 255, 255, 0.12);
+}
+
+/* Editorial Hardware material — v2.0 per-section bloom triples.
+   Scoped to modern-vibrant only (NOT :root) so that classic, pastel, and
+   arcade-neon themes have these tokens undefined. Block.module.css binds
+   --bloom-* from these, then the gradient/caustic/etc. fall through to
+   the v1 --block-bg / --block-fg chain on non-modern-vibrant themes.
+
+   Each section gets three tokens: dark (outer-edge body), base (middle
+   of the diagonal gradient), bright (highlight stop). */
+[data-theme="modern-vibrant"] {
   --c-hero-mat-dark:   #8a0144;
   --c-hero-mat-base:   #d90368;
   --c-hero-mat-bright: #ff5e98;
@@ -82,24 +105,6 @@
   --c-contact-mat-dark:    #8a0144;
   --c-contact-mat-base:    #d90368;
   --c-contact-mat-bright:  #ff5e98;
-
-  /* Ambient shadow stack — multi-layer drop shadow used by directional-light
-     surfaces (.block in TetrisGrid, .header in Page). Each theme defines its
-     own values to suit its visual depth (e.g. arcade-neon uses neon glow rings
-     instead of soft ambient drops). */
-  --shadow-base: 0 4px 0 rgba(0,0,0,0.32), 0 8px 20px rgba(0,0,0,0.28), 0 24px 48px rgba(0,0,0,0.16);
-  --shadow-hover: 0 20px 0 rgba(0,0,0,0.38), 0 32px 60px rgba(0,0,0,0.30), 0 56px 80px rgba(0,0,0,0.18);
-
-  /* Directional-light specular edges — used by any "elevated surface"
-     (TetrisGrid blocks, inner-page headers). Top + left edges catch the
-     top-left light source. Bright variants are for hover/focus states. */
-  --surface-specular-top: rgba(255, 255, 255, 0.40);
-  --surface-specular-left: rgba(255, 255, 255, 0.18);
-  --surface-specular-top-bright: rgba(255, 255, 255, 0.45);
-  --surface-specular-left-bright: rgba(255, 255, 255, 0.22);
-
-  --toggler-bg: rgba(0, 0, 0, 0.45);
-  --toggler-border: rgba(255, 255, 255, 0.12);
 }
 
 [data-theme="classic"] {

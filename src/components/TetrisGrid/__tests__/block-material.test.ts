@@ -1,9 +1,14 @@
+/// <reference types="node" />
 import fs from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { describe, it, expect } from 'vitest'
 
+// ESM-native dirname resolution — see material-tokens.test.ts for rationale.
+const HERE = path.dirname(fileURLToPath(import.meta.url))
+
 const BLOCK_CSS = fs.readFileSync(
-  path.resolve(__dirname, '../Block.module.css'),
+  path.resolve(HERE, '../Block.module.css'),
   'utf8',
 )
 

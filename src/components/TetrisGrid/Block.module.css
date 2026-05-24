@@ -194,33 +194,45 @@
   --bloom-bright: var(--c-contact-mat-bright);
 }
 
-/* Editorial Hardware surface overlay — brushed micro-grain at 118° + diagonal
-   specular highlight at 135°. Stacked via comma-separated backgrounds so
-   they composite together. mix-blend-mode: screen lets the bloom underneath
-   show through where the highlight is most intense. */
+/* Base ::before overlay — v1 gloss preserved for classic, pastel, and other
+   non-modern-vibrant themes. Modern-vibrant overrides this with the
+   Editorial Hardware brushed grain + specular highlight further down. */
 .block::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background:
-    repeating-linear-gradient(118deg, transparent 0 2px, rgba(255, 255, 255, 0.045) 2px 3px),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, transparent 30%, transparent 70%, rgba(0, 0, 0, 0.25) 100%);
-  mix-blend-mode: screen;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.06) 40%,
+    transparent 70%,
+    rgba(0, 0, 0, 0.08) 100%
+  );
   pointer-events: none;
 }
 
-/* Neon theme retains its v1 behavior — Editorial Hardware overlay disabled
-   (the theme uses glow rings instead of surface highlights). */
+/* Neon theme: glow rings instead of any surface overlay. */
 [data-theme="arcade-neon"] .block::before {
   display: none;
 }
 
+/* Editorial Hardware surface overlay — modern-vibrant only. Brushed
+   micro-grain at 118° + diagonal specular highlight at 135°, composited
+   via mix-blend-mode: screen so the bloom underneath shows through where
+   the highlight is most intense. */
+[data-theme="modern-vibrant"] .block::before {
+  background:
+    repeating-linear-gradient(118deg, transparent 0 2px, rgba(255, 255, 255, 0.045) 2px 3px),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, transparent 30%, transparent 70%, rgba(0, 0, 0, 0.25) 100%);
+  mix-blend-mode: screen;
+}
+
 /* Editorial Hardware caustic floor spill — soft colored glow under the
-   block, suggesting refracted light passing through a glass cushion onto
-   the surface below. Hidden on themes without --bloom-bright (degrades to
-   transparent gracefully via the fallback). */
-.block::after {
+   block suggesting refracted light from a glass cushion onto the velvet
+   stage below. Scoped to modern-vibrant only — other themes have no
+   ::after pseudo-element, matching v1 visuals exactly. */
+[data-theme="modern-vibrant"] .block::after {
   content: '';
   position: absolute;
   bottom: -8%;

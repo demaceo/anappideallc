@@ -1,10 +1,18 @@
 // src/components/TetrisGrid/__tests__/material-tokens.test.ts
+/// <reference types="node" />
 import fs from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { describe, it, expect } from 'vitest'
 
+// ESM-native dirname resolution. The repo is "type": "module", so
+// CommonJS __dirname is not defined at runtime — only Vitest's
+// historical shim made the previous version work, which Copilot
+// (correctly) flagged as fragile.
+const HERE = path.dirname(fileURLToPath(import.meta.url))
+
 const TOKENS_CSS = fs.readFileSync(
-  path.resolve(__dirname, '../../../styles/tokens.css'),
+  path.resolve(HERE, '../../../styles/tokens.css'),
   'utf8',
 )
 
