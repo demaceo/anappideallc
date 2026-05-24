@@ -81,3 +81,33 @@
 :global(html:not([data-theme="modern-vibrant"])) .vignette {
   display: none;
 }
+
+/* Slow aurora drift — same gentle oscillation as HeroPortalWindow but
+   tuned for the larger blurred radials. 30s cycle. Respects
+   prefers-reduced-motion. */
+@keyframes aurora-chamber-drift-1 {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(2%, -3%, 0); }
+}
+
+@keyframes aurora-chamber-drift-2 {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(-2%, 3%, 0); }
+}
+
+@keyframes aurora-chamber-drift-3 {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(0, -2%, 0); }
+}
+
+.auroraCyan    { animation: aurora-chamber-drift-1 30s ease-in-out infinite; }
+.auroraMagenta { animation: aurora-chamber-drift-2 34s ease-in-out infinite; }
+.auroraGold    { animation: aurora-chamber-drift-3 26s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .auroraCyan,
+  .auroraMagenta,
+  .auroraGold {
+    animation: none;
+  }
+}

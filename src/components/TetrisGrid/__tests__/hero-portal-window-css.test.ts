@@ -29,4 +29,11 @@ describe('HeroPortalWindow.module.css', () => {
   it('portal is hidden on non-modern-vibrant themes', () => {
     expect(CSS).toMatch(/:not\(\[data-theme="modern-vibrant"\]\)/)
   })
+  it('aurora layer has a 30s drift animation', () => {
+    expect(CSS).toMatch(/\.aurora\s*\{[^}]*animation:\s*hero-portal-aurora-drift\s+30s/)
+  })
+  it('respects prefers-reduced-motion by disabling the drift', () => {
+    expect(CSS).toMatch(/prefers-reduced-motion:\s*reduce/)
+    expect(CSS).toMatch(/animation:\s*none/)
+  })
 })

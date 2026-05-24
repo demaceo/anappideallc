@@ -29,4 +29,12 @@ describe('AuroraChamber.module.css', () => {
   it('decorative layers are hidden on non-modern-vibrant themes', () => {
     expect(CSS).toMatch(/:not\(\[data-theme="modern-vibrant"\]\)/)
   })
+  it('aurora layers have drift animations with different durations', () => {
+    expect(CSS).toMatch(/\.auroraCyan\s*\{[^}]*animation:\s*aurora-chamber-drift-1\s+30s/)
+    expect(CSS).toMatch(/\.auroraMagenta\s*\{[^}]*animation:\s*aurora-chamber-drift-2\s+34s/)
+    expect(CSS).toMatch(/\.auroraGold\s*\{[^}]*animation:\s*aurora-chamber-drift-3\s+26s/)
+  })
+  it('respects prefers-reduced-motion', () => {
+    expect(CSS).toMatch(/prefers-reduced-motion:\s*reduce/)
+  })
 })
