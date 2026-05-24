@@ -75,8 +75,10 @@
   --c-services-mat-base:   #00b4aa;
   --c-services-mat-bright: #5be3dc;
   --c-process-mat-dark:    #5a3618;
-  --c-process-mat-base:    #C47820;
+  --c-process-mat-base:    #c47820;
   --c-process-mat-bright:  #e8a85a;
+  /* Contact intentionally shares Hero's triple — same magenta identity,
+     per spec §4.2 (color-identity consistency). */
   --c-contact-mat-dark:    #8a0144;
   --c-contact-mat-base:    #d90368;
   --c-contact-mat-bright:  #ff5e98;
