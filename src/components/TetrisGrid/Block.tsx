@@ -1,4 +1,5 @@
 import { forwardRef } from 'react'
+import type { ReactNode } from 'react'
 import { motion } from 'motion/react'
 import { Link } from 'react-router'
 import styles from './Block.module.css'
@@ -34,12 +35,18 @@ export interface BlockProps {
   tags?: string[]
   ariaLabel?: string
   onNavigate?: (id: BlockId, to: string) => void
+  /**
+   * Optional decorative content rendered as a sibling element BEFORE the
+   * block's title. Used by the Hero block to mount the aurora portal
+   * window cutout. Should not contain interactive content.
+   */
+  portal?: ReactNode
 }
 
 const MotionLink = motion.create(Link)
 
 export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
-  { id, to, title, subtitle, cta, tags, ariaLabel, onNavigate },
+  { id, to, title, subtitle, cta, tags, ariaLabel, onNavigate, portal },
   ref,
 ) {
   const className = `${styles.block} ${styles[`block-${id}`]}`
@@ -64,6 +71,7 @@ export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
         onNavigate(id, to)
       }}
     >
+      {portal}
       <span data-reveal="title" className={styles.title}>{title}</span>
       {subtitle ? <span data-reveal="subtitle" className={styles.subtitle}>{subtitle}</span> : null}
       {tags && tags.length > 0
