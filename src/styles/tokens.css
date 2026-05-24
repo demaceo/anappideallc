@@ -62,6 +62,9 @@
   --c-hero-mat-dark:   #8a0144;
   --c-hero-mat-base:   #d90368;
   --c-hero-mat-bright: #ff5e98;
+  --c-brand-mat-dark:   #a89a82;
+  --c-brand-mat-base:   #f1e9da;
+  --c-brand-mat-bright: #ffffff;
 
   /* Ambient shadow stack — multi-layer drop shadow used by directional-light
      surfaces (.block in TetrisGrid, .header in Page). Each theme defines its
