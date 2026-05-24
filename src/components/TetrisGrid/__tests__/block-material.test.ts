@@ -79,4 +79,22 @@ describe('Block.module.css — Editorial Hardware material', () => {
   it('.block::after positions below the block (bottom: -8%)', () => {
     expect(BLOCK_CSS).toMatch(/\.block::after\s*\{[^}]*bottom:\s*-8%/)
   })
+
+  it('.block has Editorial Hardware shadow stack — pearl rim inset', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\.block\s*\{[^}]*box-shadow:[^;]*inset\s+0\s+0\s+0\s+1px\s+rgba\(255,\s*255,\s*255,\s*0\.18\)/,
+    )
+  })
+
+  it('.block has Editorial Hardware shadow stack — cushion offset', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\.block\s*\{[^}]*box-shadow:[^;]*0\s+18px\s+0\s+rgba\(0,\s*0,\s*0,\s*0\.42\)/,
+    )
+  })
+
+  it('.block has Editorial Hardware shadow stack — bloom halo', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\.block\s*\{[^}]*box-shadow:[^;]*0\s+36px\s+70px\s+var\(--bloom,\s*transparent\)/,
+    )
+  })
 })
