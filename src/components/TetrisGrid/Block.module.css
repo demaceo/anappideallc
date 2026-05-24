@@ -187,24 +187,24 @@
   --bloom-bright: var(--c-contact-mat-bright);
 }
 
-/* Gloss overlay — simulates a top-left light source catching the lifted surface */
+/* Editorial Hardware surface overlay — brushed micro-grain at 118° + diagonal
+   specular highlight at 135°. Stacked via comma-separated backgrounds so
+   they composite together. mix-blend-mode: screen lets the bloom underneath
+   show through where the highlight is most intense. */
 .block::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.18) 0%,
-    rgba(255, 255, 255, 0.06) 40%,
-    transparent 70%,
-    rgba(0, 0, 0, 0.08) 100%
-  );
-  opacity: 1;
+  background:
+    repeating-linear-gradient(118deg, transparent 0 2px, rgba(255, 255, 255, 0.045) 2px 3px),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, transparent 30%, transparent 70%, rgba(0, 0, 0, 0.25) 100%);
+  mix-blend-mode: screen;
   pointer-events: none;
 }
 
-/* Neon theme uses glow rings, not surface highlights */
+/* Neon theme retains its v1 behavior — Editorial Hardware overlay disabled
+   (the theme uses glow rings instead of surface highlights). */
 [data-theme="arcade-neon"] .block::before {
   display: none;
 }

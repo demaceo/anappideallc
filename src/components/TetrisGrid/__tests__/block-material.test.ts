@@ -49,4 +49,20 @@ describe('Block.module.css — Editorial Hardware material', () => {
   it('.block gradient falls back through --block-bg for non-bloom themes', () => {
     expect(BLOCK_CSS).toMatch(/var\(--bloom-dark,\s*var\(--block-bg/)
   })
+
+  it('.block::before has brushed micro-grain via 118deg repeating-linear-gradient', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\.block::before\s*\{[^}]*repeating-linear-gradient\(\s*118deg,\s*transparent\s*0\s*2px,\s*rgba\(255,\s*255,\s*255,\s*0\.045\)\s*2px\s*3px\)/,
+    )
+  })
+
+  it('.block::before has diagonal specular highlight 135deg', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\.block::before\s*\{[^}]*linear-gradient\(\s*135deg,\s*rgba\(255,\s*255,\s*255,\s*0\.45\)\s*0%,\s*transparent\s*30%,\s*transparent\s*70%,\s*rgba\(0,\s*0,\s*0,\s*0\.25\)\s*100%\)/,
+    )
+  })
+
+  it('.block::before uses mix-blend-mode: screen', () => {
+    expect(BLOCK_CSS).toMatch(/\.block::before\s*\{[^}]*mix-blend-mode:\s*screen/)
+  })
 })
