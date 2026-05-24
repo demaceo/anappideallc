@@ -63,4 +63,14 @@ describe('Editorial Hardware bloom tokens (modern-vibrant)', () => {
   it('defines --c-services-mat-bright with #5be3dc', () => {
     expect(TOKENS_CSS).toMatch(/--c-services-mat-bright:\s*#5be3dc/i)
   })
+
+  it('defines --c-process-mat-dark with #5a3618', () => {
+    expect(TOKENS_CSS).toMatch(/--c-process-mat-dark:\s*#5a3618/i)
+  })
+  it('defines --c-process-mat-base with #C47820', () => {
+    expect(TOKENS_CSS).toMatch(/--c-process-mat-base:\s*#C47820/i)
+  })
+  it('defines --c-process-mat-bright with #e8a85a', () => {
+    expect(TOKENS_CSS).toMatch(/--c-process-mat-bright:\s*#e8a85a/i)
+  })
 })
