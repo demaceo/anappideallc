@@ -105,6 +105,15 @@
   --c-contact-mat-dark:    #8a0144;
   --c-contact-mat-base:    #d90368;
   --c-contact-mat-bright:  #ff5e98;
+
+  /* Aurora composition — modern-vibrant only. Used by HeroPortalWindow
+     (inside the Hero block) and AuroraChamber (full-viewport on /contact).
+     Each layer is a separable radial gradient string so individual layers
+     can be composed into different parent rules. */
+  --aurora-cyan:    rgba(80, 200, 255, 0.35);
+  --aurora-magenta: rgba(217, 3, 104, 0.5);
+  --aurora-gold:    rgba(255, 212, 0, 0.32);
+  --aurora-deepspace: linear-gradient(180deg, #03020a 0%, #0a0418 60%, #050310 100%);
 }
 
 [data-theme="classic"] {
