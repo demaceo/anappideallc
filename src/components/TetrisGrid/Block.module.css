@@ -209,6 +209,25 @@
   display: none;
 }
 
+/* Editorial Hardware caustic floor spill — soft colored glow under the
+   block, suggesting refracted light passing through a glass cushion onto
+   the surface below. Hidden on themes without --bloom-bright (degrades to
+   transparent gracefully via the fallback). */
+.block::after {
+  content: '';
+  position: absolute;
+  bottom: -8%;
+  left: 10%;
+  right: 10%;
+  height: 16%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--bloom-bright, transparent), transparent 70%);
+  filter: blur(10px);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: -1;
+}
+
 /* Per-block hover lift — only on devices that actually have a hover state.
    Touch devices skip it so the block doesn't get stuck in the lifted state. */
 @media (hover: hover) {

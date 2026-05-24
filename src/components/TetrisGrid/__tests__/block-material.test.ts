@@ -65,4 +65,18 @@ describe('Block.module.css — Editorial Hardware material', () => {
   it('.block::before uses mix-blend-mode: screen', () => {
     expect(BLOCK_CSS).toMatch(/\.block::before\s*\{[^}]*mix-blend-mode:\s*screen/)
   })
+
+  it('.block::after renders the glass caustic floor spill', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\.block::after\s*\{[^}]*radial-gradient\(\s*closest-side,\s*var\(--bloom-bright[^)]*\),\s*transparent\s*70%\)/,
+    )
+  })
+
+  it('.block::after applies a 10px blur', () => {
+    expect(BLOCK_CSS).toMatch(/\.block::after\s*\{[^}]*filter:\s*blur\(10px\)/)
+  })
+
+  it('.block::after positions below the block (bottom: -8%)', () => {
+    expect(BLOCK_CSS).toMatch(/\.block::after\s*\{[^}]*bottom:\s*-8%/)
+  })
 })
