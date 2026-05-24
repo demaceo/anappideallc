@@ -155,3 +155,13 @@ That requires:
 5. A decisive, single brand identity
 
 The bones are good. The experience needs to be built for the right audience.
+
+---
+
+## v2.0 Implementation Status
+
+### Phase 1 — Material System Refactor (completed 2026-05-24)
+
+Editorial Hardware material recipe applied to `modern-vibrant` theme. Per-section bloom triples (`--c-{section}-mat-{dark|base|bright}`) drive a 135° multi-stop diagonal gradient, brushed micro-grain at 118°, diagonal specular highlight, pearl rim, cushioned offset shadow, bloom halo, atmospheric shadow, and glass caustic floor spill. Other themes (`classic`, `pastel`, `arcade-neon`) remain visually unchanged via fallback chain to v1's `--block-bg` + `--shadow-base`. See `docs/superpowers/plans/2026-05-24-ui-v2-phase-1-material-system.md` for the full implementation log.
+
+No critiqued issues closed by this phase — material polish is the visual foundation for later phases that solve issues #3 (inner-page experience cliff), #4 (no persistent nav), #5 (Brand block does nothing), and #8 (mobile loses magic).
