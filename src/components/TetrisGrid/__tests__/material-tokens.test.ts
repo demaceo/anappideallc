@@ -73,4 +73,14 @@ describe('Editorial Hardware bloom tokens (modern-vibrant)', () => {
   it('defines --c-process-mat-bright with #e8a85a', () => {
     expect(TOKENS_CSS).toMatch(/--c-process-mat-bright:\s*#e8a85a/i)
   })
+
+  it('defines --c-contact-mat-dark with #8a0144', () => {
+    expect(TOKENS_CSS).toMatch(/--c-contact-mat-dark:\s*#8a0144/i)
+  })
+  it('defines --c-contact-mat-base with #d90368', () => {
+    expect(TOKENS_CSS).toMatch(/--c-contact-mat-base:\s*#d90368/i)
+  })
+  it('defines --c-contact-mat-bright with #ff5e98', () => {
+    expect(TOKENS_CSS).toMatch(/--c-contact-mat-bright:\s*#ff5e98/i)
+  })
 })
