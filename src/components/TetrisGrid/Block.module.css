@@ -35,28 +35,23 @@
   --focus-tilt-x: -4deg;
   --focus-tilt-y: 4deg;
 
-  /* Editorial Hardware shadow stack — pearl rim (inset) + top/left specular
-     edges (preserved from v1 for keyboard-focus consistency) + cushioned
-     offset shadow (gives the chunky 3D form) + colored bloom halo (smells
-     of refraction) + atmospheric shadow. The --bloom token falls back to
-     transparent on themes without bloom tokens, so non-modern-vibrant
-     themes retain v1's simpler --shadow-base stack underneath. */
+  /* Base shadow — v1 specular edges + theme's --shadow-base. Editorial
+     Hardware adds chunky cushion + bloom halo + atmospheric layers in a
+     theme-scoped override below ([data-theme="modern-vibrant"] .block).
+     Classic, pastel, and arcade-neon keep their v1 shadow identity. */
   box-shadow:
     inset 0 1px 0 var(--block-specular-top),
     inset 1px 0 0 var(--block-specular-left),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
-    inset 0 2px 0 rgba(255, 255, 255, 0.5),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
-    0 18px 0 rgba(0, 0, 0, 0.42),
-    0 36px 70px var(--bloom, transparent),
-    0 50px 80px rgba(0, 0, 0, 0.45),
     var(--shadow-base);
   transition:
     background 200ms,
     color 200ms,
     box-shadow 200ms ease-out,
     transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1);
-  overflow: hidden;
+  /* No overflow:hidden — the Editorial Hardware ::after caustic floor spill
+     intentionally extends 8% below the block to render the soft refractive
+     glow on the velvet stage. The ::before specular overlay uses inset:0 +
+     border-radius:inherit so it's already bounded by the block's box. */
   isolation: isolate;
   transform-style: preserve-3d;
   transform: translateZ(var(--block-z, 20px));
@@ -254,18 +249,12 @@
     transform: translateZ(calc(var(--block-z, 20px) + 30px))
                rotateX(var(--hover-rx, 0deg))
                rotateY(var(--hover-ry, 0deg));
-    /* Editorial Hardware hover — intensified cushion + bloom halo for lift
-       feedback. Maintains the stacking order from the base .block rule so
-       the cascade replaces shadows cleanly. */
+    /* Base hover shadow — v1 specular edges + brighter theme shadow.
+       Editorial Hardware extensions live in a theme-scoped override
+       (see [data-theme="modern-vibrant"] .block:hover below). */
     box-shadow:
       inset 0 1px 0 var(--block-specular-top),
       inset 1px 0 0 var(--block-specular-left),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.28),
-      inset 0 2px 0 rgba(255, 255, 255, 0.55),
-      inset 0 -2px 0 rgba(0, 0, 0, 0.4),
-      0 28px 0 rgba(0, 0, 0, 0.48),
-      0 60px 100px var(--bloom, transparent),
-      0 70px 120px rgba(0, 0, 0, 0.5),
       var(--shadow-hover);
     /* Fast tracking during hover; the base 240ms cubic easing applies on exit */
     transition:
@@ -280,7 +269,9 @@
   }
 }
 
-/* Keyboard focus: same visual lift as hover so pointer and keyboard UX are equivalent */
+/* Keyboard focus: same visual lift as hover so pointer and keyboard UX are
+   equivalent. Editorial Hardware shadow extensions live in a theme-scoped
+   override (see [data-theme="modern-vibrant"] .block:focus-visible below). */
 .block:focus-visible {
   --block-specular-top: var(--surface-specular-top-bright);
   --block-specular-left: var(--surface-specular-left-bright);
@@ -290,6 +281,48 @@
   transform: translateZ(calc(var(--block-z, 20px) + 30px))
              rotateX(var(--focus-tilt-x))
              rotateY(var(--focus-tilt-y));
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    var(--shadow-hover);
+}
+
+/* =========================================================================
+   Editorial Hardware theme-scoped overrides.
+   These extend the base shadows above with the v2 Editorial Hardware stack
+   (pearl rim + cushioned offset + bloom halo + atmospheric) — but ONLY for
+   the modern-vibrant theme. Other themes (classic, pastel, arcade-neon)
+   retain their v1 shadow identities defined via --shadow-base / --shadow-hover.
+   ========================================================================= */
+[data-theme="modern-vibrant"] .block {
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    inset 0 2px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+    0 18px 0 rgba(0, 0, 0, 0.42),
+    0 36px 70px var(--bloom, transparent),
+    0 50px 80px rgba(0, 0, 0, 0.45),
+    var(--shadow-base);
+}
+
+@media (hover: hover) {
+  [data-theme="modern-vibrant"] .block:hover {
+    box-shadow:
+      inset 0 1px 0 var(--block-specular-top),
+      inset 1px 0 0 var(--block-specular-left),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+      inset 0 2px 0 rgba(255, 255, 255, 0.55),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+      0 28px 0 rgba(0, 0, 0, 0.48),
+      0 60px 100px var(--bloom, transparent),
+      0 70px 120px rgba(0, 0, 0, 0.5),
+      var(--shadow-hover);
+  }
+}
+
+[data-theme="modern-vibrant"] .block:focus-visible {
   box-shadow:
     inset 0 1px 0 var(--block-specular-top),
     inset 1px 0 0 var(--block-specular-left),
