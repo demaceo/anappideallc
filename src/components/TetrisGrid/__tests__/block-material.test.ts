@@ -109,4 +109,13 @@ describe('Block.module.css — Editorial Hardware material', () => {
       /\.block:hover\s*\{[^}]*box-shadow:[^;]*0\s+60px\s+100px\s+var\(--bloom,\s*transparent\)/,
     )
   })
+
+  it('.block:focus-visible matches the hover Editorial Hardware shadow stack', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\.block:focus-visible\s*\{[^}]*box-shadow:[^;]*0\s+28px\s+0\s+rgba\(0,\s*0,\s*0/,
+    )
+    expect(BLOCK_CSS).toMatch(
+      /\.block:focus-visible\s*\{[^}]*box-shadow:[^;]*0\s+60px\s+100px\s+var\(--bloom,\s*transparent\)/,
+    )
+  })
 })
