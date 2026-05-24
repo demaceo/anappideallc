@@ -254,11 +254,19 @@
     transform: translateZ(calc(var(--block-z, 20px) + 30px))
                rotateX(var(--hover-rx, 0deg))
                rotateY(var(--hover-ry, 0deg));
+    /* Editorial Hardware hover — intensified cushion + bloom halo for lift
+       feedback. Maintains the stacking order from the base .block rule so
+       the cascade replaces shadows cleanly. */
     box-shadow:
       inset 0 1px 0 var(--block-specular-top),
       inset 1px 0 0 var(--block-specular-left),
-      var(--shadow-hover),
-      0 40px 80px rgba(0, 0, 0, 0.22);
+      inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+      inset 0 2px 0 rgba(255, 255, 255, 0.55),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+      0 28px 0 rgba(0, 0, 0, 0.48),
+      0 60px 100px var(--bloom, transparent),
+      0 70px 120px rgba(0, 0, 0, 0.5),
+      var(--shadow-hover);
     /* Fast tracking during hover; the base 240ms cubic easing applies on exit */
     transition:
       background 200ms,

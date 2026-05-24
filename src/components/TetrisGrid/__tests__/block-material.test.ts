@@ -97,4 +97,16 @@ describe('Block.module.css — Editorial Hardware material', () => {
       /\.block\s*\{[^}]*box-shadow:[^;]*0\s+36px\s+70px\s+var\(--bloom,\s*transparent\)/,
     )
   })
+
+  it('.block:hover intensifies the cushion shadow', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\.block:hover\s*\{[^}]*box-shadow:[^;]*0\s+28px\s+0\s+rgba\(0,\s*0,\s*0/,
+    )
+  })
+
+  it('.block:hover intensifies the bloom halo', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\.block:hover\s*\{[^}]*box-shadow:[^;]*0\s+60px\s+100px\s+var\(--bloom,\s*transparent\)/,
+    )
+  })
 })
