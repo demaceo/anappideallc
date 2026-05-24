@@ -54,6 +54,15 @@
     rgba(28, 18, 45, 0.88) 100%
   );
 
+  /* Editorial Hardware material — v2.0 per-section bloom triples.
+     Each section gets three tokens: dark (outer-edge body), base (middle
+     of the diagonal gradient), bright (highlight stop). The Block
+     component reads these to render the Editorial Hardware multi-stop
+     gradient + caustic floor spill. */
+  --c-hero-mat-dark:   #8a0144;
+  --c-hero-mat-base:   #d90368;
+  --c-hero-mat-bright: #ff5e98;
+
   /* Ambient shadow stack — multi-layer drop shadow used by directional-light
      surfaces (.block in TetrisGrid, .header in Page). Each theme defines its
      own values to suit its visual depth (e.g. arcade-neon uses neon glow rings
