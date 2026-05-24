@@ -31,3 +31,22 @@ describe('Block.module.css — bloom token bindings', () => {
     })
   }
 })
+
+describe('Block.module.css — Editorial Hardware material', () => {
+  it('.block background is a 135deg linear-gradient', () => {
+    expect(BLOCK_CSS).toMatch(/\.block\s*\{[^}]*background:[^;]*linear-gradient\(\s*135deg/)
+  })
+
+  it('.block gradient references --bloom-dark at 0% and 100%', () => {
+    expect(BLOCK_CSS).toMatch(/\.block\s*\{[^}]*--bloom-dark[^;]*?0%/)
+    expect(BLOCK_CSS).toMatch(/\.block\s*\{[^}]*--bloom-dark[^;]*?100%/)
+  })
+
+  it('.block gradient references --bloom-bright at 50%', () => {
+    expect(BLOCK_CSS).toMatch(/\.block\s*\{[^}]*--bloom-bright[^;]*?50%/)
+  })
+
+  it('.block gradient falls back through --block-bg for non-bloom themes', () => {
+    expect(BLOCK_CSS).toMatch(/var\(--bloom-dark,\s*var\(--block-bg/)
+  })
+})
