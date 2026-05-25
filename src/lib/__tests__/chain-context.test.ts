@@ -34,8 +34,14 @@ describe('chain-context', () => {
     expect(workSeq[0]).toEqual({ kind: 'wait', durationMs: 1500 })
   })
 
-  it('remaining blocks (services, process, contact) stay at DEFAULT_CHAIN_DURATION_MS (1200ms placeholder)', () => {
-    for (const id of ['services', 'process', 'contact'] as BlockId[]) {
+  it('services sequence is 1300ms (lever raise + flag unfurl)', () => {
+    const seq = BLOCK_SEQUENCES.services!
+    expect(seq).toHaveLength(1)
+    expect(seq[0]).toEqual({ kind: 'wait', durationMs: 1300 })
+  })
+
+  it('remaining blocks (process, contact) stay at DEFAULT_CHAIN_DURATION_MS (1200ms placeholder)', () => {
+    for (const id of ['process', 'contact'] as BlockId[]) {
       const seq = BLOCK_SEQUENCES[id]!
       expect(seq).toHaveLength(1)
       expect(seq[0]).toEqual({ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS })
