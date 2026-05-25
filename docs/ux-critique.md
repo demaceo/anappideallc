@@ -245,3 +245,16 @@ Shipped the second block's chain reaction visual: clicking the About block trigg
 Phase 5e+ will deliver the remaining 4 block sequences (Work domino cascade, Services lever, Process pulley, Contact letter spring).
 
 See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5d-about-pendulum.md` for the full implementation log.
+
+### Phases 5e–5h — Remaining Block Gadgets (completed 2026-05-25)
+
+Shipped the four remaining block chain-reaction visuals in one pass, completing the per-block visual sequences for all 6 navigable blocks of the home grid:
+
+- **Work (5e)** — A small gold marble rolls in from the left, hits the first of 5 polished-steel dominos staggered horizontally. Each domino tips 0° → 90° clockwise with a 90ms stagger, producing a cascading sequence reading as "shipped iteration." `WORK_CHAIN_DURATION_MS = 1500`.
+- **Services (5f)** — A horizontal teal lever pivots at its center, raising its right end by 25° over 700ms. A small flag unfurls on the raised end (scale 0 → 1, backOut) over the trailing 400ms. Reads as "operational systems — clear, mechanical." `SERVICES_CHAIN_DURATION_MS = 1300`.
+- **Process (5g)** — A bronze pulley wheel rotates 720° (two full spins) over 800ms, pulling a bronze weight up on a string (translateY +30 → 0 in lockstep). Reads as "process — orderly, sequential, ratcheted." `PROCESS_CHAIN_DURATION_MS = 1400`.
+- **Contact (5h)** — A coiled magenta spring uncoils via `pathLength` animation (0 → 1 over 500ms), simultaneously releasing a small magenta envelope that slides along the extension direction (translateX -25 → 55). Reads as "contact — the deliverable." Stays at `DEFAULT_CHAIN_DURATION_MS = 1200ms` — the visual fits comfortably.
+
+ChainOverlay's dispatcher now has 5 conditional branches (Hero, About, Work, Services, Process, Contact); each `<Gadget targetX targetY />` is positioned via `useBlockCenters` snapshot. The architectural pattern proven in Phase 5b/5c/5d scaled cleanly — no architectural changes needed for any of the 4 new sequences. **Still zero new runtime dependencies** — Rapier2D continues deferred because each gadget's choreography is templatable via Motion timelines.
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5e-5h-remaining-gadgets.md` for the full implementation log.
