@@ -31,4 +31,9 @@ describe('MaterialsPanel.module.css', () => {
   it('swatch grid is 7 columns', () => {
     expect(CSS).toMatch(/\.swatches\s*\{[^}]*grid-template-columns:\s*repeat\(7,\s*1fr\)/)
   })
+
+  it('close button meets the 44x44 WCAG target-size minimum', () => {
+    expect(CSS).toMatch(/\.close\s*\{[^}]*min-width:\s*44px/)
+    expect(CSS).toMatch(/\.close\s*\{[^}]*min-height:\s*44px/)
+  })
 })
