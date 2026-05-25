@@ -408,7 +408,8 @@
 /* Polished Steel — mirror-grade chrome, vertical horizon-reflection
    gradient that fakes a polished metal surface reflecting a horizon
    line. Cooler than Anodized; reads as machined precision. */
-[data-theme="modern-vibrant"][data-material="steel"] .block {
+[data-theme="modern-vibrant"][data-material="steel"] .block,
+[data-material-preview="steel"] {
   background: linear-gradient(
     180deg,
     #2a2f38 0%,
@@ -433,7 +434,8 @@
 /* Gold Leaf — soft hand-applied warm gold. Radial gradient suggests
    manual application; the imperfect specular pseudo-element overlay
    (added below) fakes the slightly mottled finish of real gold leaf. */
-[data-theme="modern-vibrant"][data-material="gold"] .block {
+[data-theme="modern-vibrant"][data-material="gold"] .block,
+[data-material-preview="gold"] {
   background: radial-gradient(100% 80% at 40% 30%, #ffe066 0%, #ffb800 50%, #b07700 100%);
   box-shadow:
     inset 0 1px 0 var(--block-specular-top),
@@ -451,7 +453,8 @@
    a chunk of architectural glass — clean, modern, slightly clinical.
    The backdrop-filter samples whatever is behind the block (the velvet
    floor + spotlight), so the visual changes with the environment. */
-[data-theme="modern-vibrant"][data-material="frosted"] .block {
+[data-theme="modern-vibrant"][data-material="frosted"] .block,
+[data-material-preview="frosted"] {
   background: linear-gradient(
     135deg,
     rgba(0, 180, 170, 0.5) 0%,
@@ -475,7 +478,8 @@
 /* Patinated Bronze — warm oxidized copper. Radial gradient for the base
    bronze; the ::before patina overlay (added in a later task) provides
    the verdigris green/blue oxidation streaks. */
-[data-theme="modern-vibrant"][data-material="bronze"] .block {
+[data-theme="modern-vibrant"][data-material="bronze"] .block,
+[data-material-preview="bronze"] {
   background: radial-gradient(100% 80% at 35% 30%, #e8a85a 0%, #C47820 45%, #6a3e10 100%);
   box-shadow:
     inset 0 1px 0 var(--block-specular-top),
@@ -492,7 +496,8 @@
 /* Cream Ceramic — matte warm cream, like a glazed ceramic mug. Radial
    gradient with subtle radial highlight; muted shadows for a soft,
    tactile reading. The warmest and most domestic of the 6 alternates. */
-[data-theme="modern-vibrant"][data-material="ceramic"] .block {
+[data-theme="modern-vibrant"][data-material="ceramic"] .block,
+[data-material-preview="ceramic"] {
   background: radial-gradient(120% 100% at 40% 25%, #ffffff 0%, #f1e9da 50%, #c8b89c 100%);
   box-shadow:
     inset 0 1px 0 var(--block-specular-top),

@@ -128,7 +128,7 @@ describe('Block.module.css — Editorial Hardware material', () => {
 describe('Polished Steel material recipe', () => {
   it('overrides .block background on [data-material="steel"]', () => {
     expect(BLOCK_CSS).toMatch(
-      /\[data-material="steel"\][^{]*\.block\s*\{[^}]*background:[^;]*linear-gradient\(\s*180deg/,
+      /\[data-material="steel"\][^{]*\.block[^{]*\{[^}]*background:[^;]*linear-gradient\(\s*180deg/,
     )
   })
   it('steel recipe scoped to modern-vibrant only', () => {
@@ -141,7 +141,7 @@ describe('Polished Steel material recipe', () => {
 describe('Gold Leaf material recipe', () => {
   it('overrides .block background on [data-material="gold"] with radial gradient', () => {
     expect(BLOCK_CSS).toMatch(
-      /\[data-material="gold"\][^{]*\.block\s*\{[^}]*background:[^;]*radial-gradient/,
+      /\[data-material="gold"\][^{]*\.block[^{]*\{[^}]*background:[^;]*radial-gradient/,
     )
   })
   it('gold recipe scoped to modern-vibrant only', () => {
@@ -154,12 +154,12 @@ describe('Gold Leaf material recipe', () => {
 describe('Frosted Glass material recipe', () => {
   it('overrides .block background on [data-material="frosted"]', () => {
     expect(BLOCK_CSS).toMatch(
-      /\[data-material="frosted"\][^{]*\.block\s*\{[^}]*background:[^;]*linear-gradient/,
+      /\[data-material="frosted"\][^{]*\.block[^{]*\{[^}]*background:[^;]*linear-gradient/,
     )
   })
   it('frosted recipe uses backdrop-filter blur', () => {
     expect(BLOCK_CSS).toMatch(
-      /\[data-material="frosted"\][^{]*\.block\s*\{[^}]*backdrop-filter:\s*blur/,
+      /\[data-material="frosted"\][^{]*\.block[^{]*\{[^}]*backdrop-filter:\s*blur/,
     )
   })
 })
@@ -167,7 +167,7 @@ describe('Frosted Glass material recipe', () => {
 describe('Patinated Bronze material recipe', () => {
   it('overrides .block background on [data-material="bronze"]', () => {
     expect(BLOCK_CSS).toMatch(
-      /\[data-material="bronze"\][^{]*\.block\s*\{[^}]*background:[^;]*radial-gradient/,
+      /\[data-material="bronze"\][^{]*\.block[^{]*\{[^}]*background:[^;]*radial-gradient/,
     )
   })
 })
@@ -175,7 +175,7 @@ describe('Patinated Bronze material recipe', () => {
 describe('Cream Ceramic material recipe', () => {
   it('overrides .block background on [data-material="ceramic"]', () => {
     expect(BLOCK_CSS).toMatch(
-      /\[data-material="ceramic"\][^{]*\.block\s*\{[^}]*background:[^;]*radial-gradient/,
+      /\[data-material="ceramic"\][^{]*\.block[^{]*\{[^}]*background:[^;]*radial-gradient/,
     )
   })
 })
