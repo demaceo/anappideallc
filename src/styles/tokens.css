@@ -2,6 +2,27 @@
    The active theme is selected via the [data-theme] attribute on <html>,
    set by the inline bootstrap script in index.html before first paint. */
 
+/* Register the Editorial Hardware bloom triple as <color> so that
+   transitioning between material presets interpolates smoothly across
+   the 600ms color animation. Without @property, custom-property
+   transitions are hard cuts (the new value snaps in at completion).
+   `inherits: true` lets per-section .block-{section} bindings cascade. */
+@property --bloom-dark {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+@property --bloom {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+@property --bloom-bright {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+
 :root,
 [data-theme="modern-vibrant"] {
   --bg: #2E294E;
