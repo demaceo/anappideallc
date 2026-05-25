@@ -150,4 +150,11 @@ describe('TetrisGrid', () => {
     fireEvent.click(getByTestId('drive-close'))
     await waitFor(() => expect(playfield.hasAttribute('inert')).toBe(false))
   })
+
+  it('mounts a ThreadLine SVG inside the playfield', () => {
+    const { container } = renderTetrisGrid()
+    const svg = container.querySelector('svg[aria-hidden="true"]')
+    expect(svg).toBeInTheDocument()
+    expect(svg?.querySelectorAll('path').length).toBe(7)
+  })
 })
