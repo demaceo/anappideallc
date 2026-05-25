@@ -375,3 +375,37 @@
       box-shadow 80ms ease-out;
   }
 }
+
+/* ====================================================================
+   Materials Panel alternate recipes — modern-vibrant only.
+   Each recipe overrides .block's background + box-shadow when the
+   active preset is set on <html data-material>. The default Anodized
+   preset needs no override (it's what the base Editorial Hardware
+   recipe already produces). The Showcase preset is per-section and
+   lives further down.
+   ==================================================================== */
+
+/* Polished Steel — mirror-grade chrome, vertical horizon-reflection
+   gradient that fakes a polished metal surface reflecting a horizon
+   line. Cooler than Anodized; reads as machined precision. */
+[data-theme="modern-vibrant"][data-material="steel"] .block {
+  background: linear-gradient(
+    180deg,
+    #2a2f38 0%,
+    #6a7585 30%,
+    #c8d2dc 48%,
+    #6a7585 70%,
+    #2a2f38 100%
+  );
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    inset 0 -8px 12px rgba(0, 0, 0, 0.3),
+    0 18px 0 rgba(0, 0, 0, 0.5),
+    0 36px 70px rgba(80, 90, 100, 0.35),
+    0 50px 80px rgba(0, 0, 0, 0.5),
+    var(--shadow-base);
+}

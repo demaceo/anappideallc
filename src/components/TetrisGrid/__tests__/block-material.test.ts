@@ -124,3 +124,16 @@ describe('Block.module.css — Editorial Hardware material', () => {
     )
   })
 })
+
+describe('Polished Steel material recipe', () => {
+  it('overrides .block background on [data-material="steel"]', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\[data-material="steel"\][^{]*\.block\s*\{[^}]*background:[^;]*linear-gradient\(\s*180deg/,
+    )
+  })
+  it('steel recipe scoped to modern-vibrant only', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\[data-theme="modern-vibrant"\]\[data-material="steel"\]/,
+    )
+  })
+})
