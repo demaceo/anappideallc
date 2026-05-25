@@ -221,3 +221,17 @@ Shipped the first visible chain-reaction gadget: clicking the Hero block trigger
 `ChainOverlay` is a dispatcher — it reads `activeBlock` from `useChain()` and renders the matching per-block gadget. Phase 5b only ships the Hero marble; remaining 5 sequences (About pendulum, Work domino cascade, Services lever, Process pulley, Contact letter spring) follow in Phase 5c+. No new runtime dependencies — pure Motion choreography.
 
 See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5b-hero-marble-drop.md` for the full implementation log.
+
+### Phase 5c — Hero Bell Flash + Aurora Grow (completed 2026-05-25)
+
+Completed the Hero block's chain reaction with two more visual phases on top of Phase 5b's marble drop:
+
+1. **HeroBellFlash** — a gold radial halo that emanates from the Hero block at the marble's impact moment (~1050ms after chain start). Scales from 0 to 4× and fades over 350ms via Motion. Mounted inside ChainOverlay alongside the marble.
+
+2. **HeroAuroraGrow** — a fullscreen aurora overlay that grows from the Hero block's viewport position to fill the screen during the chain's tail (~1300ms in). `position: fixed` to escape the `.playfield` parallax; reads chain state via useChain(); finds the hero block via stable `data-block-id` selector and anchors at its center. By the time the overlay reaches fullscreen, navigation has fired and /contact's AuroraChamber takes over seamlessly.
+
+Total Hero sequence duration bumped to 1900ms (from 1500ms) to accommodate: marble drop 900ms + squash 150ms + bell flash 350ms + aurora grow 600ms (overlapping). No new runtime dependencies.
+
+The cinematic "Velvet → Aurora portal transition" promised by the spec §5.2 now lands visually. Phase 5d+ will deliver the remaining 5 block sequences (About / Work / Services / Process / Contact).
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5c-hero-bell-and-aurora.md` for the full implementation log.
