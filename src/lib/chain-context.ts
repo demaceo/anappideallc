@@ -17,6 +17,9 @@ export const WORK_CHAIN_DURATION_MS = 1500
 /** Services' lever raise + flag unfurl needs a small bump beyond the placeholder. */
 export const SERVICES_CHAIN_DURATION_MS = 1300
 
+/** Process's pulley wheel spin + weight lift needs slight breathing room. */
+export const PROCESS_CHAIN_DURATION_MS = 1400
+
 /**
  * Discriminated union for chain sequence steps. Phase 5a ships only
  * `wait` — a timed delay used as a placeholder while the infrastructure
@@ -40,7 +43,7 @@ export const BLOCK_SEQUENCES: Partial<Record<BlockId, ChainSequence>> = {
   about:    [{ kind: 'wait', durationMs: ABOUT_CHAIN_DURATION_MS }],
   work:     [{ kind: 'wait', durationMs: WORK_CHAIN_DURATION_MS }],
   services: [{ kind: 'wait', durationMs: SERVICES_CHAIN_DURATION_MS }],
-  process:  [{ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS }],
+  process:  [{ kind: 'wait', durationMs: PROCESS_CHAIN_DURATION_MS }],
   contact:  [{ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS }],
 }
 
