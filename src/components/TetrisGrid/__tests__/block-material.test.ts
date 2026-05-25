@@ -150,3 +150,16 @@ describe('Gold Leaf material recipe', () => {
     )
   })
 })
+
+describe('Frosted Glass material recipe', () => {
+  it('overrides .block background on [data-material="frosted"]', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\[data-material="frosted"\][^{]*\.block\s*\{[^}]*background:[^;]*linear-gradient/,
+    )
+  })
+  it('frosted recipe uses backdrop-filter blur', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\[data-material="frosted"\][^{]*\.block\s*\{[^}]*backdrop-filter:\s*blur/,
+    )
+  })
+})
