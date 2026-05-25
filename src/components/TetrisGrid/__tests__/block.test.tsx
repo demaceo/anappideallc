@@ -198,6 +198,36 @@ describe('Block chain integration', () => {
     expect(onNavigate).toHaveBeenCalledWith('work', '/work')
   })
 
+  it('defers navigation until the chain completes for the Hero block', () => {
+    const onNavigate = vi.fn()
+    render(
+      <MemoryRouter>
+        <ThemeProvider>
+          <MaterialProvider>
+            <ChainProvider>
+              <Block id="hero" to="/contact" title="Hero" onNavigate={onNavigate} />
+            </ChainProvider>
+          </MaterialProvider>
+        </ThemeProvider>
+      </MemoryRouter>,
+    )
+
+    const block = document.querySelector('[data-block-id="hero"]') as HTMLElement
+    act(() => {
+      block.click()
+    })
+
+    // Click captured by chain — navigation not yet fired
+    expect(onNavigate).not.toHaveBeenCalled()
+
+    act(() => {
+      vi.advanceTimersByTime(2000)
+    })
+
+    // After the hero sequence (2000ms), navigation fires
+    expect(onNavigate).toHaveBeenCalledWith('hero', '/contact')
+  })
+
   it('Brand block on modern-vibrant still opens panel (not chain)', () => {
     const onNavigate = vi.fn()
     render(
