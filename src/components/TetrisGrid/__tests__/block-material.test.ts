@@ -137,3 +137,16 @@ describe('Polished Steel material recipe', () => {
     )
   })
 })
+
+describe('Gold Leaf material recipe', () => {
+  it('overrides .block background on [data-material="gold"] with radial gradient', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\[data-material="gold"\][^{]*\.block\s*\{[^}]*background:[^;]*radial-gradient/,
+    )
+  })
+  it('gold recipe scoped to modern-vibrant only', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\[data-theme="modern-vibrant"\]\[data-material="gold"\]/,
+    )
+  })
+})
