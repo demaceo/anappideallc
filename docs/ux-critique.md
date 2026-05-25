@@ -235,3 +235,26 @@ Total Hero sequence duration bumped to 1900ms (from 1500ms) to accommodate: marb
 The cinematic "Velvet → Aurora portal transition" promised by the spec §5.2 now lands visually. Phase 5d+ will deliver the remaining 5 block sequences (About / Work / Services / Process / Contact).
 
 See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5c-hero-bell-and-aurora.md` for the full implementation log.
+
+### Phase 5d — About Pendulum (completed 2026-05-25)
+
+Shipped the second block's chain reaction visual: clicking the About block triggers a gold pendulum that swings down from above the block, sweeps across the block face from one side to the other, then returns partway to a rest position before navigation fires. Reads as "founder presence" — stately and deliberate, in contrast to Hero's energetic marble drop.
+
+`AboutPendulum` is a Motion-animated SVG (16px × 140px) with its `transform-origin` set to top-center, anchored 120px above the About block via wrapper margin offset. The full swing animates `rotate` through -50° → +50° → -15° over 900ms, with a 500ms hold at the rest position before chain completes. ChainOverlay now dispatches the pendulum when `activeBlock === 'about'`. About sequence duration bumped to 1400ms (`ABOUT_CHAIN_DURATION_MS`) to give the swing visible breathing room.
+
+Phase 5e+ will deliver the remaining 4 block sequences (Work domino cascade, Services lever, Process pulley, Contact letter spring).
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5d-about-pendulum.md` for the full implementation log.
+
+### Phases 5e–5h — Remaining Block Gadgets (completed 2026-05-25)
+
+Shipped the four remaining block chain-reaction visuals in one pass, completing the per-block visual sequences for all 6 navigable blocks of the home grid:
+
+- **Work (5e)** — A small gold marble rolls in from the left, hits the first of 5 polished-steel dominos staggered horizontally. Each domino tips 0° → 90° clockwise with a 90ms stagger, producing a cascading sequence reading as "shipped iteration." `WORK_CHAIN_DURATION_MS = 1500`.
+- **Services (5f)** — A horizontal teal lever pivots at its center, raising its right end by 25° over 700ms. A small flag unfurls on the raised end (scale 0 → 1, backOut) over the trailing 400ms. Reads as "operational systems — clear, mechanical." `SERVICES_CHAIN_DURATION_MS = 1300`.
+- **Process (5g)** — A bronze pulley wheel rotates 720° (two full spins) over 800ms, pulling a bronze weight up on a string (translateY +30 → 0 in lockstep). Reads as "process — orderly, sequential, ratcheted." `PROCESS_CHAIN_DURATION_MS = 1400`.
+- **Contact (5h)** — A coiled magenta spring uncoils via `pathLength` animation (0 → 1 over 500ms), simultaneously releasing a small magenta envelope that slides along the extension direction (translateX -25 → 55). Reads as "contact — the deliverable." Stays at `DEFAULT_CHAIN_DURATION_MS = 1200ms` — the visual fits comfortably.
+
+ChainOverlay's dispatcher now has 5 conditional branches (Hero, About, Work, Services, Process, Contact); each `<Gadget targetX targetY />` is positioned via `useBlockCenters` snapshot. The architectural pattern proven in Phase 5b/5c/5d scaled cleanly — no architectural changes needed for any of the 4 new sequences. **Still zero new runtime dependencies** — Rapier2D continues deferred because each gadget's choreography is templatable via Motion timelines.
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5e-5h-remaining-gadgets.md` for the full implementation log.

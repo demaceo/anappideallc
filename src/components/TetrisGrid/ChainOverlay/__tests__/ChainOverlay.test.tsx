@@ -69,7 +69,7 @@ describe('ChainOverlay', () => {
     expect(container.querySelector('circle')).toBeInTheDocument()
   })
 
-  it('does NOT render a visual when activeBlock is any non-hero block (Phase 5b scope)', () => {
+  it('does NOT render a hero-style svg marble when activeBlock is work', () => {
     const { containerRef, blockRefs } = setupRefs()
     const { container, getByTestId } = render(
       <ChainProvider>
@@ -80,7 +80,7 @@ describe('ChainOverlay', () => {
     act(() => {
       getByTestId('start').click()
     })
-    // work's gadget visual isn't shipped yet (Phase 5c+)
+    // Work renders the domino cascade, not the hero marble svg
     expect(container.querySelector('svg')).toBeNull()
   })
 
@@ -99,6 +99,96 @@ describe('ChainOverlay', () => {
     expect(container.querySelector('svg circle')).toBeInTheDocument()
     // Bell halo: a div with radial-gradient styling — find via halo class
     expect(container.querySelector('[class*="halo"]')).toBeInTheDocument()
+  })
+
+  it('renders AboutPendulum when activeBlock is about', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ChainStarter blockId="about" />
+        <ChainOverlay containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
+    )
+    act(() => {
+      getByTestId('start').click()
+    })
+    // Pendulum has both a line (rod) and a circle (bob)
+    expect(container.querySelector('line')).toBeInTheDocument()
+    expect(container.querySelector('circle')).toBeInTheDocument()
+  })
+
+  it('does NOT render AboutPendulum when activeBlock is hero', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ChainStarter blockId="hero" />
+        <ChainOverlay containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
+    )
+    act(() => {
+      getByTestId('start').click()
+    })
+    // Hero shows marble (circle) but no rod (line) since pendulum isn't dispatched
+    expect(container.querySelector('line')).toBeNull()
+  })
+
+  it('renders WorkDominoCascade when activeBlock is work', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ChainStarter blockId="work" />
+        <ChainOverlay containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
+    )
+    act(() => {
+      getByTestId('start').click()
+    })
+    expect(container.querySelectorAll('[data-domino]').length).toBe(5)
+  })
+
+  it('renders ContactSpring when activeBlock is contact', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ChainStarter blockId="contact" />
+        <ChainOverlay containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
+    )
+    act(() => {
+      getByTestId('start').click()
+    })
+    expect(container.querySelector('[data-spring]')).toBeInTheDocument()
+    expect(container.querySelector('[data-envelope]')).toBeInTheDocument()
+  })
+
+  it('renders ProcessPulley when activeBlock is process', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ChainStarter blockId="process" />
+        <ChainOverlay containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
+    )
+    act(() => {
+      getByTestId('start').click()
+    })
+    expect(container.querySelector('[data-wheel]')).toBeInTheDocument()
+    expect(container.querySelector('[data-weight]')).toBeInTheDocument()
+  })
+
+  it('renders ServicesLever when activeBlock is services', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ChainStarter blockId="services" />
+        <ChainOverlay containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
+    )
+    act(() => {
+      getByTestId('start').click()
+    })
+    expect(container.querySelector('[data-lever]')).toBeInTheDocument()
+    expect(container.querySelector('[data-flag]')).toBeInTheDocument()
   })
 
   it('overlay container has data-chain-overlay attribute (for inspection / Phase 5c hooks)', () => {

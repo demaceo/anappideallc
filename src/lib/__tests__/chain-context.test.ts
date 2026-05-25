@@ -22,12 +22,34 @@ describe('chain-context', () => {
     expect(heroSeq[0]).toEqual({ kind: 'wait', durationMs: 1900 })
   })
 
-  it('other blocks remain at DEFAULT_CHAIN_DURATION_MS (1200ms placeholder)', () => {
-    for (const id of ['about', 'work', 'services', 'process', 'contact'] as BlockId[]) {
-      const seq = BLOCK_SEQUENCES[id]!
-      expect(seq).toHaveLength(1)
-      expect(seq[0]).toEqual({ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS })
-    }
+  it('about sequence is 1400ms (gives pendulum swing breathing room)', () => {
+    const aboutSeq = BLOCK_SEQUENCES.about!
+    expect(aboutSeq).toHaveLength(1)
+    expect(aboutSeq[0]).toEqual({ kind: 'wait', durationMs: 1400 })
+  })
+
+  it('work sequence is 1500ms (gives marble + 5-domino cascade time)', () => {
+    const workSeq = BLOCK_SEQUENCES.work!
+    expect(workSeq).toHaveLength(1)
+    expect(workSeq[0]).toEqual({ kind: 'wait', durationMs: 1500 })
+  })
+
+  it('services sequence is 1300ms (lever raise + flag unfurl)', () => {
+    const seq = BLOCK_SEQUENCES.services!
+    expect(seq).toHaveLength(1)
+    expect(seq[0]).toEqual({ kind: 'wait', durationMs: 1300 })
+  })
+
+  it('process sequence is 1400ms (pulley wheel + weight lift)', () => {
+    const seq = BLOCK_SEQUENCES.process!
+    expect(seq).toHaveLength(1)
+    expect(seq[0]).toEqual({ kind: 'wait', durationMs: 1400 })
+  })
+
+  it('contact sequence stays at DEFAULT_CHAIN_DURATION_MS (spring + letter fits comfortably)', () => {
+    const seq = BLOCK_SEQUENCES.contact!
+    expect(seq).toHaveLength(1)
+    expect(seq[0]).toEqual({ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS })
   })
 
   it('does not define a sequence for brand (it opens the Materials Panel instead)', () => {
