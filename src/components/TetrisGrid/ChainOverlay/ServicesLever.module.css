@@ -1,0 +1,50 @@
+/* ServicesLever — horizontal lever that pivots at its center, raising
+   one end. A small teal flag unfurls on the raised end. */
+
+.leverWrapper {
+  position: absolute;
+  width: 160px;
+  height: 60px;
+  margin-left: -80px;
+  margin-top: -30px;
+  pointer-events: none;
+  will-change: contents;
+}
+
+.lever {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(180deg, #006e68, #00b4aa 35%, #5be3dc 55%, #00b4aa 75%, #006e68);
+  border-radius: 3px;
+  transform-origin: 50% 50%;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.pivot {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #c8d2dc, #6a7585 75%, #2a2f38);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.flag {
+  position: absolute;
+  top: -4px;
+  left: calc(50% + 60px);
+  width: 20px;
+  height: 14px;
+  background: linear-gradient(135deg, rgba(0, 180, 170, 0.9), rgba(91, 227, 220, 0.7));
+  border-radius: 1px;
+  transform-origin: 0% 100%;
+}
