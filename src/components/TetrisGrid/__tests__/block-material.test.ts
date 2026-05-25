@@ -125,57 +125,49 @@ describe('Block.module.css — Editorial Hardware material', () => {
   })
 })
 
+/* Each alternate recipe is keyed by the exact selector form actually
+   shipped — `[data-theme="modern-vibrant"][data-material="<id>"] .block,
+   [data-material-preview="<id>"] { … }`. The earlier `[^{]*` slop between
+   the attribute selector and `.block` was loose enough to match a
+   misplaced or refactored recipe (e.g. one accidentally scoped to a
+   sibling selector). The tightened patterns below pin the comma-separated
+   selector pair and the exact gradient shape that opens each recipe. */
 describe('Polished Steel material recipe', () => {
-  it('overrides .block background on [data-material="steel"]', () => {
+  it('matches the exact selector pair and opens with a 180deg linear-gradient', () => {
     expect(BLOCK_CSS).toMatch(
-      /\[data-material="steel"\][^{]*\.block[^{]*\{[^}]*background:[^;]*linear-gradient\(\s*180deg/,
-    )
-  })
-  it('steel recipe scoped to modern-vibrant only', () => {
-    expect(BLOCK_CSS).toMatch(
-      /\[data-theme="modern-vibrant"\]\[data-material="steel"\]/,
+      /\[data-theme="modern-vibrant"\]\[data-material="steel"\]\s+\.block\s*,\s*\[data-material-preview="steel"\]\s*\{[^}]*background:[^;]*linear-gradient\(\s*180deg/,
     )
   })
 })
 
 describe('Gold Leaf material recipe', () => {
-  it('overrides .block background on [data-material="gold"] with radial gradient', () => {
+  it('matches the exact selector pair and opens with a radial-gradient', () => {
     expect(BLOCK_CSS).toMatch(
-      /\[data-material="gold"\][^{]*\.block[^{]*\{[^}]*background:[^;]*radial-gradient/,
-    )
-  })
-  it('gold recipe scoped to modern-vibrant only', () => {
-    expect(BLOCK_CSS).toMatch(
-      /\[data-theme="modern-vibrant"\]\[data-material="gold"\]/,
+      /\[data-theme="modern-vibrant"\]\[data-material="gold"\]\s+\.block\s*,\s*\[data-material-preview="gold"\]\s*\{[^}]*background:[^;]*radial-gradient/,
     )
   })
 })
 
 describe('Frosted Glass material recipe', () => {
-  it('overrides .block background on [data-material="frosted"]', () => {
+  it('matches the exact selector pair, opens with a linear-gradient, and includes backdrop-filter blur', () => {
     expect(BLOCK_CSS).toMatch(
-      /\[data-material="frosted"\][^{]*\.block[^{]*\{[^}]*background:[^;]*linear-gradient/,
-    )
-  })
-  it('frosted recipe uses backdrop-filter blur', () => {
-    expect(BLOCK_CSS).toMatch(
-      /\[data-material="frosted"\][^{]*\.block[^{]*\{[^}]*backdrop-filter:\s*blur/,
+      /\[data-theme="modern-vibrant"\]\[data-material="frosted"\]\s+\.block\s*,\s*\[data-material-preview="frosted"\]\s*\{[^}]*background:[^;]*linear-gradient[^}]*backdrop-filter:\s*blur/,
     )
   })
 })
 
 describe('Patinated Bronze material recipe', () => {
-  it('overrides .block background on [data-material="bronze"]', () => {
+  it('matches the exact selector pair and opens with a radial-gradient', () => {
     expect(BLOCK_CSS).toMatch(
-      /\[data-material="bronze"\][^{]*\.block[^{]*\{[^}]*background:[^;]*radial-gradient/,
+      /\[data-theme="modern-vibrant"\]\[data-material="bronze"\]\s+\.block\s*,\s*\[data-material-preview="bronze"\]\s*\{[^}]*background:[^;]*radial-gradient/,
     )
   })
 })
 
 describe('Cream Ceramic material recipe', () => {
-  it('overrides .block background on [data-material="ceramic"]', () => {
+  it('matches the exact selector pair and opens with a radial-gradient', () => {
     expect(BLOCK_CSS).toMatch(
-      /\[data-material="ceramic"\][^{]*\.block[^{]*\{[^}]*background:[^;]*radial-gradient/,
+      /\[data-theme="modern-vibrant"\]\[data-material="ceramic"\]\s+\.block\s*,\s*\[data-material-preview="ceramic"\]\s*\{[^}]*background:[^;]*radial-gradient/,
     )
   })
 })
