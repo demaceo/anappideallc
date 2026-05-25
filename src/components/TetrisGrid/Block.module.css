@@ -43,15 +43,48 @@
     inset 0 1px 0 var(--block-specular-top),
     inset 1px 0 0 var(--block-specular-left),
     var(--shadow-base);
+  /* The 600ms transitions on --bloom-* and the longer box-shadow
+     duration are for Materials Panel preset switches. The shorter
+     200ms transitions handle hover state cascade. Both run in the
+     same transition shorthand — the browser picks whichever applies
+     to the changed property. */
   transition:
-    background 200ms,
+    --bloom-dark 600ms cubic-bezier(0.4, 0, 0.2, 1),
+    --bloom 600ms cubic-bezier(0.4, 0, 0.2, 1),
+    --bloom-bright 600ms cubic-bezier(0.4, 0, 0.2, 1),
+    background 600ms cubic-bezier(0.4, 0, 0.2, 1),
+    backdrop-filter 600ms cubic-bezier(0.4, 0, 0.2, 1),
     color 200ms,
-    box-shadow 200ms ease-out,
+    box-shadow 600ms cubic-bezier(0.4, 0, 0.2, 1),
     transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1);
   /* No overflow:hidden — the Editorial Hardware ::after caustic floor spill
      intentionally extends 8% below the block to render the soft refractive
      glow on the velvet stage. The ::before specular overlay uses inset:0 +
      border-radius:inherit so it's already bounded by the block's box. */
+
+  /* isolation + preserve-3d coexistence — required reading for future
+     Phase 4/5 maintainers:
+     - `isolation: isolate` creates a new stacking context so that
+       `mix-blend-mode: screen` on `::before` (the brushed grain / specular
+       highlight, see line ~225) blends against THIS block's background,
+       not against the page underneath. Removing isolation makes the
+       ::before highlight bleed onto whatever sits behind the block.
+     - `transform-style: preserve-3d` here governs how the block's CHILDREN
+       are composed in 3D space — but the block's children today (title,
+       subtitle, cta, tags, portal) are all 2D content with no translateZ
+       of their own, so the preserve-3d here is currently latent.
+     - The block's OWN translateZ(--block-z) depth is honored by the
+       PARENT (`.playfield`)'s `transform-style: preserve-3d`, not by the
+       block's own. That's why Frosted Glass (which forces this block's
+       transform-style to `flat` via its non-initial `backdrop-filter`)
+       still lifts to its Z plane correctly on desktop.
+     - DO NOT add 3D-transformed children directly inside `.block`
+       without first auditing each material recipe — any recipe that
+       sets a non-initial `backdrop-filter`, `filter`, `mix-blend-mode`,
+       `opacity < 1`, etc. will flatten this block's internal 3D scene
+       and the child's translateZ / rotateY will collapse. Move 3D
+       children outside the block (e.g., as a sibling at the playfield
+       level) or scope the 3D transforms to non-Frosted materials. */
   isolation: isolate;
   transform-style: preserve-3d;
   transform: translateZ(var(--block-z, 20px));
@@ -345,7 +378,18 @@
 
 /* Reduced-motion: collapse the entire 3D layer to flat. */
 @media (prefers-reduced-motion: reduce) {
-  .block { transform: none !important; transition: background 200ms, color 200ms !important; }
+  .block {
+    transform: none !important;
+    transition:
+      --bloom-dark 0ms,
+      --bloom 0ms,
+      --bloom-bright 0ms,
+      background 0ms,
+      backdrop-filter 0ms,
+      color 200ms,
+      box-shadow 0ms,
+      transform 0ms !important;
+  }
   .block:hover { transform: none !important; }
 }
 
@@ -373,5 +417,339 @@
     transition:
       transform 80ms ease-out,
       box-shadow 80ms ease-out;
+  }
+}
+
+/* ====================================================================
+   Materials Panel alternate recipes — modern-vibrant only.
+   Each recipe overrides .block's background + box-shadow when the
+   active preset is set on <html data-material>. The default Anodized
+   preset needs no override (it's what the base Editorial Hardware
+   recipe already produces). The Showcase preset is per-section and
+   lives further down.
+   ==================================================================== */
+
+/* Polished Steel — mirror-grade chrome, vertical horizon-reflection
+   gradient that fakes a polished metal surface reflecting a horizon
+   line. Cooler than Anodized; reads as machined precision. */
+[data-theme="modern-vibrant"][data-material="steel"] .block,
+[data-material-preview="steel"] {
+  background: linear-gradient(
+    180deg,
+    #2a2f38 0%,
+    #6a7585 30%,
+    #c8d2dc 48%,
+    #6a7585 70%,
+    #2a2f38 100%
+  );
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    inset 0 -8px 12px rgba(0, 0, 0, 0.3),
+    0 18px 0 rgba(0, 0, 0, 0.5),
+    0 36px 70px rgba(80, 90, 100, 0.35),
+    0 50px 80px rgba(0, 0, 0, 0.5),
+    var(--shadow-base);
+}
+
+/* Gold Leaf — soft hand-applied warm gold. Radial gradient suggests
+   manual application; the imperfect specular pseudo-element overlay
+   (added below) fakes the slightly mottled finish of real gold leaf. */
+[data-theme="modern-vibrant"][data-material="gold"] .block,
+[data-material-preview="gold"] {
+  background: radial-gradient(100% 80% at 40% 30%, #ffe066 0%, #ffb800 50%, #b07700 100%);
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1px rgba(255, 224, 102, 0.6),
+    inset 0 6px 8px rgba(255, 255, 255, 0.35),
+    inset 0 -10px 14px rgba(0, 0, 0, 0.35),
+    0 18px 0 rgba(0, 0, 0, 0.42),
+    0 36px 70px rgba(255, 184, 0, 0.35),
+    0 50px 80px rgba(0, 0, 0, 0.45),
+    var(--shadow-base);
+}
+
+/* Frosted Glass — translucent teal cushion with backdrop blur. Reads as
+   a chunk of architectural glass — clean, modern, slightly clinical.
+   The backdrop-filter samples whatever is behind the block (the velvet
+   floor + spotlight), so the visual changes with the environment.
+
+   Backdrop-filter + preserve-3d coexistence: per CSS Transforms Module
+   Level 2 §6, a non-initial `backdrop-filter` forces this element's
+   `transform-style` to compute as `flat`. That governs how THIS block's
+   CHILDREN are composed — but the block's own translateZ(--block-z) is
+   honored by the PARENT (.playfield)'s `transform-style: preserve-3d`,
+   not by the block's own. The block's children here (title / subtitle /
+   cta / portal) are all 2D content with no translateZ of their own, so
+   flattening the block's internal 3D scene is visually invisible. Net
+   result: Frosted blocks still occupy their distinct Z plane on desktop
+   alongside the other materials. Future maintainers: if a 3D-transformed
+   child is ever added inside a Frosted block, it will be flattened —
+   move such children outside the block or drop backdrop-filter then. */
+[data-theme="modern-vibrant"][data-material="frosted"] .block,
+[data-material-preview="frosted"] {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 180, 170, 0.5) 0%,
+    rgba(91, 227, 220, 0.7) 50%,
+    rgba(0, 110, 104, 0.5) 100%
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.4),
+    inset 0 2px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2),
+    0 18px 0 rgba(0, 0, 0, 0.35),
+    0 36px 70px rgba(0, 180, 170, 0.4),
+    0 50px 80px rgba(0, 0, 0, 0.45),
+    var(--shadow-base);
+}
+
+/* Patinated Bronze — warm oxidized copper with verdigris patina. The
+   base radial gradient is the warm bronze body; two soft off-center
+   radial gradients composited on top suggest the green/blue oxidation
+   streaks that form on aged bronze. Stacking the patina into the
+   `background` shorthand (rather than a separate ::before overlay)
+   keeps the editorial ::before brushed-grain + specular highlight
+   intact on the live block, and lets the swatch preview render the
+   same patina without needing its own pseudo-element. */
+[data-theme="modern-vibrant"][data-material="bronze"] .block,
+[data-material-preview="bronze"] {
+  background:
+    radial-gradient(60% 40% at 22% 78%, rgba(60, 140, 110, 0.30) 0%, transparent 65%),
+    radial-gradient(45% 35% at 75% 32%, rgba(70, 150, 160, 0.22) 0%, transparent 70%),
+    radial-gradient(100% 80% at 35% 30%, #e8a85a 0%, #C47820 45%, #6a3e10 100%);
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1px rgba(200, 120, 32, 0.5),
+    inset 0 4px 6px rgba(255, 255, 255, 0.25),
+    inset 0 -10px 14px rgba(0, 0, 0, 0.4),
+    0 18px 0 rgba(0, 0, 0, 0.45),
+    0 36px 70px rgba(200, 120, 32, 0.3),
+    0 50px 80px rgba(0, 0, 0, 0.45),
+    var(--shadow-base);
+}
+
+/* Cream Ceramic — matte warm cream, like a glazed ceramic mug. Radial
+   gradient with subtle radial highlight; muted shadows for a soft,
+   tactile reading. The warmest and most domestic of the 6 alternates. */
+[data-theme="modern-vibrant"][data-material="ceramic"] .block,
+[data-material-preview="ceramic"] {
+  background: radial-gradient(120% 100% at 40% 25%, #ffffff 0%, #f1e9da 50%, #c8b89c 100%);
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1px rgba(241, 233, 218, 0.5),
+    inset 0 4px 6px rgba(255, 255, 255, 0.6),
+    inset 0 -8px 12px rgba(180, 160, 120, 0.3),
+    0 18px 0 rgba(0, 0, 0, 0.25),
+    0 36px 70px rgba(180, 160, 120, 0.3),
+    0 50px 80px rgba(0, 0, 0, 0.35),
+    var(--shadow-base);
+}
+
+/* ====================================================================
+   Showcase preset — per-section distinct materials.
+   Hero + Contact stay on the default Anodized recipe (Editorial Hardware
+   magenta with aurora window on Hero); the other 5 sections each get
+   one of the alternate material recipes for variety. Per spec §9.3.
+   ==================================================================== */
+
+/* About → Gold Leaf */
+[data-theme="modern-vibrant"][data-material="showcase"] .block-about {
+  background: radial-gradient(100% 80% at 40% 30%, #ffe066 0%, #ffb800 50%, #b07700 100%);
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1px rgba(255, 224, 102, 0.6),
+    inset 0 6px 8px rgba(255, 255, 255, 0.35),
+    inset 0 -10px 14px rgba(0, 0, 0, 0.35),
+    0 18px 0 rgba(0, 0, 0, 0.42),
+    0 36px 70px rgba(255, 184, 0, 0.35),
+    0 50px 80px rgba(0, 0, 0, 0.45),
+    var(--shadow-base);
+}
+
+/* Brand → Cream Ceramic */
+[data-theme="modern-vibrant"][data-material="showcase"] .block-brand {
+  background: radial-gradient(120% 100% at 40% 25%, #ffffff 0%, #f1e9da 50%, #c8b89c 100%);
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1px rgba(241, 233, 218, 0.5),
+    inset 0 4px 6px rgba(255, 255, 255, 0.6),
+    inset 0 -8px 12px rgba(180, 160, 120, 0.3),
+    0 18px 0 rgba(0, 0, 0, 0.25),
+    0 36px 70px rgba(180, 160, 120, 0.3),
+    0 50px 80px rgba(0, 0, 0, 0.35),
+    var(--shadow-base);
+}
+
+/* Work → Polished Steel */
+[data-theme="modern-vibrant"][data-material="showcase"] .block-work {
+  background: linear-gradient(
+    180deg,
+    #2a2f38 0%,
+    #6a7585 30%,
+    #c8d2dc 48%,
+    #6a7585 70%,
+    #2a2f38 100%
+  );
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    inset 0 -8px 12px rgba(0, 0, 0, 0.3),
+    0 18px 0 rgba(0, 0, 0, 0.5),
+    0 36px 70px rgba(80, 90, 100, 0.35),
+    0 50px 80px rgba(0, 0, 0, 0.5),
+    var(--shadow-base);
+}
+
+/* Services → Frosted Glass */
+[data-theme="modern-vibrant"][data-material="showcase"] .block-services {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 180, 170, 0.5) 0%,
+    rgba(91, 227, 220, 0.7) 50%,
+    rgba(0, 110, 104, 0.5) 100%
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.4),
+    inset 0 2px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2),
+    0 18px 0 rgba(0, 0, 0, 0.35),
+    0 36px 70px rgba(0, 180, 170, 0.4),
+    0 50px 80px rgba(0, 0, 0, 0.45),
+    var(--shadow-base);
+}
+
+/* Process → Patinated Bronze (matches the standalone Bronze recipe
+   including the verdigris patina layers). */
+[data-theme="modern-vibrant"][data-material="showcase"] .block-process {
+  background:
+    radial-gradient(60% 40% at 22% 78%, rgba(60, 140, 110, 0.30) 0%, transparent 65%),
+    radial-gradient(45% 35% at 75% 32%, rgba(70, 150, 160, 0.22) 0%, transparent 70%),
+    radial-gradient(100% 80% at 35% 30%, #e8a85a 0%, #C47820 45%, #6a3e10 100%);
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1px rgba(200, 120, 32, 0.5),
+    inset 0 4px 6px rgba(255, 255, 255, 0.25),
+    inset 0 -10px 14px rgba(0, 0, 0, 0.4),
+    0 18px 0 rgba(0, 0, 0, 0.45),
+    0 36px 70px rgba(200, 120, 32, 0.3),
+    0 50px 80px rgba(0, 0, 0, 0.45),
+    var(--shadow-base);
+}
+
+/* Hero + Contact stay Anodized (no override needed — the default
+   Editorial Hardware recipe applies). */
+
+/* Anodized swatch preview — renders the default Editorial Hardware look
+   on the panel swatch (the live grid blocks already render this by
+   default; the swatch needs an explicit rule because it's outside the
+   .block element). */
+[data-material-preview="anodized"] {
+  background: linear-gradient(
+    135deg,
+    #8a0144 0%,
+    #d90368 30%,
+    #ff5e98 50%,
+    #d90368 70%,
+    #8a0144 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 4px 0 rgba(0, 0, 0, 0.42),
+    0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Showcase swatch preview — conic gradient with each section's bloom
+   color as a segment, hinting at the per-section variety. */
+[data-material-preview="showcase"] {
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    #d90368 0deg 60deg,       /* hero magenta */
+    #ffb800 60deg 120deg,     /* about gold */
+    #f1e9da 120deg 180deg,    /* brand cream */
+    #00b4aa 180deg 240deg,    /* services teal */
+    #C47820 240deg 300deg,    /* process bronze */
+    #6a7585 300deg 360deg     /* work steel */
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.25),
+    0 4px 0 rgba(0, 0, 0, 0.4),
+    0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Brand block pulse glow — modern-vibrant only. Every 30 seconds the
+   block emits a soft gold halo over 1.5s, then fades. Quietly invites
+   curiosity ("click me") without becoming UI noise. Halts under
+   prefers-reduced-motion. */
+@keyframes brand-pulse {
+  0%, 90%, 100% {
+    box-shadow:
+      inset 0 1px 0 var(--block-specular-top),
+      inset 1px 0 0 var(--block-specular-left),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+      inset 0 2px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+      0 18px 0 rgba(0, 0, 0, 0.42),
+      0 36px 70px var(--bloom, transparent),
+      0 50px 80px rgba(0, 0, 0, 0.45),
+      var(--shadow-base);
+  }
+  95% {
+    box-shadow:
+      inset 0 1px 0 var(--block-specular-top),
+      inset 1px 0 0 var(--block-specular-left),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+      inset 0 2px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+      0 18px 0 rgba(0, 0, 0, 0.42),
+      0 0 24px 8px rgba(255, 212, 0, 0.45),
+      0 36px 70px var(--bloom, transparent),
+      0 50px 80px rgba(0, 0, 0, 0.45),
+      var(--shadow-base);
+  }
+}
+
+[data-theme="modern-vibrant"] .block-brand {
+  animation: brand-pulse 30s ease-in-out infinite;
+}
+
+/* Pause the pulse on hover so the .block:hover box-shadow cascade can take
+   over. Without this, the running animation's `box-shadow` keyframes paint
+   above Author Normal in the CSS cascade and suppress the deeper Editorial
+   Hardware hover shadow stack — the Brand block would lift via transform
+   but its hover halo would be muted. animation-play-state: paused freezes
+   the animation in place; the hover styles win until pointer leaves. */
+@media (hover: hover) {
+  [data-theme="modern-vibrant"] .block-brand:hover {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="modern-vibrant"] .block-brand {
+    animation: none;
   }
 }

@@ -1,0 +1,41 @@
+import type { RefObject } from 'react'
+import { useChain } from '../../../lib/chain'
+import { useBlockCenters, type BlockRefEntry } from '../useBlockCenters'
+import { HeroMarbleDrop } from './HeroMarbleDrop'
+import { HeroBellFlash } from './HeroBellFlash'
+import styles from './ChainOverlay.module.css'
+
+export interface ChainOverlayProps {
+  containerRef: RefObject<HTMLDivElement | null>
+  blockRefs: readonly BlockRefEntry[]
+}
+
+/**
+ * ChainOverlay — full-coverage layer that renders the active chain
+ * reaction's gadget visuals. Sits inside `.playfield` as a sibling
+ * to `.grid` and `ThreadLine`. Reads `activeBlock` from `useChain()`
+ * and dispatches to per-block gadget components positioned over each
+ * block's center (looked up via `blockRefs` + `useBlockCenters`).
+ *
+ * Phase 5b ships only the Hero marble drop. Other blocks' visuals
+ * land in Phase 5c+ — `activeBlock` matching `about` / `work` / etc.
+ * currently renders nothing.
+ *
+ * Decorative — pointer-events:none, no interactive content.
+ */
+export function ChainOverlay({ containerRef, blockRefs }: ChainOverlayProps) {
+  const { activeBlock } = useChain()
+  const snapshot = useBlockCenters(containerRef, blockRefs)
+  const heroCenter = snapshot?.centers.hero
+
+  return (
+    <div className={styles.overlay} data-chain-overlay>
+      {activeBlock === 'hero' && heroCenter && (
+        <>
+          <HeroMarbleDrop targetX={heroCenter.x} targetY={heroCenter.y} />
+          <HeroBellFlash targetX={heroCenter.x} targetY={heroCenter.y} />
+        </>
+      )}
+    </div>
+  )
+}

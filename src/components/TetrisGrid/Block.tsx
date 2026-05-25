@@ -3,6 +3,9 @@ import type { ReactNode } from 'react'
 import { motion } from 'motion/react'
 import { Link } from 'react-router'
 import styles from './Block.module.css'
+import { useTheme } from '../../lib/theme-context'
+import { useMaterial } from '../../lib/material'
+import { useChain } from '../../lib/chain'
 
 function applyTilt(e: React.MouseEvent<HTMLAnchorElement>) {
   const rect = e.currentTarget.getBoundingClientRect()
@@ -49,7 +52,22 @@ export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
   { id, to, title, subtitle, cta, tags, ariaLabel, onNavigate, portal },
   ref,
 ) {
+  const { theme } = useTheme()
+  const { openPanel, panelOpen } = useMaterial()
+  const { startChain } = useChain()
+  const isMaterialsTrigger = id === 'brand' && theme === 'modern-vibrant'
   const className = `${styles.block} ${styles[`block-${id}`]}`
+  // Pause the brand-pulse keyframe animation while the panel is open. The
+  // hover-paused behavior in Block.module.css continues to apply via CSS;
+  // this inline `animationPlayState` adds a second pause condition. Without
+  // it, the running animation's box-shadow keyframes (which carry the
+  // default Anodized halo colors) would keep cycling underneath whichever
+  // material is currently being previewed, mismatching the active preset
+  // and drawing attention to a block that already triggered the panel.
+  const styleOverride: React.CSSProperties = { gridArea: id }
+  if (isMaterialsTrigger && panelOpen) {
+    styleOverride.animationPlayState = 'paused'
+  }
 
   return (
     <MotionLink
@@ -58,17 +76,24 @@ export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
       layoutId={`block-${id}`}
       data-block-id={id}
       className={className}
-      style={{ gridArea: id }}
+      style={styleOverride}
       aria-label={ariaLabel ?? title}
+      aria-haspopup={isMaterialsTrigger ? 'dialog' : undefined}
+      aria-expanded={isMaterialsTrigger ? panelOpen : undefined}
       onMouseMove={applyTilt}
       onMouseLeave={resetTilt}
       onClick={(e) => {
-        if (!onNavigate) return
-        // Let modifier-clicks (cmd/ctrl/middle) keep their default
-        // browser behavior — open in new tab, etc.
+        if (isMaterialsTrigger) {
+          e.preventDefault()
+          openPanel()
+          return
+        }
+        // Modifier-key clicks preserve browser native nav (open in new tab etc.)
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+        // Same-tab navigation: defer through chain reaction, then call onNavigate
         e.preventDefault()
-        onNavigate(id, to)
+        if (!onNavigate) return
+        startChain(id, () => onNavigate(id, to))
       }}
     >
       {portal}

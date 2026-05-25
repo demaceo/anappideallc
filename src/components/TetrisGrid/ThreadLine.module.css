@@ -1,0 +1,70 @@
+/* ThreadLine — the golden serpentine connecting all 7 grid blocks. The
+   SVG layer sits INSIDE `.playfield` as a sibling of the blocks so it
+   inherits the parallax tilt automatically (no per-frame recomputation
+   needed). Path geometry uses container-local coordinates (offsetLeft/
+   Top), which are transform-invariant — the SVG visually follows the
+   blocks through the 3D scene without any re-projection math. */
+
+.threadLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Below blocks (which use z-index via translateZ in the playfield's
+     3D context) but above the playfield's background. Setting an
+     explicit 2D z-index here is fine because we're inside a
+     transform-style: preserve-3d parent — the value still influences
+     paint order among siblings at the same 3D depth. */
+  z-index: 0;
+  overflow: visible;
+}
+
+.segment {
+  stroke: rgb(255, 212, 0);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  fill: none;
+  /* Ambient shimmer: opacity gently cycles between 0.12 and 0.24 over 8s,
+     producing a slow breathing effect that draws attention without
+     becoming UI noise. Per spec §7.1. */
+  animation: thread-shimmer 8s ease-in-out infinite;
+}
+
+@keyframes thread-shimmer {
+  0%   { stroke-opacity: 0.12; }
+  50%  { stroke-opacity: 0.24; }
+  100% { stroke-opacity: 0.12; }
+}
+
+/* Cursor-tracked highlight — applied to the two segments adjacent to
+   whichever block the cursor is within 60px of. Brightens the local
+   region of the thread so the visitor can sense which connection
+   they're "near." */
+.segmentBright {
+  stroke-opacity: 0.55;
+  /* Pause the ambient shimmer on the bright segments — the brightness
+     should hold steady while the cursor is nearby, then ease back to
+     shimmer once they move away. */
+  animation-play-state: paused;
+  transition: stroke-opacity 240ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Chain-active highlight — the segment(s) participating in the current
+   Rube Goldberg chain reaction. Fully opaque, slightly thicker, and the
+   shimmer is paused so the bright state holds while the gadgets fire.
+   Higher specificity than .segmentBright so the chain treatment wins
+   when both could apply (cursor happens to be near an active block). */
+.segmentChainActive {
+  stroke-opacity: 1;
+  stroke-width: 2;
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segment {
+    animation: none;
+    stroke-opacity: 0.18;  /* freeze at the shimmer mid-point */
+  }
+  .segmentBright {
+    transition: none;
+  }
+}

@@ -173,3 +173,65 @@ Added the v2.0 environmental layer on modern-vibrant: home grid is wrapped in a 
 This phase begins addressing issue #3 (inner-page experience cliff) for the `/contact` route specifically — the contact page now carries the same atmospheric language as the home page through the aurora chamber, eliminating the v1 cliff for that one route. Issue #3 will be fully closed in Phase 6 when the Velvet Vitrine treatment is applied to About/Work/Services/Process pages.
 
 See `docs/superpowers/plans/2026-05-24-ui-v2-phase-2-velvet-stage-aurora-portal.md` for the full implementation log.
+
+### Phase 3 — Materials Panel (completed 2026-05-25)
+
+Added the Materials Panel: clicking the Brand block on modern-vibrant opens a bottom drawer with 7 material presets (Anodized default, Polished Steel, Gold Leaf, Frosted Glass, Patinated Bronze, Cream Ceramic, Showcase). Selection persists via `localStorage['material']`, mirrored onto `<html data-material>` for CSS scoping. The 6 alternate recipes are CSS overrides keyed by `[data-material]` selectors; the bloom triple is registered as a `<color>` `@property` so the cross-preset transition interpolates smoothly over 600ms. Brand block emits a quiet gold pulse every 30s to telegraph the affordance. Other themes (`classic`, `pastel`, `arcade-neon`) ignore the panel entirely — Brand reverts to `/about` navigation. Full keyboard support (Escape closes, dialog semantics with `aria-modal="true"`); `prefers-reduced-motion` halts the pulse and zeroes the transition.
+
+This phase closes UX critique issue #5 ("The 'AAI' brand block does nothing") on the canonical theme. The Brand block now earns its grid real estate by serving as the door to the studio's material wardrobe.
+
+Known limitation: spec §9.1 calls for a strict focus trap inside the open drawer (Tab cycle confined to swatches). This phase ships basic focus management (Escape closes; `aria-modal="true"` signals modal intent) without a full Tab interception; deferred as a follow-up if usability testing reveals the gap.
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-3-materials-panel.md` for the full implementation log.
+
+### Phase 3 Audit Cleanup (completed 2026-05-25)
+
+Pre-Phase-4 holistic audit of Phases 1-3 surfaced 8 findings, all addressed on this branch:
+- **C1** (Frosted Glass `backdrop-filter` + preserve-3d): confirmed false positive after spec re-analysis; documented with a 14-line comment in `Block.module.css` explaining why backdrop-filter is safe on `.block` (the block's own translateZ comes from `.playfield`'s preserve-3d, not from `.block`'s own transform-style).
+- **C2/M3** (SSR parity): `MaterialProvider.readInitial()` now mirrors `ThemeProvider`'s pattern — reads `document.documentElement.dataset.material` first (already set by the bootstrap script), falls back to localStorage.
+- **I2** (Brand pulse during panel): pulse animation now pauses both on hover AND when the panel is open.
+- **I3** (focus trap): `inert` attribute applied to `.playfield` when panel is open; focus restoration to Brand block on close.
+- **I4** (touch target): close button now 44×44px min via `min-width`/`min-height` + flex centering. WCAG 2.5.5 compliant.
+- **I5** (roving tabindex): swatches now navigable via arrow keys (left/right/up/down + Home/End); only the active swatch participates in Tab order; focus opens on the active material.
+- **M1** (test regex): tightened block-material recipe selector regexes to exact comma-separated form.
+- **M2/M4 + SD1**: documentation improvements and the shipped verdigris patina overlay on Patinated Bronze (per spec §9.3 — `mix-blend-mode: multiply` green/blue radial layers).
+
+### Phase 4 — Single-Thread Line System (completed 2026-05-25)
+
+Added the golden serpentine thread connecting all 7 grid blocks as a closed Catmull-Rom Bézier loop. The thread is a `<ThreadLine>` SVG layer mounted inside `.playfield` as a sibling to the blocks, so it inherits the parallax tilt automatically. Path geometry computes from block `offsetLeft`/`offsetTop` (transform-invariant coordinates), recomputed on `ResizeObserver` events — never on every parallax frame. Each segment runs an 8s opacity shimmer at ambient (0.12 ↔ 0.24). When the cursor approaches within 60px of a block's center, the two segments adjacent to that block brighten to 0.55 over 240ms, creating a localized "you're near this connection" cue. Reduced-motion freezes the shimmer at the mid-point and disables transitions.
+
+The 7 path segments are individual `<path>` elements (not a single continuous path) — forward-compat for Phase 5's chain-reaction `pathLength` tightening animation, which needs per-segment control.
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-4-single-thread-line.md` for the full implementation log.
+
+### Phase 5a — Chain Reaction Infrastructure (completed 2026-05-25)
+
+Built the Rube Goldberg chain reaction control flow without shipping any actual gadgets yet. New `ChainProvider` context exposes `{ activeBlock, isPlaying, startChain(blockId, onComplete), cancelChain() }`. Block clicks (on non-Brand blocks, no modifier keys) call `startChain` instead of navigating directly — the provider plays the configured sequence (placeholder 1.2s wait in 5a; real gadget sequences in 5b), then invokes `onComplete()` to trigger the deferred `navigate(to)`. Escape key cancels in-flight chains; `prefers-reduced-motion: reduce` skips the sequence entirely and navigates immediately. The `ThreadLine` reads `activeBlock` from `useChain()` and applies a `.segmentChainActive` class (full opacity, 2px stroke, paused shimmer) to the segment whose `from` matches the active block.
+
+Sequencing uses an AbortController so cancellation propagates through `playStep` (each step receives the signal). Phase 5a only handles the `'wait'` step kind via `setTimeout`; Phase 5b will extend `playStep` with `'gadget'` kinds backed by Rapier2D physics. The TypeScript exhaustive `_exhaustive: never` line at the end of `playStep` will surface any missed kinds at compile time.
+
+This phase validates the entire control flow end-to-end: click → state transition → thread highlight → timed sequence → navigation. The infrastructure is ready for Phase 5b to drop physics-driven gadget sequences (marble drops, lever swings, domino cascades, pendulum swings, pulley pulls, spring releases) into the existing scaffold.
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5a-chain-reaction-infrastructure.md` for the full implementation log.
+
+### Phase 5b — Hero Marble Drop (completed 2026-05-25)
+
+Shipped the first visible chain-reaction gadget: clicking the Hero block triggers a golden marble that drops from above the viewport onto the Hero block center over ~900ms with an accelerating gravity curve, then squashes vertically for 150ms on impact. The marble is a `motion.svg` (golden radial-gradient orb with a small white specular highlight) inside a new `ChainOverlay` component that sits as a sibling to ThreadLine inside `.playfield` — so it inherits the parallax tilt and reads block positions from the same `useBlockCenters` snapshot. Total Hero sequence duration bumped to 1500ms (from 1200ms placeholder) to give the visual time to land cleanly before navigation fires.
+
+`ChainOverlay` is a dispatcher — it reads `activeBlock` from `useChain()` and renders the matching per-block gadget. Phase 5b only ships the Hero marble; remaining 5 sequences (About pendulum, Work domino cascade, Services lever, Process pulley, Contact letter spring) follow in Phase 5c+. No new runtime dependencies — pure Motion choreography.
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5b-hero-marble-drop.md` for the full implementation log.
+
+### Phase 5c — Hero Bell Flash + Aurora Grow (completed 2026-05-25)
+
+Completed the Hero block's chain reaction with two more visual phases on top of Phase 5b's marble drop:
+
+1. **HeroBellFlash** — a gold radial halo that emanates from the Hero block at the marble's impact moment (~1050ms after chain start). Scales from 0 to 4× and fades over 350ms via Motion. Mounted inside ChainOverlay alongside the marble.
+
+2. **HeroAuroraGrow** — a fullscreen aurora overlay that grows from the Hero block's viewport position to fill the screen during the chain's tail (~1300ms in). `position: fixed` to escape the `.playfield` parallax; reads chain state via useChain(); finds the hero block via stable `data-block-id` selector and anchors at its center. By the time the overlay reaches fullscreen, navigation has fired and /contact's AuroraChamber takes over seamlessly.
+
+Total Hero sequence duration bumped to 1900ms (from 1500ms) to accommodate: marble drop 900ms + squash 150ms + bell flash 350ms + aurora grow 600ms (overlapping). No new runtime dependencies.
+
+The cinematic "Velvet → Aurora portal transition" promised by the spec §5.2 now lands visually. Phase 5d+ will deliver the remaining 5 block sequences (About / Work / Services / Process / Contact).
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5c-hero-bell-and-aurora.md` for the full implementation log.

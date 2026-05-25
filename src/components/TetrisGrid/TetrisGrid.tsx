@@ -2,12 +2,16 @@ import { useMemo } from 'react'
 import { Block } from './Block'
 import type { BlockId } from './Block'
 import { HeroPortalWindow } from './HeroPortalWindow'
+import { ThreadLine } from './ThreadLine'
+import { ChainOverlay } from './ChainOverlay/ChainOverlay'
+import { MaterialsPanel } from '../MaterialsPanel/MaterialsPanel'
 import { useGridParallax } from './useGridParallax'
 import { useGyroParallax } from './useGyroParallax'
 import { useGravityDrop } from './useGravityDrop'
 import { useLineClearController } from './useLineClear'
 import type { BlockRef } from './useLineClear'
 import { useTheme } from '../../lib/theme-context'
+import { useMaterial } from '../../lib/material'
 import { SITE } from '../../data/site'
 import styles from './TetrisGrid.module.css'
 
@@ -63,6 +67,7 @@ const BLOCKS = [
 
 export function TetrisGrid() {
   const { theme } = useTheme()
+  const { panelOpen } = useMaterial()
   const playfieldRef = useGridParallax(4)
   useGyroParallax(playfieldRef)
 
@@ -84,7 +89,17 @@ export function TetrisGrid() {
 
   return (
     <div className={styles.viewport}>
-      <div ref={playfieldRef} className={styles.playfield}>
+      {/*
+        `inert` traps focus inside MaterialsPanel while it's open (WCAG 2.4.3
+        / 4.1.2). When the panel mounts, the playfield (grid + decorative
+        children) is removed from the accessibility tree and focus order,
+        so Tab cycles only within the panel's own focusable elements.
+      */}
+      <div
+        ref={playfieldRef}
+        className={styles.playfield}
+        inert={panelOpen || undefined}
+      >
         <div className={styles.backWall} data-back-wall aria-hidden="true" />
         <div className={styles.floor} data-floor aria-hidden="true" />
         <div className={styles.grid} data-grid>
@@ -99,7 +114,10 @@ export function TetrisGrid() {
             />
           ))}
         </div>
+        <ThreadLine containerRef={playfieldRef} blockRefs={blockRefs} />
+        <ChainOverlay containerRef={playfieldRef} blockRefs={blockRefs} />
       </div>
+      <MaterialsPanel />
     </div>
   )
 }

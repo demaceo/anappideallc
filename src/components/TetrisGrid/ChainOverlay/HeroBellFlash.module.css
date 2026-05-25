@@ -1,0 +1,27 @@
+/* HeroBellFlash — a gold halo that radiates outward from the Hero
+   block at the marble's impact moment. Reads as a bell ringing.
+   Scaled from 0 to 4× with fade-out over 350ms via Motion. */
+
+.bellWrapper {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  margin-left: -40px;
+  margin-top: -40px;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.halo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 230, 110, 0.7) 0%,
+    rgba(255, 212, 0, 0.5) 35%,
+    rgba(255, 184, 0, 0.2) 65%,
+    transparent 100%
+  );
+  filter: drop-shadow(0 0 12px rgba(255, 212, 0, 0.6));
+}
