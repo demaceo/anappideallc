@@ -162,6 +162,16 @@ describe('Patinated Bronze material recipe', () => {
       /\[data-theme="modern-vibrant"\]\[data-material="bronze"\]\s+\.block\s*,\s*\[data-material-preview="bronze"\]\s*\{[^}]*background:[^;]*radial-gradient/,
     )
   })
+
+  it('stacks verdigris patina layers (green + blue oxidation) over the bronze base', () => {
+    // The Bronze recipe ships three radial-gradients in its background
+    // shorthand: a green verdigris streak, a blue-green oxidation streak,
+    // and the warm bronze body. We assert presence of the two patina
+    // colors to confirm the overlay shipped.
+    expect(BLOCK_CSS).toMatch(
+      /\[data-theme="modern-vibrant"\]\[data-material="bronze"\]\s+\.block\s*,\s*\[data-material-preview="bronze"\]\s*\{[^}]*rgba\(60,\s*140,\s*110[^}]*rgba\(70,\s*150,\s*160/,
+    )
+  })
 })
 
 describe('Cream Ceramic material recipe', () => {

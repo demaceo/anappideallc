@@ -512,12 +512,20 @@
     var(--shadow-base);
 }
 
-/* Patinated Bronze — warm oxidized copper. Radial gradient for the base
-   bronze; the ::before patina overlay (added in a later task) provides
-   the verdigris green/blue oxidation streaks. */
+/* Patinated Bronze — warm oxidized copper with verdigris patina. The
+   base radial gradient is the warm bronze body; two soft off-center
+   radial gradients composited on top suggest the green/blue oxidation
+   streaks that form on aged bronze. Stacking the patina into the
+   `background` shorthand (rather than a separate ::before overlay)
+   keeps the editorial ::before brushed-grain + specular highlight
+   intact on the live block, and lets the swatch preview render the
+   same patina without needing its own pseudo-element. */
 [data-theme="modern-vibrant"][data-material="bronze"] .block,
 [data-material-preview="bronze"] {
-  background: radial-gradient(100% 80% at 35% 30%, #e8a85a 0%, #C47820 45%, #6a3e10 100%);
+  background:
+    radial-gradient(60% 40% at 22% 78%, rgba(60, 140, 110, 0.30) 0%, transparent 65%),
+    radial-gradient(45% 35% at 75% 32%, rgba(70, 150, 160, 0.22) 0%, transparent 70%),
+    radial-gradient(100% 80% at 35% 30%, #e8a85a 0%, #C47820 45%, #6a3e10 100%);
   box-shadow:
     inset 0 1px 0 var(--block-specular-top),
     inset 1px 0 0 var(--block-specular-left),
@@ -630,9 +638,13 @@
     var(--shadow-base);
 }
 
-/* Process → Patinated Bronze */
+/* Process → Patinated Bronze (matches the standalone Bronze recipe
+   including the verdigris patina layers). */
 [data-theme="modern-vibrant"][data-material="showcase"] .block-process {
-  background: radial-gradient(100% 80% at 35% 30%, #e8a85a 0%, #C47820 45%, #6a3e10 100%);
+  background:
+    radial-gradient(60% 40% at 22% 78%, rgba(60, 140, 110, 0.30) 0%, transparent 65%),
+    radial-gradient(45% 35% at 75% 32%, rgba(70, 150, 160, 0.22) 0%, transparent 70%),
+    radial-gradient(100% 80% at 35% 30%, #e8a85a 0%, #C47820 45%, #6a3e10 100%);
   box-shadow:
     inset 0 1px 0 var(--block-specular-top),
     inset 1px 0 0 var(--block-specular-left),
