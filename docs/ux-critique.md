@@ -183,3 +183,23 @@ This phase closes UX critique issue #5 ("The 'AAI' brand block does nothing") on
 Known limitation: spec §9.1 calls for a strict focus trap inside the open drawer (Tab cycle confined to swatches). This phase ships basic focus management (Escape closes; `aria-modal="true"` signals modal intent) without a full Tab interception; deferred as a follow-up if usability testing reveals the gap.
 
 See `docs/superpowers/plans/2026-05-25-ui-v2-phase-3-materials-panel.md` for the full implementation log.
+
+### Phase 3 Audit Cleanup (completed 2026-05-25)
+
+Pre-Phase-4 holistic audit of Phases 1-3 surfaced 8 findings, all addressed on this branch:
+- **C1** (Frosted Glass `backdrop-filter` + preserve-3d): confirmed false positive after spec re-analysis; documented with a 14-line comment in `Block.module.css` explaining why backdrop-filter is safe on `.block` (the block's own translateZ comes from `.playfield`'s preserve-3d, not from `.block`'s own transform-style).
+- **C2/M3** (SSR parity): `MaterialProvider.readInitial()` now mirrors `ThemeProvider`'s pattern — reads `document.documentElement.dataset.material` first (already set by the bootstrap script), falls back to localStorage.
+- **I2** (Brand pulse during panel): pulse animation now pauses both on hover AND when the panel is open.
+- **I3** (focus trap): `inert` attribute applied to `.playfield` when panel is open; focus restoration to Brand block on close.
+- **I4** (touch target): close button now 44×44px min via `min-width`/`min-height` + flex centering. WCAG 2.5.5 compliant.
+- **I5** (roving tabindex): swatches now navigable via arrow keys (left/right/up/down + Home/End); only the active swatch participates in Tab order; focus opens on the active material.
+- **M1** (test regex): tightened block-material recipe selector regexes to exact comma-separated form.
+- **M2/M4 + SD1**: documentation improvements and the shipped verdigris patina overlay on Patinated Bronze (per spec §9.3 — `mix-blend-mode: multiply` green/blue radial layers).
+
+### Phase 4 — Single-Thread Line System (completed 2026-05-25)
+
+Added the golden serpentine thread connecting all 7 grid blocks as a closed Catmull-Rom Bézier loop. The thread is a `<ThreadLine>` SVG layer mounted inside `.playfield` as a sibling to the blocks, so it inherits the parallax tilt automatically. Path geometry computes from block `offsetLeft`/`offsetTop` (transform-invariant coordinates), recomputed on `ResizeObserver` events — never on every parallax frame. Each segment runs an 8s opacity shimmer at ambient (0.12 ↔ 0.24). When the cursor approaches within 60px of a block's center, the two segments adjacent to that block brighten to 0.55 over 240ms, creating a localized "you're near this connection" cue. Reduced-motion freezes the shimmer at the mid-point and disables transitions.
+
+The 7 path segments are individual `<path>` elements (not a single continuous path) — forward-compat for Phase 5's chain-reaction `pathLength` tightening animation, which needs per-segment control.
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-4-single-thread-line.md` for the full implementation log.
