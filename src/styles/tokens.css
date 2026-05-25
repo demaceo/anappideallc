@@ -73,6 +73,49 @@
   --toggler-border: rgba(255, 255, 255, 0.12);
 }
 
+/* Editorial Hardware material — v2.0 per-section bloom triples.
+   Scoped to modern-vibrant only (NOT :root) so that classic, pastel, and
+   arcade-neon themes have these tokens undefined. Block.module.css binds
+   --bloom-* from these, then the gradient/caustic/etc. fall through to
+   the v1 --block-bg / --block-fg chain on non-modern-vibrant themes.
+
+   Each section gets three tokens: dark (outer-edge body), base (middle
+   of the diagonal gradient), bright (highlight stop). */
+[data-theme="modern-vibrant"] {
+  --c-hero-mat-dark:   #8a0144;
+  --c-hero-mat-base:   #d90368;
+  --c-hero-mat-bright: #ff5e98;
+  --c-brand-mat-dark:   #a89a82;
+  --c-brand-mat-base:   #f1e9da;
+  --c-brand-mat-bright: #ffffff;
+  --c-about-mat-dark:   #b07700;
+  --c-about-mat-base:   #ffb800;
+  --c-about-mat-bright: #ffe066;
+  --c-work-mat-dark:    #0d3d2b;
+  --c-work-mat-base:    #1f6f50;
+  --c-work-mat-bright:  #4cb589;
+  --c-services-mat-dark:   #006e68;
+  --c-services-mat-base:   #00b4aa;
+  --c-services-mat-bright: #5be3dc;
+  --c-process-mat-dark:    #5a3618;
+  --c-process-mat-base:    #c47820;
+  --c-process-mat-bright:  #e8a85a;
+  /* Contact intentionally shares Hero's triple — same magenta identity,
+     per spec §4.2 (color-identity consistency). */
+  --c-contact-mat-dark:    #8a0144;
+  --c-contact-mat-base:    #d90368;
+  --c-contact-mat-bright:  #ff5e98;
+
+  /* Aurora composition — modern-vibrant only. Used by HeroPortalWindow
+     (inside the Hero block) and AuroraChamber (full-viewport on /contact).
+     Each layer is a separable radial gradient string so individual layers
+     can be composed into different parent rules. */
+  --aurora-cyan:    rgba(80, 200, 255, 0.35);
+  --aurora-magenta: rgba(217, 3, 104, 0.5);
+  --aurora-gold:    rgba(255, 212, 0, 0.32);
+  --aurora-deepspace: linear-gradient(180deg, #03020a 0%, #0a0418 60%, #050310 100%);
+}
+
 [data-theme="classic"] {
   --bg: #000;
   --fg: #fff;

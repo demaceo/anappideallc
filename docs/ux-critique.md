@@ -155,3 +155,21 @@ That requires:
 5. A decisive, single brand identity
 
 The bones are good. The experience needs to be built for the right audience.
+
+---
+
+## v2.0 Implementation Status
+
+### Phase 1 — Material System Refactor (completed 2026-05-24)
+
+Editorial Hardware material recipe applied to `modern-vibrant` theme. Per-section bloom triples (`--c-{section}-mat-{dark|base|bright}`) drive a 135° multi-stop diagonal gradient, brushed micro-grain at 118°, diagonal specular highlight, pearl rim, cushioned offset shadow, bloom halo, atmospheric shadow, and glass caustic floor spill. Other themes (`classic`, `pastel`, `arcade-neon`) remain visually unchanged via fallback chain to v1's `--block-bg` + `--shadow-base`. See `docs/superpowers/plans/2026-05-24-ui-v2-phase-1-material-system.md` for the full implementation log.
+
+No critiqued issues closed by this phase — material polish is the visual foundation for later phases that solve issues #3 (inner-page experience cliff), #4 (no persistent nav), #5 (Brand block does nothing), and #8 (mobile loses magic).
+
+### Phase 2 — Velvet Stage + Aurora Portal Hero (completed 2026-05-24)
+
+Added the v2.0 environmental layer on modern-vibrant: home grid is wrapped in a `VelvetStage` (warm burgundy fabric floor + overhead spot + inset vignette), `/contact` route is wrapped in an `AuroraChamber` (cyan/magenta/gold radial gradients drifting against deep space with stars and vignette), and the Hero block now has a glowing aurora window cutout (`HeroPortalWindow`) inside its surface. Decorative layers fade in over 600ms via Motion on mount; aurora gradients drift continuously on a 30s cycle with `prefers-reduced-motion` respect. Other themes (`classic`, `pastel`, `arcade-neon`) remain visually unchanged via CSS theme-scoping.
+
+This phase begins addressing issue #3 (inner-page experience cliff) for the `/contact` route specifically — the contact page now carries the same atmospheric language as the home page through the aurora chamber, eliminating the v1 cliff for that one route. Issue #3 will be fully closed in Phase 6 when the Velvet Vitrine treatment is applied to About/Work/Services/Process pages.
+
+See `docs/superpowers/plans/2026-05-24-ui-v2-phase-2-velvet-stage-aurora-portal.md` for the full implementation log.

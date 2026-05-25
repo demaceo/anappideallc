@@ -61,4 +61,18 @@ describe('TetrisGrid', () => {
     expect(grid).not.toBeNull()
     expect(floor!.parentElement).toBe(grid!.parentElement)
   })
+
+  it('mounts a HeroPortalWindow inside the hero block', () => {
+    const { container } = renderTetrisGrid()
+    const hero = container.querySelector('[data-block-id="hero"]') as HTMLElement | null
+    expect(hero).toBeInTheDocument()
+    expect(hero?.querySelector('[aria-hidden="true"]')).toBeInTheDocument()
+  })
+
+  it('does NOT mount a HeroPortalWindow inside non-hero blocks', () => {
+    const { container } = renderTetrisGrid()
+    const about = container.querySelector('[data-block-id="about"]') as HTMLElement | null
+    expect(about).toBeInTheDocument()
+    expect(about?.querySelector('[aria-hidden="true"]')).toBeNull()
+  })
 })
