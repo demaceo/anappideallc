@@ -610,3 +610,43 @@
 
 /* Hero + Contact stay Anodized (no override needed — the default
    Editorial Hardware recipe applies). */
+
+/* Anodized swatch preview — renders the default Editorial Hardware look
+   on the panel swatch (the live grid blocks already render this by
+   default; the swatch needs an explicit rule because it's outside the
+   .block element). */
+[data-material-preview="anodized"] {
+  background: linear-gradient(
+    135deg,
+    #8a0144 0%,
+    #d90368 30%,
+    #ff5e98 50%,
+    #d90368 70%,
+    #8a0144 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 4px 0 rgba(0, 0, 0, 0.42),
+    0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Showcase swatch preview — conic gradient with each section's bloom
+   color as a segment, hinting at the per-section variety. */
+[data-material-preview="showcase"] {
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    #d90368 0deg 60deg,       /* hero magenta */
+    #ffb800 60deg 120deg,     /* about gold */
+    #f1e9da 120deg 180deg,    /* brand cream */
+    #00b4aa 180deg 240deg,    /* services teal */
+    #C47820 240deg 300deg,    /* process bronze */
+    #6a7585 300deg 360deg     /* work steel */
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.25),
+    0 4px 0 rgba(0, 0, 0, 0.4),
+    0 8px 16px rgba(0, 0, 0, 0.5);
+}

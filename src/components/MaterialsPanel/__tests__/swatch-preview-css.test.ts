@@ -20,4 +20,12 @@ describe('Swatch previews use the same material recipes', () => {
       expect(BLOCK_CSS).toMatch(pattern)
     })
   }
+
+  it('Anodized swatch preview renders the default Editorial Hardware look', () => {
+    expect(BLOCK_CSS).toMatch(/\[data-material-preview="anodized"\]\s*\{[^}]*linear-gradient\(\s*135deg/)
+  })
+
+  it('Showcase swatch preview uses a conic-gradient (multi-section hint)', () => {
+    expect(BLOCK_CSS).toMatch(/\[data-material-preview="showcase"\]\s*\{[^}]*conic-gradient/)
+  })
 })
