@@ -24,6 +24,25 @@
       })();
     </script>
 
+    <!--
+      Material bootstrap — runs synchronously before paint to set
+      data-material on <html>, preventing a flash of the wrong material
+      on hydration. Anodized is the canonical default. Other presets
+      are accessible via the Materials Panel on modern-vibrant only.
+    -->
+    <script>
+      (function () {
+        try {
+          var ALLOWED = ['anodized', 'steel', 'gold', 'frosted', 'bronze', 'ceramic', 'showcase'];
+          var saved = localStorage.getItem('material');
+          var initial = saved && ALLOWED.indexOf(saved) > -1 ? saved : 'anodized';
+          document.documentElement.dataset.material = initial;
+        } catch (e) {
+          document.documentElement.dataset.material = 'anodized';
+        }
+      })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
