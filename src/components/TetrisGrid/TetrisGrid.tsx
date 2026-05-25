@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Block } from './Block'
 import type { BlockId } from './Block'
 import { HeroPortalWindow } from './HeroPortalWindow'
+import { MaterialsPanel } from '../MaterialsPanel/MaterialsPanel'
 import { useGridParallax } from './useGridParallax'
 import { useGyroParallax } from './useGyroParallax'
 import { useGravityDrop } from './useGravityDrop'
@@ -100,6 +101,7 @@ export function TetrisGrid() {
           ))}
         </div>
       </div>
+      <MaterialsPanel />
     </div>
   )
 }
