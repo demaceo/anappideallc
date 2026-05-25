@@ -171,3 +171,11 @@ describe('Patinated Bronze material recipe', () => {
     )
   })
 })
+
+describe('Cream Ceramic material recipe', () => {
+  it('overrides .block background on [data-material="ceramic"]', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\[data-material="ceramic"\][^{]*\.block\s*\{[^}]*background:[^;]*radial-gradient/,
+    )
+  })
+})
