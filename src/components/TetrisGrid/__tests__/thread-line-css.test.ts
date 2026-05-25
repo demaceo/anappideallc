@@ -42,4 +42,16 @@ describe('ThreadLine.module.css', () => {
   it('reduced-motion disables the shimmer animation', () => {
     expect(CSS).toMatch(/prefers-reduced-motion:\s*reduce[^}]*\.segment[^}]*animation:\s*none/s)
   })
+
+  it('.segmentChainActive class is defined with full opacity', () => {
+    expect(CSS).toMatch(/\.segmentChainActive\s*\{[^}]*stroke-opacity:\s*1/)
+  })
+
+  it('.segmentChainActive has thicker stroke', () => {
+    expect(CSS).toMatch(/\.segmentChainActive\s*\{[^}]*stroke-width:\s*2/)
+  })
+
+  it('.segmentChainActive pauses the shimmer animation', () => {
+    expect(CSS).toMatch(/\.segmentChainActive\s*\{[^}]*animation-play-state:\s*paused/)
+  })
 })
