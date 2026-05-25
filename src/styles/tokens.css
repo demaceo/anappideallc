@@ -129,8 +129,18 @@
 
   /* Aurora composition — modern-vibrant only. Used by HeroPortalWindow
      (inside the Hero block) and AuroraChamber (full-viewport on /contact).
-     Each layer is a separable radial gradient string so individual layers
-     can be composed into different parent rules. */
+
+     Token shape note: spec §5.2 sketches these as `radial-gradient(...)`
+     strings, but we ship the COLORS only. The gradient SHAPES (geometry,
+     position, falloff) are inlined in each consumer:
+       - AuroraChamber.module.css  → full-viewport gradient stack
+       - HeroPortalWindow.module.css → tightly framed portal cutout
+     This split is deliberate: tokens carry the shared aurora palette so
+     both components stay in chromatic sync, while each component owns its
+     own geometry so the portal cutout and the full-viewport chamber can
+     compose those colors into different visual shapes. --aurora-deepspace
+     is the exception (it ships as a full gradient string) because it's
+     used identically as a base background in both consumers. */
   --aurora-cyan:    rgba(80, 200, 255, 0.35);
   --aurora-magenta: rgba(217, 3, 104, 0.5);
   --aurora-gold:    rgba(255, 212, 0, 0.32);
