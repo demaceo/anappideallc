@@ -1,8 +1,10 @@
-import { render } from '@testing-library/react'
+import { render, fireEvent, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
+import { MotionConfig } from 'motion/react'
 import { vi, beforeAll, afterAll } from 'vitest'
+import type { ReactNode } from 'react'
 import { ThemeProvider } from '../../../lib/theme'
-import { MaterialProvider } from '../../../lib/material'
+import { MaterialProvider, useMaterial } from '../../../lib/material'
 import { TetrisGrid } from '../TetrisGrid'
 
 // happy-dom does not implement WAAPI or matchMedia; stub both so TetrisGrid renders.
@@ -44,6 +46,37 @@ function renderTetrisGrid() {
           <TetrisGrid />
         </MemoryRouter>
       </MaterialProvider>
+    </ThemeProvider>,
+  )
+}
+
+// Same wrapper as above, but with an extra child that exposes the
+// MaterialProvider's openPanel/closePanel through a test-id button so we
+// can drive panel state from tests without simulating Brand-block clicks
+// (which would require theme='modern-vibrant' and full Block wiring).
+function PanelDriver({ children }: { children: ReactNode }) {
+  const { openPanel, closePanel } = useMaterial()
+  return (
+    <>
+      <button data-testid="drive-open" onClick={openPanel}>open</button>
+      <button data-testid="drive-close" onClick={closePanel}>close</button>
+      {children}
+    </>
+  )
+}
+
+function renderTetrisGridWithDriver() {
+  return render(
+    <ThemeProvider>
+      <MotionConfig reducedMotion="always">
+        <MaterialProvider>
+          <MemoryRouter>
+            <PanelDriver>
+              <TetrisGrid />
+            </PanelDriver>
+          </MemoryRouter>
+        </MaterialProvider>
+      </MotionConfig>
     </ThemeProvider>,
   )
 }
@@ -98,5 +131,23 @@ describe('TetrisGrid', () => {
     // here also confirms MaterialProvider IS in the render helper (or
     // we need to add it).
     expect(container.firstChild).toBeInTheDocument()
+  })
+
+  // Focus-trap contract (WCAG 2.4.3 / 4.1.2): when the MaterialsPanel
+  // dialog is open, the playfield (everything except the panel itself)
+  // is marked `inert`, which removes its subtree from the focus order
+  // and accessibility tree.
+  it('marks the playfield inert when the MaterialsPanel is open', async () => {
+    const { container, getByTestId } = renderTetrisGridWithDriver()
+    const playfield = container.querySelector('[data-grid]')!.parentElement!
+
+    // Closed → no `inert` attribute.
+    expect(playfield.hasAttribute('inert')).toBe(false)
+
+    fireEvent.click(getByTestId('drive-open'))
+    await waitFor(() => expect(playfield.hasAttribute('inert')).toBe(true))
+
+    fireEvent.click(getByTestId('drive-close'))
+    await waitFor(() => expect(playfield.hasAttribute('inert')).toBe(false))
   })
 })

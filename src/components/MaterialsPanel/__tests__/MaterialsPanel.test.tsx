@@ -128,4 +128,46 @@ describe('MaterialsPanel', () => {
     fireEvent.keyDown(document, { key: 'Escape' })
     await waitFor(() => expect(queryByRole('dialog')).toBeNull())
   })
+
+  // Focus restoration is part of the dialog focus-trap contract (WCAG
+  // 2.4.3). When the panel closes, focus must return to the element that
+  // opened it — the Brand block. We render a stub element with the
+  // `data-block-id="brand"` selector and verify it receives focus.
+  it('restores focus to the Brand block when the panel closes', async () => {
+    const { getByTestId, queryByRole } = render(
+      <Wrapper>
+        <PanelOpener>
+          <a
+            href="#brand"
+            data-block-id="brand"
+            data-testid="brand-stub"
+          >
+            brand
+          </a>
+          <MaterialsPanel />
+        </PanelOpener>
+      </Wrapper>,
+    )
+    const brandStub = getByTestId('brand-stub') as HTMLAnchorElement
+    fireEvent.click(getByTestId('open-panel'))
+    expect(queryByRole('dialog')).toBeInTheDocument()
+    // Some other element holds focus while panel is open.
+    ;(document.body as HTMLElement).focus()
+    fireEvent.keyDown(document, { key: 'Escape' })
+    await waitFor(() => expect(queryByRole('dialog')).toBeNull())
+    await waitFor(() => expect(document.activeElement).toBe(brandStub))
+  })
+
+  it('does NOT steal focus to the Brand block on initial mount', () => {
+    const { getByTestId } = render(
+      <Wrapper>
+        <input data-testid="outside-input" />
+        <a href="#brand" data-block-id="brand" data-testid="brand-stub">brand</a>
+        <MaterialsPanel />
+      </Wrapper>,
+    )
+    const input = getByTestId('outside-input') as HTMLInputElement
+    input.focus()
+    expect(document.activeElement).toBe(input)
+  })
 })

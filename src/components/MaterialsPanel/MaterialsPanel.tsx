@@ -1,4 +1,4 @@
-import { useEffect, useId } from 'react'
+import { useEffect, useId, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useMaterial } from '../../lib/material'
 import { MATERIAL_PRESETS } from './materialPresets'
@@ -22,6 +22,10 @@ const SLIDE_UP = {
 export function MaterialsPanel() {
   const { material, setMaterial, panelOpen, closePanel } = useMaterial()
   const titleId = useId()
+  // Tracks whether the panel was previously open, so we only restore focus
+  // on a true open→close transition (not on initial mount, when panelOpen
+  // begins false and we don't want to steal focus to the Brand block).
+  const wasOpenRef = useRef(false)
 
   // Escape key handler — bound while panel is open, unbound otherwise.
   useEffect(() => {
@@ -32,6 +36,21 @@ export function MaterialsPanel() {
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [panelOpen, closePanel])
+
+  // Focus restoration: when the panel closes, send focus back to the Brand
+  // block that opened it. Part of the dialog focus-trap contract (WCAG
+  // 2.4.3). Only fires on a real open→close transition, not on initial
+  // mount, so we don't yank focus from elsewhere when the page first loads.
+  useEffect(() => {
+    if (panelOpen) {
+      wasOpenRef.current = true
+      return
+    }
+    if (!wasOpenRef.current) return
+    wasOpenRef.current = false
+    const brand = document.querySelector<HTMLElement>('[data-block-id="brand"]')
+    brand?.focus()
+  }, [panelOpen])
 
   return (
     <AnimatePresence>
