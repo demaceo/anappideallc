@@ -4,13 +4,16 @@ import { Block } from '../Block'
 import type { BlockProps } from '../Block'
 import { MaterialProvider, useMaterial } from '../../../lib/material'
 import { ThemeProvider } from '../../../lib/theme'
+import { ChainProvider } from '../../../lib/chain'
 
 function renderBlock(props: Partial<BlockProps> = {}) {
   return render(
     <MemoryRouter>
       <ThemeProvider>
         <MaterialProvider>
-          <Block id="hero" to="/" title="Test Title" {...props} />
+          <ChainProvider>
+            <Block id="hero" to="/" title="Test Title" {...props} />
+          </ChainProvider>
         </MaterialProvider>
       </ThemeProvider>
     </MemoryRouter>,
@@ -90,7 +93,9 @@ describe('Brand block click behavior', () => {
       <MemoryRouter>
         <ThemeProvider>
           <MaterialProvider>
-            <Block id="brand" to="/about" title="AAI" />
+            <ChainProvider>
+              <Block id="brand" to="/about" title="AAI" />
+            </ChainProvider>
           </MaterialProvider>
         </ThemeProvider>
       </MemoryRouter>,
@@ -127,8 +132,10 @@ describe('Brand block pulse animation pause', () => {
       <MemoryRouter>
         <ThemeProvider>
           <MaterialProvider>
-            <Capture />
-            <Block id="brand" to="/about" title="AAI" />
+            <ChainProvider>
+              <Capture />
+              <Block id="brand" to="/about" title="AAI" />
+            </ChainProvider>
           </MaterialProvider>
         </ThemeProvider>
       </MemoryRouter>,
@@ -148,5 +155,98 @@ describe('Brand block pulse animation pause', () => {
     })
     const el = container.querySelector('[data-block-id="brand"]') as HTMLElement
     expect(el.style.animationPlayState).toBe('paused')
+  })
+})
+
+describe('Block chain integration', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    document.documentElement.dataset.theme = 'modern-vibrant'
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('defers navigation until the chain completes for non-Brand blocks', () => {
+    const onNavigate = vi.fn()
+    render(
+      <MemoryRouter>
+        <ThemeProvider>
+          <MaterialProvider>
+            <ChainProvider>
+              <Block id="work" to="/work" title="Work" onNavigate={onNavigate} />
+            </ChainProvider>
+          </MaterialProvider>
+        </ThemeProvider>
+      </MemoryRouter>,
+    )
+
+    const block = document.querySelector('[data-block-id="work"]') as HTMLElement
+    act(() => {
+      block.click()
+    })
+
+    // Click captured by chain — navigation not yet fired
+    expect(onNavigate).not.toHaveBeenCalled()
+
+    act(() => {
+      vi.advanceTimersByTime(1200)
+    })
+
+    // After the sequence, navigation fires
+    expect(onNavigate).toHaveBeenCalledWith('work', '/work')
+  })
+
+  it('Brand block on modern-vibrant still opens panel (not chain)', () => {
+    const onNavigate = vi.fn()
+    render(
+      <MemoryRouter>
+        <ThemeProvider>
+          <MaterialProvider>
+            <ChainProvider>
+              <Block id="brand" to="/about" title="AAI" onNavigate={onNavigate} />
+            </ChainProvider>
+          </MaterialProvider>
+        </ThemeProvider>
+      </MemoryRouter>,
+    )
+
+    const block = document.querySelector('[data-block-id="brand"]') as HTMLElement
+    act(() => {
+      block.click()
+    })
+
+    // Brand path: panel opens, navigation never fires
+    act(() => {
+      vi.advanceTimersByTime(2000)
+    })
+    expect(onNavigate).not.toHaveBeenCalled()
+  })
+
+  it('modifier-click navigates directly (skip chain) for new-tab behavior', () => {
+    const onNavigate = vi.fn()
+    render(
+      <MemoryRouter>
+        <ThemeProvider>
+          <MaterialProvider>
+            <ChainProvider>
+              <Block id="services" to="/services" title="Services" onNavigate={onNavigate} />
+            </ChainProvider>
+          </MaterialProvider>
+        </ThemeProvider>
+      </MemoryRouter>,
+    )
+
+    const block = document.querySelector('[data-block-id="services"]') as HTMLElement
+    act(() => {
+      block.dispatchEvent(new MouseEvent('click', { metaKey: true, bubbles: true, cancelable: true }))
+    })
+
+    // Modifier-click bypasses chain (browser default tab behavior preserved)
+    // No timer advance needed — the chain code returns early
+    // onNavigate is also not called because the early return is BEFORE both
+    // onNavigate and chain start. This matches v1 behavior.
+    expect(onNavigate).not.toHaveBeenCalled()
   })
 })

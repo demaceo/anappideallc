@@ -5,6 +5,7 @@ import { Link } from 'react-router'
 import styles from './Block.module.css'
 import { useTheme } from '../../lib/theme-context'
 import { useMaterial } from '../../lib/material'
+import { useChain } from '../../lib/chain'
 
 function applyTilt(e: React.MouseEvent<HTMLAnchorElement>) {
   const rect = e.currentTarget.getBoundingClientRect()
@@ -53,6 +54,7 @@ export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
 ) {
   const { theme } = useTheme()
   const { openPanel, panelOpen } = useMaterial()
+  const { startChain } = useChain()
   const isMaterialsTrigger = id === 'brand' && theme === 'modern-vibrant'
   const className = `${styles.block} ${styles[`block-${id}`]}`
   // Pause the brand-pulse keyframe animation while the panel is open. The
@@ -86,12 +88,12 @@ export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
           openPanel()
           return
         }
-        if (!onNavigate) return
-        // Let modifier-clicks (cmd/ctrl/middle) keep their default
-        // browser behavior — open in new tab, etc.
+        // Modifier-key clicks preserve browser native nav (open in new tab etc.)
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+        // Same-tab navigation: defer through chain reaction, then call onNavigate
         e.preventDefault()
-        onNavigate(id, to)
+        if (!onNavigate) return
+        startChain(id, () => onNavigate(id, to))
       }}
     >
       {portal}
