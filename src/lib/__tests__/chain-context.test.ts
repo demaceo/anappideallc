@@ -16,8 +16,14 @@ describe('chain-context', () => {
     }
   })
 
-  it('Phase 5a placeholder sequences are single wait steps of DEFAULT_CHAIN_DURATION_MS', () => {
-    for (const id of ['hero', 'about', 'work', 'services', 'process', 'contact'] as BlockId[]) {
+  it('hero sequence is a 1500ms wait (allowing marble drop + squash time)', () => {
+    const heroSeq = BLOCK_SEQUENCES.hero!
+    expect(heroSeq).toHaveLength(1)
+    expect(heroSeq[0]).toEqual({ kind: 'wait', durationMs: 1500 })
+  })
+
+  it('other blocks remain at DEFAULT_CHAIN_DURATION_MS (1200ms placeholder)', () => {
+    for (const id of ['about', 'work', 'services', 'process', 'contact'] as BlockId[]) {
       const seq = BLOCK_SEQUENCES[id]!
       expect(seq).toHaveLength(1)
       expect(seq[0]).toEqual({ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS })

@@ -5,6 +5,9 @@ import type { BlockId } from '../components/TetrisGrid/Block'
  *  override this with their own per-step timing. */
 export const DEFAULT_CHAIN_DURATION_MS = 1200
 
+/** Hero's marble drop + squash needs more time than a generic placeholder. */
+export const HERO_CHAIN_DURATION_MS = 1500
+
 /**
  * Discriminated union for chain sequence steps. Phase 5a ships only
  * `wait` — a timed delay used as a placeholder while the infrastructure
@@ -24,7 +27,7 @@ export type ChainSequence = readonly ChainStep[]
  * chain reaction system.
  */
 export const BLOCK_SEQUENCES: Partial<Record<BlockId, ChainSequence>> = {
-  hero:     [{ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS }],
+  hero:     [{ kind: 'wait', durationMs: HERO_CHAIN_DURATION_MS }],
   about:    [{ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS }],
   work:     [{ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS }],
   services: [{ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS }],
