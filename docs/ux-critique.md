@@ -203,3 +203,13 @@ Added the golden serpentine thread connecting all 7 grid blocks as a closed Catm
 The 7 path segments are individual `<path>` elements (not a single continuous path) — forward-compat for Phase 5's chain-reaction `pathLength` tightening animation, which needs per-segment control.
 
 See `docs/superpowers/plans/2026-05-25-ui-v2-phase-4-single-thread-line.md` for the full implementation log.
+
+### Phase 5a — Chain Reaction Infrastructure (completed 2026-05-25)
+
+Built the Rube Goldberg chain reaction control flow without shipping any actual gadgets yet. New `ChainProvider` context exposes `{ activeBlock, isPlaying, startChain(blockId, onComplete), cancelChain() }`. Block clicks (on non-Brand blocks, no modifier keys) call `startChain` instead of navigating directly — the provider plays the configured sequence (placeholder 1.2s wait in 5a; real gadget sequences in 5b), then invokes `onComplete()` to trigger the deferred `navigate(to)`. Escape key cancels in-flight chains; `prefers-reduced-motion: reduce` skips the sequence entirely and navigates immediately. The `ThreadLine` reads `activeBlock` from `useChain()` and applies a `.segmentChainActive` class (full opacity, 2px stroke, paused shimmer) to the segment whose `from` matches the active block.
+
+Sequencing uses an AbortController so cancellation propagates through `playStep` (each step receives the signal). Phase 5a only handles the `'wait'` step kind via `setTimeout`; Phase 5b will extend `playStep` with `'gadget'` kinds backed by Rapier2D physics. The TypeScript exhaustive `_exhaustive: never` line at the end of `playStep` will surface any missed kinds at compile time.
+
+This phase validates the entire control flow end-to-end: click → state transition → thread highlight → timed sequence → navigation. The infrastructure is ready for Phase 5b to drop physics-driven gadget sequences (marble drops, lever swings, domino cascades, pendulum swings, pulley pulls, spring releases) into the existing scaffold.
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5a-chain-reaction-infrastructure.md` for the full implementation log.
