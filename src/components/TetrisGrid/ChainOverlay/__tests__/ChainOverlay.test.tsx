@@ -69,7 +69,7 @@ describe('ChainOverlay', () => {
     expect(container.querySelector('circle')).toBeInTheDocument()
   })
 
-  it('does NOT render a visual when activeBlock is any non-hero block (Phase 5b scope)', () => {
+  it('does NOT render a hero-style svg marble when activeBlock is work', () => {
     const { containerRef, blockRefs } = setupRefs()
     const { container, getByTestId } = render(
       <ChainProvider>
@@ -80,7 +80,7 @@ describe('ChainOverlay', () => {
     act(() => {
       getByTestId('start').click()
     })
-    // work's gadget visual isn't shipped yet (Phase 5c+)
+    // Work renders the domino cascade, not the hero marble svg
     expect(container.querySelector('svg')).toBeNull()
   })
 
@@ -130,6 +130,20 @@ describe('ChainOverlay', () => {
     })
     // Hero shows marble (circle) but no rod (line) since pendulum isn't dispatched
     expect(container.querySelector('line')).toBeNull()
+  })
+
+  it('renders WorkDominoCascade when activeBlock is work', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ChainStarter blockId="work" />
+        <ChainOverlay containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
+    )
+    act(() => {
+      getByTestId('start').click()
+    })
+    expect(container.querySelectorAll('[data-domino]').length).toBe(5)
   })
 
   it('overlay container has data-chain-overlay attribute (for inspection / Phase 5c hooks)', () => {

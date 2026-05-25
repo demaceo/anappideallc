@@ -4,6 +4,7 @@ import { useBlockCenters, type BlockRefEntry } from '../useBlockCenters'
 import { HeroMarbleDrop } from './HeroMarbleDrop'
 import { HeroBellFlash } from './HeroBellFlash'
 import { AboutPendulum } from './AboutPendulum'
+import { WorkDominoCascade } from './WorkDominoCascade'
 import styles from './ChainOverlay.module.css'
 
 export interface ChainOverlayProps {
@@ -29,6 +30,7 @@ export function ChainOverlay({ containerRef, blockRefs }: ChainOverlayProps) {
   const snapshot = useBlockCenters(containerRef, blockRefs)
   const heroCenter = snapshot?.centers.hero
   const aboutCenter = snapshot?.centers.about
+  const workCenter = snapshot?.centers.work
 
   return (
     <div className={styles.overlay} data-chain-overlay>
@@ -40,6 +42,9 @@ export function ChainOverlay({ containerRef, blockRefs }: ChainOverlayProps) {
       )}
       {activeBlock === 'about' && aboutCenter && (
         <AboutPendulum targetX={aboutCenter.x} targetY={aboutCenter.y} />
+      )}
+      {activeBlock === 'work' && workCenter && (
+        <WorkDominoCascade targetX={workCenter.x} targetY={workCenter.y} />
       )}
     </div>
   )
