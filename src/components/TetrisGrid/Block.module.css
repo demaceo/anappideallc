@@ -451,3 +451,20 @@
     0 50px 80px rgba(0, 0, 0, 0.45),
     var(--shadow-base);
 }
+
+/* Patinated Bronze — warm oxidized copper. Radial gradient for the base
+   bronze; the ::before patina overlay (added in a later task) provides
+   the verdigris green/blue oxidation streaks. */
+[data-theme="modern-vibrant"][data-material="bronze"] .block {
+  background: radial-gradient(100% 80% at 35% 30%, #e8a85a 0%, #C47820 45%, #6a3e10 100%);
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1px rgba(200, 120, 32, 0.5),
+    inset 0 4px 6px rgba(255, 255, 255, 0.25),
+    inset 0 -10px 14px rgba(0, 0, 0, 0.4),
+    0 18px 0 rgba(0, 0, 0, 0.45),
+    0 36px 70px rgba(200, 120, 32, 0.3),
+    0 50px 80px rgba(0, 0, 0, 0.45),
+    var(--shadow-base);
+}

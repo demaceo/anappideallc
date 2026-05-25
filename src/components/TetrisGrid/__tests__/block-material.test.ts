@@ -163,3 +163,11 @@ describe('Frosted Glass material recipe', () => {
     )
   })
 })
+
+describe('Patinated Bronze material recipe', () => {
+  it('overrides .block background on [data-material="bronze"]', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\[data-material="bronze"\][^{]*\.block\s*\{[^}]*background:[^;]*radial-gradient/,
+    )
+  })
+})
