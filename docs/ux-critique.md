@@ -213,3 +213,11 @@ Sequencing uses an AbortController so cancellation propagates through `playStep`
 This phase validates the entire control flow end-to-end: click → state transition → thread highlight → timed sequence → navigation. The infrastructure is ready for Phase 5b to drop physics-driven gadget sequences (marble drops, lever swings, domino cascades, pendulum swings, pulley pulls, spring releases) into the existing scaffold.
 
 See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5a-chain-reaction-infrastructure.md` for the full implementation log.
+
+### Phase 5b — Hero Marble Drop (completed 2026-05-25)
+
+Shipped the first visible chain-reaction gadget: clicking the Hero block triggers a golden marble that drops from above the viewport onto the Hero block center over ~900ms with an accelerating gravity curve, then squashes vertically for 150ms on impact. The marble is a `motion.svg` (golden radial-gradient orb with a small white specular highlight) inside a new `ChainOverlay` component that sits as a sibling to ThreadLine inside `.playfield` — so it inherits the parallax tilt and reads block positions from the same `useBlockCenters` snapshot. Total Hero sequence duration bumped to 1500ms (from 1200ms placeholder) to give the visual time to land cleanly before navigation fires.
+
+`ChainOverlay` is a dispatcher — it reads `activeBlock` from `useChain()` and renders the matching per-block gadget. Phase 5b only ships the Hero marble; remaining 5 sequences (About pendulum, Work domino cascade, Services lever, Process pulley, Contact letter spring) follow in Phase 5c+. No new runtime dependencies — pure Motion choreography.
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5b-hero-marble-drop.md` for the full implementation log.
