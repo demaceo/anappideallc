@@ -2,11 +2,17 @@ import { render } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { Block } from '../Block'
 import type { BlockProps } from '../Block'
+import { MaterialProvider } from '../../../lib/material'
+import { ThemeProvider } from '../../../lib/theme'
 
 function renderBlock(props: Partial<BlockProps> = {}) {
   return render(
     <MemoryRouter>
-      <Block id="hero" to="/" title="Test Title" {...props} />
+      <ThemeProvider>
+        <MaterialProvider>
+          <Block id="hero" to="/" title="Test Title" {...props} />
+        </MaterialProvider>
+      </ThemeProvider>
     </MemoryRouter>,
   )
 }
@@ -74,5 +80,35 @@ describe('Block', () => {
   it('does not render any portal element when portal prop is absent', () => {
     const { container } = renderBlock()
     expect(container.querySelector('[data-testid="portal-content"]')).toBeNull()
+  })
+})
+
+describe('Brand block click behavior', () => {
+  function renderBrand(theme: string) {
+    document.documentElement.dataset.theme = theme
+    return render(
+      <MemoryRouter>
+        <ThemeProvider>
+          <MaterialProvider>
+            <Block id="brand" to="/about" title="AAI" />
+          </MaterialProvider>
+        </ThemeProvider>
+      </MemoryRouter>,
+    )
+  }
+
+  it('on modern-vibrant, has aria-haspopup="dialog"', () => {
+    const { container } = renderBrand('modern-vibrant')
+    expect(container.querySelector('[data-block-id="brand"]')).toHaveAttribute(
+      'aria-haspopup',
+      'dialog',
+    )
+  })
+
+  it('on classic, has NO aria-haspopup (regular link)', () => {
+    const { container } = renderBrand('classic')
+    expect(container.querySelector('[data-block-id="brand"]')).not.toHaveAttribute(
+      'aria-haspopup',
+    )
   })
 })

@@ -3,6 +3,8 @@ import type { ReactNode } from 'react'
 import { motion } from 'motion/react'
 import { Link } from 'react-router'
 import styles from './Block.module.css'
+import { useTheme } from '../../lib/theme-context'
+import { useMaterial } from '../../lib/material'
 
 function applyTilt(e: React.MouseEvent<HTMLAnchorElement>) {
   const rect = e.currentTarget.getBoundingClientRect()
@@ -49,6 +51,9 @@ export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
   { id, to, title, subtitle, cta, tags, ariaLabel, onNavigate, portal },
   ref,
 ) {
+  const { theme } = useTheme()
+  const { openPanel, panelOpen } = useMaterial()
+  const isMaterialsTrigger = id === 'brand' && theme === 'modern-vibrant'
   const className = `${styles.block} ${styles[`block-${id}`]}`
 
   return (
@@ -60,9 +65,16 @@ export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
       className={className}
       style={{ gridArea: id }}
       aria-label={ariaLabel ?? title}
+      aria-haspopup={isMaterialsTrigger ? 'dialog' : undefined}
+      aria-expanded={isMaterialsTrigger ? panelOpen : undefined}
       onMouseMove={applyTilt}
       onMouseLeave={resetTilt}
       onClick={(e) => {
+        if (isMaterialsTrigger) {
+          e.preventDefault()
+          openPanel()
+          return
+        }
         if (!onNavigate) return
         // Let modifier-clicks (cmd/ctrl/middle) keep their default
         // browser behavior — open in new tab, etc.

@@ -2,6 +2,7 @@ import { render } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest'
 import { ThemeProvider } from '../../lib/theme'
+import { MaterialProvider } from '../../lib/material'
 import Home from '../Home'
 
 // happy-dom does not implement WAAPI or matchMedia; stub both so TetrisGrid renders.
@@ -37,9 +38,11 @@ afterAll(() => {
 function renderHome() {
   return render(
     <ThemeProvider>
-      <MemoryRouter>
-        <Home />
-      </MemoryRouter>
+      <MaterialProvider>
+        <MemoryRouter>
+          <Home />
+        </MemoryRouter>
+      </MaterialProvider>
     </ThemeProvider>,
   )
 }
