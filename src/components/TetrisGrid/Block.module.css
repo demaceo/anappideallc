@@ -452,7 +452,20 @@
 /* Frosted Glass — translucent teal cushion with backdrop blur. Reads as
    a chunk of architectural glass — clean, modern, slightly clinical.
    The backdrop-filter samples whatever is behind the block (the velvet
-   floor + spotlight), so the visual changes with the environment. */
+   floor + spotlight), so the visual changes with the environment.
+
+   Backdrop-filter + preserve-3d coexistence: per CSS Transforms Module
+   Level 2 §6, a non-initial `backdrop-filter` forces this element's
+   `transform-style` to compute as `flat`. That governs how THIS block's
+   CHILDREN are composed — but the block's own translateZ(--block-z) is
+   honored by the PARENT (.playfield)'s `transform-style: preserve-3d`,
+   not by the block's own. The block's children here (title / subtitle /
+   cta / portal) are all 2D content with no translateZ of their own, so
+   flattening the block's internal 3D scene is visually invisible. Net
+   result: Frosted blocks still occupy their distinct Z plane on desktop
+   alongside the other materials. Future maintainers: if a 3D-transformed
+   child is ever added inside a Frosted block, it will be flattened —
+   move such children outside the block or drop backdrop-filter then. */
 [data-theme="modern-vibrant"][data-material="frosted"] .block,
 [data-material-preview="frosted"] {
   background: linear-gradient(
