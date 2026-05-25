@@ -110,8 +110,8 @@ export function ChainProvider({ children }: ChainProviderProps) {
   const cancelChain = useCallback(() => {
     if (controllerRef.current) {
       controllerRef.current.abort()
+      clearState()
     }
-    clearState()
   }, [clearState])
 
   const startChain = useCallback(
