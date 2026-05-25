@@ -146,6 +146,21 @@ describe('ChainOverlay', () => {
     expect(container.querySelectorAll('[data-domino]').length).toBe(5)
   })
 
+  it('renders ProcessPulley when activeBlock is process', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ChainStarter blockId="process" />
+        <ChainOverlay containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
+    )
+    act(() => {
+      getByTestId('start').click()
+    })
+    expect(container.querySelector('[data-wheel]')).toBeInTheDocument()
+    expect(container.querySelector('[data-weight]')).toBeInTheDocument()
+  })
+
   it('renders ServicesLever when activeBlock is services', () => {
     const { containerRef, blockRefs } = setupRefs()
     const { container, getByTestId } = render(
