@@ -1,0 +1,39 @@
+/* AboutPendulum — a gold pendulum that swings over the About block at
+   chain time. Anchored 120px above the block's center; rotates around
+   the anchor via `transformOrigin: 'center top'`. The wrapper holds the
+   pivot point; the SVG inside hangs downward and rotates. */
+
+.pendulumWrapper {
+  position: absolute;
+  /* Pivot is 120px ABOVE the block center; the SVG below this point is
+     what visually swings. The wrapper is a 0×0 pivot pin. */
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  /* Lift the pivot above the target Y by 120px via margin-top. */
+  margin-top: -120px;
+  will-change: transform;
+}
+
+.pendulum {
+  position: absolute;
+  /* Center the SVG horizontally on the pivot (the wrapper has 0 width
+     so we use margin offsets). The SVG is 16px wide so margin-left
+     -8px centers it. The SVG itself is 140px tall, hanging downward
+     from the pivot. */
+  margin-left: -8px;
+  width: 16px;
+  height: 140px;
+  /* Rotate around the top-center of the SVG (the pivot). */
+  transform-origin: 50% 0%;
+}
+
+.rod {
+  stroke: rgba(255, 212, 0, 0.85);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.bob {
+  /* Bob fill is set via the radialGradient defined in the component. */
+}
