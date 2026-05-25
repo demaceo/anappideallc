@@ -158,52 +158,33 @@
   opacity: 0.7;
 }
 
-/* Per-block color + bloom binding via CSS custom properties + per-block
-   translateZ so blocks float at staggered depths in the 3D scene. The
-   --bloom-* triple drives the Editorial Hardware material gradient; the
-   --block-bg fallback covers themes without bloom tokens (classic, etc.). */
-.block-hero {
-  --block-bg: var(--c-hero); --block-fg: var(--c-hero-fg); --block-z: 60px;
-  --bloom-dark: var(--c-hero-mat-dark);
-  --bloom: var(--c-hero-mat-base);
-  --bloom-bright: var(--c-hero-mat-bright);
-}
-.block-brand {
-  --block-bg: var(--c-brand); --block-fg: var(--c-brand-fg); --block-z: 15px;
-  --bloom-dark: var(--c-brand-mat-dark);
-  --bloom: var(--c-brand-mat-base);
-  --bloom-bright: var(--c-brand-mat-bright);
-}
-.block-about {
-  --block-bg: var(--c-about); --block-fg: var(--c-about-fg); --block-z: 40px;
-  --bloom-dark: var(--c-about-mat-dark);
-  --bloom: var(--c-about-mat-base);
-  --bloom-bright: var(--c-about-mat-bright);
-}
-.block-work {
-  --block-bg: var(--c-work); --block-fg: var(--c-work-fg); --block-z: 30px;
-  --bloom-dark: var(--c-work-mat-dark);
-  --bloom: var(--c-work-mat-base);
-  --bloom-bright: var(--c-work-mat-bright);
-}
-.block-services {
-  --block-bg: var(--c-services); --block-fg: var(--c-services-fg); --block-z: 35px;
-  --bloom-dark: var(--c-services-mat-dark);
-  --bloom: var(--c-services-mat-base);
-  --bloom-bright: var(--c-services-mat-bright);
-}
-.block-process {
-  --block-bg: var(--c-process); --block-fg: var(--c-process-fg); --block-z: 25px;
-  --bloom-dark: var(--c-process-mat-dark);
-  --bloom: var(--c-process-mat-base);
-  --bloom-bright: var(--c-process-mat-bright);
-}
-.block-contact {
-  --block-bg: var(--c-contact); --block-fg: var(--c-contact-fg); --block-z: 45px;
-  --bloom-dark: var(--c-contact-mat-dark);
-  --bloom: var(--c-contact-mat-base);
-  --bloom-bright: var(--c-contact-mat-bright);
-}
+/* v1 per-block color binding + per-block translateZ — applies to ALL
+   themes so they continue to render with their own --c-* tokens. */
+.block-hero      { --block-bg: var(--c-hero);     --block-fg: var(--c-hero-fg);     --block-z: 60px; }
+.block-brand     { --block-bg: var(--c-brand);    --block-fg: var(--c-brand-fg);    --block-z: 15px; }
+.block-about     { --block-bg: var(--c-about);    --block-fg: var(--c-about-fg);    --block-z: 40px; }
+.block-work      { --block-bg: var(--c-work);     --block-fg: var(--c-work-fg);     --block-z: 30px; }
+.block-services  { --block-bg: var(--c-services); --block-fg: var(--c-services-fg); --block-z: 35px; }
+.block-process   { --block-bg: var(--c-process);  --block-fg: var(--c-process-fg);  --block-z: 25px; }
+.block-contact   { --block-bg: var(--c-contact);  --block-fg: var(--c-contact-fg);  --block-z: 45px; }
+
+/* Editorial Hardware bloom triple bindings — modern-vibrant ONLY.
+   Scoping these to the theme attribute prevents non-modern-vibrant themes
+   from ever computing a value for --bloom-*. The .block background
+   gradient's nested fallback chain (var(--bloom-dark, var(--block-bg, ...)))
+   then correctly resolves to --block-bg on other themes regardless of how
+   the browser handles a var() chain that resolves to invalid-at-computed-
+   value-time (which has subtle spec ambiguities). With explicit scoping,
+   we don't rely on cascade-through-invalidity behavior — bloom tokens are
+   simply absent on classic / pastel / arcade-neon, and the fallback fires
+   cleanly. */
+[data-theme="modern-vibrant"] .block-hero      { --bloom-dark: var(--c-hero-mat-dark);     --bloom: var(--c-hero-mat-base);     --bloom-bright: var(--c-hero-mat-bright); }
+[data-theme="modern-vibrant"] .block-brand     { --bloom-dark: var(--c-brand-mat-dark);    --bloom: var(--c-brand-mat-base);    --bloom-bright: var(--c-brand-mat-bright); }
+[data-theme="modern-vibrant"] .block-about     { --bloom-dark: var(--c-about-mat-dark);    --bloom: var(--c-about-mat-base);    --bloom-bright: var(--c-about-mat-bright); }
+[data-theme="modern-vibrant"] .block-work      { --bloom-dark: var(--c-work-mat-dark);     --bloom: var(--c-work-mat-base);     --bloom-bright: var(--c-work-mat-bright); }
+[data-theme="modern-vibrant"] .block-services  { --bloom-dark: var(--c-services-mat-dark); --bloom: var(--c-services-mat-base); --bloom-bright: var(--c-services-mat-bright); }
+[data-theme="modern-vibrant"] .block-process   { --bloom-dark: var(--c-process-mat-dark);  --bloom: var(--c-process-mat-base);  --bloom-bright: var(--c-process-mat-bright); }
+[data-theme="modern-vibrant"] .block-contact   { --bloom-dark: var(--c-contact-mat-dark);  --bloom: var(--c-contact-mat-base);  --bloom-bright: var(--c-contact-mat-bright); }
 
 /* Base ::before overlay — v1 gloss preserved for classic, pastel, and other
    non-modern-vibrant themes. Modern-vibrant overrides this with the
@@ -272,13 +253,17 @@
     transform: translateZ(calc(var(--block-z, 20px) + 30px))
                rotateX(var(--hover-rx, 0deg))
                rotateY(var(--hover-ry, 0deg));
-    /* Base hover shadow — v1 specular edges + brighter theme shadow.
-       Editorial Hardware extensions live in a theme-scoped override
-       (see [data-theme="modern-vibrant"] .block:hover below). */
+    /* Base hover shadow — v1 specular edges + brighter theme shadow +
+       atmospheric drop shadow. The trailing 0 40px 80px atmospheric layer
+       was part of v1's hover treatment for classic/pastel/arcade-neon;
+       restoring it here so non-modern-vibrant themes don't regress.
+       Modern-vibrant fully overrides this in its theme-scoped rule below
+       so it doesn't double-stack. */
     box-shadow:
       inset 0 1px 0 var(--block-specular-top),
       inset 1px 0 0 var(--block-specular-left),
-      var(--shadow-hover);
+      var(--shadow-hover),
+      0 40px 80px rgba(0, 0, 0, 0.22);
     /* Fast tracking during hover; the base 240ms cubic easing applies on exit */
     transition:
       background 200ms,
