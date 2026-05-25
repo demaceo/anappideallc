@@ -32,7 +32,11 @@ class MockResizeObserver {
 
 beforeEach(() => {
   MockResizeObserver.instances = []
-  ;(globalThis as { ResizeObserver: typeof MockResizeObserver }).ResizeObserver =
+  // Replace the global ResizeObserver with our mock. The cast goes through
+  // `unknown` because MockResizeObserver has a static `instances` field
+  // that the real ResizeObserver type doesn't — TypeScript rejects the
+  // direct narrow cast as a structural mismatch.
+  ;(globalThis as unknown as { ResizeObserver: typeof MockResizeObserver }).ResizeObserver =
     MockResizeObserver
 })
 
