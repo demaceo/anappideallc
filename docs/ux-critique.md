@@ -173,3 +173,13 @@ Added the v2.0 environmental layer on modern-vibrant: home grid is wrapped in a 
 This phase begins addressing issue #3 (inner-page experience cliff) for the `/contact` route specifically — the contact page now carries the same atmospheric language as the home page through the aurora chamber, eliminating the v1 cliff for that one route. Issue #3 will be fully closed in Phase 6 when the Velvet Vitrine treatment is applied to About/Work/Services/Process pages.
 
 See `docs/superpowers/plans/2026-05-24-ui-v2-phase-2-velvet-stage-aurora-portal.md` for the full implementation log.
+
+### Phase 3 — Materials Panel (completed 2026-05-25)
+
+Added the Materials Panel: clicking the Brand block on modern-vibrant opens a bottom drawer with 7 material presets (Anodized default, Polished Steel, Gold Leaf, Frosted Glass, Patinated Bronze, Cream Ceramic, Showcase). Selection persists via `localStorage['material']`, mirrored onto `<html data-material>` for CSS scoping. The 6 alternate recipes are CSS overrides keyed by `[data-material]` selectors; the bloom triple is registered as a `<color>` `@property` so the cross-preset transition interpolates smoothly over 600ms. Brand block emits a quiet gold pulse every 30s to telegraph the affordance. Other themes (`classic`, `pastel`, `arcade-neon`) ignore the panel entirely — Brand reverts to `/about` navigation. Full keyboard support (Escape closes, dialog semantics with `aria-modal="true"`); `prefers-reduced-motion` halts the pulse and zeroes the transition.
+
+This phase closes UX critique issue #5 ("The 'AAI' brand block does nothing") on the canonical theme. The Brand block now earns its grid real estate by serving as the door to the studio's material wardrobe.
+
+Known limitation: spec §9.1 calls for a strict focus trap inside the open drawer (Tab cycle confined to swatches). This phase ships basic focus management (Escape closes; `aria-modal="true"` signals modal intent) without a full Tab interception; deferred as a follow-up if usability testing reveals the gap.
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-3-materials-panel.md` for the full implementation log.
