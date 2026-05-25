@@ -235,3 +235,13 @@ Total Hero sequence duration bumped to 1900ms (from 1500ms) to accommodate: marb
 The cinematic "Velvet → Aurora portal transition" promised by the spec §5.2 now lands visually. Phase 5d+ will deliver the remaining 5 block sequences (About / Work / Services / Process / Contact).
 
 See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5c-hero-bell-and-aurora.md` for the full implementation log.
+
+### Phase 5d — About Pendulum (completed 2026-05-25)
+
+Shipped the second block's chain reaction visual: clicking the About block triggers a gold pendulum that swings down from above the block, sweeps across the block face from one side to the other, then returns partway to a rest position before navigation fires. Reads as "founder presence" — stately and deliberate, in contrast to Hero's energetic marble drop.
+
+`AboutPendulum` is a Motion-animated SVG (16px × 140px) with its `transform-origin` set to top-center, anchored 120px above the About block via wrapper margin offset. The full swing animates `rotate` through -50° → +50° → -15° over 900ms, with a 500ms hold at the rest position before chain completes. ChainOverlay now dispatches the pendulum when `activeBlock === 'about'`. About sequence duration bumped to 1400ms (`ABOUT_CHAIN_DURATION_MS`) to give the swing visible breathing room.
+
+Phase 5e+ will deliver the remaining 4 block sequences (Work domino cascade, Services lever, Process pulley, Contact letter spring).
+
+See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5d-about-pendulum.md` for the full implementation log.
