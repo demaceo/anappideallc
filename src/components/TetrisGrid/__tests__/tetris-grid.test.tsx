@@ -5,6 +5,7 @@ import { vi, beforeAll, afterAll } from 'vitest'
 import type { ReactNode } from 'react'
 import { ThemeProvider } from '../../../lib/theme'
 import { MaterialProvider, useMaterial } from '../../../lib/material'
+import { ChainProvider } from '../../../lib/chain'
 import { TetrisGrid } from '../TetrisGrid'
 
 // happy-dom does not implement WAAPI or matchMedia; stub both so TetrisGrid renders.
@@ -42,9 +43,11 @@ function renderTetrisGrid() {
   return render(
     <ThemeProvider>
       <MaterialProvider>
-        <MemoryRouter>
-          <TetrisGrid />
-        </MemoryRouter>
+        <ChainProvider>
+          <MemoryRouter>
+            <TetrisGrid />
+          </MemoryRouter>
+        </ChainProvider>
       </MaterialProvider>
     </ThemeProvider>,
   )
@@ -70,11 +73,13 @@ function renderTetrisGridWithDriver() {
     <ThemeProvider>
       <MotionConfig reducedMotion="always">
         <MaterialProvider>
-          <MemoryRouter>
-            <PanelDriver>
-              <TetrisGrid />
-            </PanelDriver>
-          </MemoryRouter>
+          <ChainProvider>
+            <MemoryRouter>
+              <PanelDriver>
+                <TetrisGrid />
+              </PanelDriver>
+            </MemoryRouter>
+          </ChainProvider>
         </MaterialProvider>
       </MotionConfig>
     </ThemeProvider>,
