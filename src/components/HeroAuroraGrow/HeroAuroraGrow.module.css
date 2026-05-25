@@ -1,0 +1,34 @@
+/* HeroAuroraGrow — a fullscreen aurora overlay that grows from the
+   Hero block's viewport position to fill the screen during the chain
+   reaction's tail. Reads cinematically as the velvet → aurora portal
+   transition; by the time it's at fullscreen, navigation fires and
+   /contact's AuroraChamber takes over seamlessly.
+
+   Mounted at the home-page level (inside VelvetStage, sibling to
+   TetrisGrid) so `position: fixed` escapes the `.playfield` parallax
+   tilt and grows to true viewport bounds. */
+
+.growWrapper {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  /* The center is set inline (left/top via style props from the
+     hero block's bounding rect). Width/height are tiny initially;
+     scaled outward via transform: scale() in the motion animation. */
+  width: 60px;
+  height: 60px;
+  margin-left: -30px;
+  margin-top: -30px;
+  will-change: transform, opacity;
+}
+
+.aurora {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background:
+    radial-gradient(60% 60% at 30% 30%, rgba(80, 200, 255, 0.7), transparent 70%),
+    radial-gradient(60% 60% at 80% 70%, rgba(217, 3, 104, 0.7), transparent 70%),
+    radial-gradient(50% 50% at 50% 100%, rgba(255, 212, 0, 0.4), transparent 70%),
+    linear-gradient(180deg, #03020a 0%, #0a0418 100%);
+}
