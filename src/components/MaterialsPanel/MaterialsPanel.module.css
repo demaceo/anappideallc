@@ -1,0 +1,90 @@
+/* MaterialsPanel — bottom drawer overlay revealing the 7 material
+   presets. Slide-up animation handled by Motion in the component.
+   The drawer is `position: fixed` so it overlays the page regardless
+   of scroll position. */
+
+.drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 12, 30, 0.9),
+    rgba(10, 6, 20, 0.98)
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 18px 24px 22px;
+  box-shadow: 0 -16px 40px rgba(0, 0, 0, 0.4);
+  color: var(--fg, #F1E9DA);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.title {
+  font-family: var(--font-display, 'Syne', system-ui, sans-serif);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.meta {
+  color: var(--fg-muted, #B8A8C8);
+  font-size: 11px;
+  flex: 1;
+  text-align: center;
+}
+
+.close {
+  background: none;
+  border: 0;
+  color: var(--fg-muted, #B8A8C8);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font: inherit;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.close:hover {
+  color: var(--fg, #F1E9DA);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.close:focus-visible {
+  outline: 2px solid var(--focus-ring, #FFD400);
+  outline-offset: 2px;
+}
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+/* On narrow viewports, wrap the swatch grid to 4 cols then 2 — better
+   touch targets and avoids horizontal squish. */
+@media (max-width: 768px) {
+  .swatches {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .swatches {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
