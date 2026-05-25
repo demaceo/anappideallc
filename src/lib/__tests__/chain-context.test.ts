@@ -16,10 +16,10 @@ describe('chain-context', () => {
     }
   })
 
-  it('hero sequence is a 1500ms wait (allowing marble drop + squash time)', () => {
+  it('hero sequence is 1900ms (marble + squash + bell + aurora grow)', () => {
     const heroSeq = BLOCK_SEQUENCES.hero!
     expect(heroSeq).toHaveLength(1)
-    expect(heroSeq[0]).toEqual({ kind: 'wait', durationMs: 1500 })
+    expect(heroSeq[0]).toEqual({ kind: 'wait', durationMs: 1900 })
   })
 
   it('other blocks remain at DEFAULT_CHAIN_DURATION_MS (1200ms placeholder)', () => {

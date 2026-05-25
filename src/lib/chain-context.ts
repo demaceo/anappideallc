@@ -6,7 +6,7 @@ import type { BlockId } from '../components/TetrisGrid/Block'
 export const DEFAULT_CHAIN_DURATION_MS = 1200
 
 /** Hero's marble drop + squash needs more time than a generic placeholder. */
-export const HERO_CHAIN_DURATION_MS = 1500
+export const HERO_CHAIN_DURATION_MS = 1900
 
 /**
  * Discriminated union for chain sequence steps. Phase 5a ships only
