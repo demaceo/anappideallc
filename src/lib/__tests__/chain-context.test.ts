@@ -22,8 +22,14 @@ describe('chain-context', () => {
     expect(heroSeq[0]).toEqual({ kind: 'wait', durationMs: 1900 })
   })
 
-  it('other blocks remain at DEFAULT_CHAIN_DURATION_MS (1200ms placeholder)', () => {
-    for (const id of ['about', 'work', 'services', 'process', 'contact'] as BlockId[]) {
+  it('about sequence is 1400ms (gives pendulum swing breathing room)', () => {
+    const aboutSeq = BLOCK_SEQUENCES.about!
+    expect(aboutSeq).toHaveLength(1)
+    expect(aboutSeq[0]).toEqual({ kind: 'wait', durationMs: 1400 })
+  })
+
+  it('remaining non-hero non-about blocks stay at DEFAULT_CHAIN_DURATION_MS (1200ms placeholder)', () => {
+    for (const id of ['work', 'services', 'process', 'contact'] as BlockId[]) {
       const seq = BLOCK_SEQUENCES[id]!
       expect(seq).toHaveLength(1)
       expect(seq[0]).toEqual({ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS })

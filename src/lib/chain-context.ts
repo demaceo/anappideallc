@@ -8,6 +8,9 @@ export const DEFAULT_CHAIN_DURATION_MS = 1200
 /** Hero's marble drop + squash needs more time than a generic placeholder. */
 export const HERO_CHAIN_DURATION_MS = 1900
 
+/** About's pendulum swing needs breathing room beyond the placeholder. */
+export const ABOUT_CHAIN_DURATION_MS = 1400
+
 /**
  * Discriminated union for chain sequence steps. Phase 5a ships only
  * `wait` — a timed delay used as a placeholder while the infrastructure
@@ -28,7 +31,7 @@ export type ChainSequence = readonly ChainStep[]
  */
 export const BLOCK_SEQUENCES: Partial<Record<BlockId, ChainSequence>> = {
   hero:     [{ kind: 'wait', durationMs: HERO_CHAIN_DURATION_MS }],
-  about:    [{ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS }],
+  about:    [{ kind: 'wait', durationMs: ABOUT_CHAIN_DURATION_MS }],
   work:     [{ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS }],
   services: [{ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS }],
   process:  [{ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS }],
