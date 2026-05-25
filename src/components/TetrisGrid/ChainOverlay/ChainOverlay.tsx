@@ -2,6 +2,7 @@ import type { RefObject } from 'react'
 import { useChain } from '../../../lib/chain'
 import { useBlockCenters, type BlockRefEntry } from '../useBlockCenters'
 import { HeroMarbleDrop } from './HeroMarbleDrop'
+import { HeroBellFlash } from './HeroBellFlash'
 import styles from './ChainOverlay.module.css'
 
 export interface ChainOverlayProps {
@@ -30,7 +31,10 @@ export function ChainOverlay({ containerRef, blockRefs }: ChainOverlayProps) {
   return (
     <div className={styles.overlay} data-chain-overlay>
       {activeBlock === 'hero' && heroCenter && (
-        <HeroMarbleDrop targetX={heroCenter.x} targetY={heroCenter.y} />
+        <>
+          <HeroMarbleDrop targetX={heroCenter.x} targetY={heroCenter.y} />
+          <HeroBellFlash targetX={heroCenter.x} targetY={heroCenter.y} />
+        </>
       )}
     </div>
   )

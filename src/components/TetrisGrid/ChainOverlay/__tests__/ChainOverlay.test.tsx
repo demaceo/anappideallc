@@ -84,6 +84,23 @@ describe('ChainOverlay', () => {
     expect(container.querySelector('svg')).toBeNull()
   })
 
+  it('renders BOTH marble and bell when activeBlock is hero', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ChainStarter blockId="hero" />
+        <ChainOverlay containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
+    )
+    act(() => {
+      getByTestId('start').click()
+    })
+    // Marble: svg + circle
+    expect(container.querySelector('svg circle')).toBeInTheDocument()
+    // Bell halo: a div with radial-gradient styling — find via halo class
+    expect(container.querySelector('[class*="halo"]')).toBeInTheDocument()
+  })
+
   it('overlay container has data-chain-overlay attribute (for inspection / Phase 5c hooks)', () => {
     const { containerRef, blockRefs } = setupRefs()
     const { container } = render(
