@@ -143,4 +143,24 @@ describe('useChain', () => {
   it('throws helpfully when useChain is called outside a provider', () => {
     expect(() => renderHook(() => useChain())).toThrow(/ChainProvider/)
   })
+
+  it('unmounting mid-chain aborts the in-flight sequence and skips onComplete', () => {
+    const { result, unmount } = renderHook(() => useChain(), { wrapper })
+    const onComplete = vi.fn()
+
+    act(() => {
+      result.current.startChain('hero', onComplete)
+    })
+    expect(result.current.isPlaying).toBe(true)
+
+    // Unmount BEFORE the timer advances — provider's cleanup effect aborts
+    unmount()
+
+    act(() => {
+      vi.advanceTimersByTime(3000)
+    })
+
+    // Sequence was aborted on unmount; onComplete must not fire
+    expect(onComplete).not.toHaveBeenCalled()
+  })
 })
