@@ -50,10 +50,11 @@
   background: none;
   border: 0;
   color: var(--fg-muted, #B8A8C8);
-  font-size: 18px;
   cursor: pointer;
   padding: 4px 8px;
   border-radius: 4px;
+  /* font: inherit resets font-size to inherited; set the desired size
+     AFTER the shorthand so it isn't overwritten. */
   font: inherit;
   font-size: 18px;
   line-height: 1;

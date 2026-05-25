@@ -687,6 +687,18 @@
   animation: brand-pulse 30s ease-in-out infinite;
 }
 
+/* Pause the pulse on hover so the .block:hover box-shadow cascade can take
+   over. Without this, the running animation's `box-shadow` keyframes paint
+   above Author Normal in the CSS cascade and suppress the deeper Editorial
+   Hardware hover shadow stack — the Brand block would lift via transform
+   but its hover halo would be muted. animation-play-state: paused freezes
+   the animation in place; the hover styles win until pointer leaves. */
+@media (hover: hover) {
+  [data-theme="modern-vibrant"] .block-brand:hover {
+    animation-play-state: paused;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-theme="modern-vibrant"] .block-brand {
     animation: none;
