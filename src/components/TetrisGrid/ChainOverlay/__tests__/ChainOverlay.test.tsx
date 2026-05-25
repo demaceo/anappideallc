@@ -101,6 +101,37 @@ describe('ChainOverlay', () => {
     expect(container.querySelector('[class*="halo"]')).toBeInTheDocument()
   })
 
+  it('renders AboutPendulum when activeBlock is about', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ChainStarter blockId="about" />
+        <ChainOverlay containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
+    )
+    act(() => {
+      getByTestId('start').click()
+    })
+    // Pendulum has both a line (rod) and a circle (bob)
+    expect(container.querySelector('line')).toBeInTheDocument()
+    expect(container.querySelector('circle')).toBeInTheDocument()
+  })
+
+  it('does NOT render AboutPendulum when activeBlock is hero', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ChainStarter blockId="hero" />
+        <ChainOverlay containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
+    )
+    act(() => {
+      getByTestId('start').click()
+    })
+    // Hero shows marble (circle) but no rod (line) since pendulum isn't dispatched
+    expect(container.querySelector('line')).toBeNull()
+  })
+
   it('overlay container has data-chain-overlay attribute (for inspection / Phase 5c hooks)', () => {
     const { containerRef, blockRefs } = setupRefs()
     const { container } = render(
