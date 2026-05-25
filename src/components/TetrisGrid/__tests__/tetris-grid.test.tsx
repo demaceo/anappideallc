@@ -162,4 +162,9 @@ describe('TetrisGrid', () => {
     expect(svg).toBeInTheDocument()
     expect(svg?.querySelectorAll('path').length).toBe(7)
   })
+
+  it('mounts a ChainOverlay inside the playfield', () => {
+    const { container } = renderTetrisGrid()
+    expect(container.querySelector('[data-chain-overlay]')).toBeInTheDocument()
+  })
 })

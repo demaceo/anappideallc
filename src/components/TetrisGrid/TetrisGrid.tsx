@@ -3,6 +3,7 @@ import { Block } from './Block'
 import type { BlockId } from './Block'
 import { HeroPortalWindow } from './HeroPortalWindow'
 import { ThreadLine } from './ThreadLine'
+import { ChainOverlay } from './ChainOverlay/ChainOverlay'
 import { MaterialsPanel } from '../MaterialsPanel/MaterialsPanel'
 import { useGridParallax } from './useGridParallax'
 import { useGyroParallax } from './useGyroParallax'
@@ -114,6 +115,7 @@ export function TetrisGrid() {
           ))}
         </div>
         <ThreadLine containerRef={playfieldRef} blockRefs={blockRefs} />
+        <ChainOverlay containerRef={playfieldRef} blockRefs={blockRefs} />
       </div>
       <MaterialsPanel />
     </div>
