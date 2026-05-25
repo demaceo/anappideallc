@@ -1,8 +1,8 @@
-import { render } from '@testing-library/react'
+import { render, act } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { Block } from '../Block'
 import type { BlockProps } from '../Block'
-import { MaterialProvider } from '../../../lib/material'
+import { MaterialProvider, useMaterial } from '../../../lib/material'
 import { ThemeProvider } from '../../../lib/theme'
 
 function renderBlock(props: Partial<BlockProps> = {}) {
@@ -110,5 +110,43 @@ describe('Brand block click behavior', () => {
     expect(container.querySelector('[data-block-id="brand"]')).not.toHaveAttribute(
       'aria-haspopup',
     )
+  })
+})
+
+describe('Brand block pulse animation pause', () => {
+  // Capture the context so we can drive panelOpen from the test.
+  let materialApi: ReturnType<typeof useMaterial> | null = null
+  function Capture() {
+    materialApi = useMaterial()
+    return null
+  }
+
+  function renderBrand() {
+    document.documentElement.dataset.theme = 'modern-vibrant'
+    return render(
+      <MemoryRouter>
+        <ThemeProvider>
+          <MaterialProvider>
+            <Capture />
+            <Block id="brand" to="/about" title="AAI" />
+          </MaterialProvider>
+        </ThemeProvider>
+      </MemoryRouter>,
+    )
+  }
+
+  it('does not set animation-play-state when panel is closed', () => {
+    const { container } = renderBrand()
+    const el = container.querySelector('[data-block-id="brand"]') as HTMLElement
+    expect(el.style.animationPlayState).toBe('')
+  })
+
+  it('sets animation-play-state: paused when panel is open', () => {
+    const { container } = renderBrand()
+    act(() => {
+      materialApi?.openPanel()
+    })
+    const el = container.querySelector('[data-block-id="brand"]') as HTMLElement
+    expect(el.style.animationPlayState).toBe('paused')
   })
 })

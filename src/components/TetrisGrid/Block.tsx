@@ -55,6 +55,17 @@ export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
   const { openPanel, panelOpen } = useMaterial()
   const isMaterialsTrigger = id === 'brand' && theme === 'modern-vibrant'
   const className = `${styles.block} ${styles[`block-${id}`]}`
+  // Pause the brand-pulse keyframe animation while the panel is open. The
+  // hover-paused behavior in Block.module.css continues to apply via CSS;
+  // this inline `animationPlayState` adds a second pause condition. Without
+  // it, the running animation's box-shadow keyframes (which carry the
+  // default Anodized halo colors) would keep cycling underneath whichever
+  // material is currently being previewed, mismatching the active preset
+  // and drawing attention to a block that already triggered the panel.
+  const styleOverride: React.CSSProperties = { gridArea: id }
+  if (isMaterialsTrigger && panelOpen) {
+    styleOverride.animationPlayState = 'paused'
+  }
 
   return (
     <MotionLink
@@ -63,7 +74,7 @@ export const Block = forwardRef<HTMLAnchorElement, BlockProps>(function Block(
       layoutId={`block-${id}`}
       data-block-id={id}
       className={className}
-      style={{ gridArea: id }}
+      style={styleOverride}
       aria-label={ariaLabel ?? title}
       aria-haspopup={isMaterialsTrigger ? 'dialog' : undefined}
       aria-expanded={isMaterialsTrigger ? panelOpen : undefined}
