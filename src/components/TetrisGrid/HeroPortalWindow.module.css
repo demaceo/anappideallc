@@ -9,7 +9,13 @@
   inset: 14px;
   border-radius: 18px;
   overflow: hidden;
-  z-index: 2;
+  /* z-index: 0 keeps the portal in stacking layer 6 (positioned, z-index 0)
+     while the Hero block's text spans (.title/.subtitle/.cta in Block.module.css
+     — also at position:relative without explicit z-index) live in the same
+     layer 6 and paint AFTER the portal in DOM order. Result: portal is the
+     window cutout backdrop, text reads on top of it. Previously z-index:2
+     placed the portal in layer 7 and covered the hero text. */
+  z-index: 0;
   pointer-events: none;
   background: var(--aurora-deepspace);
   box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.18);

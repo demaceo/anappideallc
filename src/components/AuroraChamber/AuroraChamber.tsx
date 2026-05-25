@@ -6,10 +6,11 @@ export interface AuroraChamberProps {
   children: ReactNode
 }
 
+// Motion fade-in for the decorative atmosphere. `exit` removed: the chamber
+// is not wrapped in <AnimatePresence>, so an exit animation would never fire.
 const fadeIn = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  exit: { opacity: 0 },
   transition: { duration: 0.6, ease: 'easeOut' as const },
 }
 
@@ -20,6 +21,11 @@ const fadeIn = {
  * sparse star field and an inset vignette framing the viewport. Layers
  * fade in over 600ms on mount via Motion. On other themes the wrapper is
  * a transparent passthrough.
+ *
+ * Children are wrapped in a `.content` div with `position: relative;
+ * z-index: 1` so the page's `<main>` reads on top of the aurora gradient
+ * layers (all at z-index: 0). Without this wrapper, in-flow content paints
+ * in stacking layer 5 and the positioned auroras paint above it in layer 6.
  */
 export function AuroraChamber({ children }: AuroraChamberProps) {
   return (
@@ -28,7 +34,7 @@ export function AuroraChamber({ children }: AuroraChamberProps) {
       <motion.div className={styles.auroraMagenta} aria-hidden="true" {...fadeIn} />
       <motion.div className={styles.auroraGold} aria-hidden="true" {...fadeIn} />
       <motion.div className={styles.stars} aria-hidden="true" {...fadeIn} />
-      {children}
+      <div className={styles.content}>{children}</div>
       <motion.div className={styles.vignette} aria-hidden="true" {...fadeIn} />
     </div>
   )

@@ -61,6 +61,15 @@
     radial-gradient(0.5px 0.5px at 16% 78%, rgba(255, 255, 255, 0.5), transparent 60%);
 }
 
+/* Content wrapper sits in stacking layer 7 (positioned, z-index: 1) so the
+   page's <main> reads above the aurora gradient layers (all at z-index: 0
+   = layer 6). Without this, in-flow content paints in layer 5 and gets
+   covered by the auroras. */
+.content {
+  position: relative;
+  z-index: 1;
+}
+
 .vignette {
   position: absolute;
   inset: 0;

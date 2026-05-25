@@ -57,7 +57,15 @@
   transform: translateZ(var(--block-z, 20px));
 }
 
+/* position: relative on .title / .subtitle / .cta / .tags promotes them into
+   stacking layer 6 (positioned, z-index auto). The Hero block's optional
+   portal slot (HeroPortalWindow's .portal at z-index: 0) is also in layer 6
+   and is the FIRST child in DOM order — the text spans paint after it,
+   reading on top of the portal cutout. Required after Phase 2: without
+   position: relative, text spans live in layer 5 (in-flow inline) which
+   the portal at any z-index ≥ 0 would cover. */
 .title {
+  position: relative;
   font-family: var(--font-display);
   font-size: clamp(1.1rem, 1.4vw + 0.5rem, 1.6rem);
   text-transform: uppercase;
@@ -66,6 +74,7 @@
 }
 
 .subtitle {
+  position: relative;
   font-size: clamp(0.75rem, 0.6vw + 0.5rem, 0.95rem);
   font-weight: 500;
   opacity: 0.85;
@@ -93,6 +102,7 @@
 }
 
 .cta {
+  position: relative;
   align-self: flex-end;
   margin-top: 0.5rem;
   padding: 0.6rem 1.1rem;
@@ -110,6 +120,7 @@
 }
 
 .tags {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 0.3rem;

@@ -6,10 +6,11 @@ export interface VelvetStageProps {
   children: ReactNode
 }
 
+// Motion fade-in for the decorative atmosphere. `exit` removed: the stage
+// is not wrapped in <AnimatePresence>, so an exit animation would never fire.
 const fadeIn = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  exit: { opacity: 0 },
   transition: { duration: 0.6, ease: 'easeOut' as const },
 }
 
