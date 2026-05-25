@@ -57,8 +57,8 @@ describe('useBlockCenters', () => {
       { id: 'brand' as BlockId, ref: makeRef({ offsetLeft: 400, offsetTop: 50, offsetWidth: 100, offsetHeight: 100 }) },
     ]
     const { result } = renderHook(() => useBlockCenters(containerRef, blockRefs))
-    expect(result.current?.hero).toEqual({ x: 200, y: 275 })   // 100+100, 200+75
-    expect(result.current?.brand).toEqual({ x: 450, y: 100 })  // 400+50, 50+50
+    expect(result.current?.centers.hero).toEqual({ x: 200, y: 275 })   // 100+100, 200+75
+    expect(result.current?.centers.brand).toEqual({ x: 450, y: 100 })  // 400+50, 50+50
   })
 
   it('recomputes when the ResizeObserver fires', () => {
@@ -69,7 +69,7 @@ describe('useBlockCenters', () => {
     const blockRefs = [{ id: 'hero' as BlockId, ref: makeRef(block) }]
 
     const { result } = renderHook(() => useBlockCenters(containerRef, blockRefs))
-    expect(result.current?.hero).toEqual({ x: 200, y: 275 })
+    expect(result.current?.centers.hero).toEqual({ x: 200, y: 275 })
 
     // Simulate a layout shift: hero block moves
     block.offsetLeft = 150
@@ -77,7 +77,7 @@ describe('useBlockCenters', () => {
     act(() => {
       MockResizeObserver.instances[0].fire()
     })
-    expect(result.current?.hero).toEqual({ x: 250, y: 175 })
+    expect(result.current?.centers.hero).toEqual({ x: 250, y: 175 })
   })
 
   it('disconnects the observer on unmount', () => {

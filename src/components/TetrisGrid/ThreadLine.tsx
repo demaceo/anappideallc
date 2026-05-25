@@ -28,15 +28,16 @@ const PROXIMITY_PX = 60
  * Decorative — aria-hidden. No interactive content.
  */
 export function ThreadLine({ containerRef, blockRefs }: ThreadLineProps) {
-  const centers = useBlockCenters(containerRef, blockRefs)
-  const segments = centers ? computeThreadSegments(centers) : []
+  const snapshot = useBlockCenters(containerRef, blockRefs)
+  const segments = snapshot ? computeThreadSegments(snapshot.centers) : []
 
   const [nearBlock, setNearBlock] = useState<BlockId | null>(null)
 
   useEffect(() => {
     const container = containerRef.current
-    if (!container || !centers) return
+    if (!container || !snapshot) return
 
+    const { centers } = snapshot
     const onMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect()
       const x = e.clientX - rect.left
@@ -57,10 +58,14 @@ export function ThreadLine({ containerRef, blockRefs }: ThreadLineProps) {
 
     container.addEventListener('mousemove', onMove)
     return () => container.removeEventListener('mousemove', onMove)
-  }, [containerRef, centers])
+  }, [containerRef, snapshot])
 
-  const width = containerRef.current?.offsetWidth ?? 0
-  const height = containerRef.current?.offsetHeight ?? 0
+  // SVG always mounts so Phase 5 chain animations can target it even
+  // before the first layout snapshot lands. Width/height fall back to
+  // 1 (not 0) so the viewBox is technically valid; segments only render
+  // when snapshot is populated.
+  const width = snapshot?.containerSize.width ?? 1
+  const height = snapshot?.containerSize.height ?? 1
 
   return (
     <svg

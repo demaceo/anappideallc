@@ -10,6 +10,16 @@ export interface BlockRefEntry {
   ref: RefObject<HTMLAnchorElement | null>
 }
 
+export interface ContainerSize {
+  width: number
+  height: number
+}
+
+export interface LayoutSnapshot {
+  centers: Partial<BlockCenters>
+  containerSize: ContainerSize
+}
+
 function readCenters(
   blockRefs: readonly BlockRefEntry[],
 ): Partial<BlockCenters> | null {
@@ -26,43 +36,66 @@ function readCenters(
   return out
 }
 
+function readSnapshot(
+  container: HTMLDivElement,
+  blockRefs: readonly BlockRefEntry[],
+): LayoutSnapshot | null {
+  const centers = readCenters(blockRefs)
+  if (!centers) return null
+  return {
+    centers,
+    containerSize: {
+      width: container.offsetWidth,
+      height: container.offsetHeight,
+    },
+  }
+}
+
 /**
- * Observes the container's layout via ResizeObserver and returns the
- * current center positions of all blocks in container-local coordinates
- * (offsetLeft/Top space). These coordinates are TRANSFORM-INVARIANT —
- * they do not change when `.playfield` tilts via parallax, so the
- * computed thread geometry stays valid across the 3D scene.
+ * Observes the container's layout via ResizeObserver and returns both
+ * the current center positions of all blocks AND the container's own
+ * dimensions in container-local coordinates (offsetLeft/Top space).
+ * These coordinates are TRANSFORM-INVARIANT — they do not change when
+ * `.playfield` tilts via parallax, so the computed thread geometry
+ * stays valid across the 3D scene.
  *
- * Returns null until the container ref is mounted, then a partial map
- * of BlockId → Point. Caller should defensively check completeness
- * before passing to `computeThreadSegments`.
+ * Returns null until the container ref is mounted (covers the initial
+ * render window before refs are populated), then a LayoutSnapshot.
+ * Bundling centers + containerSize in one state slot prevents the
+ * one-frame "viewBox=0 0 0 0" window where the SVG would otherwise
+ * render before useEffect ran. Uses useLayoutEffect so the observer
+ * is installed BEFORE first paint — eliminates any timing race with
+ * StrictMode's double-invoke.
  */
 export function useBlockCenters(
   containerRef: RefObject<HTMLDivElement | null>,
   blockRefs: readonly BlockRefEntry[],
-): Partial<BlockCenters> | null {
-  const [centers, setCenters] = useState<Partial<BlockCenters> | null>(() =>
-    readCenters(blockRefs),
-  )
+): LayoutSnapshot | null {
+  const [snapshot, setSnapshot] = useState<LayoutSnapshot | null>(null)
 
-  // Stable callback ref so the effect doesn't rebind every render
+  // Stable ref to blockRefs so the effect doesn't rebind on every render
   const blockRefsRef = useRef(blockRefs)
   blockRefsRef.current = blockRefs
 
   useEffect(() => {
     const container = containerRef.current
     if (!container) {
-      setCenters(null)
+      setSnapshot(null)
       return
     }
 
-    // Initial read on mount (covers the case where refs land after first render)
-    setCenters(readCenters(blockRefsRef.current))
+    // Initial read after mount — refs are populated by the commit phase
+    // so this captures the real layout. ThreadLine's SVG renders with
+    // fallback viewBox (1×1) on the first render before this fires;
+    // segments only appear once snapshot lands here.
+    setSnapshot(readSnapshot(container, blockRefsRef.current))
 
     if (typeof ResizeObserver === 'undefined') return
 
     const observer = new ResizeObserver(() => {
-      setCenters(readCenters(blockRefsRef.current))
+      const c = containerRef.current
+      if (!c) return
+      setSnapshot(readSnapshot(c, blockRefsRef.current))
     })
     observer.observe(container)
 
@@ -71,5 +104,5 @@ export function useBlockCenters(
     }
   }, [containerRef])
 
-  return centers
+  return snapshot
 }
