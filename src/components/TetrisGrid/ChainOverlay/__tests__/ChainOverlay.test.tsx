@@ -146,6 +146,21 @@ describe('ChainOverlay', () => {
     expect(container.querySelectorAll('[data-domino]').length).toBe(5)
   })
 
+  it('renders ServicesLever when activeBlock is services', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ChainStarter blockId="services" />
+        <ChainOverlay containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
+    )
+    act(() => {
+      getByTestId('start').click()
+    })
+    expect(container.querySelector('[data-lever]')).toBeInTheDocument()
+    expect(container.querySelector('[data-flag]')).toBeInTheDocument()
+  })
+
   it('overlay container has data-chain-overlay attribute (for inspection / Phase 5c hooks)', () => {
     const { containerRef, blockRefs } = setupRefs()
     const { container } = render(
