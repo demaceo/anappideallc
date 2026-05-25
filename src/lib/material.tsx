@@ -10,13 +10,29 @@ import {
 const STORAGE_KEY = 'material'
 
 function readInitial(): MaterialId {
+  // SSR guard — mirror ThemeProvider's readInitialTheme pattern. During
+  // server rendering there is no `document`, so we bail to the default.
+  if (typeof document === 'undefined') return DEFAULT_MATERIAL
+
+  // Prefer the value already written to the DOM by the synchronous
+  // bootstrap script in index.html. The bootstrap has already validated
+  // it against the allow-list before paint, so this read is cheap and
+  // race-free. Mirrors ThemeProvider's readInitialTheme dataset-first
+  // approach and avoids a redundant localStorage read on every mount.
+  const fromAttr = document.documentElement.dataset.material
+  if (fromAttr && (MATERIAL_IDS as readonly string[]).includes(fromAttr)) {
+    return fromAttr as MaterialId
+  }
+
+  // Fall back to localStorage if the bootstrap-set attribute is missing
+  // or invalid (e.g., script didn't run in a test environment).
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved && (MATERIAL_IDS as readonly string[]).includes(saved)) {
       return saved as MaterialId
     }
   } catch {
-    // localStorage may throw in private browsing / SSR — fall through to default
+    // localStorage may throw in private browsing — fall through to default
   }
   return DEFAULT_MATERIAL
 }

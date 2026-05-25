@@ -25,6 +25,23 @@ describe('useMaterial', () => {
     expect(result.current.material).toBe('steel')
   })
 
+  it('prefers <html data-material> over localStorage (bootstrap-set value wins)', () => {
+    // The bootstrap script in index.html writes the validated value to
+    // <html data-material> before React mounts. readInitial should honor
+    // that attribute and skip the localStorage round-trip.
+    document.documentElement.dataset.material = 'gold'
+    localStorage.setItem('material', 'steel')
+    const { result } = renderHook(() => useMaterial(), { wrapper })
+    expect(result.current.material).toBe('gold')
+  })
+
+  it('falls back to localStorage when data-material is missing', () => {
+    // Already covered above; explicit to document the fallback path.
+    localStorage.setItem('material', 'frosted')
+    const { result } = renderHook(() => useMaterial(), { wrapper })
+    expect(result.current.material).toBe('frosted')
+  })
+
   it('persists changes to localStorage', () => {
     const { result } = renderHook(() => useMaterial(), { wrapper })
     act(() => result.current.setMaterial('gold'))
