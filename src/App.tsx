@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router'
-import { LayoutGroup } from 'motion/react'
+import { LayoutGroup, MotionConfig } from 'motion/react'
 import { ThemeProvider } from './lib/theme'
 import { RouteTracker } from './components/RouteTracker'
 import { RouteFocusReset } from './components/RouteFocusReset'
@@ -20,10 +20,20 @@ function AppShell() {
   )
 }
 
+/**
+ * App root. MotionConfig `reducedMotion="user"` honours the user's OS
+ * `prefers-reduced-motion: reduce` setting for every Motion component in
+ * the tree — Motion zeroes transform and opacity animations when the
+ * media query is active. This pairs with the CSS `@media (prefers-
+ * reduced-motion: reduce)` guards on the aurora drift @keyframes for
+ * complete reduced-motion respect.
+ */
 export default function App() {
   return (
-    <ThemeProvider>
-      <AppShell />
-    </ThemeProvider>
+    <MotionConfig reducedMotion="user">
+      <ThemeProvider>
+        <AppShell />
+      </ThemeProvider>
+    </MotionConfig>
   )
 }

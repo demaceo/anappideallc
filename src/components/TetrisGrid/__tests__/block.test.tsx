@@ -55,4 +55,24 @@ describe('Block', () => {
     const { container } = renderBlock({ cta: 'View work', tags: ['Civic Tech'] })
     expect(container.querySelector('[data-reveal="cta"]')).toBeNull()
   })
+
+  it('renders the portal slot before the title when provided', () => {
+    const { container, getByText } = renderBlock({
+      portal: <div data-testid="portal-content">portal here</div>,
+      title: 'Hero',
+    })
+    const portal = container.querySelector('[data-testid="portal-content"]')
+    const title = getByText('Hero')
+    expect(portal).toBeInTheDocument()
+    // Portal precedes title in DOM order
+    if (portal && title.parentElement) {
+      const children = Array.from(title.parentElement.children)
+      expect(children.indexOf(portal)).toBeLessThan(children.indexOf(title))
+    }
+  })
+
+  it('does not render any portal element when portal prop is absent', () => {
+    const { container } = renderBlock()
+    expect(container.querySelector('[data-testid="portal-content"]')).toBeNull()
+  })
 })

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Block } from './Block'
 import type { BlockId } from './Block'
+import { HeroPortalWindow } from './HeroPortalWindow'
 import { useGridParallax } from './useGridParallax'
 import { useGyroParallax } from './useGyroParallax'
 import { useGravityDrop } from './useGravityDrop'
@@ -18,6 +19,7 @@ const BLOCKS = [
     subtitle:
       'I design the interface, build the backend, and ship the operational systems that make ambitious products credible.',
     cta: 'Tell me about it',
+    portal: <HeroPortalWindow />,
   },
   {
     id: 'about' as const,

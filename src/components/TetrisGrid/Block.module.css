@@ -9,7 +9,17 @@
   text-decoration: none;
   font-weight: 800;
   letter-spacing: -0.01em;
-  background: var(--block-bg, transparent);
+  /* Editorial Hardware multi-stop diagonal gradient. Themes without bloom
+     tokens (classic, etc.) fall back through the chain to --block-bg, which
+     reproduces v1's flat-color treatment. */
+  background: linear-gradient(
+    135deg,
+    var(--bloom-dark, var(--block-bg, transparent)) 0%,
+    var(--bloom, var(--block-bg, transparent)) 30%,
+    var(--bloom-bright, var(--block-bg, transparent)) 50%,
+    var(--bloom, var(--block-bg, transparent)) 70%,
+    var(--bloom-dark, var(--block-bg, transparent)) 100%
+  );
   color: var(--block-fg, currentColor);
 
   /* Directional-light specular edges (top + left) — pull from global
@@ -25,6 +35,10 @@
   --focus-tilt-x: -4deg;
   --focus-tilt-y: 4deg;
 
+  /* Base shadow — v1 specular edges + theme's --shadow-base. Editorial
+     Hardware adds chunky cushion + bloom halo + atmospheric layers in a
+     theme-scoped override below ([data-theme="modern-vibrant"] .block).
+     Classic, pastel, and arcade-neon keep their v1 shadow identity. */
   box-shadow:
     inset 0 1px 0 var(--block-specular-top),
     inset 1px 0 0 var(--block-specular-left),
@@ -34,13 +48,24 @@
     color 200ms,
     box-shadow 200ms ease-out,
     transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1);
-  overflow: hidden;
+  /* No overflow:hidden — the Editorial Hardware ::after caustic floor spill
+     intentionally extends 8% below the block to render the soft refractive
+     glow on the velvet stage. The ::before specular overlay uses inset:0 +
+     border-radius:inherit so it's already bounded by the block's box. */
   isolation: isolate;
   transform-style: preserve-3d;
   transform: translateZ(var(--block-z, 20px));
 }
 
+/* position: relative on .title / .subtitle / .cta / .tags promotes them into
+   stacking layer 6 (positioned, z-index auto). The Hero block's optional
+   portal slot (HeroPortalWindow's .portal at z-index: 0) is also in layer 6
+   and is the FIRST child in DOM order — the text spans paint after it,
+   reading on top of the portal cutout. Required after Phase 2: without
+   position: relative, text spans live in layer 5 (in-flow inline) which
+   the portal at any z-index ≥ 0 would cover. */
 .title {
+  position: relative;
   font-family: var(--font-display);
   font-size: clamp(1.1rem, 1.4vw + 0.5rem, 1.6rem);
   text-transform: uppercase;
@@ -49,6 +74,7 @@
 }
 
 .subtitle {
+  position: relative;
   font-size: clamp(0.75rem, 0.6vw + 0.5rem, 0.95rem);
   font-weight: 500;
   opacity: 0.85;
@@ -57,6 +83,8 @@
   line-height: 1.3;
 }
 
+/* Layout overrides only — color + bloom variable bindings live in the
+   per-block binding section further down (search for ".block-hero {"). */
 .block-hero {
   justify-content: center;
   gap: 1rem;
@@ -74,6 +102,7 @@
 }
 
 .cta {
+  position: relative;
   align-self: flex-end;
   margin-top: 0.5rem;
   padding: 0.6rem 1.1rem;
@@ -91,6 +120,7 @@
 }
 
 .tags {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 0.3rem;
@@ -112,6 +142,8 @@
   letter-spacing: 0.02em;
 }
 
+/* Layout overrides only — color + bloom variable bindings live in the
+   per-block binding section further down (search for ".block-brand {"). */
 .block-brand {
   align-items: center;
   justify-content: center;
@@ -126,8 +158,8 @@
   opacity: 0.7;
 }
 
-/* Per-block color binding via CSS custom property + per-block translateZ
-   so blocks float at staggered depths in the 3D scene. */
+/* v1 per-block color binding + per-block translateZ — applies to ALL
+   themes so they continue to render with their own --c-* tokens. */
 .block-hero      { --block-bg: var(--c-hero);     --block-fg: var(--c-hero-fg);     --block-z: 60px; }
 .block-brand     { --block-bg: var(--c-brand);    --block-fg: var(--c-brand-fg);    --block-z: 15px; }
 .block-about     { --block-bg: var(--c-about);    --block-fg: var(--c-about-fg);    --block-z: 40px; }
@@ -136,7 +168,27 @@
 .block-process   { --block-bg: var(--c-process);  --block-fg: var(--c-process-fg);  --block-z: 25px; }
 .block-contact   { --block-bg: var(--c-contact);  --block-fg: var(--c-contact-fg);  --block-z: 45px; }
 
-/* Gloss overlay — simulates a top-left light source catching the lifted surface */
+/* Editorial Hardware bloom triple bindings — modern-vibrant ONLY.
+   Scoping these to the theme attribute prevents non-modern-vibrant themes
+   from ever computing a value for --bloom-*. The .block background
+   gradient's nested fallback chain (var(--bloom-dark, var(--block-bg, ...)))
+   then correctly resolves to --block-bg on other themes regardless of how
+   the browser handles a var() chain that resolves to invalid-at-computed-
+   value-time (which has subtle spec ambiguities). With explicit scoping,
+   we don't rely on cascade-through-invalidity behavior — bloom tokens are
+   simply absent on classic / pastel / arcade-neon, and the fallback fires
+   cleanly. */
+[data-theme="modern-vibrant"] .block-hero      { --bloom-dark: var(--c-hero-mat-dark);     --bloom: var(--c-hero-mat-base);     --bloom-bright: var(--c-hero-mat-bright); }
+[data-theme="modern-vibrant"] .block-brand     { --bloom-dark: var(--c-brand-mat-dark);    --bloom: var(--c-brand-mat-base);    --bloom-bright: var(--c-brand-mat-bright); }
+[data-theme="modern-vibrant"] .block-about     { --bloom-dark: var(--c-about-mat-dark);    --bloom: var(--c-about-mat-base);    --bloom-bright: var(--c-about-mat-bright); }
+[data-theme="modern-vibrant"] .block-work      { --bloom-dark: var(--c-work-mat-dark);     --bloom: var(--c-work-mat-base);     --bloom-bright: var(--c-work-mat-bright); }
+[data-theme="modern-vibrant"] .block-services  { --bloom-dark: var(--c-services-mat-dark); --bloom: var(--c-services-mat-base); --bloom-bright: var(--c-services-mat-bright); }
+[data-theme="modern-vibrant"] .block-process   { --bloom-dark: var(--c-process-mat-dark);  --bloom: var(--c-process-mat-base);  --bloom-bright: var(--c-process-mat-bright); }
+[data-theme="modern-vibrant"] .block-contact   { --bloom-dark: var(--c-contact-mat-dark);  --bloom: var(--c-contact-mat-base);  --bloom-bright: var(--c-contact-mat-bright); }
+
+/* Base ::before overlay — v1 gloss preserved for classic, pastel, and other
+   non-modern-vibrant themes. Modern-vibrant overrides this with the
+   Editorial Hardware brushed grain + specular highlight further down. */
 .block::before {
   content: '';
   position: absolute;
@@ -149,13 +201,42 @@
     transparent 70%,
     rgba(0, 0, 0, 0.08) 100%
   );
-  opacity: 1;
   pointer-events: none;
 }
 
-/* Neon theme uses glow rings, not surface highlights */
+/* Neon theme: glow rings instead of any surface overlay. */
 [data-theme="arcade-neon"] .block::before {
   display: none;
+}
+
+/* Editorial Hardware surface overlay — modern-vibrant only. Brushed
+   micro-grain at 118° + diagonal specular highlight at 135°, composited
+   via mix-blend-mode: screen so the bloom underneath shows through where
+   the highlight is most intense. */
+[data-theme="modern-vibrant"] .block::before {
+  background:
+    repeating-linear-gradient(118deg, transparent 0 2px, rgba(255, 255, 255, 0.045) 2px 3px),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, transparent 30%, transparent 70%, rgba(0, 0, 0, 0.25) 100%);
+  mix-blend-mode: screen;
+}
+
+/* Editorial Hardware caustic floor spill — soft colored glow under the
+   block suggesting refracted light from a glass cushion onto the velvet
+   stage below. Scoped to modern-vibrant only — other themes have no
+   ::after pseudo-element, matching v1 visuals exactly. */
+[data-theme="modern-vibrant"] .block::after {
+  content: '';
+  position: absolute;
+  bottom: -8%;
+  left: 10%;
+  right: 10%;
+  height: 16%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--bloom-bright, transparent), transparent 70%);
+  filter: blur(10px);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* Per-block hover lift — only on devices that actually have a hover state.
@@ -172,6 +253,12 @@
     transform: translateZ(calc(var(--block-z, 20px) + 30px))
                rotateX(var(--hover-rx, 0deg))
                rotateY(var(--hover-ry, 0deg));
+    /* Base hover shadow — v1 specular edges + brighter theme shadow +
+       atmospheric drop shadow. The trailing 0 40px 80px atmospheric layer
+       was part of v1's hover treatment for classic/pastel/arcade-neon;
+       restoring it here so non-modern-vibrant themes don't regress.
+       Modern-vibrant fully overrides this in its theme-scoped rule below
+       so it doesn't double-stack. */
     box-shadow:
       inset 0 1px 0 var(--block-specular-top),
       inset 1px 0 0 var(--block-specular-left),
@@ -190,7 +277,9 @@
   }
 }
 
-/* Keyboard focus: same visual lift as hover so pointer and keyboard UX are equivalent */
+/* Keyboard focus: same visual lift as hover so pointer and keyboard UX are
+   equivalent. Editorial Hardware shadow extensions live in a theme-scoped
+   override (see [data-theme="modern-vibrant"] .block:focus-visible below). */
 .block:focus-visible {
   --block-specular-top: var(--surface-specular-top-bright);
   --block-specular-left: var(--surface-specular-left-bright);
@@ -203,6 +292,54 @@
   box-shadow:
     inset 0 1px 0 var(--block-specular-top),
     inset 1px 0 0 var(--block-specular-left),
+    var(--shadow-hover);
+}
+
+/* =========================================================================
+   Editorial Hardware theme-scoped overrides.
+   These extend the base shadows above with the v2 Editorial Hardware stack
+   (pearl rim + cushioned offset + bloom halo + atmospheric) — but ONLY for
+   the modern-vibrant theme. Other themes (classic, pastel, arcade-neon)
+   retain their v1 shadow identities defined via --shadow-base / --shadow-hover.
+   ========================================================================= */
+[data-theme="modern-vibrant"] .block {
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    inset 0 2px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+    0 18px 0 rgba(0, 0, 0, 0.42),
+    0 36px 70px var(--bloom, transparent),
+    0 50px 80px rgba(0, 0, 0, 0.45),
+    var(--shadow-base);
+}
+
+@media (hover: hover) {
+  [data-theme="modern-vibrant"] .block:hover {
+    box-shadow:
+      inset 0 1px 0 var(--block-specular-top),
+      inset 1px 0 0 var(--block-specular-left),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+      inset 0 2px 0 rgba(255, 255, 255, 0.55),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+      0 28px 0 rgba(0, 0, 0, 0.48),
+      0 60px 100px var(--bloom, transparent),
+      0 70px 120px rgba(0, 0, 0, 0.5),
+      var(--shadow-hover);
+  }
+}
+
+[data-theme="modern-vibrant"] .block:focus-visible {
+  box-shadow:
+    inset 0 1px 0 var(--block-specular-top),
+    inset 1px 0 0 var(--block-specular-left),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+    inset 0 2px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+    0 28px 0 rgba(0, 0, 0, 0.48),
+    0 60px 100px var(--bloom, transparent),
+    0 70px 120px rgba(0, 0, 0, 0.5),
     var(--shadow-hover);
 }
 
