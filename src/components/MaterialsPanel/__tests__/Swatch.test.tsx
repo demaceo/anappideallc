@@ -42,4 +42,12 @@ describe('Swatch', () => {
     fireEvent.click(container.querySelector('button')!)
     expect(onSelect).toHaveBeenCalledWith('steel')
   })
+
+  it('forwards tabIndex prop to the underlying <button>', () => {
+    const { container, rerender } = render(<Swatch {...baseProps} tabIndex={0} />)
+    expect(container.querySelector('button')).toHaveAttribute('tabindex', '0')
+
+    rerender(<Swatch {...baseProps} tabIndex={-1} />)
+    expect(container.querySelector('button')).toHaveAttribute('tabindex', '-1')
+  })
 })

@@ -170,4 +170,139 @@ describe('MaterialsPanel', () => {
     input.focus()
     expect(document.activeElement).toBe(input)
   })
+
+  // ─── Roving tabindex (WAI-ARIA toolbar / radio-group pattern) ─────────
+  // Only one swatch is in the tab sequence at a time; ArrowLeft/Right/
+  // Up/Down (and Home/End) shift focus among them while Tab moves out of
+  // the group. Focus and selection are decoupled — arrow keys move focus
+  // only; Enter/Space activates.
+
+  function getSwatchButtons(getAllByRole: (role: string) => HTMLElement[]) {
+    return getAllByRole('button').filter((b) =>
+      b.hasAttribute('aria-pressed'),
+    ) as HTMLButtonElement[]
+  }
+
+  it('exactly one swatch has tabIndex=0 when the panel opens', async () => {
+    const { getByTestId, getAllByRole } = render(
+      <Wrapper>
+        <PanelOpener>
+          <MaterialsPanel />
+        </PanelOpener>
+      </Wrapper>,
+    )
+    fireEvent.click(getByTestId('open-panel'))
+    await waitFor(() => {
+      const swatches = getSwatchButtons(getAllByRole)
+      const tabbable = swatches.filter((b) => b.tabIndex === 0)
+      expect(tabbable).toHaveLength(1)
+    })
+  })
+
+  it('initial focused swatch matches the current material (default = anodized, index 0)', async () => {
+    const { getByTestId, getAllByRole } = render(
+      <Wrapper>
+        <PanelOpener>
+          <MaterialsPanel />
+        </PanelOpener>
+      </Wrapper>,
+    )
+    fireEvent.click(getByTestId('open-panel'))
+    await waitFor(() => {
+      const swatches = getSwatchButtons(getAllByRole)
+      // anodized is index 0 in MATERIAL_PRESETS.
+      expect(swatches[0].tabIndex).toBe(0)
+      expect(swatches.slice(1).every((b) => b.tabIndex === -1)).toBe(true)
+    })
+  })
+
+  it('ArrowRight moves the roving tabIndex to the next swatch', async () => {
+    const { getByTestId, getAllByRole } = render(
+      <Wrapper>
+        <PanelOpener>
+          <MaterialsPanel />
+        </PanelOpener>
+      </Wrapper>,
+    )
+    fireEvent.click(getByTestId('open-panel'))
+    let swatches: HTMLButtonElement[] = []
+    await waitFor(() => {
+      swatches = getSwatchButtons(getAllByRole)
+      expect(swatches[0].tabIndex).toBe(0)
+    })
+    fireEvent.keyDown(swatches[0], { key: 'ArrowRight' })
+    await waitFor(() => {
+      const next = getSwatchButtons(getAllByRole)
+      expect(next[0].tabIndex).toBe(-1)
+      expect(next[1].tabIndex).toBe(0)
+    })
+  })
+
+  it('ArrowLeft from the first swatch wraps to the last', async () => {
+    const { getByTestId, getAllByRole } = render(
+      <Wrapper>
+        <PanelOpener>
+          <MaterialsPanel />
+        </PanelOpener>
+      </Wrapper>,
+    )
+    fireEvent.click(getByTestId('open-panel'))
+    let swatches: HTMLButtonElement[] = []
+    await waitFor(() => {
+      swatches = getSwatchButtons(getAllByRole)
+      expect(swatches[0].tabIndex).toBe(0)
+    })
+    fireEvent.keyDown(swatches[0], { key: 'ArrowLeft' })
+    await waitFor(() => {
+      const next = getSwatchButtons(getAllByRole)
+      expect(next[next.length - 1].tabIndex).toBe(0)
+    })
+  })
+
+  it('Home and End jump to the first / last swatch', async () => {
+    const { getByTestId, getAllByRole } = render(
+      <Wrapper>
+        <PanelOpener>
+          <MaterialsPanel />
+        </PanelOpener>
+      </Wrapper>,
+    )
+    fireEvent.click(getByTestId('open-panel'))
+    let swatches: HTMLButtonElement[] = []
+    await waitFor(() => {
+      swatches = getSwatchButtons(getAllByRole)
+      expect(swatches[0].tabIndex).toBe(0)
+    })
+    fireEvent.keyDown(swatches[0], { key: 'End' })
+    await waitFor(() => {
+      const next = getSwatchButtons(getAllByRole)
+      expect(next[next.length - 1].tabIndex).toBe(0)
+    })
+    fireEvent.keyDown(swatches[swatches.length - 1], { key: 'Home' })
+    await waitFor(() => {
+      const next = getSwatchButtons(getAllByRole)
+      expect(next[0].tabIndex).toBe(0)
+    })
+  })
+
+  it('ArrowUp / ArrowDown also move focus (grid-layout fallback)', async () => {
+    const { getByTestId, getAllByRole } = render(
+      <Wrapper>
+        <PanelOpener>
+          <MaterialsPanel />
+        </PanelOpener>
+      </Wrapper>,
+    )
+    fireEvent.click(getByTestId('open-panel'))
+    let swatches: HTMLButtonElement[] = []
+    await waitFor(() => {
+      swatches = getSwatchButtons(getAllByRole)
+      expect(swatches[0].tabIndex).toBe(0)
+    })
+    fireEvent.keyDown(swatches[0], { key: 'ArrowDown' })
+    await waitFor(() => {
+      const next = getSwatchButtons(getAllByRole)
+      expect(next[1].tabIndex).toBe(0)
+    })
+  })
 })
