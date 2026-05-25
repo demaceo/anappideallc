@@ -46,12 +46,10 @@ describe('chain-context', () => {
     expect(seq[0]).toEqual({ kind: 'wait', durationMs: 1400 })
   })
 
-  it('remaining blocks (contact) stay at DEFAULT_CHAIN_DURATION_MS (1200ms placeholder)', () => {
-    for (const id of ['contact'] as BlockId[]) {
-      const seq = BLOCK_SEQUENCES[id]!
-      expect(seq).toHaveLength(1)
-      expect(seq[0]).toEqual({ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS })
-    }
+  it('contact sequence stays at DEFAULT_CHAIN_DURATION_MS (spring + letter fits comfortably)', () => {
+    const seq = BLOCK_SEQUENCES.contact!
+    expect(seq).toHaveLength(1)
+    expect(seq[0]).toEqual({ kind: 'wait', durationMs: DEFAULT_CHAIN_DURATION_MS })
   })
 
   it('does not define a sequence for brand (it opens the Materials Panel instead)', () => {
