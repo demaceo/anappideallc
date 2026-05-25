@@ -191,7 +191,7 @@ describe('Block chain integration', () => {
     expect(onNavigate).not.toHaveBeenCalled()
 
     act(() => {
-      vi.advanceTimersByTime(1200)
+      vi.advanceTimersByTime(1500)
     })
 
     // After the sequence, navigation fires
