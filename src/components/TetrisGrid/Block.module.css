@@ -61,6 +61,30 @@
      intentionally extends 8% below the block to render the soft refractive
      glow on the velvet stage. The ::before specular overlay uses inset:0 +
      border-radius:inherit so it's already bounded by the block's box. */
+
+  /* isolation + preserve-3d coexistence — required reading for future
+     Phase 4/5 maintainers:
+     - `isolation: isolate` creates a new stacking context so that
+       `mix-blend-mode: screen` on `::before` (the brushed grain / specular
+       highlight, see line ~225) blends against THIS block's background,
+       not against the page underneath. Removing isolation makes the
+       ::before highlight bleed onto whatever sits behind the block.
+     - `transform-style: preserve-3d` here governs how the block's CHILDREN
+       are composed in 3D space — but the block's children today (title,
+       subtitle, cta, tags, portal) are all 2D content with no translateZ
+       of their own, so the preserve-3d here is currently latent.
+     - The block's OWN translateZ(--block-z) depth is honored by the
+       PARENT (`.playfield`)'s `transform-style: preserve-3d`, not by the
+       block's own. That's why Frosted Glass (which forces this block's
+       transform-style to `flat` via its non-initial `backdrop-filter`)
+       still lifts to its Z plane correctly on desktop.
+     - DO NOT add 3D-transformed children directly inside `.block`
+       without first auditing each material recipe — any recipe that
+       sets a non-initial `backdrop-filter`, `filter`, `mix-blend-mode`,
+       `opacity < 1`, etc. will flatten this block's internal 3D scene
+       and the child's translateZ / rotateY will collapse. Move 3D
+       children outside the block (e.g., as a sibling at the playfield
+       level) or scope the 3D transforms to non-Frosted materials. */
   isolation: isolate;
   transform-style: preserve-3d;
   transform: translateZ(var(--block-z, 20px));
