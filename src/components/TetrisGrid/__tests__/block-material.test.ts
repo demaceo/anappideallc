@@ -224,3 +224,21 @@ describe('Material switch transition', () => {
     )
   })
 })
+
+describe('Brand block pulse glow (modern-vibrant)', () => {
+  it('defines brand-pulse keyframes', () => {
+    expect(BLOCK_CSS).toMatch(/@keyframes\s+brand-pulse/)
+  })
+
+  it('applies brand-pulse animation to brand block on modern-vibrant', () => {
+    expect(BLOCK_CSS).toMatch(
+      /\[data-theme="modern-vibrant"\]\s+\.block-brand\s*\{[^}]*animation:\s*brand-pulse/,
+    )
+  })
+
+  it('respects prefers-reduced-motion', () => {
+    expect(BLOCK_CSS).toMatch(
+      /prefers-reduced-motion:\s*reduce[^}]*\.block-brand[^}]*animation:\s*none/s,
+    )
+  })
+})

@@ -650,3 +650,45 @@
     0 4px 0 rgba(0, 0, 0, 0.4),
     0 8px 16px rgba(0, 0, 0, 0.5);
 }
+
+/* Brand block pulse glow — modern-vibrant only. Every 30 seconds the
+   block emits a soft gold halo over 1.5s, then fades. Quietly invites
+   curiosity ("click me") without becoming UI noise. Halts under
+   prefers-reduced-motion. */
+@keyframes brand-pulse {
+  0%, 90%, 100% {
+    box-shadow:
+      inset 0 1px 0 var(--block-specular-top),
+      inset 1px 0 0 var(--block-specular-left),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+      inset 0 2px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+      0 18px 0 rgba(0, 0, 0, 0.42),
+      0 36px 70px var(--bloom, transparent),
+      0 50px 80px rgba(0, 0, 0, 0.45),
+      var(--shadow-base);
+  }
+  95% {
+    box-shadow:
+      inset 0 1px 0 var(--block-specular-top),
+      inset 1px 0 0 var(--block-specular-left),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+      inset 0 2px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+      0 18px 0 rgba(0, 0, 0, 0.42),
+      0 0 24px 8px rgba(255, 212, 0, 0.45),
+      0 36px 70px var(--bloom, transparent),
+      0 50px 80px rgba(0, 0, 0, 0.45),
+      var(--shadow-base);
+  }
+}
+
+[data-theme="modern-vibrant"] .block-brand {
+  animation: brand-pulse 30s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="modern-vibrant"] .block-brand {
+    animation: none;
+  }
+}
