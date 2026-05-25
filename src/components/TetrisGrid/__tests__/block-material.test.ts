@@ -211,3 +211,16 @@ describe('Showcase material recipe (per-section)', () => {
     expect(true).toBe(true)
   })
 })
+
+describe('Material switch transition', () => {
+  it('.block transitions bloom triple at 600ms', () => {
+    expect(BLOCK_CSS).toMatch(/\.block\s*\{[^}]*transition:[^;]*--bloom-dark\s+600ms/)
+    expect(BLOCK_CSS).toMatch(/\.block\s*\{[^}]*transition:[^;]*--bloom\s+600ms/)
+    expect(BLOCK_CSS).toMatch(/\.block\s*\{[^}]*transition:[^;]*--bloom-bright\s+600ms/)
+  })
+  it('reduced-motion zeroes the transition durations', () => {
+    expect(BLOCK_CSS).toMatch(
+      /prefers-reduced-motion:\s*reduce[^}]*\.block[^}]*transition:[^;]*0ms/s,
+    )
+  })
+})

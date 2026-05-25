@@ -43,10 +43,19 @@
     inset 0 1px 0 var(--block-specular-top),
     inset 1px 0 0 var(--block-specular-left),
     var(--shadow-base);
+  /* The 600ms transitions on --bloom-* and the longer box-shadow
+     duration are for Materials Panel preset switches. The shorter
+     200ms transitions handle hover state cascade. Both run in the
+     same transition shorthand — the browser picks whichever applies
+     to the changed property. */
   transition:
-    background 200ms,
+    --bloom-dark 600ms cubic-bezier(0.4, 0, 0.2, 1),
+    --bloom 600ms cubic-bezier(0.4, 0, 0.2, 1),
+    --bloom-bright 600ms cubic-bezier(0.4, 0, 0.2, 1),
+    background 600ms cubic-bezier(0.4, 0, 0.2, 1),
+    backdrop-filter 600ms cubic-bezier(0.4, 0, 0.2, 1),
     color 200ms,
-    box-shadow 200ms ease-out,
+    box-shadow 600ms cubic-bezier(0.4, 0, 0.2, 1),
     transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1);
   /* No overflow:hidden — the Editorial Hardware ::after caustic floor spill
      intentionally extends 8% below the block to render the soft refractive
@@ -345,7 +354,18 @@
 
 /* Reduced-motion: collapse the entire 3D layer to flat. */
 @media (prefers-reduced-motion: reduce) {
-  .block { transform: none !important; transition: background 200ms, color 200ms !important; }
+  .block {
+    transform: none !important;
+    transition:
+      --bloom-dark 0ms,
+      --bloom 0ms,
+      --bloom-bright 0ms,
+      background 0ms,
+      backdrop-filter 0ms,
+      color 200ms,
+      box-shadow 0ms,
+      transform 0ms !important;
+  }
   .block:hover { transform: none !important; }
 }
 
