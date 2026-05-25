@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .superpowers
+.playwright-mcp
 
 # Editor directories and files
 .vscode/*
