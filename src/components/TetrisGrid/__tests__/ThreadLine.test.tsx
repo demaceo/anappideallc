@@ -1,7 +1,10 @@
 import { render, act } from '@testing-library/react'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import type { RefObject } from 'react'
 import { ThreadLine } from '../ThreadLine'
 import type { BlockId } from '../Block'
+import type { BlockRefEntry } from '../useBlockCenters'
+import { ChainProvider, useChain } from '../../../lib/chain'
 
 class MockResizeObserver {
   observe = vi.fn()
@@ -41,7 +44,9 @@ describe('ThreadLine', () => {
   it('renders an SVG layer with aria-hidden="true"', () => {
     const { containerRef, blockRefs } = setupRefs()
     const { container } = render(
-      <ThreadLine containerRef={containerRef} blockRefs={blockRefs} />,
+      <ChainProvider>
+        <ThreadLine containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
     )
     const svg = container.querySelector('svg')
     expect(svg).toBeInTheDocument()
@@ -51,7 +56,9 @@ describe('ThreadLine', () => {
   it('renders 7 <path> segments', () => {
     const { containerRef, blockRefs } = setupRefs()
     const { container } = render(
-      <ThreadLine containerRef={containerRef} blockRefs={blockRefs} />,
+      <ChainProvider>
+        <ThreadLine containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
     )
     expect(container.querySelectorAll('path').length).toBe(7)
   })
@@ -59,7 +66,9 @@ describe('ThreadLine', () => {
   it('each path has a non-empty d attribute', () => {
     const { containerRef, blockRefs } = setupRefs()
     const { container } = render(
-      <ThreadLine containerRef={containerRef} blockRefs={blockRefs} />,
+      <ChainProvider>
+        <ThreadLine containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
     )
     const paths = container.querySelectorAll('path')
     paths.forEach((p) => {
@@ -75,7 +84,9 @@ describe('ThreadLine', () => {
     Object.defineProperty(div, 'offsetHeight', { value: 800, configurable: true })
     const containerRef = { current: div as HTMLDivElement }
     const { container } = render(
-      <ThreadLine containerRef={containerRef} blockRefs={[]} />,
+      <ChainProvider>
+        <ThreadLine containerRef={containerRef} blockRefs={[]} />
+      </ChainProvider>,
     )
     // SVG may still render but with 0 paths
     expect(container.querySelectorAll('path').length).toBe(0)
@@ -88,7 +99,9 @@ describe('ThreadLine', () => {
       ({ left: 0, top: 0, right: 1000, bottom: 800, width: 1000, height: 800, x: 0, y: 0, toJSON: () => '' } as DOMRect)
 
     const { container } = render(
-      <ThreadLine containerRef={containerRef} blockRefs={blockRefs} />,
+      <ChainProvider>
+        <ThreadLine containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
     )
 
     // Hero center is at (130, 130) per setupRefs math (100+30, 100+30).
@@ -117,7 +130,9 @@ describe('ThreadLine', () => {
       ({ left: 0, top: 0, right: 1000, bottom: 800, width: 1000, height: 800, x: 0, y: 0, toJSON: () => '' } as DOMRect)
 
     const { container } = render(
-      <ThreadLine containerRef={containerRef} blockRefs={blockRefs} />,
+      <ChainProvider>
+        <ThreadLine containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
     )
 
     // First near hero
@@ -137,5 +152,45 @@ describe('ThreadLine', () => {
     paths.forEach((p) => {
       expect(p.getAttribute('class') ?? '').not.toMatch(/segmentBright/)
     })
+  })
+})
+
+// Helper: render ThreadLine with a startChain trigger button
+function ThreadWithStarter({ containerRef, blockRefs, startId }: {
+  containerRef: RefObject<HTMLDivElement | null>
+  blockRefs: BlockRefEntry[]
+  startId: BlockId
+}) {
+  const { startChain } = useChain()
+  return (
+    <>
+      <button data-testid="start" onClick={() => startChain(startId, () => {})}>start</button>
+      <ThreadLine containerRef={containerRef} blockRefs={blockRefs} />
+    </>
+  )
+}
+
+describe('ThreadLine chain integration', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('applies segmentChainActive to the segment matching activeBlock', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ThreadWithStarter containerRef={containerRef} blockRefs={blockRefs} startId="hero" />
+      </ChainProvider>,
+    )
+
+    act(() => {
+      getByTestId('start').click()
+    })
+
+    const heroOutgoing = container.querySelector('path[data-from="hero"]')
+    expect(heroOutgoing?.getAttribute('class')).toMatch(/segmentChainActive/)
   })
 })

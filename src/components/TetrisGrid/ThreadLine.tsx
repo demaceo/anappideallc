@@ -3,6 +3,7 @@ import type { RefObject } from 'react'
 import { computeThreadSegments } from './threadPath'
 import { useBlockCenters, type BlockRefEntry } from './useBlockCenters'
 import type { BlockId } from './Block'
+import { useChain } from '../../lib/chain'
 import styles from './ThreadLine.module.css'
 
 export interface ThreadLineProps {
@@ -32,6 +33,7 @@ export function ThreadLine({ containerRef, blockRefs }: ThreadLineProps) {
   const segments = snapshot ? computeThreadSegments(snapshot.centers) : []
 
   const [nearBlock, setNearBlock] = useState<BlockId | null>(null)
+  const { activeBlock } = useChain()
 
   useEffect(() => {
     const container = containerRef.current
@@ -76,7 +78,12 @@ export function ThreadLine({ containerRef, blockRefs }: ThreadLineProps) {
     >
       {segments.map((seg) => {
         const adjacent = nearBlock !== null && (seg.from === nearBlock || seg.to === nearBlock)
-        const className = `${styles.segment} ${adjacent ? styles.segmentBright : ''}`
+        const chainActive = activeBlock !== null && seg.from === activeBlock
+        const className = [
+          styles.segment,
+          adjacent && styles.segmentBright,
+          chainActive && styles.segmentChainActive,
+        ].filter(Boolean).join(' ')
         return (
           <path
             key={`${seg.from}-${seg.to}`}
