@@ -8,7 +8,7 @@ import type { BlockId } from '../components/TetrisGrid/Block'
 export const DEFAULT_CHAIN_DURATION_MS = 1200
 
 /** Hero's marble drop + squash needs more time than a generic placeholder. */
-export const HERO_CHAIN_DURATION_MS = 1900
+export const HERO_CHAIN_DURATION_MS = 2000
 
 /** About's pendulum swing needs breathing room beyond the placeholder. */
 export const ABOUT_CHAIN_DURATION_MS = 1400

@@ -16,10 +16,10 @@ describe('chain-context', () => {
     }
   })
 
-  it('hero sequence is 1900ms (marble + squash + bell + aurora grow)', () => {
+  it('hero sequence is 2000ms (marble + squash + bell + aurora grow)', () => {
     const heroSeq = BLOCK_SEQUENCES.hero!
     expect(heroSeq).toHaveLength(1)
-    expect(heroSeq[0]).toEqual({ kind: 'wait', durationMs: 1900 })
+    expect(heroSeq[0]).toEqual({ kind: 'wait', durationMs: 2000 })
   })
 
   it('about sequence is 1400ms (gives pendulum swing breathing room)', () => {

@@ -31,7 +31,7 @@ describe('useChain', () => {
     expect(onComplete).not.toHaveBeenCalled()
 
     act(() => {
-      vi.advanceTimersByTime(1900)
+      vi.advanceTimersByTime(2000)
     })
 
     expect(result.current.activeBlock).toBeNull()
@@ -92,7 +92,7 @@ describe('useChain', () => {
     expect(result.current.activeBlock).toBe('hero')
 
     act(() => {
-      vi.advanceTimersByTime(1900)
+      vi.advanceTimersByTime(2000)
     })
 
     expect(firstComplete).toHaveBeenCalledTimes(1)
