@@ -7,6 +7,7 @@ import { AboutPendulum } from './AboutPendulum'
 import { WorkDominoCascade } from './WorkDominoCascade'
 import { ServicesLever } from './ServicesLever'
 import { ProcessPulley } from './ProcessPulley'
+import { ContactSpring } from './ContactSpring'
 import styles from './ChainOverlay.module.css'
 
 export interface ChainOverlayProps {
@@ -35,6 +36,7 @@ export function ChainOverlay({ containerRef, blockRefs }: ChainOverlayProps) {
   const workCenter = snapshot?.centers.work
   const servicesCenter = snapshot?.centers.services
   const processCenter = snapshot?.centers.process
+  const contactCenter = snapshot?.centers.contact
 
   return (
     <div className={styles.overlay} data-chain-overlay>
@@ -55,6 +57,9 @@ export function ChainOverlay({ containerRef, blockRefs }: ChainOverlayProps) {
       )}
       {activeBlock === 'process' && processCenter && (
         <ProcessPulley targetX={processCenter.x} targetY={processCenter.y} />
+      )}
+      {activeBlock === 'contact' && contactCenter && (
+        <ContactSpring targetX={contactCenter.x} targetY={contactCenter.y} />
       )}
     </div>
   )

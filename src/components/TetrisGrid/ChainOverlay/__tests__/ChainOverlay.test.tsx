@@ -146,6 +146,21 @@ describe('ChainOverlay', () => {
     expect(container.querySelectorAll('[data-domino]').length).toBe(5)
   })
 
+  it('renders ContactSpring when activeBlock is contact', () => {
+    const { containerRef, blockRefs } = setupRefs()
+    const { container, getByTestId } = render(
+      <ChainProvider>
+        <ChainStarter blockId="contact" />
+        <ChainOverlay containerRef={containerRef} blockRefs={blockRefs} />
+      </ChainProvider>,
+    )
+    act(() => {
+      getByTestId('start').click()
+    })
+    expect(container.querySelector('[data-spring]')).toBeInTheDocument()
+    expect(container.querySelector('[data-envelope]')).toBeInTheDocument()
+  })
+
   it('renders ProcessPulley when activeBlock is process', () => {
     const { containerRef, blockRefs } = setupRefs()
     const { container, getByTestId } = render(
