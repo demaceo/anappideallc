@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router'
 import { LayoutGroup, MotionConfig } from 'motion/react'
 import { ThemeProvider } from './lib/theme'
+import { MaterialProvider } from './lib/material'
 import { RouteTracker } from './components/RouteTracker'
 import { RouteFocusReset } from './components/RouteFocusReset'
 import { HomeIcon } from './components/HomeIcon/HomeIcon'
@@ -32,7 +33,9 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
       <ThemeProvider>
-        <AppShell />
+        <MaterialProvider>
+          <AppShell />
+        </MaterialProvider>
       </ThemeProvider>
     </MotionConfig>
   )
