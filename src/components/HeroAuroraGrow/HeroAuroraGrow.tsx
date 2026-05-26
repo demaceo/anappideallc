@@ -59,8 +59,8 @@ export function HeroAuroraGrow() {
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 50, opacity: [0, 0.6, 1] }}
         transition={{
-          delay: 1.3,
-          duration: 0.6,
+          delay: 1.2,
+          duration: 0.7,
           scale: { ease: [0.4, 0, 0.2, 1] },
           opacity: { times: [0, 0.3, 1], ease: 'easeOut' },
         }}

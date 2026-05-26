@@ -22,9 +22,11 @@ export interface ChainOverlayProps {
  * and dispatches to per-block gadget components positioned over each
  * block's center (looked up via `blockRefs` + `useBlockCenters`).
  *
- * Phase 5b ships only the Hero marble drop. Other blocks' visuals
- * land in Phase 5c+ — `activeBlock` matching `about` / `work` / etc.
- * currently renders nothing.
+ * All 6 navigable blocks have active gadget visuals: Hero shows the
+ * marble drop + bell flash, About a swinging pendulum, Work a domino
+ * cascade, Services a lever + flag, Process a pulley + weight,
+ * Contact an uncoiling spring + envelope. Brand opens the Materials
+ * Panel via Block.tsx (no chain — see Phase 3).
  *
  * Decorative — pointer-events:none, no interactive content.
  */

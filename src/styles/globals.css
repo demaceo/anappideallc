@@ -40,6 +40,23 @@ button:focus-visible {
   border-radius: 4px;
 }
 
+/* AUDIT FIX (Phase 5, Minor): RouteFocusReset programmatically focuses
+   <main> after every navigation so screen readers get a position cue.
+   The browser's default focus outline would otherwise render around the
+   main content for every visitor — not just keyboard users — appearing
+   as a stray accent rectangle on /about, /contact, etc.
+   <main> is a non-interactive content container (tabindex=-1 means it's
+   not in the Tab sequence). Keyboard users navigate to the interactive
+   elements *inside* main, which get their own focus rings via the
+   a:focus-visible / button:focus-visible rules above. So hiding the
+   outline on main is safe — there's nothing to "lose" focus-wise.
+   Note: an earlier attempt used `:not(:focus-visible)` but WebKit's
+   :focus-visible heuristic treats programmatic .focus() on tabindex=-1
+   as visible, which defeated the filter. Unconditional works everywhere. */
+main:focus {
+  outline: none;
+}
+
 ::selection {
   background: var(--accent);
   color: var(--bg);
