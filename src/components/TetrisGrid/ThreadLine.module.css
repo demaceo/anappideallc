@@ -68,3 +68,17 @@
     transition: none;
   }
 }
+
+/* AUDIT FIX (Phase 5, Minor): hide the thread line on mobile. At narrow
+   viewports (<768px) the grid stacks vertically, so the serpentine path
+   between vertically-stacked blocks becomes a few short curves rather
+   than the sweeping connection that makes the gold thread expressive at
+   desktop widths. Hiding it keeps mobile layout cleaner and is
+   consistent with the existing pattern of v2 atmospherics being mobile-
+   optional (e.g., TetrisGrid's .floor / .backWall gate on min-width:
+   1024px). */
+@media (max-width: 767px) {
+  .threadLayer {
+    display: none;
+  }
+}

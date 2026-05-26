@@ -19,6 +19,13 @@ const SLIDE_UP = {
  * + closePanel back to context. Escape closes; close button closes;
  * clicking a swatch applies the preset (without closing — visitor may
  * want to try several).
+ *
+ * Hero block note (Phase 5 audit clarification): the Hero block *does*
+ * receive each material recipe just like every other block, but the
+ * HeroPortalWindow component layers an opaque aurora cutout on top of
+ * Hero's gradient. So visually, Hero appears unchanged across material
+ * switches while the other 6 blocks transition. See HeroPortalWindow.tsx
+ * for the rationale.
  */
 export function MaterialsPanel() {
   const { material, setMaterial, panelOpen, closePanel } = useMaterial()

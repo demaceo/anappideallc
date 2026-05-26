@@ -1,35 +1,37 @@
 # Phase 5 Visual Audit — Findings
 
 **Audit date:** 2026-05-25
+**Resolution date:** 2026-05-26 (all findings addressed)
 **Branch under test:** `claude/pedantic-wozniak-496a1e` (forked off PR #6 `worktree-phase-5-audit-fixes`)
 **Browser:** WebKit headless (via `@playwright/mcp` with `--browser webkit`)
 **Viewport (primary):** 1440 × 900; also 1024 × 768 (tablet) and 414 × 896 (iPhone 11 Pro Max)
 **Scope:** Phases 1–5 shipped state — home grid, materials panel, chain reactions, themes, reduced-motion, inner pages, multi-viewport
-**Screenshots:** `docs/superpowers/specs/screenshots/2026-05-25-phase-5-visual-audit/` (35 files)
+**Screenshots:** `docs/superpowers/specs/screenshots/2026-05-25-phase-5-visual-audit/` (35 original + 3 fixed = 38 files)
+**Test suite after fixes:** 334/334 passing (307 baseline + 27 new regression tests)
 
 ---
 
 ## Critical (must fix)
 
-- **Classic theme is unreadable — dark-on-dark blocks.** On `theme=classic`, all bento blocks render with the v2 Editorial Hardware dark backing (`_block_w66of_*`) but lose the v1 high-contrast NES palette that should give them readable color. Result: nearly-invisible dark-gray-on-dark-gray text for Hero, WORK, ABOUT, PROCESS, CONTACT, AAI. The spec explicitly says classic should have *no v2 effects* and use "high-contrast colors (cyan/yellow/purple etc. on black)." Pastel and arcade-neon look correct; only classic is broken. Repro: home page → Konami code (Up Up Down Down Left Right Left Right b a) → click "Classic NES Tetris". Screenshot: `theme-classic.png`. Hypothesis: the v2 material/stage CSS is wrapped in something that doesn't gate on `[data-theme="modern-vibrant"]`, so it leaks onto every theme — but the classic palette's dark-on-dark relies on the v2 surfaces being absent.
+- ✅ **RESOLVED 2026-05-26.** **Classic theme is unreadable — dark-on-dark blocks.** *Root cause:* `@property --bloom-dark { initial-value: transparent }` (and same for `--bloom`, `--bloom-bright`) in `src/styles/tokens.css:10-24` makes those custom properties always *declared* per the CSS Properties and Values L1 spec. The gradient in `Block.module.css` used the nested fallback `var(--bloom-dark, var(--block-bg, transparent))`, which never fell through to `--block-bg` because `--bloom-dark` was never "missing" — it computed to `transparent` from `@property`. Classic, pastel, and arcade-neon ended up with transparent gradient stops over the dark stage. *Fix:* `src/components/TetrisGrid/Block.module.css:196-202` now pre-bind `--bloom-dark / --bloom / --bloom-bright` to `var(--block-bg)` on every `.block-{section}` rule. modern-vibrant's `[data-theme="modern-vibrant"] .block-{section}` selector (higher specificity) still overrides with the Editorial Hardware material palette. *Tests:* `src/components/TetrisGrid/__tests__/block-theme-fallback.test.ts` (21 assertions, one per section × triple). *Visual proof:* `theme-classic-fixed.png` — all 7 NES Tetris colors render correctly (cyan/white/yellow/purple/green/orange/red).
 
 ## Important (should fix)
 
-- **Cream Ceramic preset reduces text contrast on light blocks.** The AAI/LLC and ABOUT blocks become very low-contrast against the cream surface in Anodized → Ceramic mode — white-on-cream on AAI and dim charcoal-on-cream on ABOUT. Other blocks (Hero, WORK, SERVICES, PROCESS, CONTACT) keep their distinct color identity and remain legible. Repro: home → click Brand → click "Cream Ceramic". Screenshot: `material-ceramic.png`. Suggest darkening the title text per-block in ceramic mode, or boosting text-shadow.
+- ✅ **RESOLVED 2026-05-26.** **Cream Ceramic preset reduces text contrast on light blocks.** *Root cause:* the ceramic recipe paints a cream radial gradient (`#fff → #f1e9da → #c8b89c`); per-block `--block-fg` can be white (Hero/Work/Contact). White text on cream is unreadable. *Fix:* `src/components/TetrisGrid/Block.module.css:556` adds `color: #2a1810` to the ceramic rule — a warm earth-tone that harmonizes with the cream palette and overrides any per-block white `--block-fg`. *Test:* `block-theme-fallback.test.ts` "ceramic .block overrides color to a dark earth-tone". *Visual proof:* `material-ceramic-fixed.png` — all 7 blocks now show dark text on cream.
 
-- **Frosted Glass preset collapses block color identity.** In Frosted mode all blocks render as nearly identical dark-teal translucent panels — the 7-block visual hierarchy that the design depends on dissolves. Hero is the only block that retains distinctive coloring (because its aurora stays through every material). Repro: home → Brand → "Frosted Glass". Screenshot: `material-frosted.png`. Either intentional (translucent = uniform) or an oversight; if intentional, note in spec; if not, allow per-block tint to bleed through the frosted layer.
+- ✅ **RESOLVED 2026-05-26.** **Frosted Glass preset collapses block color identity.** *Root cause:* the original frosted recipe (`Block.module.css:495-499`) used hardcoded teal gradient stops (`rgba(0, 180, 170, 0.5)` etc.) for every block. *Fix:* replaced the hardcoded teal with `color-mix(in srgb, var(--bloom-dark), transparent 50%)` etc., so each block tints its frosted gradient with its own Editorial Hardware palette. The backdrop-filter blur is preserved — visitors still see frosted glass character, but Hero stays magenta-frosted, Work stays green-frosted, etc. *Tests:* `block-theme-fallback.test.ts` "frosted recipe references --bloom-dark / --bloom-bright". *Visual proof:* `material-frosted-fixed.png` — distinct color identity restored across all 7 blocks.
 
-- **Aurora chamber on `/contact` is missing the gold radial.** The spec for the AuroraChamber backdrop calls for "cyan/magenta/gold radials." Observed: cyan and magenta are clearly visible (top-left and right respectively), but no detectable gold/amber bleed anywhere in viewport. Repro: navigate `/contact`. Screenshot: `contact-aurora-chamber.png` and `route-contact.png`. Likely missing a third radial-gradient layer in `AuroraChamber.module.css`, or its opacity is 0.
+- ⚠️→✅ **FALSE POSITIVE — corrected.** ~~Aurora chamber on `/contact` is missing the gold radial.~~ Live re-verification in WebKit shows `.auroraGold` *is* in the CSS (`AuroraChamber.module.css:39-48`) and *does* render: positioned at `50% 100%` (bottom-center), `radial-gradient(60% 60% at 50% 100%, var(--aurora-gold) /* rgba(255, 212, 0, 0.32) */, transparent 70%)`. The element computes `display: block, opacity: 1`, has a 864×360 rect visible in the 900px viewport. The original audit observation missed it because the gold is subtle by design — opacity 0.32, 34px blur, positioned underneath the more saturated magenta layer (`50%, 80% 60%`). Looking carefully at `contact-aurora-chamber.png` you can see the faint amber band along the bottom edge. No fix needed; this is correct intentional behavior.
 
 ## Minor (nice-to-have)
 
-- **Hero block is unaffected by Materials Panel.** Switching presets doesn't change the Hero's appearance — it keeps the dark teal + aurora portal regardless. This is probably intentional (the aurora cutout is the brand anchor) but is undocumented in the spec, so add a one-line note in the MaterialsPanel docs: "Hero block opts out of material switching; its aurora cutout is preset-agnostic."
+- ✅ **RESOLVED 2026-05-26.** **Hero block is unaffected by Materials Panel (clarification).** *What was actually happening:* the Hero block *does* receive each material recipe just like every other block — the gradient and shadow change correctly. What stays constant is the HeroPortalWindow component (the aurora cutout) which layers on top of Hero's gradient. Because the cutout's deep-space backing + cyan/magenta radials are opaque enough, Hero *visually* reads as "aurora portal" regardless of the material below — which made the audit observation "Hero opts out of materials" look true at a glance. *Fix:* added clarifying JSDoc to `HeroPortalWindow.tsx` ("Material independence") and `MaterialsPanel.tsx` ("Hero block note") so the intentional decoupling is documented for future contributors.
 
-- **Visible blue focus ring on inner pages.** The `<main>` (or content wrapper) on `/about`, `/work`, etc. shows a visible blue 2-px focus outline by default — likely from `RouteFocusReset` programmatically focusing the heading region after route changes. This is good for accessibility but the resulting "blue rectangle" border looks like a visual element rather than a focus indicator. Repro: navigate `/about`. Screenshot: `route-about.png`. Suggest restricting the outline to `:focus-visible` only.
+- ✅ **RESOLVED 2026-05-26.** **Visible focus ring on inner pages.** *Root cause:* `RouteFocusReset` programmatically focuses `<main>` (with `tabindex=-1`) after every navigation, and the browser's default `:focus` outline renders for every visitor — not just keyboard users. *First attempt:* `main:focus:not(:focus-visible) { outline: none }`. This failed because WebKit's `:focus-visible` heuristic treats programmatic `.focus()` on a `tabindex=-1` element as visible, defeating the `:not()` filter. *Final fix:* unconditional `main:focus { outline: none }` in `src/styles/globals.css`. `<main>` is a non-interactive content container; interactive elements *inside* still get their own focus rings via the `a:focus-visible / button:focus-visible` rules above. *Test:* `src/styles/__tests__/main-focus-ring.test.ts`.
 
-- **Chain navigation fires earlier than spec'd durations.** Plan spec says, e.g., Work chain is 1500ms total with nav at the end. Observed: clicking Work resulted in URL change to `/work` within ≤ 400ms of click (and similarly for About, Services, Process, Contact). Either the chain controller navigates early and continues animating over the destination route (intentional), or the chain durations have been shortened post-spec. Worth reconciling the plan doc vs the actual `chain.tsx` timing constants. Screenshots: `work-chain-400ms.png` etc. show the destination block isolated on the dark stage — consistent with View-Transitions-style hand-off.
+- ✅ **RESOLVED 2026-05-26.** **Chain navigation timing — false positive.** Live re-measurement in WebKit (clicking Work, capturing the precise time delta with `performance.now()` between `link.click()` and the URL changing to `/work`): **2074 ms**. `WORK_CHAIN_DURATION_MS = 1500` plus React-Router navigation/render overhead. The original audit observation of "<400ms" was a measurement artifact — `browser_wait_for(0.4)` and then querying URL doesn't measure precisely from click. The chain controller `src/lib/chain.tsx` correctly waits the full sequence before firing `onNavigate`. No code change needed; the spec is correct.
 
-- **Thread line is visible on mobile.** Spec was uncertain whether the thread line is hidden at 414 px wide; observed: it renders (`display: block`, `opacity: 1`). At the narrow viewport it's geometrically constrained between vertically-stacked blocks, so it's far less expressive than on desktop. Decide whether to hide-below-768px or leave visible; document the choice either way.
+- ✅ **RESOLVED 2026-05-26.** **Thread line is visible on mobile.** Decision: hide below 768 px. *Rationale:* at narrow viewports the grid stacks vertically, so the serpentine path between vertically-stacked blocks becomes a few short curves — not the sweeping expressive connection the gold thread provides at desktop widths. Consistent with the existing pattern of v2 atmospherics being mobile-optional (e.g., TetrisGrid's `.floor` and `.backWall` gate on `min-width: 1024px`). *Fix:* `src/components/TetrisGrid/ThreadLine.module.css` adds `@media (max-width: 767px) { .threadLayer { display: none } }`. *Test:* `src/components/TetrisGrid/__tests__/thread-line-mobile.test.ts`.
 
 ## What's notably good
 
@@ -65,18 +67,30 @@
 
 ## Verdict
 
-**Critical findings: 1** (classic theme unreadable). This must be fixed before Phase 6 begins per the audit's gating rule.
-**Important findings: 3** (ceramic/frosted readability, missing gold radial on AuroraChamber).
-**Minor findings: 4** (hero opt-out doc, focus ring, chain timing reconciliation, mobile thread line decision).
+**Original (2026-05-25):** 1 Critical, 3 Important, 4 Minor → Phase 6 gated.
+**Resolution (2026-05-26):** 1 Critical FIXED, 2 Important FIXED + 1 false positive corrected, 4 Minor FIXED (2 real fixes + 1 clarifying doc + 1 false positive corrected). **Phase 6 unblocked.**
 
-**Recommended next steps:**
-1. Fix classic theme on this branch (PR #6 audit-fix track) — likely needs a `[data-theme="modern-vibrant"]` gate around the v2 Editorial Hardware material in `Block.module.css` (or equivalent), so classic actually gets v1 surfaces.
-2. Triage ceramic/frosted contrast — either tune the swatch recipes for legibility, or accept the visual identity and document it.
-3. Add the missing gold radial to `AuroraChamber.module.css`.
-4. Reconcile the chain timing constants in `chain.tsx` against the plan's stated durations — update whichever is wrong.
-5. Resolve the Minor findings (focus ring scope, hero material opt-out doc, mobile thread line decision) as cleanup.
+**Resolution summary:**
 
-After (1) lands, this audit can be re-run to confirm; once green, Phase 6 (inner-page Velvet Vitrine, moss/crochet themes, mobile polish) can start.
+| Finding | Status | Fix |
+|---|---|---|
+| Classic theme dark-on-dark | ✅ Fixed | `Block.module.css:196-202` bind `--bloom-*` to `var(--block-bg)` per block, sidestepping the `@property` initial-value gotcha |
+| Cream Ceramic contrast | ✅ Fixed | `Block.module.css:556` adds `color: #2a1810` to ceramic rule |
+| Frosted Glass identity | ✅ Fixed | `Block.module.css:498-501` replace hardcoded teal with `color-mix(in srgb, var(--bloom-*), ...)` |
+| AuroraChamber gold radial | ⚠️ False positive | Gold radial IS present and rendering at bottom of viewport; just visually subtle by design |
+| Hero materials opt-out doc | ✅ Fixed | JSDoc clarifications in `HeroPortalWindow.tsx` and `MaterialsPanel.tsx` |
+| Focus ring scope | ✅ Fixed | `globals.css` adds unconditional `main:focus { outline: none }` (WebKit's `:focus-visible` heuristic defeated the `:not()` approach) |
+| Chain timing vs spec | ⚠️ False positive | Live re-measurement confirms 2074 ms click→nav (chain runs full 1500 ms then navigates) |
+| Mobile thread line | ✅ Fixed | `ThreadLine.module.css` hides `.threadLayer` below 768 px |
+
+**Tests added:**
+- `src/components/TetrisGrid/__tests__/block-theme-fallback.test.ts` — 25 assertions
+- `src/components/TetrisGrid/__tests__/thread-line-mobile.test.ts` — 1 assertion
+- `src/styles/__tests__/main-focus-ring.test.ts` — 1 assertion
+
+**Test suite:** 334/334 passing (307 baseline + 27 new audit-fix regression tests).
+
+Phase 6 (inner-page Velvet Vitrine, moss/crochet themes, mobile polish) can now start.
 
 ## Audit infrastructure notes (for next-session agent)
 
