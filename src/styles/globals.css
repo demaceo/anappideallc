@@ -1,6 +1,13 @@
 @import './reset.css';
 @import './tokens.css';
 
+/* Inner-page navigation bar height. Referenced by VelvetVitrine's
+   padding-top so page content always clears the fixed nav bar.
+   Change this value in one place to resize the nav across the site. */
+:root {
+  --inner-nav-height: 52px;
+}
+
 @font-face {
   font-family: 'Bricolage Grotesque';
   src: url('/fonts/BricolageGrotesque-Variable.ttf') format('truetype');

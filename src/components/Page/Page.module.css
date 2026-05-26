@@ -127,3 +127,49 @@
   color: var(--fg);
   letter-spacing: 0.01em;
 }
+
+/* ─── Phase 6: Editorial Hardware card treatment (modern-vibrant only) ─── *
+ *                                                                            *
+ * On modern-vibrant, inner-page cards receive a softer version of the        *
+ * Block material treatment: pearl rim (inset box-shadow), brushed            *
+ * micro-grain (::before pseudo-element), and a directional shadow that       *
+ * adds depth without overwhelming the smaller card surface.                  *
+ *                                                                            *
+ * The base .card rule above remains unchanged so other themes (classic,      *
+ * pastel, arcade-neon) keep their existing card style.                       *
+ * ────────────────────────────────────────────────────────────────────────── */
+
+:global([data-theme="modern-vibrant"]) .card {
+  position: relative;
+  overflow: hidden;
+  /* Pearl rim — top specular highlight + left edge light + bottom undercut.
+     Softer values than .block (which uses 0.5 opacity) since cards are
+     smaller and sit on a page bg rather than a velvet stage. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.30),
+    inset 1px 0 0 rgba(255, 255, 255, 0.10),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+    /* Directional shadow stack — offset gives card "lift" off page surface */
+    0 4px 0 rgba(0, 0, 0, 0.28),
+    0 8px 20px rgba(0, 0, 0, 0.25),
+    0 1px 3px rgba(0, 0, 0, 0.20);
+}
+
+/* Brushed micro-grain — faint 118° diagonal lines on a screen blend mode.
+   Same recipe as Block.module.css's .block::before grain layer, scaled to
+   card dimensions. The `pointer-events: none` + `z-index: 1` ensure the
+   overlay doesn't block text or interactive descendants. */
+:global([data-theme="modern-vibrant"]) .card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    118deg,
+    transparent 0 2px,
+    rgba(255, 255, 255, 0.035) 2px 3px
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+}

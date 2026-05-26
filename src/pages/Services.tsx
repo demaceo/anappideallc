@@ -2,11 +2,19 @@ import { motion } from 'motion/react'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
+import { VelvetVitrine } from '../components/VelvetVitrine/VelvetVitrine'
 import styles from '../components/Page/Page.module.css'
 
 export default function Services() {
   return (
-    <main className={styles.page}>
+    <VelvetVitrine>
+      <motion.main
+        className={styles.page}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
+      >
       <RouteHead {...META['/services']} />
       <motion.h1
         layoutId="block-services"
@@ -44,6 +52,7 @@ export default function Services() {
           ))}
         </div>
       </section>
-    </main>
+      </motion.main>
+    </VelvetVitrine>
   )
 }
