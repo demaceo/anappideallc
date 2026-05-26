@@ -258,3 +258,24 @@ Shipped the four remaining block chain-reaction visuals in one pass, completing 
 ChainOverlay's dispatcher now has 5 conditional branches (Hero, About, Work, Services, Process, Contact); each `<Gadget targetX targetY />` is positioned via `useBlockCenters` snapshot. The architectural pattern proven in Phase 5b/5c/5d scaled cleanly — no architectural changes needed for any of the 4 new sequences. **Still zero new runtime dependencies** — Rapier2D continues deferred because each gadget's choreography is templatable via Motion timelines.
 
 See `docs/superpowers/plans/2026-05-25-ui-v2-phase-5e-5h-remaining-gadgets.md` for the full implementation log.
+
+### Phase 6 — Velvet Vitrine + InnerNav + Editorial Hardware Cards (completed 2026-05-26)
+
+Phase 6 closes the gap between the cinematic home stage and the inner content pages, giving scrollable pages their own atmosphere, persistent navigation, and animated page transitions.
+
+**VelvetVitrine** — a new atmosphere wrapper for inner pages that mirrors VelvetStage's three-layer depth stack (floor, spot, vignette) without the 3D `perspective: 1400px` transform used by the home grid. The floor's `rotateX(48deg)` burgundy wash and the overhead warm spot are present; the content wrapper adds `padding-top: var(--inner-nav-height, 52px)` so the body begins below the InnerNav bar. All three atmosphere layers are hidden on non-`modern-vibrant` themes via `:global(html:not([data-theme="modern-vibrant"])) .floor, .spot, .vignette { display: none; }` — the wrapper is inert on classic/pastel/arcade-neon. The About, Work, Services, and Process pages were updated to use VelvetVitrine.
+
+**InnerNav** — a fixed glassmorphic top bar (`height: 52px; z-index: 50`) that persists across all inner routes. Studio mark "AAI" links home and subsumes the retired standalone `HomeIcon`. Five NavLink entries with a gold 2px underline active indicator; at `< 480px` the link list is hidden (studio mark alone remains). The bar uses `backdrop-filter: blur(14px)` with a `color-mix(in srgb, var(--bg) 88%, transparent)` background so the VelvetVitrine atmosphere bleeds through.
+
+**AnimatePresence FLIP transitions** — `<AnimatePresence mode="popLayout" initial={false}>` wraps `<Outlet key={pathname}>` in AppShell. Combined with the `layoutId="block-{name}"` already present on every inner-page `motion.h1` and the `LayoutGroup` already in App.tsx, this activates the "block expands into page header" cinematic transition that was architecturally wired since Phase 4 but never firing.
+
+**Editorial Hardware card upgrade** — `Page.module.css` gains theme-scoped `[data-theme="modern-vibrant"] .card` rules: inset pearl rim (`rgba(255,255,255, 0.30/0.10/0.00)` top/left/bottom), brushed 118° micro-grain via `::before` (same recipe as Block's grain layer, scaled to card dimensions, `mix-blend-mode: screen`), and a directional shadow stack (`0 4px 0` + `0 8px 20px`) that lifts cards off the velvet page surface. The base `.card` rule is untouched so all other themes keep their original style.
+
+**Design critique — open issues at Phase 6 exit:**
+- Inner pages have no breadcrumb or back affordance on mobile (InnerNav links hidden at < 480px; only "AAI" mark remains — users must know it links home).
+- Card z-index: the `::before` grain overlay at `z-index: 1` means any absolutely-positioned child inside a card (future badge, tooltip) must be `z-index: 2` or higher — currently undocumented and easy to forget.
+- VelvetVitrine `padding-top` matches InnerNav height exactly; if InnerNav gains a second row (e.g., subnav), content will underlap without updating `--inner-nav-height`.
+- FLIP animation fidelity: the block→header morph works, but on slow connections (layout committed before fonts load) the header briefly renders in fallback typeface, then repaints — a brief flash. A future font-display strategy could mask this.
+- The gold underline active indicator in InnerNav uses `::after` with `background: var(--accent)` — on arcade-neon where `--accent` is neon-green, the gold association breaks. The InnerNav should ideally use a theme-invariant indicator (e.g., `--c-active-indicator: var(--gold)` token).
+
+See `docs/superpowers/plans/2026-05-26-ui-v2-phase-6-velvet-vitrine.md` for the full implementation log.
