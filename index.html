@@ -5,63 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!--
-      Theme bootstrap — runs synchronously before paint to set
-      data-theme on <html>, preventing a flash of the wrong theme on
-      hydration. Regal Builder (modern-vibrant) is the canonical theme.
-      Alternate themes are accessible via Konami code only.
-    -->
-    <script>
-      (function () {
-        try {
-          var ALLOWED = ['modern-vibrant', 'classic', 'pastel', 'arcade-neon'];
-          var saved = localStorage.getItem('theme');
-          var initial = saved && ALLOWED.indexOf(saved) > -1 ? saved : 'modern-vibrant';
-          document.documentElement.dataset.theme = initial;
-        } catch (e) {
-          document.documentElement.dataset.theme = 'modern-vibrant';
-        }
-      })();
-    </script>
-
-    <!--
-      Material bootstrap — runs synchronously before paint to set
-      data-material on <html>, preventing a flash of the wrong material
-      on hydration. Anodized is the canonical default. Other presets
-      are accessible via the Materials Panel on modern-vibrant only.
-    -->
-    <script>
-      (function () {
-        try {
-          var ALLOWED = ['anodized', 'steel', 'gold', 'frosted', 'bronze', 'ceramic', 'showcase'];
-          var saved = localStorage.getItem('material');
-          var initial = saved && ALLOWED.indexOf(saved) > -1 ? saved : 'anodized';
-          document.documentElement.dataset.material = initial;
-        } catch (e) {
-          document.documentElement.dataset.material = 'anodized';
-        }
-      })();
-    </script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-
     <title>An App Idea LLC — Got an app idea? Let's build it.</title>
     <meta
       name="description"
       content="Dev studio in Denver helping founders ship mobile apps and websites — from interface to database to launch."
     />
 
-    <!--
-      Plausible analytics — privacy-friendly, cookieless, GDPR-safe.
-      TODO: register anappidea.llc at plausible.io to start receiving
-      events. Until then this script 204s silently. Self-host via
-      Vercel rewrites if Lighthouse complains about the 3rd-party.
-    -->
     <script
       defer
       data-domain="anappidea.llc"

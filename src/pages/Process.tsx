@@ -1,53 +1,31 @@
-import { motion } from 'motion/react'
 import { processSteps } from '../data/process'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
-import { VelvetVitrine } from '../components/VelvetVitrine/VelvetVitrine'
-import styles from '../components/Page/Page.module.css'
 
 export default function Process() {
   return (
-    <VelvetVitrine>
-      <motion.main
-        className={styles.page}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ duration: 0.25, ease: 'easeOut' }}
-      >
+    <main>
       <RouteHead {...META['/process']} />
-      <motion.h1
-        layoutId="block-process"
-        className={styles.header}
-        style={{ ['--block-bg' as string]: 'var(--c-process)', ['--block-fg' as string]: 'var(--c-process-fg)' }}
-      >
-        Process
-      </motion.h1>
-
-      <p className={styles.lede}>
+      <h1>Process</h1>
+      <p>
         Four phases, one builder. Each step ends with a tangible deliverable so
         you always know where the project stands.
       </p>
-
-      <section className={styles.section}>
-        <div className={styles.cardGrid}>
-          {processSteps.map((p) => (
-            <article key={p.step} className={styles.card}>
-              <span className={styles.sectionHeading}>
-                {p.step} · {p.timeline}
-              </span>
-              <h3 className={styles.cardTitle}>{p.title}</h3>
-              <p className={styles.cardDesc}>{p.description}</p>
-              <ul className={styles.list}>
-                {p.deliverables.map((d) => (
-                  <li key={d}>{d}</li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
+      <section>
+        {processSteps.map((p) => (
+          <article key={p.step}>
+            <p>{p.step} · {p.timeline}</p>
+            <h2>{p.title}</h2>
+            <p>{p.description}</p>
+            <h3>Deliverables</h3>
+            <ul>
+              {p.deliverables.map((d) => (
+                <li key={d}>{d}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
       </section>
-      </motion.main>
-    </VelvetVitrine>
+    </main>
   )
 }

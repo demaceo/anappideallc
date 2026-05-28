@@ -1,9 +1,6 @@
-import { motion } from 'motion/react'
 import { SITE } from '../data/site'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
-import { AuroraChamber } from '../components/AuroraChamber/AuroraChamber'
-import styles from '../components/Page/Page.module.css'
 
 export default function Contact() {
   const subject = encodeURIComponent('App idea — initial contact')
@@ -12,41 +9,25 @@ export default function Contact() {
   )
 
   return (
-    <AuroraChamber>
-      <main className={styles.page}>
-        <RouteHead {...META['/contact']} />
-        <motion.h1
-          layoutId="block-contact"
-          className={styles.header}
-          style={{ ['--block-bg' as string]: 'var(--c-contact)', ['--block-fg' as string]: 'var(--c-contact-fg)' }}
-        >
-          Contact
-        </motion.h1>
-
-        <p className={styles.lede}>
-          Got an app or website idea, or a project that needs a co-builder? Send
-          a few sentences. I read everything and respond within 1–2 business days.
+    <main>
+      <RouteHead {...META['/contact']} />
+      <h1>Contact</h1>
+      <p>
+        Got an app or website idea, or a project that needs a co-builder? Send
+        a few sentences. I read everything and respond within 1–2 business days.
+      </p>
+      <section>
+        <h2>Email</h2>
+        <p>
+          <a href={`mailto:${SITE.email}?subject=${subject}&body=${body}`}>
+            {SITE.email}
+          </a>
         </p>
-
-        <section className={styles.section}>
-          <h2 className={styles.sectionHeading}>Email</h2>
-          <p>
-            <a
-              href={`mailto:${SITE.email}?subject=${subject}&body=${body}`}
-              style={{ fontWeight: 800, fontSize: '1.25rem' }}
-            >
-              {SITE.email}
-            </a>
-          </p>
-        </section>
-
-        <section className={styles.section}>
-          <h2 className={styles.sectionHeading}>Where I am</h2>
-          <p style={{ color: 'var(--fg-muted)' }}>
-            {SITE.founder.location} · Mountain Time (US/Denver)
-          </p>
-        </section>
-      </main>
-    </AuroraChamber>
+      </section>
+      <section>
+        <h2>Where I am</h2>
+        <p>{SITE.founder.location} · Mountain Time (US/Denver)</p>
+      </section>
+    </main>
   )
 }
