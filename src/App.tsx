@@ -14,10 +14,15 @@ function AppShell() {
     const COLLAPSE_START = 60
     const COLLAPSE_RANGE = 140
     let ticking = false
+    let last = -1
 
     const update = () => {
-      const progress = Math.min(1, Math.max(0, (window.scrollY - COLLAPSE_START) / COLLAPSE_RANGE))
-      document.documentElement.style.setProperty('--header-progress', progress.toFixed(4))
+      const raw = Math.min(1, Math.max(0, (window.scrollY - COLLAPSE_START) / COLLAPSE_RANGE))
+      const progress = Math.round(raw * 100) / 100
+      if (progress !== last) {
+        document.documentElement.style.setProperty('--header-progress', progress.toFixed(2))
+        last = progress
+      }
       ticking = false
     }
 

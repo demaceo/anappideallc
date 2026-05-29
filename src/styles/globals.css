@@ -23,7 +23,7 @@
 }
 
 /* ─── SECTION 3: Global page setup ─── */
-html { scroll-behavior: smooth; }
+html { scroll-behavior: auto; }
 
 body {
   background: var(--paper);
@@ -66,6 +66,8 @@ button:focus-visible {
   position: sticky;
   top: 0;
   z-index: 20;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .masthead::before {
