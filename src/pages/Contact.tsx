@@ -1,11 +1,36 @@
 import { SITE } from '../data/site'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
+import { IconEdit, IconSearch, IconSend } from '../components/icons'
+
+const PROMPTS = [
+  {
+    icon: IconEdit,
+    iconClass: 'icon-gold',
+    eyebrow: 'The idea',
+    title: 'What it does and who it\'s for',
+    body: 'One to three sentences. What problem does it solve? Who\'s the primary user? What\'s the one thing it needs to do well?',
+  },
+  {
+    icon: IconSearch,
+    iconClass: 'icon-blue',
+    eyebrow: 'Where you are',
+    title: 'Stage, timeline, and any existing work',
+    body: 'Sketches, wireframes, specs, or existing code — include whatever you have. A rough target date helps too, even if it\'s loose. None of it is required.',
+  },
+  {
+    icon: IconSend,
+    iconClass: 'icon-green',
+    eyebrow: 'The fit',
+    title: 'Budget ballpark, if you have one',
+    body: 'A rough range helps scope the engagement. If you don\'t have a number yet, that\'s a normal place to start — just say so and we\'ll figure it out together.',
+  },
+] as const
 
 export default function Contact() {
   const subject = encodeURIComponent('App idea — initial contact')
   const body = encodeURIComponent(
-    `Hi ${SITE.founder.name.split(' ')[0]},\n\nI have an idea for a [mobile app / website] and I'd like to talk through what it would take to ship it.\n\nA short description:\n\n— `,
+    `Hi ${SITE.founder.name.split(' ')[0]},\n\nI have an idea for a [mobile app / website] and I'd like to talk through what it would take to ship it.\n\nThe idea:\n\n\nWhere I am:\n\n\nBudget range:\n\n— `,
   )
 
   return (
@@ -25,31 +50,49 @@ export default function Contact() {
       <main className="container">
         <div className="intro-block">
           <p>
-            Got an app or website idea, or a project that needs a co-builder?
-            Send a few sentences. I read everything and respond within
-            1–2 business days.
+            Early-stage conversations are welcome. The goal of the first
+            exchange is to figure out whether we're a good fit — no deck
+            or finished spec required.
           </p>
         </div>
 
+        <div className="contact-hero">
+          <span className="contact-hero-label">Send an email</span>
+          <a
+            href={`mailto:${SITE.email}?subject=${subject}&body=${body}`}
+            className="contact-hero-email"
+          >
+            {SITE.email}
+          </a>
+          <span className="contact-hero-sub">
+            Responds within 1–2 business days · Denver, MT
+          </span>
+        </div>
+
         <div className="section-header">
-          <span className="section-num">01</span>
-          <h2>Email</h2>
+          <span className="section-num">What to include</span>
+          <h2>Three things worth mentioning</h2>
           <div className="section-rule" />
         </div>
 
-        <div className="verdict-box contact">
-          <p>
-            The best way to reach me is a direct email. Describe your idea in a
-            few sentences — what it does, who it's for, and where you are in the
-            process. No decks required.{' '}
-            <a href={`mailto:${SITE.email}?subject=${subject}&body=${body}`}>
-              {SITE.email}
-            </a>
-          </p>
-        </div>
+        {PROMPTS.map((p) => {
+          const PromptIcon = p.icon
+          return (
+            <div key={p.eyebrow} className="feature-item">
+              <div className={`feature-icon ${p.iconClass}`}>
+                <PromptIcon size={20} />
+              </div>
+              <div className="feature-body">
+                <span className="feature-eyebrow">{p.eyebrow}</span>
+                <h3 className="feature-title">{p.title}</h3>
+                <p>{p.body}</p>
+              </div>
+            </div>
+          )
+        })}
 
         <div className="section-header">
-          <span className="section-num">02</span>
+          <span className="section-num">Location</span>
           <h2>Where I am</h2>
           <div className="section-rule" />
         </div>
@@ -60,37 +103,6 @@ export default function Contact() {
             I work with founders remotely and have built across US, UK, and
             international time zones without friction.
           </p>
-        </div>
-
-        <div className="chapter-divider">
-          <span className="ornament">✦ ✦ ✦</span>
-        </div>
-
-        <div className="section-header">
-          <span className="section-num">03</span>
-          <h2>What to include</h2>
-          <div className="section-rule" />
-        </div>
-
-        <div className="dialogue-entry">
-          <div className="speaker-card">
-            <div className="speaker-icon" style={{ background: '#2980b9' }}>
-              📝
-            </div>
-            <div className="speaker-name">Your note</div>
-          </div>
-          <div className="speech-bubble bubble-blue">
-            <p>
-              A few sentences is plenty. Useful things to include: what the
-              product does, who uses it, whether you have designs or specs
-              already, and your rough timeline or budget range.
-            </p>
-            <p>
-              You don't need a finished idea — early-stage conversations are
-              welcome. The goal of the first exchange is to figure out whether
-              we're a good fit.
-            </p>
-          </div>
         </div>
       </main>
 

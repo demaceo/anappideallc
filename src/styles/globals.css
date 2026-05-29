@@ -62,11 +62,13 @@ button:focus-visible {
   content: '';
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent 0px, transparent 3px,
-    rgba(255,255,255,0.018) 3px, rgba(255,255,255,0.018) 4px
-  );
+  background:
+    radial-gradient(ellipse 130% 90% at 50% 0%, transparent 42%, rgba(0,0,0,0.42) 100%),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px, transparent 3px,
+      rgba(255,255,255,0.018) 3px, rgba(255,255,255,0.018) 4px
+    );
   pointer-events: none;
 }
 
@@ -189,6 +191,23 @@ button:focus-visible {
   align-items: baseline;
   gap: 0.9rem;
   padding: 2.75rem 0 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-header::before {
+  content: '§';
+  position: absolute;
+  right: -0.05em;
+  bottom: -0.4rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 6rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--ink);
+  opacity: 0.042;
+  pointer-events: none;
+  user-select: none;
 }
 
 .section-num {
@@ -486,6 +505,7 @@ cite:hover { background: rgba(192,57,43,0.14); }
   border-left: 4px solid var(--gold);
   background: var(--panel);
   position: relative;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 4px 14px rgba(0,0,0,0.045);
 }
 
 .verdict-box::before {
@@ -523,9 +543,20 @@ cite:hover { background: rgba(192,57,43,0.14); }
 /* ─── SECTION 14: Sources / reference footer ─── */
 .sources-section {
   background: var(--panel);
-  border-top: 2px solid var(--ink);
+  border-top: 3px solid var(--ink);
   padding: 2.75rem 0 3.5rem;
   margin-top: 3.5rem;
+  position: relative;
+}
+
+.sources-section::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--gold) 0% 30%, var(--accent) 30% 100%);
 }
 
 .sources-section .container {
@@ -636,6 +667,7 @@ cite:hover { background: rgba(192,57,43,0.14); }
 .inner-nav-link.active {
   color: var(--gold);
   border-color: rgba(184,134,11,0.4);
+  background: rgba(184,134,11,0.07);
 }
 
 @media (max-width: 580px) {
@@ -715,6 +747,15 @@ cite:hover { background: rgba(192,57,43,0.14); }
   padding: 2.25rem 0;
   border-bottom: 1px solid var(--rule);
   align-items: start;
+  transition: background 0.18s var(--ease);
+}
+
+.feature-item:first-of-type {
+  border-top: 1px solid var(--rule);
+}
+
+.feature-item:hover {
+  background: rgba(15, 14, 12, 0.025);
 }
 
 @media (max-width: 580px) {
@@ -746,13 +787,13 @@ cite:hover { background: rgba(192,57,43,0.14); }
 }
 
 /* Icon color variants */
-.icon-gold   { color: var(--gold);  border-color: rgba(184,134,11,0.4);  }
-.icon-blue   { color: #2980b9;      border-color: rgba(41,128,185,0.4);  }
-.icon-green  { color: #27ae60;      border-color: rgba(39,174,96,0.4);   }
-.icon-navy   { color: var(--navy);  border-color: rgba(26,58,92,0.4);    }
-.icon-orange { color: #d35400;      border-color: rgba(211,84,0,0.4);    }
-.icon-purple { color: #8e44ad;      border-color: rgba(142,68,173,0.4);  }
-.icon-teal   { color: #16a085;      border-color: rgba(22,160,133,0.4);  }
+.icon-gold   { color: var(--gold);  border-color: rgba(184,134,11,0.4);  background: rgba(184,134,11,0.06);  }
+.icon-blue   { color: #2980b9;      border-color: rgba(41,128,185,0.4);  background: rgba(41,128,185,0.06);  }
+.icon-green  { color: #27ae60;      border-color: rgba(39,174,96,0.4);   background: rgba(39,174,96,0.06);   }
+.icon-navy   { color: var(--navy);  border-color: rgba(26,58,92,0.4);    background: rgba(26,58,92,0.06);    }
+.icon-orange { color: #d35400;      border-color: rgba(211,84,0,0.4);    background: rgba(211,84,0,0.06);    }
+.icon-purple { color: #8e44ad;      border-color: rgba(142,68,173,0.4);  background: rgba(142,68,173,0.06);  }
+.icon-teal   { color: #16a085;      border-color: rgba(22,160,133,0.4);  background: rgba(22,160,133,0.06);  }
 
 .feature-eyebrow {
   font-family: 'IBM Plex Mono', monospace;
@@ -794,6 +835,49 @@ cite:hover { background: rgba(192,57,43,0.14); }
   line-height: 1.7;
   color: var(--muted);
   margin-bottom: 0.25rem;
+}
+
+/* ─── Contact hero CTA ─── */
+.contact-hero {
+  background: var(--ink);
+  margin: 1.75rem 0 0.5rem;
+  padding: 1.75rem clamp(1rem, 4vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.contact-hero-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.38);
+  display: block;
+}
+
+.contact-hero-email {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.1rem, 3.5vw, 1.65rem);
+  font-weight: 700;
+  color: var(--gold);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  display: block;
+  transition: color 0.2s var(--ease);
+}
+
+.contact-hero-email:hover { color: var(--paper); }
+
+.contact-hero-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.28);
+  display: block;
+  margin-top: 0.1rem;
 }
 
 /* ─── Main content links ─── */
