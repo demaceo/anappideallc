@@ -3,7 +3,7 @@ import { differentiators } from '../data/case-studies'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconKey, IconCode, IconShieldCheck, IconLock } from '../components/icons'
-import { SiteNav } from '../components/SiteNav/SiteNav'
+import { PageHeader } from '../components/PageHeader/PageHeader'
 
 const DIFF_ICONS = [IconKey, IconCode, IconShieldCheck, IconLock]
 const DIFF_ICON_CLASSES = ['icon-gold', 'icon-blue', 'icon-green', 'icon-navy'] as const
@@ -14,17 +14,17 @@ export default function About() {
     <>
       <RouteHead {...META['/about']} />
 
-      <header className="masthead">
-        <p className="overline">Dev Studio · {SITE.founder.location}</p>
-        <h1><em>Founder-led,</em> Denver-based.</h1>
-        <p className="subtitle">
-          {SITE.name} — run by {SITE.founder.name}.
-          One builder from interface to deploy.
-        </p>
-        <p className="date-line">About the studio</p>
-      </header>
-
-      <SiteNav />
+      <PageHeader>
+        <header className="masthead">
+          <p className="overline">Dev Studio · {SITE.founder.location}</p>
+          <h1><em>Founder-led,</em> Denver-based.</h1>
+          <p className="subtitle">
+            {SITE.name} — run by {SITE.founder.name}.
+            One builder from interface to deploy.
+          </p>
+          <p className="date-line">About the studio</p>
+        </header>
+      </PageHeader>
 
       <main className="container">
         <div className="intro-block">

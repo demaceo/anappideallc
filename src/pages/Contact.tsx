@@ -2,7 +2,7 @@ import { SITE } from '../data/site'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconEdit, IconSearch, IconSend } from '../components/icons'
-import { SiteNav } from '../components/SiteNav/SiteNav'
+import { PageHeader } from '../components/PageHeader/PageHeader'
 
 const PROMPTS = [
   {
@@ -38,17 +38,17 @@ export default function Contact() {
     <>
       <RouteHead {...META['/contact']} />
 
-      <header className="masthead">
-        <p className="overline">An App Idea LLC · Denver, Colorado</p>
-        <h1>Let's <em>talk.</em></h1>
-        <p className="subtitle">
-          Got an app or website idea? Send a few sentences.
-          I read everything and respond within 1–2 business days.
-        </p>
-        <p className="date-line">{SITE.email}</p>
-      </header>
-
-      <SiteNav />
+      <PageHeader>
+        <header className="masthead">
+          <p className="overline">An App Idea LLC · Denver, Colorado</p>
+          <h1>Let's <em>talk.</em></h1>
+          <p className="subtitle">
+            Got an app or website idea? Send a few sentences.
+            I read everything and respond within 1–2 business days.
+          </p>
+          <p className="date-line">{SITE.email}</p>
+        </header>
+      </PageHeader>
 
       <main className="container">
         <div className="intro-block">

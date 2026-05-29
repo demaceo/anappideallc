@@ -1,7 +1,7 @@
 import { caseStudies } from '../data/case-studies'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
-import { SiteNav } from '../components/SiteNav/SiteNav'
+import { PageHeader } from '../components/PageHeader/PageHeader'
 import {
   LogoPinpoint,
   LogoPayback,
@@ -19,18 +19,13 @@ export default function Work() {
     <>
       <RouteHead {...META['/work']} />
 
-      <header className="masthead">
-        <p className="overline">An App Idea LLC · Shipped products</p>
-        <h1>Work</h1>
-        {/* remove redundant subtitle  */}
-        {/* <p className="subtitle">
-          Five products shipped end-to-end — interface, backend, auth,
-          payments, moderation, and deploy.
-        </p> */}
-        <p className="date-line">Five solo builds</p>
-      </header>
-
-      <SiteNav />
+      <PageHeader>
+        <header className="masthead">
+          <p className="overline">An App Idea LLC · Shipped products</p>
+          <h1>Work</h1>
+          <p className="date-line">Five solo builds</p>
+        </header>
+      </PageHeader>
 
       <main className="container">
         <div className="intro-block">

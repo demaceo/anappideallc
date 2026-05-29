@@ -3,7 +3,7 @@ import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconZap, IconLayers, IconGlobe, IconBarChart } from '../components/icons'
-import { SiteNav } from '../components/SiteNav/SiteNav'
+import { PageHeader } from '../components/PageHeader/PageHeader'
 
 const SERVICE_ICONS = [IconZap, IconLayers, IconGlobe, IconBarChart]
 const SERVICE_ICON_CLASSES = ['icon-green', 'icon-blue', 'icon-teal', 'icon-orange'] as const
@@ -13,14 +13,14 @@ export default function Home() {
     <>
       <RouteHead {...META['/']} />
 
-      <header className="masthead">
-        <p className="overline">Dev Studio · Denver, Colorado</p>
-        <h1>Got an app idea? <em>Let's build it.</em></h1>
-        <p className="subtitle">{SITE.description}</p>
-        <p className="date-line">{SITE.email} · {SITE.domain}</p>
-      </header>
-
-      <SiteNav />
+      <PageHeader>
+        <header className="masthead">
+          <p className="overline">Dev Studio · Denver, Colorado</p>
+          <h1>Got an app idea? <em>Let's build it.</em></h1>
+          <p className="subtitle">{SITE.description}</p>
+          <p className="date-line">{SITE.email} · {SITE.domain}</p>
+        </header>
+      </PageHeader>
 
       <main className="container">
         <div className="intro-block">

@@ -2,7 +2,7 @@ import { processSteps } from '../data/process'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconSearch, IconEdit, IconTerminal, IconSend } from '../components/icons'
-import { SiteNav } from '../components/SiteNav/SiteNav'
+import { PageHeader } from '../components/PageHeader/PageHeader'
 
 const PROCESS_ICONS = [IconSearch, IconEdit, IconTerminal, IconSend]
 const PROCESS_ICON_CLASSES = ['icon-navy', 'icon-purple', 'icon-green', 'icon-orange'] as const
@@ -12,18 +12,13 @@ export default function Process() {
     <>
       <RouteHead {...META['/process']} />
 
-      <header className="masthead">
-        <p className="overline">An App Idea LLC · How we work</p>
-        <h1>Process</h1>
-        {/* remove redundant subtitle  */}
-        {/* <p className="subtitle">
-          Four phases, one builder. Each step ends with a tangible deliverable
-          so you always know where the project stands.
-        </p> */}
-        <p className="date-line">Discovery → Design → Dev → Launch</p>
-      </header>
-
-      <SiteNav />
+      <PageHeader>
+        <header className="masthead">
+          <p className="overline">An App Idea LLC · How we work</p>
+          <h1>Process</h1>
+          <p className="date-line">Discovery → Design → Dev → Launch</p>
+        </header>
+      </PageHeader>
 
       <main className="container">
         <div className="intro-block">

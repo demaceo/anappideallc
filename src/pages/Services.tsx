@@ -2,7 +2,7 @@ import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconZap, IconLayers, IconGlobe, IconBarChart } from '../components/icons'
-import { SiteNav } from '../components/SiteNav/SiteNav'
+import { PageHeader } from '../components/PageHeader/PageHeader'
 
 const SERVICE_ICONS = [IconZap, IconLayers, IconGlobe, IconBarChart]
 const SERVICE_ICON_CLASSES = ['icon-green', 'icon-blue', 'icon-teal', 'icon-orange'] as const
@@ -12,18 +12,13 @@ export default function Services() {
     <>
       <RouteHead {...META['/services']} />
 
-      <header className="masthead">
-        <p className="overline">An App Idea LLC · What I build</p>
-        <h1>Services</h1>
-        {/* remove redundant subtitle  */}
-        {/* <p className="subtitle">
-          From a 6-week MVP to a production-grade interface. Here's what I help
-          founders ship.
-        </p> */}
-        <p className="date-line">Four service categories</p>
-      </header>
-
-      <SiteNav />
+      <PageHeader>
+        <header className="masthead">
+          <p className="overline">An App Idea LLC · What I build</p>
+          <h1>Services</h1>
+          <p className="date-line">Four service categories</p>
+        </header>
+      </PageHeader>
 
       <main className="container">
         <div className="intro-block">

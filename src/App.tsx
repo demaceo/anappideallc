@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Link, Outlet, useLocation } from 'react-router'
+import { Outlet, useLocation } from 'react-router'
 import { RouteFocusReset } from './components/RouteFocusReset'
 
 function AppShell() {
@@ -33,9 +33,6 @@ function AppShell() {
   return (
     <>
       <RouteFocusReset />
-      {pathname !== '/' && (
-        <Link to="/" className="back-home" aria-label="Back to home">{'<'}</Link>
-      )}
       <Outlet />
     </>
   )
