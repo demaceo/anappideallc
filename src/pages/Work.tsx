@@ -1,6 +1,7 @@
 import { caseStudies } from '../data/case-studies'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
+import { SiteNav } from '../components/SiteNav/SiteNav'
 import {
   LogoPinpoint,
   LogoPayback,
@@ -27,6 +28,8 @@ export default function Work() {
         </p>
         <p className="date-line">Five solo builds</p>
       </header>
+
+      <SiteNav />
 
       <main className="container">
         <div className="intro-block">

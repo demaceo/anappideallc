@@ -2,6 +2,7 @@ import { processSteps } from '../data/process'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconSearch, IconEdit, IconTerminal, IconSend } from '../components/icons'
+import { SiteNav } from '../components/SiteNav/SiteNav'
 
 const PROCESS_ICONS = [IconSearch, IconEdit, IconTerminal, IconSend]
 const PROCESS_ICON_CLASSES = ['icon-navy', 'icon-purple', 'icon-green', 'icon-orange'] as const
@@ -20,6 +21,8 @@ export default function Process() {
         </p>
         <p className="date-line">Discovery → Design → Dev → Launch</p>
       </header>
+
+      <SiteNav />
 
       <main className="container">
         <div className="intro-block">

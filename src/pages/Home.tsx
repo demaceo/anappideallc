@@ -1,17 +1,9 @@
-import { Link } from 'react-router'
 import { SITE } from '../data/site'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconZap, IconLayers, IconGlobe, IconBarChart } from '../components/icons'
-
-const HOME_NAV = [
-  { to: '/about',    label: 'About',    color: '#b8860b' },
-  { to: '/work',     label: 'Work',     color: '#27ae60' },
-  { to: '/services', label: 'Services', color: '#16a085' },
-  { to: '/process',  label: 'Process',  color: '#2980b9' },
-  { to: '/contact',  label: 'Contact',  color: '#d35400' },
-] as const
+import { SiteNav } from '../components/SiteNav/SiteNav'
 
 const SERVICE_ICONS = [IconZap, IconLayers, IconGlobe, IconBarChart]
 const SERVICE_ICON_CLASSES = ['icon-green', 'icon-blue', 'icon-teal', 'icon-orange'] as const
@@ -28,14 +20,7 @@ export default function Home() {
         <p className="date-line">{SITE.email} · {SITE.domain}</p>
       </header>
 
-      <nav className="personas-bar" aria-label="Main navigation">
-        {HOME_NAV.map(({ to, label, color }) => (
-          <Link key={to} to={to} className="persona-tag">
-            <span className="persona-dot" style={{ background: color }} />
-            <span>{label}</span>
-          </Link>
-        ))}
-      </nav>
+      <SiteNav />
 
       <main className="container">
         <div className="intro-block">

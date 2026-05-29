@@ -8,32 +8,32 @@ function renderRoute(path: string) {
   return render(<RouterProvider router={router} />)
 }
 
-describe('AppShell — InnerNav routing', () => {
-  it('does NOT render InnerNav on home route "/"', () => {
+describe('AppShell — personas-bar routing', () => {
+  it('renders exactly one personas-bar on home route "/"', () => {
     renderRoute('/')
     expect(
-      screen.queryByRole('navigation', { name: /inner pages/i }),
-    ).toBeNull()
+      screen.getAllByRole('navigation', { name: /main navigation/i }),
+    ).toHaveLength(1)
   })
 
-  it('renders InnerNav on /about', () => {
+  it('renders personas-bar on /about', () => {
     renderRoute('/about')
     expect(
-      screen.getByRole('navigation', { name: /inner pages/i }),
+      screen.getByRole('navigation', { name: /main navigation/i }),
     ).toBeInTheDocument()
   })
 
-  it('renders InnerNav on /work', () => {
+  it('renders personas-bar on /work', () => {
     renderRoute('/work')
     expect(
-      screen.getByRole('navigation', { name: /inner pages/i }),
+      screen.getByRole('navigation', { name: /main navigation/i }),
     ).toBeInTheDocument()
   })
 
-  it('renders InnerNav on /contact', () => {
+  it('renders personas-bar on /contact', () => {
     renderRoute('/contact')
     expect(
-      screen.getByRole('navigation', { name: /inner pages/i }),
+      screen.getByRole('navigation', { name: /main navigation/i }),
     ).toBeInTheDocument()
   })
 })

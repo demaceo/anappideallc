@@ -2,6 +2,7 @@ import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconZap, IconLayers, IconGlobe, IconBarChart } from '../components/icons'
+import { SiteNav } from '../components/SiteNav/SiteNav'
 
 const SERVICE_ICONS = [IconZap, IconLayers, IconGlobe, IconBarChart]
 const SERVICE_ICON_CLASSES = ['icon-green', 'icon-blue', 'icon-teal', 'icon-orange'] as const
@@ -20,6 +21,8 @@ export default function Services() {
         </p>
         <p className="date-line">Four service categories</p>
       </header>
+
+      <SiteNav />
 
       <main className="container">
         <div className="intro-block">

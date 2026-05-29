@@ -2,6 +2,7 @@ import { SITE } from '../data/site'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconEdit, IconSearch, IconSend } from '../components/icons'
+import { SiteNav } from '../components/SiteNav/SiteNav'
 
 const PROMPTS = [
   {
@@ -46,6 +47,8 @@ export default function Contact() {
         </p>
         <p className="date-line">{SITE.email}</p>
       </header>
+
+      <SiteNav />
 
       <main className="container">
         <div className="intro-block">

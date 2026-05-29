@@ -3,6 +3,7 @@ import { differentiators } from '../data/case-studies'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconKey, IconCode, IconShieldCheck, IconLock } from '../components/icons'
+import { SiteNav } from '../components/SiteNav/SiteNav'
 
 const DIFF_ICONS = [IconKey, IconCode, IconShieldCheck, IconLock]
 const DIFF_ICON_CLASSES = ['icon-gold', 'icon-blue', 'icon-green', 'icon-navy'] as const
@@ -22,6 +23,8 @@ export default function About() {
         </p>
         <p className="date-line">About the studio</p>
       </header>
+
+      <SiteNav />
 
       <main className="container">
         <div className="intro-block">
