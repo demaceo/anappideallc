@@ -1,54 +1,38 @@
-import { motion } from 'motion/react'
 import { caseStudies } from '../data/case-studies'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
-import { VelvetVitrine } from '../components/VelvetVitrine/VelvetVitrine'
-import styles from '../components/Page/Page.module.css'
 
 export default function Work() {
   return (
-    <VelvetVitrine>
-      <motion.main
-        className={styles.page}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ duration: 0.25, ease: 'easeOut' }}
-      >
+    <main>
       <RouteHead {...META['/work']} />
-      <motion.h1
-        layoutId="block-work"
-        className={styles.header}
-        style={{ ['--block-bg' as string]: 'var(--c-work)', ['--block-fg' as string]: 'var(--c-work-fg)' }}
-      >
-        Work
-      </motion.h1>
-
-      <p className={styles.lede}>
+      <h1>Work</h1>
+      <p>
         Five products shipped end-to-end — interface, backend, auth, payments,
         moderation, and deploy. Each one solves a real workflow rather than
         showcasing a trick.
       </p>
-
-      <section className={styles.section}>
-        <div className={styles.cardGrid}>
-          {caseStudies.map((c) => (
-            <article key={c.slug} className={styles.card}>
-              <span className={styles.sectionHeading}>{c.category}</span>
-              <h3 className={styles.cardTitle}>{c.title}</h3>
-              <p className={styles.cardDesc}>{c.summary}</p>
-              <div className={styles.chips}>
-                {c.stack.slice(0, 4).map((s) => (
-                  <span key={s} className={styles.chip}>
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </article>
-          ))}
-        </div>
+      <section>
+        {caseStudies.map((c) => (
+          <article key={c.slug}>
+            <p>{c.category}</p>
+            <h2>{c.title}</h2>
+            <p>{c.summary}</p>
+            <ul>
+              {c.outcomes.map((o) => (
+                <li key={o}>{o}</li>
+              ))}
+            </ul>
+            <p><strong>Stack:</strong> {c.stack.join(', ')}</p>
+            {c.liveUrl && (
+              <p><a href={c.liveUrl} target="_blank" rel="noopener noreferrer">Live Site</a></p>
+            )}
+            {c.repoUrl && (
+              <p><a href={c.repoUrl} target="_blank" rel="noopener noreferrer">Repository</a></p>
+            )}
+          </article>
+        ))}
       </section>
-      </motion.main>
-    </VelvetVitrine>
+    </main>
   )
 }

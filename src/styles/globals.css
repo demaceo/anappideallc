@@ -1,70 +1,68 @@
 @import './reset.css';
-@import './tokens.css';
-
-/* Inner-page navigation bar height. Referenced by VelvetVitrine's
-   padding-top so page content always clears the fixed nav bar.
-   Change this value in one place to resize the nav across the site. */
-:root {
-  --inner-nav-height: 52px;
-}
-
-@font-face {
-  font-family: 'Bricolage Grotesque';
-  src: url('/fonts/BricolageGrotesque-Variable.ttf') format('truetype');
-  font-weight: 100 900;
-  font-stretch: 75% 125%;
-  font-display: swap;
-}
 
 html {
-  font-family: 'Bricolage Grotesque', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-variation-settings: 'wdth' 87.5;
-  background: var(--bg);
-  color: var(--fg);
-  transition: background-color 200ms, color 200ms;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #fff;
+  color: #111;
 }
 
 body {
   font-size: 16px;
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  line-height: 1.6;
+  padding: 1rem;
 }
 
 h1, h2, h3 {
-  font-family: 'Syne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
 }
 
 h1 { font-size: clamp(2rem, 4vw + 1rem, 3.5rem); }
 h2 { font-size: clamp(1.5rem, 2.5vw + 0.75rem, 2.5rem); }
 h3 { font-size: clamp(1.25rem, 1.5vw + 0.75rem, 1.75rem); }
 
+p { margin-bottom: 1em; }
+ul, ol { margin-bottom: 1em; padding-left: 1.5em; }
+li { margin-bottom: 0.25em; }
+
+a { color: #0066cc; }
+a:hover { text-decoration: underline; }
+
 a:focus-visible,
 button:focus-visible {
-  outline: 3px solid var(--focus-ring);
+  outline: 3px solid #0066cc;
   outline-offset: 4px;
   border-radius: 4px;
 }
 
-/* AUDIT FIX (Phase 5, Minor): RouteFocusReset programmatically focuses
-   <main> after every navigation so screen readers get a position cue.
-   The browser's default focus outline would otherwise render around the
-   main content for every visitor — not just keyboard users — appearing
-   as a stray accent rectangle on /about, /contact, etc.
-   <main> is a non-interactive content container (tabindex=-1 means it's
-   not in the Tab sequence). Keyboard users navigate to the interactive
-   elements *inside* main, which get their own focus rings via the
-   a:focus-visible / button:focus-visible rules above. So hiding the
-   outline on main is safe — there's nothing to "lose" focus-wise.
-   Note: an earlier attempt used `:not(:focus-visible)` but WebKit's
-   :focus-visible heuristic treats programmatic .focus() on tabindex=-1
-   as visible, which defeated the filter. Unconditional works everywhere. */
-main:focus {
-  outline: none;
+main:focus { outline: none; }
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
-::selection {
-  background: var(--accent);
-  color: var(--bg);
+nav {
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+article {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+article:last-child {
+  border-bottom: none;
 }
