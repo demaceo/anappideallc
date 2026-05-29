@@ -52,7 +52,7 @@ button:focus-visible {
 .masthead {
   background: var(--ink);
   color: var(--paper);
-  padding: clamp(2rem, 6vw, 3.5rem) clamp(1rem, 4vw, 2rem) clamp(1.5rem, 4vw, 2.5rem);
+  padding: clamp(2.25rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem) clamp(1.75rem, 4vw, 3rem);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -91,27 +91,27 @@ button:focus-visible {
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--gold);
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.3rem;
 }
 
 .masthead h1 {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 5.5vw, 3.75rem);
   font-weight: 900;
-  line-height: 1.06;
+  line-height: 1.12;
   letter-spacing: -0.02em;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.75rem;
 }
 
 .masthead h1 em { font-style: italic; color: var(--accent); }
 
 .subtitle {
   font-style: italic;
-  font-size: 1rem;
-  color: rgba(245,240,232,0.65);
+  font-size: 1.05rem;
+  color: rgba(245,240,232,0.82);
   max-width: 580px;
-  margin: 0.6rem auto 0;
-  line-height: 1.7;
+  margin: 0.65rem auto 0;
+  line-height: 1.78;
 }
 
 .date-line {
@@ -119,8 +119,8 @@ button:focus-visible {
   font-size: 0.62rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(245,240,232,0.35);
-  margin-top: 1.6rem;
+  color: rgba(245,240,232,0.52);
+  margin-top: 1.75rem;
 }
 
 /* ─── SECTION 5: Navigation / legend bar ─── */
