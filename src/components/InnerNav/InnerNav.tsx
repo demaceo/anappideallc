@@ -10,12 +10,21 @@ const NAV_LINKS = [
 
 export function InnerNav() {
   return (
-    <nav aria-label="Inner pages">
-      <Link to="/" aria-label="Home">AAI</Link>
-      <ul role="list">
+    <nav className="inner-nav" aria-label="Inner pages">
+      <Link to="/" className="inner-nav-logo" aria-label="Home">
+        AAI
+      </Link>
+      <ul className="inner-nav-links" role="list">
         {NAV_LINKS.map(({ to, label }) => (
           <li key={to}>
-            <NavLink to={to}>{label}</NavLink>
+            <NavLink
+              to={to}
+              className={({ isActive }) =>
+                `inner-nav-link${isActive ? ' active' : ''}`
+              }
+            >
+              {label}
+            </NavLink>
           </li>
         ))}
       </ul>
