@@ -45,14 +45,14 @@ button:focus-visible {
 .container {
   max-width: 880px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 clamp(1rem, 4vw, 2rem);
 }
 
 /* ─── SECTION 4: Masthead / hero header ─── */
 .masthead {
   background: var(--ink);
   color: var(--paper);
-  padding: 3.5rem 2rem 2.5rem;
+  padding: clamp(2rem, 6vw, 3.5rem) clamp(1rem, 4vw, 2rem) clamp(1.5rem, 4vw, 2.5rem);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -136,7 +136,7 @@ button:focus-visible {
   display: flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.3rem 0.85rem;
+  padding: 0.55rem 0.9rem;
   border: 1px solid rgba(245,240,232,0.15);
   border-radius: 2px;
   text-decoration: none;
@@ -161,6 +161,10 @@ button:focus-visible {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(245,240,232,0.7);
+}
+
+@media (max-width: 640px) {
+  .personas-bar { padding: 0.85rem 1rem 1rem; gap: 0.45rem; }
 }
 
 /* ─── SECTION 6: Intro block ─── */
@@ -199,7 +203,7 @@ button:focus-visible {
 
 .section-header h2 {
   font-family: 'Playfair Display', serif;
-  font-size: 1.45rem;
+  font-size: clamp(1.2rem, 3.5vw, 1.45rem);
   font-weight: 700;
   color: var(--ink);
   flex-shrink: 0;
@@ -265,8 +269,8 @@ button:focus-visible {
   display: block;
 }
 
-.stat-num.large  { font-size: 2.1rem; }
-.stat-num.medium { font-size: 1.45rem; }
+.stat-num.large  { font-size: clamp(1.5rem, 4vw,   2.1rem); }
+.stat-num.medium { font-size: clamp(1.1rem, 2.5vw, 1.45rem); }
 
 .stat-desc {
   font-family: 'IBM Plex Mono', monospace;
@@ -553,7 +557,7 @@ cite:hover { background: rgba(192,57,43,0.14); }
   list-style: none;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem 2.5rem;
+  gap: 0.75rem clamp(1rem, 4vw, 2.5rem);
 }
 
 @media (max-width: 580px) {
@@ -632,6 +636,17 @@ cite:hover { background: rgba(192,57,43,0.14); }
 .inner-nav-link.active {
   color: var(--gold);
   border-color: rgba(184,134,11,0.4);
+}
+
+@media (max-width: 580px) {
+  .inner-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.6rem 1rem;
+    gap: 0.35rem;
+  }
+  .inner-nav-links { gap: 0.2rem; }
+  .inner-nav-link  { font-size: 0.57rem; letter-spacing: 0.1em; padding: 0.25rem 0.5rem; }
 }
 
 /* ─── Utility: mono metadata line ─── */
@@ -751,7 +766,7 @@ cite:hover { background: rgba(192,57,43,0.14); }
 
 .feature-title {
   font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
+  font-size: clamp(1.1rem, 3vw, 1.3rem);
   font-weight: 700;
   color: var(--ink);
   line-height: 1.2;
