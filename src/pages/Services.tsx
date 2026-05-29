@@ -15,10 +15,12 @@ export default function Services() {
       <header className="masthead">
         <p className="overline">An App Idea LLC · What I build</p>
         <h1>Services</h1>
-        <p className="subtitle">
+        // remove redundant subtitle 
+
+        {/* <p className="subtitle">
           From a 6-week MVP to a production-grade interface. Here's what I help
           founders ship.
-        </p>
+        </p> */}
         <p className="date-line">Four service categories</p>
       </header>
 

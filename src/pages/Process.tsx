@@ -15,10 +15,10 @@ export default function Process() {
       <header className="masthead">
         <p className="overline">An App Idea LLC · How we work</p>
         <h1>Process</h1>
-        <p className="subtitle">
+        {/* <p className="subtitle">
           Four phases, one builder. Each step ends with a tangible deliverable
           so you always know where the project stands.
-        </p>
+        </p> */}
         <p className="date-line">Discovery → Design → Dev → Launch</p>
       </header>
 

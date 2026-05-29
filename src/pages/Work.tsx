@@ -22,10 +22,11 @@ export default function Work() {
       <header className="masthead">
         <p className="overline">An App Idea LLC · Shipped products</p>
         <h1>Work</h1>
-        <p className="subtitle">
+        // remove redundant subtitle 
+        {/* <p className="subtitle">
           Five products shipped end-to-end — interface, backend, auth,
           payments, moderation, and deploy.
-        </p>
+        </p> */}
         <p className="date-line">Five solo builds</p>
       </header>
 
