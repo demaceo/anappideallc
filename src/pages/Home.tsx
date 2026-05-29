@@ -98,7 +98,7 @@ export default function Home() {
               </div>
             </div>
             <div className={`speech-bubble ${BUBBLE_CLASSES[i]}`}>
-              <p><strong>{s.title}</strong></p>
+              <h3 className="bubble-title">{s.title}</h3>
               <p>{s.description}</p>
               {s.metric && (
                 <span className="mono-meta">

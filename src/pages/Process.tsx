@@ -68,47 +68,19 @@ export default function Process() {
               >
                 {STEP_ICONS[i]}
               </div>
-              <div className="speaker-name">
-                {p.step} · {p.timeline}
-              </div>
+              <div className="speaker-name">Phase {p.step}</div>
             </div>
             <div className={`speech-bubble ${BUBBLE_CLASSES[i]}`}>
-              <p><strong>{p.title}</strong></p>
+              <h3 className="bubble-title">{p.title}</h3>
+              <span className="mono-meta">Timeline: {p.timeline}</span>
               <p>{p.description}</p>
+              <span className="bubble-subtitle">Steps</span>
               <ul>
                 {p.substeps.map((s) => (
                   <li key={s}>{s}</li>
                 ))}
               </ul>
-            </div>
-          </div>
-        ))}
-
-        <div className="chapter-divider">
-          <span className="ornament">✦ ✦ ✦</span>
-        </div>
-
-        <div className="section-header">
-          <span className="section-num">Deliverables</span>
-          <h2>What you receive</h2>
-          <div className="section-rule" />
-        </div>
-
-        {processSteps.map((p, i) => (
-          <div key={`del-${p.step}`} className="dialogue-entry">
-            <div className="speaker-card">
-              <div
-                className="speaker-icon"
-                style={{ background: STEP_COLORS[i] }}
-              >
-                {STEP_ICONS[i]}
-              </div>
-              <div className="speaker-name">{p.title.split(' ')[0]}</div>
-            </div>
-            <div className={`speech-bubble ${BUBBLE_CLASSES[i]}`}>
-              <p>
-                <strong>Phase {p.step} — {p.title}</strong>
-              </p>
+              <span className="bubble-subtitle">Deliverables</span>
               <ul>
                 {p.deliverables.map((d) => (
                   <li key={d}>{d}</li>

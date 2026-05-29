@@ -6,6 +6,7 @@ import { META } from '../lib/seo'
 const DIFFERENTIATOR_ICONS = ['🏗️', '🔧', '🚀', '🔒'] as const
 const DIFFERENTIATOR_COLORS = ['#b8860b', '#2980b9', '#27ae60', '#1a3a5c'] as const
 const DIFFERENTIATOR_BUBBLES = ['bubble-gold', 'bubble-blue', 'bubble-green', 'bubble-navy'] as const
+const DIFFERENTIATOR_LABELS = ['Ownership', 'Engineering', 'Discipline', 'Privacy'] as const
 
 export default function About() {
   return (
@@ -47,9 +48,10 @@ export default function About() {
               >
                 {DIFFERENTIATOR_ICONS[i]}
               </div>
-              <div className="speaker-name">{d.title}</div>
+              <div className="speaker-name">{DIFFERENTIATOR_LABELS[i]}</div>
             </div>
             <div className={`speech-bubble ${DIFFERENTIATOR_BUBBLES[i]}`}>
+              <h3 className="bubble-title">{d.title}</h3>
               <p>{d.description}</p>
             </div>
           </div>

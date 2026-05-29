@@ -11,6 +11,7 @@ const BUBBLE_CLASSES = [
   'bubble-orange',
   'bubble-purple',
 ] as const
+const STUDY_LABELS = ['Civic', 'Privacy', 'PropTech', 'Spatial', 'Translation'] as const
 
 export default function Work() {
   return (
@@ -75,19 +76,25 @@ export default function Work() {
               >
                 {STUDY_ICONS[i]}
               </div>
-              <div className="speaker-name">{c.category}</div>
+              <div className="speaker-name">{STUDY_LABELS[i]}</div>
             </div>
             <div className={`speech-bubble ${BUBBLE_CLASSES[i]}`}>
-              <p><strong>{c.title}</strong></p>
+              <h3 className="bubble-title">{c.title}</h3>
               <p>{c.summary}</p>
+              <span className="bubble-subtitle">Outcomes</span>
               <ul>
                 {c.outcomes.map((o) => (
                   <li key={o}>{o}</li>
                 ))}
               </ul>
-              <span className="mono-meta">
-                Stack: {c.stack.join(' · ')}
-              </span>
+              <div className="stat-row">
+                {c.stats.map((s) => (
+                  <span key={s.label} className="stat-pill">
+                    <strong>{s.label}:</strong> {s.value}
+                  </span>
+                ))}
+              </div>
+              <span className="mono-meta">Stack: {c.stack.join(' · ')}</span>
               {(c.liveUrl || c.repoUrl) && (
                 <span className="mono-meta">
                   {c.liveUrl && (
@@ -103,40 +110,6 @@ export default function Work() {
                   )}
                 </span>
               )}
-            </div>
-          </div>
-        ))}
-
-        <div className="chapter-divider">
-          <span className="ornament">✦ ✦ ✦</span>
-        </div>
-
-        <div className="section-header">
-          <span className="section-num">Stats</span>
-          <h2>Project details</h2>
-          <div className="section-rule" />
-        </div>
-
-        {caseStudies.map((c, i) => (
-          <div key={`stats-${c.slug}`} className="dialogue-entry">
-            <div className="speaker-card">
-              <div
-                className="speaker-icon"
-                style={{ background: STUDY_COLORS[i] }}
-              >
-                {STUDY_ICONS[i]}
-              </div>
-              <div className="speaker-name">{c.title}</div>
-            </div>
-            <div className={`speech-bubble ${BUBBLE_CLASSES[i]}`}>
-              <p><strong>{c.title} — Project stats</strong></p>
-              <ul>
-                {c.stats.map((s) => (
-                  <li key={s.label}>
-                    <strong>{s.label}:</strong> {s.value}
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
         ))}

@@ -65,48 +65,21 @@ export default function Services() {
               <div className="speaker-name">{s.metric?.value ?? '—'}</div>
             </div>
             <div className={`speech-bubble ${BUBBLE_CLASSES[i]}`}>
-              <p><strong>{s.title}</strong></p>
+              <h3 className="bubble-title">{s.title}</h3>
               <p>{s.description}</p>
+              <span className="bubble-subtitle">Features</span>
               <ul>
                 {s.features.map((f) => (
                   <li key={f}>{f}</li>
                 ))}
               </ul>
-              <span className="mono-meta">
-                Stack: {s.technologies.join(' · ')}
-              </span>
-            </div>
-          </div>
-        ))}
-
-        <div className="chapter-divider">
-          <span className="ornament">✦ ✦ ✦</span>
-        </div>
-
-        <div className="section-header">
-          <span className="section-num">Deliverables</span>
-          <h2>What you get</h2>
-          <div className="section-rule" />
-        </div>
-
-        {services.map((s, i) => (
-          <div key={`del-${s.id}`} className="dialogue-entry">
-            <div className="speaker-card">
-              <div
-                className="speaker-icon"
-                style={{ background: SERVICE_COLORS[i] }}
-              >
-                {SERVICE_ICONS[i]}
-              </div>
-              <div className="speaker-name">{s.title.split(' ')[0]}</div>
-            </div>
-            <div className={`speech-bubble ${BUBBLE_CLASSES[i]}`}>
-              <p><strong>{s.title} — Deliverables</strong></p>
+              <span className="bubble-subtitle">Deliverables</span>
               <ul>
                 {s.deliverables.map((d) => (
                   <li key={d}>{d}</li>
                 ))}
               </ul>
+              <span className="mono-meta">Stack: {s.technologies.join(' · ')}</span>
             </div>
           </div>
         ))}
