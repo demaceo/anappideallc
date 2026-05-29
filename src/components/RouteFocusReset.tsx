@@ -20,7 +20,7 @@ export function RouteFocusReset() {
 
     const prevTabIndex = target.getAttribute('tabindex')
     target.setAttribute('tabindex', '-1')
-    target.focus({ preventScroll: false })
+    target.focus({ preventScroll: true })
 
     // Restore the original tabindex (or remove if there was none) so we
     // don't leave the element as a focus target after handing off.
