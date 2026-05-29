@@ -1,10 +1,10 @@
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
+import { IconZap, IconLayers, IconGlobe, IconBarChart } from '../components/icons'
 
-const SERVICE_ICONS = ['🚀', '⚡', '🌐', '📊'] as const
-const SERVICE_COLORS = ['#27ae60', '#2980b9', '#16a085', '#d35400'] as const
-const BUBBLE_CLASSES = ['bubble-green', 'bubble-blue', 'bubble-teal', 'bubble-orange'] as const
+const SERVICE_ICONS = [IconZap, IconLayers, IconGlobe, IconBarChart]
+const SERVICE_ICON_CLASSES = ['icon-green', 'icon-blue', 'icon-teal', 'icon-orange'] as const
 
 export default function Services() {
   return (
@@ -53,36 +53,38 @@ export default function Services() {
           <div className="section-rule" />
         </div>
 
-        {services.map((s, i) => (
-          <div key={s.id} className="dialogue-entry">
-            <div className="speaker-card">
-              <div
-                className="speaker-icon"
-                style={{ background: SERVICE_COLORS[i] }}
-              >
-                {SERVICE_ICONS[i]}
+        {services.map((s, i) => {
+          const ServiceIcon = SERVICE_ICONS[i]
+          return (
+            <div key={s.id} className="feature-item">
+              <div className={`feature-icon ${SERVICE_ICON_CLASSES[i]}`}>
+                <ServiceIcon size={20} />
               </div>
-              <div className="speaker-name">{s.metric?.value ?? '—'}</div>
+              <div className="feature-body">
+                {s.metric && (
+                  <span className="feature-eyebrow">
+                    {s.metric.label} · {s.metric.value}
+                  </span>
+                )}
+                <h3 className="feature-title">{s.title}</h3>
+                <p>{s.description}</p>
+                <span className="bubble-subtitle">Features</span>
+                <ul>
+                  {s.features.map((f) => (
+                    <li key={f}>{f}</li>
+                  ))}
+                </ul>
+                <span className="bubble-subtitle">Deliverables</span>
+                <ul>
+                  {s.deliverables.map((d) => (
+                    <li key={d}>{d}</li>
+                  ))}
+                </ul>
+                <span className="mono-meta">Stack: {s.technologies.join(' · ')}</span>
+              </div>
             </div>
-            <div className={`speech-bubble ${BUBBLE_CLASSES[i]}`}>
-              <h3 className="bubble-title">{s.title}</h3>
-              <p>{s.description}</p>
-              <span className="bubble-subtitle">Features</span>
-              <ul>
-                {s.features.map((f) => (
-                  <li key={f}>{f}</li>
-                ))}
-              </ul>
-              <span className="bubble-subtitle">Deliverables</span>
-              <ul>
-                {s.deliverables.map((d) => (
-                  <li key={d}>{d}</li>
-                ))}
-              </ul>
-              <span className="mono-meta">Stack: {s.technologies.join(' · ')}</span>
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </main>
 
       <footer className="sources-section">

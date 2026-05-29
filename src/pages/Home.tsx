@@ -3,6 +3,7 @@ import { SITE } from '../data/site'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
+import { IconZap, IconLayers, IconGlobe, IconBarChart } from '../components/icons'
 
 const HOME_NAV = [
   { to: '/about',    label: 'About',    color: '#b8860b' },
@@ -12,9 +13,8 @@ const HOME_NAV = [
   { to: '/contact',  label: 'Contact',  color: '#d35400' },
 ] as const
 
-const SERVICE_ICONS = ['🚀', '⚡', '🌐', '📊'] as const
-const SERVICE_COLORS = ['#27ae60', '#2980b9', '#16a085', '#d35400'] as const
-const BUBBLE_CLASSES = ['bubble-green', 'bubble-blue', 'bubble-teal', 'bubble-orange'] as const
+const SERVICE_ICONS = [IconZap, IconLayers, IconGlobe, IconBarChart]
+const SERVICE_ICON_CLASSES = ['icon-green', 'icon-blue', 'icon-teal', 'icon-orange'] as const
 
 export default function Home() {
   return (
@@ -84,30 +84,25 @@ export default function Home() {
           <div className="section-rule" />
         </div>
 
-        {services.map((s, i) => (
-          <div key={s.id} className="dialogue-entry">
-            <div className="speaker-card">
-              <div
-                className="speaker-icon"
-                style={{ background: SERVICE_COLORS[i] }}
-              >
-                {SERVICE_ICONS[i]}
+        {services.map((s, i) => {
+          const ServiceIcon = SERVICE_ICONS[i]
+          return (
+            <div key={s.id} className="feature-item">
+              <div className={`feature-icon ${SERVICE_ICON_CLASSES[i]}`}>
+                <ServiceIcon size={20} />
               </div>
-              <div className="speaker-name">
-                {s.metric ? s.metric.value : '—'}
+              <div className="feature-body">
+                {s.metric && (
+                  <span className="feature-eyebrow">
+                    {s.metric.label} · {s.metric.value}
+                  </span>
+                )}
+                <h3 className="feature-title">{s.title}</h3>
+                <p>{s.description}</p>
               </div>
             </div>
-            <div className={`speech-bubble ${BUBBLE_CLASSES[i]}`}>
-              <h3 className="bubble-title">{s.title}</h3>
-              <p>{s.description}</p>
-              {s.metric && (
-                <span className="mono-meta">
-                  {s.metric.label}: {s.metric.value}
-                </span>
-              )}
-            </div>
-          </div>
-        ))}
+          )
+        })}
 
         <div className="chapter-divider">
           <span className="ornament">✦ ✦ ✦</span>

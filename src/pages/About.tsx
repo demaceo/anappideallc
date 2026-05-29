@@ -2,11 +2,11 @@ import { SITE } from '../data/site'
 import { differentiators } from '../data/case-studies'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
+import { IconKey, IconCode, IconShieldCheck, IconLock } from '../components/icons'
 
-const DIFFERENTIATOR_ICONS = ['🏗️', '🔧', '🚀', '🔒'] as const
-const DIFFERENTIATOR_COLORS = ['#b8860b', '#2980b9', '#27ae60', '#1a3a5c'] as const
-const DIFFERENTIATOR_BUBBLES = ['bubble-gold', 'bubble-blue', 'bubble-green', 'bubble-navy'] as const
-const DIFFERENTIATOR_LABELS = ['Ownership', 'Engineering', 'Discipline', 'Privacy'] as const
+const DIFF_ICONS = [IconKey, IconCode, IconShieldCheck, IconLock]
+const DIFF_ICON_CLASSES = ['icon-gold', 'icon-blue', 'icon-green', 'icon-navy'] as const
+const DIFF_EYEBROWS = ['Ownership', 'Engineering', 'Discipline', 'Privacy'] as const
 
 export default function About() {
   return (
@@ -39,23 +39,21 @@ export default function About() {
           <div className="section-rule" />
         </div>
 
-        {differentiators.map((d, i) => (
-          <div key={d.title} className="dialogue-entry">
-            <div className="speaker-card">
-              <div
-                className="speaker-icon"
-                style={{ background: DIFFERENTIATOR_COLORS[i] }}
-              >
-                {DIFFERENTIATOR_ICONS[i]}
+        {differentiators.map((d, i) => {
+          const DiffIcon = DIFF_ICONS[i]
+          return (
+            <div key={d.title} className="feature-item">
+              <div className={`feature-icon ${DIFF_ICON_CLASSES[i]}`}>
+                <DiffIcon size={20} />
               </div>
-              <div className="speaker-name">{DIFFERENTIATOR_LABELS[i]}</div>
+              <div className="feature-body">
+                <span className="feature-eyebrow">{DIFF_EYEBROWS[i]}</span>
+                <h3 className="feature-title">{d.title}</h3>
+                <p>{d.description}</p>
+              </div>
             </div>
-            <div className={`speech-bubble ${DIFFERENTIATOR_BUBBLES[i]}`}>
-              <h3 className="bubble-title">{d.title}</h3>
-              <p>{d.description}</p>
-            </div>
-          </div>
-        ))}
+          )
+        })}
 
         <div className="chapter-divider">
           <span className="ornament">✦ ✦ ✦</span>

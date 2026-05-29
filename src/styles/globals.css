@@ -692,6 +692,95 @@ cite:hover { background: rgba(192,57,43,0.14); }
   font-weight: 500;
 }
 
+/* ─── Feature Item — editorial layout replacing dialogue/bubble ─── */
+.feature-item {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 0 1.5rem;
+  padding: 2.25rem 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: start;
+}
+
+@media (max-width: 580px) {
+  .feature-item {
+    grid-template-columns: 1fr;
+    gap: 0.85rem 0;
+  }
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1.5px solid;
+  transition: box-shadow 0.2s var(--ease);
+}
+
+.feature-item:hover .feature-icon {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Colored app-icon treatment for project logos */
+.feature-icon.app-mark {
+  border: none;
+  border-radius: 10px;
+}
+
+/* Icon color variants */
+.icon-gold   { color: var(--gold);  border-color: rgba(184,134,11,0.4);  }
+.icon-blue   { color: #2980b9;      border-color: rgba(41,128,185,0.4);  }
+.icon-green  { color: #27ae60;      border-color: rgba(39,174,96,0.4);   }
+.icon-navy   { color: var(--navy);  border-color: rgba(26,58,92,0.4);    }
+.icon-orange { color: #d35400;      border-color: rgba(211,84,0,0.4);    }
+.icon-purple { color: #8e44ad;      border-color: rgba(142,68,173,0.4);  }
+.icon-teal   { color: #16a085;      border-color: rgba(22,160,133,0.4);  }
+
+.feature-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.feature-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+}
+
+.feature-body > p {
+  font-size: 0.975rem;
+  line-height: 1.8;
+  color: var(--ink);
+  margin-bottom: 0.75rem;
+}
+
+.feature-body > p:last-child { margin-bottom: 0; }
+
+.feature-body ul,
+.feature-body ol {
+  padding-left: 1.15rem;
+  margin-top: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+
+.feature-body li {
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+
 /* ─── Main content links ─── */
 main a {
   color: var(--accent);

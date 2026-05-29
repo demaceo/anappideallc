@@ -1,16 +1,16 @@
 import { caseStudies } from '../data/case-studies'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
+import {
+  LogoPinpoint,
+  LogoPayback,
+  LogoRentHarbor,
+  LogoFengShui,
+  LogoYapUnited,
+} from '../components/icons'
 
-const STUDY_ICONS = ['🏛️', '🔐', '🏠', '🪴', '🗣️'] as const
+const PROJECT_LOGOS = [LogoPinpoint, LogoPayback, LogoRentHarbor, LogoFengShui, LogoYapUnited]
 const STUDY_COLORS = ['#2980b9', '#1a3a5c', '#27ae60', '#d35400', '#8e44ad'] as const
-const BUBBLE_CLASSES = [
-  'bubble-blue',
-  'bubble-navy',
-  'bubble-green',
-  'bubble-orange',
-  'bubble-purple',
-] as const
 const STUDY_LABELS = ['Civic', 'Privacy', 'PropTech', 'Spatial', 'Translation'] as const
 
 export default function Work() {
@@ -67,52 +67,53 @@ export default function Work() {
           <div className="section-rule" />
         </div>
 
-        {caseStudies.map((c, i) => (
-          <div key={c.slug} className="dialogue-entry">
-            <div className="speaker-card">
+        {caseStudies.map((c, i) => {
+          const ProjectLogo = PROJECT_LOGOS[i]
+          return (
+            <div key={c.slug} className="feature-item">
               <div
-                className="speaker-icon"
+                className="feature-icon app-mark"
                 style={{ background: STUDY_COLORS[i] }}
               >
-                {STUDY_ICONS[i]}
+                <ProjectLogo size={22} color="white" strokeWidth={1.75} />
               </div>
-              <div className="speaker-name">{STUDY_LABELS[i]}</div>
-            </div>
-            <div className={`speech-bubble ${BUBBLE_CLASSES[i]}`}>
-              <h3 className="bubble-title">{c.title}</h3>
-              <p>{c.summary}</p>
-              <span className="bubble-subtitle">Outcomes</span>
-              <ul>
-                {c.outcomes.map((o) => (
-                  <li key={o}>{o}</li>
-                ))}
-              </ul>
-              <div className="stat-row">
-                {c.stats.map((s) => (
-                  <span key={s.label} className="stat-pill">
-                    <strong>{s.label}:</strong> {s.value}
+              <div className="feature-body">
+                <span className="feature-eyebrow">{STUDY_LABELS[i]}</span>
+                <h3 className="feature-title">{c.title}</h3>
+                <p>{c.summary}</p>
+                <span className="bubble-subtitle">Outcomes</span>
+                <ul>
+                  {c.outcomes.map((o) => (
+                    <li key={o}>{o}</li>
+                  ))}
+                </ul>
+                <div className="stat-row">
+                  {c.stats.map((s) => (
+                    <span key={s.label} className="stat-pill">
+                      <strong>{s.label}:</strong> {s.value}
+                    </span>
+                  ))}
+                </div>
+                <span className="mono-meta">Stack: {c.stack.join(' · ')}</span>
+                {(c.liveUrl || c.repoUrl) && (
+                  <span className="mono-meta">
+                    {c.liveUrl && (
+                      <a href={c.liveUrl} target="_blank" rel="noopener noreferrer">
+                        Live site
+                      </a>
+                    )}
+                    {c.liveUrl && c.repoUrl && ' · '}
+                    {c.repoUrl && (
+                      <a href={c.repoUrl} target="_blank" rel="noopener noreferrer">
+                        Repository
+                      </a>
+                    )}
                   </span>
-                ))}
+                )}
               </div>
-              <span className="mono-meta">Stack: {c.stack.join(' · ')}</span>
-              {(c.liveUrl || c.repoUrl) && (
-                <span className="mono-meta">
-                  {c.liveUrl && (
-                    <a href={c.liveUrl} target="_blank" rel="noopener noreferrer">
-                      Live site
-                    </a>
-                  )}
-                  {c.liveUrl && c.repoUrl && ' · '}
-                  {c.repoUrl && (
-                    <a href={c.repoUrl} target="_blank" rel="noopener noreferrer">
-                      Repository
-                    </a>
-                  )}
-                </span>
-              )}
             </div>
-          </div>
-        ))}
+          )
+        })}
       </main>
 
       <footer className="sources-section">

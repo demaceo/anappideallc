@@ -1,10 +1,10 @@
 import { processSteps } from '../data/process'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
+import { IconSearch, IconEdit, IconTerminal, IconSend } from '../components/icons'
 
-const STEP_ICONS = ['🔍', '🎨', '⚙️', '🚀'] as const
-const STEP_COLORS = ['#1a3a5c', '#8e44ad', '#27ae60', '#d35400'] as const
-const BUBBLE_CLASSES = ['bubble-navy', 'bubble-purple', 'bubble-green', 'bubble-orange'] as const
+const PROCESS_ICONS = [IconSearch, IconEdit, IconTerminal, IconSend]
+const PROCESS_ICON_CLASSES = ['icon-navy', 'icon-purple', 'icon-green', 'icon-orange'] as const
 
 export default function Process() {
   return (
@@ -59,36 +59,33 @@ export default function Process() {
           <div className="section-rule" />
         </div>
 
-        {processSteps.map((p, i) => (
-          <div key={p.step} className="dialogue-entry">
-            <div className="speaker-card">
-              <div
-                className="speaker-icon"
-                style={{ background: STEP_COLORS[i] }}
-              >
-                {STEP_ICONS[i]}
+        {processSteps.map((p, i) => {
+          const ProcessIcon = PROCESS_ICONS[i]
+          return (
+            <div key={p.step} className="feature-item">
+              <div className={`feature-icon ${PROCESS_ICON_CLASSES[i]}`}>
+                <ProcessIcon size={20} />
               </div>
-              <div className="speaker-name">Phase {p.step}</div>
+              <div className="feature-body">
+                <span className="feature-eyebrow">Phase {p.step} · {p.timeline}</span>
+                <h3 className="feature-title">{p.title}</h3>
+                <p>{p.description}</p>
+                <span className="bubble-subtitle">Steps</span>
+                <ul>
+                  {p.substeps.map((s) => (
+                    <li key={s}>{s}</li>
+                  ))}
+                </ul>
+                <span className="bubble-subtitle">Deliverables</span>
+                <ul>
+                  {p.deliverables.map((d) => (
+                    <li key={d}>{d}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            <div className={`speech-bubble ${BUBBLE_CLASSES[i]}`}>
-              <h3 className="bubble-title">{p.title}</h3>
-              <span className="mono-meta">Timeline: {p.timeline}</span>
-              <p>{p.description}</p>
-              <span className="bubble-subtitle">Steps</span>
-              <ul>
-                {p.substeps.map((s) => (
-                  <li key={s}>{s}</li>
-                ))}
-              </ul>
-              <span className="bubble-subtitle">Deliverables</span>
-              <ul>
-                {p.deliverables.map((d) => (
-                  <li key={d}>{d}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ))}
+          )
+        })}
 
         <div className="verdict-box">
           <p>
