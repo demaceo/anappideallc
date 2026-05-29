@@ -1,4 +1,4 @@
-import { Link } from 'react-router'
+import { Link, useLocation } from 'react-router'
 
 const NAV_LINKS = [
   { to: '/about',    label: 'About',    color: '#b8860b' },
@@ -9,8 +9,16 @@ const NAV_LINKS = [
 ] as const
 
 export function SiteNav() {
+  const { pathname } = useLocation()
+
   return (
     <nav className="personas-bar" aria-label="Main navigation">
+      {pathname !== '/' && (
+        <Link to="/" className="persona-tag">
+          <span className="persona-dot" style={{ background: '#6b7280' }} />
+          <span>Home</span>
+        </Link>
+      )}
       {NAV_LINKS.map(({ to, label, color }) => (
         <Link key={to} to={to} className="persona-tag">
           <span className="persona-dot" style={{ background: color }} />
