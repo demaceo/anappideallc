@@ -33,7 +33,9 @@ export function RouteHead({ path, title, description }: RouteHeadProps) {
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content={SITE.social.twitter} />
+      {SITE.social.twitter && (
+        <meta name="twitter:site" content={SITE.social.twitter} />
+      )}
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />

@@ -1,4 +1,4 @@
-import { SITE } from '../data/site'
+import { SITE, SAME_AS } from '../data/site'
 import { services } from '../data/services'
 import { caseStudies } from '../data/case-studies'
 import { processSteps } from '../data/process'
@@ -68,6 +68,10 @@ function buildBaseGraph(): object[] {
         addressCountry: 'US',
       },
       email: SITE.email,
+      // sameAs ties this domain to the business's verified profiles, the
+      // strongest on-page signal for Knowledge Graph entity recognition.
+      // Omitted entirely until at least one real profile URL is configured.
+      ...(SAME_AS.length ? { sameAs: SAME_AS } : {}),
       slogan: SITE.tagline,
       priceRange: '$$',
       areaServed: { '@type': 'Country', name: 'United States' },
