@@ -1,8 +1,11 @@
+import { useState } from 'react'
 import { SITE } from '../data/site'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconEdit, IconSearch, IconSend } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+
+type Status = 'idle' | 'sending' | 'sent' | 'error'
 
 const PROMPTS = [
   {
@@ -29,10 +32,27 @@ const PROMPTS = [
 ] as const
 
 export default function Contact() {
-  const subject = encodeURIComponent('App idea — initial contact')
-  const body = encodeURIComponent(
-    `Hi ${SITE.founder.name.split(' ')[0]},\n\nI have an idea for a [mobile app / website] and I'd like to talk through what it would take to ship it.\n\nThe idea:\n\n\nWhere I am:\n\n\nBudget range:\n\n— `,
-  )
+  const [fields, setFields] = useState({ name: '', email: '', message: '' })
+  const [status, setStatus] = useState<Status>('idle')
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    setFields(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setStatus('sending')
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(fields),
+      })
+      setStatus(res.ok ? 'sent' : 'error')
+    } catch {
+      setStatus('error')
+    }
+  }
 
   return (
     <>
@@ -59,18 +79,80 @@ export default function Contact() {
           </p>
         </div>
 
-        <div className="contact-hero">
-          <span className="contact-hero-label">Send an email</span>
-          <a
-            href={`mailto:${SITE.email}?subject=${subject}&body=${body}`}
-            className="contact-hero-email"
-          >
-            {SITE.email}
-          </a>
-          <span className="contact-hero-sub">
-            Responds within 1–2 business days · Denver, MT
-          </span>
-        </div>
+        {status === 'sent' ? (
+          <div className="contact-form">
+            <span className="contact-form-eyebrow">Message received</span>
+            <p className="contact-form-title">Thanks — I'll be in touch.</p>
+            <p className="contact-form-sub">
+              Expect a reply within 1–2 business days.
+            </p>
+          </div>
+        ) : (
+          <form className="contact-form" onSubmit={handleSubmit} noValidate>
+            <span className="contact-form-eyebrow">Send a message</span>
+            <p className="contact-form-title">Tell me about your idea.</p>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label" htmlFor="cf-name">Name</label>
+                <input
+                  id="cf-name"
+                  className="form-input"
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  placeholder="Your name"
+                  required
+                  value={fields.name}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="cf-email">Email</label>
+                <input
+                  id="cf-email"
+                  className="form-input"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  required
+                  value={fields.email}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label" htmlFor="cf-message">Message</label>
+              <textarea
+                id="cf-message"
+                className="form-textarea"
+                name="message"
+                placeholder={`What does it do, who's it for, and where are you in the process?`}
+                required
+                value={fields.message}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-submit-row">
+              <button
+                className="form-submit-btn"
+                type="submit"
+                disabled={status === 'sending'}
+              >
+                {status === 'sending' ? 'Sending…' : 'Send message'}
+              </button>
+              {status === 'error' && (
+                <span className="form-status error">
+                  Something went wrong — try {' '}
+                  <a href={`mailto:${SITE.email}`}>emailing directly</a>.
+                </span>
+              )}
+            </div>
+          </form>
+        )}
 
         <div className="section-header">
           <span className="section-num">What to include</span>
