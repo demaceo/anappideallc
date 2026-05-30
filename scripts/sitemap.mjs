@@ -29,13 +29,22 @@ async function main() {
   const base = 'https://www.anappidea.llc'
   const today = new Date().toISOString().split('T')[0]
 
+  const PRIORITIES = {
+    '/': { priority: '1.0', changefreq: 'weekly' },
+    '/services': { priority: '0.9', changefreq: 'monthly' },
+    '/work': { priority: '0.9', changefreq: 'monthly' },
+    '/contact': { priority: '0.8', changefreq: 'monthly' },
+    '/about': { priority: '0.8', changefreq: 'monthly' },
+    '/process': { priority: '0.7', changefreq: 'monthly' },
+  }
+
   const urls = PRERENDER_PATHS.map((p) => {
     const loc = p === '/' ? base : `${base}${p}`
-    const priority = p === '/' ? '1.0' : '0.8'
+    const { priority, changefreq } = PRIORITIES[p] ?? { priority: '0.7', changefreq: 'monthly' }
     return `  <url>
     <loc>${loc}</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>`
   }).join('\n')
