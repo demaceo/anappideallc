@@ -5,35 +5,11 @@ import { RouteFocusReset } from './components/RouteFocusReset'
 function AppShell() {
   const { pathname } = useLocation()
 
-  // Reset progress to 0 on every route change (scroll resets to top)
+  // Scroll to top on every route change so the header always starts expanded.
+  // RouteFocusReset uses preventScroll:true, so this is the only scroll reset.
   useEffect(() => {
-    document.documentElement.style.setProperty('--header-progress', '0')
+    window.scrollTo(0, 0)
   }, [pathname])
-
-  useEffect(() => {
-    const COLLAPSE_START = 60
-    const COLLAPSE_RANGE = 140
-    let ticking = false
-    let last = -1
-
-    const update = () => {
-      const raw = Math.min(1, Math.max(0, (window.scrollY - COLLAPSE_START) / COLLAPSE_RANGE))
-      const progress = Math.round(raw * 100) / 100
-      if (progress !== last) {
-        document.documentElement.style.setProperty('--header-progress', progress.toFixed(2))
-        last = progress
-      }
-      ticking = false
-    }
-
-    const onScroll = () => {
-      if (!ticking) { requestAnimationFrame(update); ticking = true }
-    }
-
-    update()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   return (
     <>
