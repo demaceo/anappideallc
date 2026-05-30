@@ -49,17 +49,43 @@ button:focus-visible {
   padding: 0 clamp(1rem, 4vw, 2rem);
 }
 
+/* ─── Scroll-driven keyframes (Chrome 115+, Firefox 114+, Safari 18+) ─── */
+@keyframes masthead-collapse {
+  from { padding-top: clamp(2.25rem, 6vw, 4rem); padding-bottom: clamp(1.75rem, 4vw, 3rem); }
+  to   { padding-top: 0.65rem;                   padding-bottom: 0.5rem;                    }
+}
+@keyframes overline-collapse {
+  from { max-height: 3rem;  opacity: 1; margin-bottom: 1.3rem; }
+  to   { max-height: 0;     opacity: 0; margin-bottom: 0;      }
+}
+@keyframes h1-collapse {
+  from { font-size: clamp(2rem, 5.5vw, 3.75rem); margin-bottom: 0.75rem; }
+  to   { font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-bottom: 0;      }
+}
+@keyframes subtitle-collapse {
+  from { max-height: 10rem; opacity: 1; margin-top: 0.65rem; }
+  to   { max-height: 0;     opacity: 0; margin-top: 0;       }
+}
+@keyframes dateline-collapse {
+  from { max-height: 4rem;  opacity: 1; margin-top: 1.75rem; }
+  to   { max-height: 0;     opacity: 0; margin-top: 0;       }
+}
+@keyframes back-home-track {
+  from { top: 1.5rem;  }
+  to   { top: 0.55rem; }
+}
+
 /* ─── SECTION 4: Masthead / hero header ─── */
 .masthead {
   background: var(--ink);
   color: var(--paper);
-  padding:
-    calc(clamp(2.25rem, 6vw, 4rem) * (1 - var(--header-progress)) + 0.65rem * var(--header-progress))
-    clamp(1rem, 4vw, 2rem)
-    calc(clamp(1.75rem, 4vw, 3rem) * (1 - var(--header-progress)) + 0.5rem * var(--header-progress));
+  padding: clamp(2.25rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem) clamp(1.75rem, 4vw, 3rem);
   text-align: center;
   position: relative;
   overflow: hidden;
+  animation: masthead-collapse linear both;
+  animation-timeline: scroll();
+  animation-range: 60px 200px;
 }
 
 .page-header-wrap {
@@ -104,21 +130,21 @@ button:focus-visible {
   text-transform: uppercase;
   color: var(--gold);
   overflow: hidden;
-  margin-bottom: calc(1.3rem * (1 - var(--header-progress)));
-  max-height: calc(3rem * (1 - var(--header-progress)));
-  opacity: calc(1 - var(--header-progress));
+  animation: overline-collapse linear both;
+  animation-timeline: scroll();
+  animation-range: 60px 200px;
 }
 
 .masthead h1 {
   font-family: 'Playfair Display', serif;
-  font-size: calc(
-    clamp(2rem, 5.5vw, 3.75rem) * (1 - var(--header-progress)) +
-    clamp(1.1rem, 2.5vw, 1.5rem) * var(--header-progress)
-  );
+  font-size: clamp(2rem, 5.5vw, 3.75rem);
   font-weight: 900;
   line-height: 1.12;
   letter-spacing: -0.02em;
-  margin-bottom: calc(0.75rem * (1 - var(--header-progress)));
+  margin-bottom: 0.75rem;
+  animation: h1-collapse linear both;
+  animation-timeline: scroll();
+  animation-range: 60px 200px;
 }
 
 .masthead h1 em { font-style: italic; color: var(--accent); }
@@ -128,11 +154,12 @@ button:focus-visible {
   font-size: 1.05rem;
   color: rgba(245,240,232,0.82);
   max-width: 580px;
-  margin: calc(0.65rem * (1 - var(--header-progress))) auto 0;
+  margin: 0.65rem auto 0;
   line-height: 1.78;
   overflow: hidden;
-  max-height: calc(10rem * (1 - var(--header-progress)));
-  opacity: calc(1 - var(--header-progress));
+  animation: subtitle-collapse linear both;
+  animation-timeline: scroll();
+  animation-range: 60px 200px;
 }
 
 .date-line {
@@ -142,9 +169,9 @@ button:focus-visible {
   text-transform: uppercase;
   color: rgba(245,240,232,0.52);
   overflow: hidden;
-  margin-top: calc(1.75rem * (1 - var(--header-progress)));
-  max-height: calc(4rem * (1 - var(--header-progress)));
-  opacity: calc(1 - var(--header-progress));
+  animation: dateline-collapse linear both;
+  animation-timeline: scroll();
+  animation-range: 60px 200px;
 }
 
 
@@ -197,7 +224,7 @@ button:focus-visible {
 /* ─── Back-to-home button — absolute within .page-header-wrap ─── */
 .back-home {
   position: absolute;
-  top: calc(1.5rem * (1 - var(--header-progress)) + 0.55rem * var(--header-progress));
+  top: 1.5rem;
   left: 1.5rem;
   z-index: 25;
   font-family: 'IBM Plex Mono', monospace;
@@ -206,7 +233,10 @@ button:focus-visible {
   color: var(--gold);
   text-decoration: none;
   line-height: 1;
-  transition: color 0.2s var(--ease), opacity 0.2s var(--ease);
+  transition: color 0.2s var(--ease);
+  animation: back-home-track linear both;
+  animation-timeline: scroll();
+  animation-range: 60px 200px;
 }
 .back-home:hover { color: var(--paper); }
 
@@ -866,6 +896,147 @@ cite:hover { background: rgba(192,57,43,0.14); }
   display: block;
   margin-top: 0.15rem;
 }
+
+/* ─── Contact Form ─── */
+.contact-form {
+  background: var(--ink);
+  margin: 1.75rem 0 0.5rem;
+  padding: 2rem clamp(1.25rem, 4vw, 2.25rem) 2.25rem clamp(1.5rem, 4vw, 2.75rem);
+  border-left: 4px solid var(--gold);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.contact-form::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--gold) 0% 35%, transparent 100%);
+}
+
+.contact-form-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.62);
+  display: block;
+}
+
+.contact-form-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: 700;
+  color: var(--paper);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.contact-form-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.52);
+  margin: 0;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 580px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.form-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.62);
+}
+
+.form-input,
+.form-textarea {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(245,240,232,0.18);
+  padding: 0.7rem 0.9rem;
+  color: var(--paper);
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 0.975rem;
+  line-height: 1.6;
+  width: 100%;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+  appearance: none;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: rgba(245,240,232,0.28);
+  font-style: italic;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(255,255,255,0.09);
+}
+
+.form-textarea {
+  min-height: 148px;
+  resize: vertical;
+}
+
+.form-submit-row {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+  padding-top: 0.25rem;
+}
+
+.form-submit-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--accent);
+  border: none;
+  padding: 0.75rem 1.6rem;
+  cursor: pointer;
+  transition: background 0.2s var(--ease), opacity 0.2s var(--ease);
+  border-radius: 0;
+}
+
+.form-submit-btn:hover:not(:disabled) { background: #a93226; }
+.form-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.form-status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  line-height: 1.55;
+}
+
+.form-status.error { color: #e57368; }
+.form-status.error a { color: #e57368; text-decoration: underline; }
 
 /* ─── Main content links ─── */
 main a {
