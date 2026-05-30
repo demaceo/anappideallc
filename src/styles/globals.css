@@ -674,7 +674,9 @@ cite:hover { background: rgba(192,57,43,0.14); }
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--muted);
-  flex-shrink: 0;
+  /* Allow the label to wrap rather than overflow the row on very narrow
+     screens (same flex-row anti-pattern as .section-header). */
+  min-width: 0;
 }
 
 .sources-header-rule { flex: 1; height: 1px; background: var(--rule); }
