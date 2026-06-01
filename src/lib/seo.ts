@@ -20,9 +20,9 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/about',
   },
   '/work': {
-    title: `Work — 5 Shipped Mobile Apps & Web Products | ${SITE.name}`,
+    title: `Work — 11 Shipped Apps & Web Products | ${SITE.name}`,
     description:
-      '5 apps shipped solo: Pinpoint (civic AI), Payback (privacy analytics), RentHarbor (PropTech), Feng Shui (spatial AI), Yap United (live translation). React Native, TypeScript, full-stack.',
+      '11 products shipped: Pinpoint (civic AI), Payback (privacy analytics), RentHarbor (PropTech), Feng Shui (spatial AI), Yap United (translation), Zoori, HITLDI, and more. React Native, TypeScript, full-stack.',
     path: '/work',
   },
   '/services': {
@@ -42,6 +42,72 @@ export const META: Record<string, { title: string; description: string; path: st
     description:
       'Ready to build your mobile app or website? Contact Demaceo Vincent at An App Idea LLC. Early-stage conversations welcome. MVPs in 6–8 weeks. Reply within 1–2 business days.',
     path: '/contact',
+  },
+  '/work/pinpoint-civic-engagement': {
+    title: `Pinpoint — Civic Engagement Platform | ${SITE.name}`,
+    description:
+      'How Demaceo Vincent built Pinpoint: a civic platform across iOS, Android, and web with AI voice chat, legislation data, surveys, moderation, and an Express + Prisma + PostgreSQL backend.',
+    path: '/work/pinpoint-civic-engagement',
+  },
+  '/work/payback-consumer-intelligence': {
+    title: `Payback — Privacy-First Consumer Intelligence | ${SITE.name}`,
+    description:
+      'Case study: Payback, a privacy-first consumer intelligence app with on-device AES-256 encrypted SQLite, 135 behavioral categories, and a hardened Gemini AI proxy.',
+    path: '/work/payback-consumer-intelligence',
+  },
+  '/work/rentharbor-property-management': {
+    title: `RentHarbor — Property Management Platform | ${SITE.name}`,
+    description:
+      'Case study: RentHarbor, a multi-role property management SaaS for landlords, tenants, and admins with Supabase RLS, realtime subscriptions, 3D previews, and a PWA build.',
+    path: '/work/rentharbor-property-management',
+  },
+  '/work/feng-shui-room-analysis': {
+    title: `Feng Shui — Spatial AI Room Analyzer | ${SITE.name}`,
+    description:
+      'Case study: Feng Shui, a spatial AI app that turns a hand-drawn floor plan into a furnished 3D model, analyzes it with Gemini, and animates alternative layouts with score comparisons.',
+    path: '/work/feng-shui-room-analysis',
+  },
+  '/work/yap-united-live-translation': {
+    title: `Yap United — Real-Time Translation App | ${SITE.name}`,
+    description:
+      'Case study: Yap United, a real-time translation app with Gemini Live audio, ElevenLabs TTS, 15 languages, L/R earpiece routing, and location-based community chat.',
+    path: '/work/yap-united-live-translation',
+  },
+  '/work/drayage-drivers': {
+    title: `Drayage Drivers — Logistics TMS & WMS App | ${SITE.name}`,
+    description:
+      'Case study: DrayagePro, a React Native TMS and WMS for drayage brokers with a terminal-style UI, load board, carrier CRM, PDF invoicing, and real-time warehouse inventory.',
+    path: '/work/drayage-drivers',
+  },
+  '/work/zoori-pet-care': {
+    title: `Zoori — Dog Adoption Platform | ${SITE.name}`,
+    description:
+      'Case study: Zoori, a bilingual Expo app connecting Puerto Rico rescue organizations with adopters via swipe-based discovery, application workflows, in-app messaging, and push notifications.',
+    path: '/work/zoori-pet-care',
+  },
+  '/work/hitldi-platform': {
+    title: `HITLDI — Truck Loan Delinquency Index | ${SITE.name}`,
+    description:
+      'Case study: HITLDI, a data analytics platform for the Hudson Insights Truck-Loan Delinquency Index with a Databricks medallion pipeline, FastAPI backend, and ML nowcasting.',
+    path: '/work/hitldi-platform',
+  },
+  '/work/unmasked-coaching': {
+    title: `Unmasked Coaching — Coaching Website | ${SITE.name}`,
+    description:
+      'Case study: Unmasked Coaching, a React 19 website with a Three.js silk background, Framer Motion animations, Calendly booking integration, and full SEO on Vercel.',
+    path: '/work/unmasked-coaching',
+  },
+  '/work/timeless-coach-consult': {
+    title: `Timeless Coach Consult — Life Coaching Website | ${SITE.name}`,
+    description:
+      'Case study: Timeless Coaching & Consulting, a fully static Next.js 16 site with Tailwind CSS v4, editorial typography, service packages, and a curated resource library.',
+    path: '/work/timeless-coach-consult',
+  },
+  '/work/portfolio': {
+    title: `Portfolio — demaceo.com | ${SITE.name}`,
+    description:
+      "Case study: Demaceo Vincent's personal portfolio with a Macintosh System 7-inspired UI, draggable windows, animated project gallery, and PDF resume export — built with Next.js 15.",
+    path: '/work/portfolio',
   },
 }
 

@@ -190,3 +190,68 @@ export function LogoYapUnited(p: IconProps) {
     </Svg>
   )
 }
+
+export function LogoDrayage(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <rect x="1" y="3" width="15" height="13" rx="1" />
+      <path d="M16 8h4l3 3v5h-7V8z" />
+      <circle cx="5.5" cy="18.5" r="2.5" />
+      <circle cx="18.5" cy="18.5" r="2.5" />
+    </Svg>
+  )
+}
+
+export function LogoZoori(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M6 20v-2a6 6 0 0 1 12 0v2" />
+      <path d="M4 9c-1.5-1-2-3-1-4.5" />
+      <path d="M20 9c1.5-1 2-3 1-4.5" />
+    </Svg>
+  )
+}
+
+export function LogoHITLDI(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 8v4l3 3" />
+      <path d="M8 12H4" />
+      <path d="M20 12h-4" />
+      <path d="M12 4V2" />
+    </Svg>
+  )
+}
+
+export function LogoUnmasked(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z" />
+      <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+      <line x1="9" y1="9" x2="9.01" y2="9" />
+      <line x1="15" y1="9" x2="15.01" y2="9" />
+    </Svg>
+  )
+}
+
+export function LogoTimeless(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </Svg>
+  )
+}
+
+export function LogoPortfolio(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+      <line x1="12" y1="12" x2="12" y2="16" />
+      <line x1="10" y1="14" x2="14" y2="14" />
+    </Svg>
+  )
+}

@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import { caseStudies } from '../data/case-studies'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
@@ -8,11 +9,53 @@ import {
   LogoRentHarbor,
   LogoFengShui,
   LogoYapUnited,
+  LogoDrayage,
+  LogoZoori,
+  LogoHITLDI,
+  LogoUnmasked,
+  LogoTimeless,
+  LogoPortfolio,
 } from '../components/icons'
 
-const PROJECT_LOGOS = [LogoPinpoint, LogoPayback, LogoRentHarbor, LogoFengShui, LogoYapUnited]
-const STUDY_COLORS = ['#2980b9', '#1a3a5c', '#27ae60', '#d35400', '#8e44ad'] as const
-const STUDY_LABELS = ['Civic', 'Privacy', 'PropTech', 'Spatial', 'Translation'] as const
+const PROJECT_LOGOS = [
+  LogoPinpoint,
+  LogoPayback,
+  LogoRentHarbor,
+  LogoFengShui,
+  LogoYapUnited,
+  LogoDrayage,
+  LogoZoori,
+  LogoHITLDI,
+  LogoUnmasked,
+  LogoTimeless,
+  LogoPortfolio,
+]
+const STUDY_COLORS = [
+  '#2980b9',
+  '#1a3a5c',
+  '#27ae60',
+  '#d35400',
+  '#8e44ad',
+  '#c0392b',
+  '#16a085',
+  '#2c3e50',
+  '#e67e22',
+  '#8e44ad',
+  '#2980b9',
+] as const
+const STUDY_LABELS = [
+  'Civic',
+  'Privacy',
+  'PropTech',
+  'Spatial',
+  'Translation',
+  'Logistics',
+  'Pet Care',
+  'Platform',
+  'Coaching',
+  'Consulting',
+  'Portfolio',
+] as const
 
 export default function Work() {
   return (
@@ -23,16 +66,16 @@ export default function Work() {
         <header className="masthead">
           <p className="overline">An App Idea LLC · Shipped products</p>
           <h1>Work</h1>
-          <p className="date-line">Five solo builds</p>
+          <p className="date-line">Eleven shipped products</p>
         </header>
       </PageHeader>
 
       <main className="container">
         <div className="intro-block">
           <p>
-            Five products shipped end-to-end — interface, backend, auth,
-            payments, moderation, and deploy. Each one solves a real workflow
-            rather than showcasing a trick.
+            Eleven products shipped end-to-end — mobile apps, logistics tools,
+            data platforms, and client sites. Interface, backend, auth, CI, and
+            deploy. Each one solves a real workflow rather than showcasing a trick.
           </p>
         </div>
 
@@ -45,8 +88,8 @@ export default function Work() {
         <div className="stats-grid">
           <div className="stat-box neutral">
             <span className="stat-label-top">Products shipped</span>
-            <span className="stat-num large">5</span>
-            <span className="stat-desc">iOS · Android · Web</span>
+            <span className="stat-num large">11</span>
+            <span className="stat-desc">Mobile · Web · Data</span>
           </div>
           <div className="stat-box positive">
             <span className="stat-label-top">Longest solo build</span>
@@ -62,14 +105,14 @@ export default function Work() {
 
         <div className="section-header">
           <span className="section-num">Case studies</span>
-          <h2>Five shipped products</h2>
+          <h2>Eleven shipped products</h2>
           <div className="section-rule" />
         </div>
 
         {caseStudies.map((c, i) => {
           const ProjectLogo = PROJECT_LOGOS[i]
           return (
-            <div key={c.slug} className="feature-item">
+            <Link key={c.slug} to={`/work/${c.slug}`} className="feature-item feature-item--linked">
               <div
                 className="feature-icon app-mark"
                 style={{ background: STUDY_COLORS[i] }}
@@ -94,23 +137,9 @@ export default function Work() {
                   ))}
                 </div>
                 <span className="mono-meta">Stack: {c.stack.join(' · ')}</span>
-                {(c.liveUrl || c.repoUrl) && (
-                  <span className="mono-meta">
-                    {c.liveUrl && (
-                      <a href={c.liveUrl} target="_blank" rel="noopener noreferrer">
-                        Live site
-                      </a>
-                    )}
-                    {c.liveUrl && c.repoUrl && ' · '}
-                    {c.repoUrl && (
-                      <a href={c.repoUrl} target="_blank" rel="noopener noreferrer">
-                        Repository
-                      </a>
-                    )}
-                  </span>
-                )}
+                <span className="feature-cta">View case study →</span>
               </div>
-            </div>
+            </Link>
           )
         })}
       </main>
