@@ -49,7 +49,7 @@
 - **Double-click is single-fire** — rapid double-click on Work results in one navigation to `/work`. No queue.
 - **Reduced-motion path skips chain** — with CSS override + `matchMedia('prefers-reduced-motion')` mocked to true, Work click navigated in ~100 ms (vs ~1500 ms normal). Brand pulse computed to `0.001 s` duration (effectively off).
 - **No console errors on direct navigation to any inner route** (`/about`, `/work`, `/services`, `/process`, `/contact`).
-- **AuroraChamber renders on `/contact`** with cyan + magenta radials, stars, vignette, "Contact" heading and `hello@anappidea.llc` link readable on top.
+- **AuroraChamber renders on `/contact`** with cyan + magenta radials, stars, vignette, "Contact" heading and `hello@milehighinterface.com` link readable on top.
 - **Multi-viewport survives** — Editorial Hardware material recipe preserved at 1024 × 768 (tablet) and 414 × 896 (mobile). Mobile reflows to single-column with About+AAI as a small paired row. No layout glitches.
 
 ## Spec compliance

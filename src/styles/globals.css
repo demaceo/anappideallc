@@ -20,6 +20,7 @@
 
   --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --header-progress: 0;
+  --collapse-range: 60px 200px;   /* scroll range over which the masthead collapses */
 }
 
 /* ─── SECTION 3: Global page setup ─── */
@@ -74,6 +75,12 @@ button:focus-visible {
   from { top: 1.5rem;  }
   to   { top: 0.55rem; }
 }
+/* Mobile only: collapse the wrapped nav into a single, horizontally
+   scrollable row so the sticky header shrinks to a slim bar when scrolled. */
+@keyframes personas-collapse {
+  from { padding-top: 0.85rem; padding-bottom: 1rem;   flex-wrap: wrap;   justify-content: center;     overflow-x: hidden; }
+  to   { padding-top: 0.4rem;  padding-bottom: 0.4rem; flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto;   }
+}
 
 /* ─── SECTION 4: Masthead / hero header ─── */
 .masthead {
@@ -85,7 +92,7 @@ button:focus-visible {
   overflow: hidden;
   animation: masthead-collapse linear both;
   animation-timeline: scroll();
-  animation-range: 60px 200px;
+  animation-range: var(--collapse-range);
 }
 
 .page-header-wrap {
@@ -132,7 +139,7 @@ button:focus-visible {
   overflow: hidden;
   animation: overline-collapse linear both;
   animation-timeline: scroll();
-  animation-range: 60px 200px;
+  animation-range: var(--collapse-range);
 }
 
 .masthead h1 {
@@ -144,7 +151,7 @@ button:focus-visible {
   margin-bottom: 0.75rem;
   animation: h1-collapse linear both;
   animation-timeline: scroll();
-  animation-range: 60px 200px;
+  animation-range: var(--collapse-range);
 }
 
 .masthead h1 em { font-style: italic; color: var(--accent); }
@@ -159,7 +166,7 @@ button:focus-visible {
   overflow: hidden;
   animation: subtitle-collapse linear both;
   animation-timeline: scroll();
-  animation-range: 60px 200px;
+  animation-range: var(--collapse-range);
 }
 
 .date-line {
@@ -171,7 +178,7 @@ button:focus-visible {
   overflow: hidden;
   animation: dateline-collapse linear both;
   animation-timeline: scroll();
-  animation-range: 60px 200px;
+  animation-range: var(--collapse-range);
 }
 
 
@@ -218,7 +225,26 @@ button:focus-visible {
 }
 
 @media (max-width: 640px) {
-  .personas-bar { padding: 0.85rem 1rem 1rem; gap: 0.45rem; }
+  /* On small screens, collapse the masthead almost immediately as the user
+     scrolls so the sticky header reclaims vertical space sooner. */
+  :root { --collapse-range: 12px 130px; }
+
+  /* Slim-bar nav: starts as a centered, wrapped 2-row bar at the top of the
+     page and collapses to a single, horizontally scrollable row when scrolled
+     (see @keyframes personas-collapse). */
+  .personas-bar {
+    padding: 0.85rem 1rem 1rem;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+    animation: personas-collapse linear both;
+    animation-timeline: scroll();
+    animation-range: var(--collapse-range);
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .personas-bar::-webkit-scrollbar { display: none; }
+  /* Keep tags at full size and let the row scroll instead of squashing them. */
+  .persona-tag { flex-shrink: 0; }
 }
 
 /* ─── Back-to-home button — absolute within .page-header-wrap ─── */
@@ -236,7 +262,7 @@ button:focus-visible {
   transition: color 0.2s var(--ease);
   animation: back-home-track linear both;
   animation-timeline: scroll();
-  animation-range: 60px 200px;
+  animation-range: var(--collapse-range);
 }
 .back-home:hover { color: var(--paper); }
 
@@ -307,6 +333,25 @@ button:focus-visible {
   min-width: 20px;
   position: relative;
   top: -0.2em;
+}
+
+/* On narrow screens, stack the eyebrow, heading and rule so the heading can
+   wrap to multiple lines instead of being clipped by the row's overflow. */
+@media (max-width: 640px) {
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+  }
+  .section-header h2 {
+    flex-shrink: 1;
+  }
+  .section-header .section-rule {
+    flex: none;
+    width: 100%;
+    top: 0;
+    margin-top: 0.35rem;
+  }
 }
 
 /* ─── SECTION 8: Stat / data callout boxes ─── */
@@ -650,7 +695,9 @@ cite:hover { background: rgba(192,57,43,0.14); }
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--muted);
-  flex-shrink: 0;
+  /* Allow the label to wrap rather than overflow the row on very narrow
+     screens (same flex-row anti-pattern as .section-header). */
+  min-width: 0;
 }
 
 .sources-header-rule { flex: 1; height: 1px; background: var(--rule); }
