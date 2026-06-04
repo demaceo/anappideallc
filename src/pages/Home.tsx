@@ -1,9 +1,11 @@
+import { Link } from 'react-router'
 import { SITE } from '../data/site'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconZap, IconLayers, IconGlobe, IconBarChart } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
 
 const SERVICE_ICONS = [IconZap, IconLayers, IconGlobe, IconBarChart]
 const SERVICE_ICON_CLASSES = ['icon-green', 'icon-blue', 'icon-teal', 'icon-orange'] as const
@@ -94,16 +96,34 @@ export default function Home() {
         </div>
 
         <div className="section-header">
+          <span className="section-num">Human vs AI</span>
+          <h2>Why a builder, not just a bot</h2>
+          <div className="section-rule" />
+        </div>
+
+        <div className="verdict-box context">
+          <p>
+            "Just prompt an AI and ship it" gets you a head start — and stops
+            there. Wireframing, testing, security, App Store launch, and
+            maintenance each need a dedicated human.{' '}
+            <Link to="/why-not-ai">Here's the honest case for working with a person →</Link>
+          </p>
+        </div>
+
+        <div className="section-header">
           <span className="section-num">Contact</span>
           <h2>Start a conversation</h2>
           <div className="section-rule" />
         </div>
 
+        <ConsultCTA />
+
         <div className="verdict-box contact">
           <p>
-            Got an app or website idea, or a project that needs a co-builder?
-            Send a few sentences to{' '}
-            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+            Prefer to write? Got an app or website idea, or a project that needs
+            a co-builder? Send a few sentences to{' '}
+            <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or use the{' '}
+            <Link to="/contact">guided form</Link>.
             I read everything and respond within 1–2 business days.
           </p>
         </div>

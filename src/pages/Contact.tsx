@@ -1,12 +1,75 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { SITE } from '../data/site'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
-import { IconEdit, IconSearch, IconSend } from '../components/icons'
+import {
+  IconEdit, IconSearch, IconSend, IconSmartphone, IconMonitor, IconLayers,
+  IconHelpCircle, IconUsers, IconTrendingUp, IconCompass, IconArrowLeft,
+  IconArrowRight, IconCheck,
+} from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
+import { VoiceNote, type VoiceNoteData } from '../components/VoiceNote/VoiceNote'
 
 type Status = 'idle' | 'sending' | 'sent' | 'error'
+type ProjectType = 'website' | 'app' | 'both' | 'unsure' | ''
+type Platform = 'ios' | 'android' | 'web'
+type Importance = '' | 'unsure' | 'nice' | 'important' | 'critical'
 
+interface FormData {
+  projectType: ProjectType
+  platforms: Platform[]
+  category: string
+  categoryOther: string
+  seo: Importance
+  geo: Importance
+  audience: string
+  description: string
+  name: string
+  email: string
+}
+
+const INITIAL: FormData = {
+  projectType: '',
+  platforms: [],
+  category: '',
+  categoryOther: '',
+  seo: '',
+  geo: '',
+  audience: '',
+  description: '',
+  name: '',
+  email: '',
+}
+
+const PROJECT_TYPES = [
+  { value: 'website', label: 'A website', desc: 'Marketing site, store, portfolio, or web app', Icon: IconMonitor },
+  { value: 'app', label: 'A mobile app', desc: 'iPhone and/or Android', Icon: IconSmartphone },
+  { value: 'both', label: 'Both', desc: 'An app with a companion website', Icon: IconLayers },
+  { value: 'unsure', label: "I'm not sure yet", desc: "That's completely fine — we'll figure it out together", Icon: IconHelpCircle },
+] as const
+
+const PLATFORMS = [
+  { value: 'ios', label: 'iOS App Store', desc: 'iPhone & iPad' },
+  { value: 'android', label: 'Google Play', desc: 'Android phones & tablets' },
+  { value: 'web', label: 'Web version too', desc: 'Runs in the browser' },
+] as const
+
+const CATEGORIES = [
+  'E-commerce / retail', 'Marketplace', 'Social / community', 'Productivity / SaaS',
+  'Health & fitness', 'Education', 'Finance / fintech', 'Food & restaurant',
+  'Travel & local', 'Media / content', 'Booking / services', 'Something else',
+]
+
+const IMPORTANCE_OPTS = [
+  { value: 'unsure', label: 'Not sure' },
+  { value: 'nice', label: 'Nice to have' },
+  { value: 'important', label: 'Important' },
+  { value: 'critical', label: 'Must-have' },
+] as const
+
+// The three prompts shown below the form — kept from the original page so the
+// "what to include" guidance still lives here for people who'd rather just email.
 const PROMPTS = [
   {
     icon: IconEdit,
@@ -31,22 +94,91 @@ const PROMPTS = [
   },
 ] as const
 
+type StepKey = 'type' | 'platforms' | 'reach' | 'category' | 'audience' | 'description' | 'details'
+
+function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = reader.result as string
+      // strip the "data:...;base64," prefix
+      resolve(result.slice(result.indexOf(',') + 1))
+    }
+    reader.onerror = reject
+    reader.readAsDataURL(blob)
+  })
+}
+
 export default function Contact() {
-  const [fields, setFields] = useState({ name: '', email: '', message: '' })
+  const [data, setData] = useState<FormData>(INITIAL)
+  const [voice, setVoice] = useState<VoiceNoteData | null>(null)
+  const [stepIdx, setStepIdx] = useState(0)
   const [status, setStatus] = useState<Status>('idle')
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    setFields(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  // The platforms step only applies when there's an app in the mix.
+  const steps = useMemo<StepKey[]>(() => {
+    const base: StepKey[] = ['type', 'platforms', 'reach', 'category', 'audience', 'description', 'details']
+    const showPlatforms = data.projectType === 'app' || data.projectType === 'both'
+    return base.filter((s) => (s === 'platforms' ? showPlatforms : true))
+  }, [data.projectType])
+
+  const step = steps[Math.min(stepIdx, steps.length - 1)]
+  const isLast = stepIdx >= steps.length - 1
+
+  function set<K extends keyof FormData>(key: K, value: FormData[K]) {
+    setData((prev) => ({ ...prev, [key]: value }))
   }
+
+  function togglePlatform(p: Platform) {
+    setData((prev) => ({
+      ...prev,
+      platforms: prev.platforms.includes(p)
+        ? prev.platforms.filter((x) => x !== p)
+        : [...prev.platforms, p],
+    }))
+  }
+
+  function next() {
+    if (!isLast) setStepIdx((i) => i + 1)
+  }
+  function back() {
+    if (stepIdx > 0) setStepIdx((i) => i - 1)
+  }
+
+  const canSubmit = data.name.trim() !== '' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (!isLast) {
+      next()
+      return
+    }
+    if (!canSubmit) return
     setStatus('sending')
     try {
+      const audio = voice
+        ? {
+            base64: await blobToBase64(voice.blob),
+            mimeType: voice.mimeType,
+            durationSec: Math.round(voice.durationSec),
+          }
+        : null
+
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(fields),
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          projectType: data.projectType,
+          platforms: data.platforms,
+          category: data.category === 'Something else' ? data.categoryOther : data.category,
+          seoImportance: data.seo,
+          geoImportance: data.geo,
+          audience: data.audience,
+          description: data.description,
+          audio,
+        }),
       })
       setStatus(res.ok ? 'sent' : 'error')
     } catch {
@@ -63,8 +195,8 @@ export default function Contact() {
           <p className="overline">An App Idea LLC · Denver, Colorado</p>
           <h1>Let's <em>talk.</em></h1>
           <p className="subtitle">
-            Got an app or website idea? Send a few sentences.
-            I read everything and respond within 1–2 business days.
+            Got an app or website idea? Walk through a few quick questions —
+            or just book a free call. I respond within 1–2 business days.
           </p>
           <p className="date-line">{SITE.email}</p>
         </header>
@@ -79,78 +211,273 @@ export default function Contact() {
           </p>
         </div>
 
+        <ConsultCTA
+          eyebrow="Prefer to talk?"
+          title={SITE.booking.label}
+          blurb="Skip the form and grab a free 30-minute call. Bring as much or as little as you've got."
+        />
+
         {status === 'sent' ? (
           <div className="contact-form">
             <span className="contact-form-eyebrow">Message received</span>
             <p className="contact-form-title">Thanks — I'll be in touch.</p>
             <p className="contact-form-sub">
-              Expect a reply within 1–2 business days.
+              Expect a reply within 1–2 business days{voice ? ', voice note and all' : ''}.
             </p>
           </div>
         ) : (
-          <form className="contact-form" onSubmit={handleSubmit} noValidate>
-            <span className="contact-form-eyebrow">Send a message</span>
-            <p className="contact-form-title">Tell me about your idea.</p>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label" htmlFor="cf-name">Name</label>
-                <input
-                  id="cf-name"
-                  className="form-input"
-                  name="name"
-                  type="text"
-                  autoComplete="name"
-                  placeholder="Your name"
-                  required
-                  value={fields.name}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label" htmlFor="cf-email">Email</label>
-                <input
-                  id="cf-email"
-                  className="form-input"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                  required
-                  value={fields.email}
-                  onChange={handleChange}
-                />
+          <form className="contact-form wizard" onSubmit={handleSubmit} noValidate>
+            <div className="wizard-progress">
+              <span className="wizard-step-count">
+                Step {String(stepIdx + 1).padStart(2, '0')} / {String(steps.length).padStart(2, '0')}
+              </span>
+              <div className="wizard-ticks" aria-hidden="true">
+                {steps.map((s, i) => (
+                  <span
+                    key={s}
+                    className={`wizard-tick${i === stepIdx ? ' current' : ''}${i < stepIdx ? ' done' : ''}`}
+                  />
+                ))}
               </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label" htmlFor="cf-message">Message</label>
-              <textarea
-                id="cf-message"
-                className="form-textarea"
-                name="message"
-                placeholder={`What does it do, who's it for, and where are you in the process?`}
-                required
-                value={fields.message}
-                onChange={handleChange}
-              />
-            </div>
+            {step === 'type' && (
+              <div className="wizard-step">
+                <span className="contact-form-eyebrow">Tell me about your idea</span>
+                <p className="wizard-question">What are you looking to build?</p>
+                <p className="wizard-help">Every question here is optional, and "not sure" is always a fine answer.</p>
+                <div className="choice-grid">
+                  {PROJECT_TYPES.map(({ value, label, desc, Icon }) => (
+                    <button
+                      type="button"
+                      key={value}
+                      className={`choice-card${data.projectType === value ? ' selected' : ''}`}
+                      onClick={() => set('projectType', value as ProjectType)}
+                      aria-pressed={data.projectType === value}
+                    >
+                      <span className="choice-card-icon"><Icon size={20} /></span>
+                      <span className="choice-card-label">{label}</span>
+                      <span className="choice-card-desc">{desc}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
-            <div className="form-submit-row">
-              <button
-                className="form-submit-btn"
-                type="submit"
-                disabled={status === 'sending'}
-              >
-                {status === 'sending' ? 'Sending…' : 'Send message'}
-              </button>
-              {status === 'error' && (
-                <span className="form-status error">
-                  Something went wrong — try {' '}
-                  <a href={`mailto:${SITE.email}`}>emailing directly</a>.
-                </span>
+            {step === 'platforms' && (
+              <div className="wizard-step">
+                <span className="contact-form-eyebrow">Where it should live</span>
+                <p className="wizard-question">Which app stores are you aiming for?</p>
+                <p className="wizard-help">Pick any that apply. Not sure? Leave it blank — I'll advise on what makes sense.</p>
+                <div className="choice-grid two">
+                  {PLATFORMS.map(({ value, label, desc }) => (
+                    <button
+                      type="button"
+                      key={value}
+                      className={`choice-card${data.platforms.includes(value as Platform) ? ' selected' : ''}`}
+                      onClick={() => togglePlatform(value as Platform)}
+                      aria-pressed={data.platforms.includes(value as Platform)}
+                    >
+                      <span className="choice-check">{data.platforms.includes(value as Platform) && <IconCheck size={14} />}</span>
+                      <span className="choice-card-label">{label}</span>
+                      <span className="choice-card-desc">{desc}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {step === 'category' && (
+              <div className="wizard-step">
+                <span className="contact-form-eyebrow">The space it's in</span>
+                <p className="wizard-question">What category does it fall into?</p>
+                <p className="wizard-help">A rough fit is plenty — this just helps me picture it.</p>
+                <div className="chip-grid">
+                  {CATEGORIES.map((c) => (
+                    <button
+                      type="button"
+                      key={c}
+                      className={`chip${data.category === c ? ' selected' : ''}`}
+                      onClick={() => set('category', c)}
+                      aria-pressed={data.category === c}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+                {data.category === 'Something else' && (
+                  <input
+                    className="form-input wizard-inline-input"
+                    type="text"
+                    placeholder="What kind of project is it?"
+                    value={data.categoryOther}
+                    onChange={(e) => set('categoryOther', e.target.value)}
+                  />
+                )}
+              </div>
+            )}
+
+            {step === 'reach' && (
+              <div className="wizard-step">
+                <span className="contact-form-eyebrow">Getting found</span>
+                <p className="wizard-question">How much do these matter to you?</p>
+                <p className="wizard-help">Most people aren't sure yet — these are things you might not have thought about, so here's the short version.</p>
+
+                <div className="rating-row">
+                  <div className="rating-label">
+                    <span className="rating-label-icon"><IconTrendingUp size={16} /></span>
+                    <span className="rating-label-title">SEO — Search Engine Optimization</span>
+                    <span className="rating-label-desc">Helping people find you on Google when they search for what you offer.</span>
+                  </div>
+                  <div className="rating-options">
+                    {IMPORTANCE_OPTS.map((o) => (
+                      <button
+                        type="button"
+                        key={o.value}
+                        className={`rating-opt${data.seo === o.value ? ' selected' : ''}`}
+                        onClick={() => set('seo', o.value as Importance)}
+                        aria-pressed={data.seo === o.value}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rating-row">
+                  <div className="rating-label">
+                    <span className="rating-label-icon"><IconCompass size={16} /></span>
+                    <span className="rating-label-title">GEO — Generative Engine Optimization</span>
+                    <span className="rating-label-desc">Helping AI assistants like ChatGPT, Claude, and Google's AI recommend you when people ask them for suggestions.</span>
+                  </div>
+                  <div className="rating-options">
+                    {IMPORTANCE_OPTS.map((o) => (
+                      <button
+                        type="button"
+                        key={o.value}
+                        className={`rating-opt${data.geo === o.value ? ' selected' : ''}`}
+                        onClick={() => set('geo', o.value as Importance)}
+                        aria-pressed={data.geo === o.value}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {step === 'audience' && (
+              <div className="wizard-step">
+                <span className="contact-form-eyebrow">Who it's for</span>
+                <p className="wizard-question">Who's the target audience?</p>
+                <p className="wizard-help">A sentence is plenty — "busy parents," "small landlords," "high-school students." Skip it if you're not sure.</p>
+                <div className="form-group">
+                  <label className="form-label" htmlFor="cf-audience">
+                    <span className="form-label-icon"><IconUsers size={13} /></span> Target audience
+                  </label>
+                  <input
+                    id="cf-audience"
+                    className="form-input"
+                    type="text"
+                    placeholder="Who will use this, and what are they like?"
+                    value={data.audience}
+                    onChange={(e) => set('audience', e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
+
+            {step === 'description' && (
+              <div className="wizard-step">
+                <span className="contact-form-eyebrow">In your words</span>
+                <p className="wizard-question">Tell me about it.</p>
+                <p className="wizard-help">A few sentences is great. What does it do, and what made you want to build it? You can also leave a voice note below instead.</p>
+                <div className="form-group">
+                  <label className="form-label" htmlFor="cf-description">Your idea</label>
+                  <textarea
+                    id="cf-description"
+                    className="form-textarea"
+                    placeholder="What does it do, who's it for, and where are you in the process?"
+                    value={data.description}
+                    onChange={(e) => set('description', e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <span className="form-label">Or talk it through (optional)</span>
+                  <VoiceNote value={voice} onChange={setVoice} />
+                </div>
+              </div>
+            )}
+
+            {step === 'details' && (
+              <div className="wizard-step">
+                <span className="contact-form-eyebrow">Last step</span>
+                <p className="wizard-question">Where can I reach you?</p>
+                <p className="wizard-help">Just a name and email so I can reply. I read everything myself.</p>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="cf-name">Name</label>
+                    <input
+                      id="cf-name"
+                      className="form-input"
+                      type="text"
+                      autoComplete="name"
+                      placeholder="Your name"
+                      required
+                      value={data.name}
+                      onChange={(e) => set('name', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="cf-email">Email</label>
+                    <input
+                      id="cf-email"
+                      className="form-input"
+                      type="email"
+                      autoComplete="email"
+                      placeholder="you@example.com"
+                      required
+                      value={data.email}
+                      onChange={(e) => set('email', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <p className="wizard-summary-note">
+                  Nervous you left something out? Don't be — send what you have and
+                  we'll fill in the rest on the call.
+                </p>
+              </div>
+            )}
+
+            <div className="wizard-nav">
+              {stepIdx > 0 ? (
+                <button type="button" className="wizard-back" onClick={back}>
+                  <IconArrowLeft size={14} /> Back
+                </button>
+              ) : <span />}
+
+              {!isLast ? (
+                <button type="button" className="wizard-next" onClick={next}>
+                  Continue <IconArrowRight size={14} />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className="form-submit-btn"
+                  disabled={status === 'sending' || !canSubmit}
+                >
+                  {status === 'sending' ? 'Sending…' : 'Send message'}
+                </button>
               )}
             </div>
+
+            {status === 'error' && (
+              <span className="form-status error">
+                Something went wrong — try{' '}
+                <a href={`mailto:${SITE.email}`}>emailing directly</a>.
+              </span>
+            )}
           </form>
         )}
 
@@ -203,16 +530,16 @@ export default function Contact() {
               {SITE.email}
             </li>
             <li>
+              <strong>Book a call</strong>
+              Free first consultation
+            </li>
+            <li>
               <strong>Location</strong>
               {SITE.founder.location} · Mountain Time
             </li>
             <li>
               <strong>Response time</strong>
               1–2 business days
-            </li>
-            <li>
-              <strong>Studio</strong>
-              {SITE.name}
             </li>
           </ul>
         </div>

@@ -5,6 +5,7 @@ const NAV_LINKS = [
   { to: '/work',     label: 'Work',     color: '#27ae60' },
   { to: '/services', label: 'Services', color: '#16a085' },
   { to: '/process',  label: 'Process',  color: '#2980b9' },
+  { to: '/why-not-ai', label: 'Human vs AI', color: '#8e44ad' },
   { to: '/contact',  label: 'Contact',  color: '#d35400' },
 ] as const
 

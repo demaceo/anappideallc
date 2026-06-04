@@ -43,6 +43,12 @@ export const META: Record<string, { title: string; description: string; path: st
       'Ready to build your mobile app or website? Contact Demaceo Vincent at An App Idea LLC. Early-stage conversations welcome. MVPs in 6–8 weeks. Reply within 1–2 business days.',
     path: '/contact',
   },
+  '/why-not-ai': {
+    title: `Why Not Just Use AI to Build Your App? | ${SITE.name}`,
+    description:
+      'Can AI build your app from a prompt? It gets you started — but wireframing, testing, security, App Store launch, and maintenance each need a dedicated human. The honest case for a builder over a chatbot.',
+    path: '/why-not-ai',
+  },
   '/work/pinpoint-civic-engagement': {
     title: `Pinpoint — Civic Engagement Platform | ${SITE.name}`,
     description:
@@ -373,6 +379,56 @@ function buildPageGraph(route: string): object[] {
           name: meta.title,
           description: meta.description,
           isPartOf: { '@id': `${SITE.url}/#website` },
+        },
+      ]
+
+    case '/why-not-ai':
+      return [
+        {
+          '@type': 'WebPage',
+          '@id': `${url}/#webpage`,
+          url,
+          name: meta.title,
+          description: meta.description,
+          isPartOf: { '@id': `${SITE.url}/#website` },
+          about: { '@id': `${SITE.url}/#org` },
+        },
+        {
+          '@type': 'FAQPage',
+          mainEntity: [
+            {
+              '@type': 'Question',
+              name: 'Can AI build my app for me?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'AI can get you a useful head start — a rough screen or a code sketch from a prompt. But that\'s roughly the first 20% of the work. Wireframing with real users, designing the data and security model, passing App Store review, deploying, debugging, and maintaining the app each require a dedicated, accountable human. Skipping them just moves the cost somewhere more expensive.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'Why hire a developer instead of just using ChatGPT or an AI app builder?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'A prompt gives you what you asked for; it can\'t tell you which features to cut, watch a confused user struggle and fix the flow, or stand behind the security of your users\' data. A developer uses AI as a power tool inside a process they own — wireframing, testing, securing, shipping, and maintaining — so you get modern speed plus a person accountable for the outcome.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'I already started my app with AI — is that wasted?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Not at all. An AI draft is a great starting point and often clarifies what you want. Bring it to a free consultation and we\'ll map the path from your current draft to a launched, secure, maintainable product.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'What does building an app actually involve beyond writing code?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Wireframing, usability testing, architecture and data modeling, authentication, payments, security and privacy, App Store and Google Play submission, deployment and build pipelines, monitoring, debugging, and ongoing maintenance. Each is a discipline of its own, and all of them require a dedicated human.',
+              },
+            },
+          ],
         },
       ]
 
