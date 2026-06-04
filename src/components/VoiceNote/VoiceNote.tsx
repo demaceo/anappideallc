@@ -18,7 +18,7 @@ interface VoiceNoteProps {
   onChange: (data: VoiceNoteData | null) => void
 }
 
-type RecState = 'idle' | 'recording' | 'recorded' | 'unsupported'
+type RecState = 'idle' | 'recording' | 'unsupported'
 
 function fmt(s: number) {
   const m = Math.floor(s / 60)
@@ -46,6 +46,9 @@ function isRecordingSupported(): boolean {
 export function VoiceNote({ value, onChange }: VoiceNoteProps) {
   // Start as 'idle' on both server and client so the prerendered HTML matches
   // hydration; unsupported browsers fall back the moment Record is tapped.
+  // The "recorded" UI is derived from `value` (the source of truth) rather than
+  // internal state, so a saved note survives this component unmounting and
+  // remounting when the visitor navigates between wizard steps.
   const [state, setState] = useState<RecState>('idle')
   const [elapsed, setElapsed] = useState(0)
   const [error, setError] = useState<string | null>(null)
@@ -107,10 +110,8 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
         const blob = new Blob(chunksRef.current, { type: mimeType })
         if (blob.size > 0) {
           onChange({ blob, mimeType, durationSec: duration })
-          setState('recorded')
-        } else {
-          setState('idle')
         }
+        setState('idle')
       }
 
       recorder.start()
@@ -152,7 +153,7 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
 
   return (
     <div className="voice-note">
-      {state === 'idle' && (
+      {state !== 'recording' && !value && (
         <button type="button" className="voice-note-btn" onClick={startRecording}>
           <IconMic size={16} />
           Record a voice note
@@ -165,20 +166,20 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
             <span className="voice-note-pulse" />
             Stop recording
           </button>
-          <span className="voice-note-timer">
+          <span className="voice-note-timer" aria-live="off">
             {fmt(elapsed)} <span className="voice-note-max">/ {fmt(MAX_SECONDS)}</span>
           </span>
         </div>
       )}
 
-      {state === 'recorded' && value && (
+      {state !== 'recording' && value && (
         <div className="voice-note-done">
           <span className="voice-note-saved">
             <IconCheck size={14} /> Voice note attached · {fmt(value.durationSec)}
           </span>
           {previewUrl && <audio className="voice-note-audio" src={previewUrl} controls />}
           <button type="button" className="voice-note-discard" onClick={discard}>
-            <IconTrash size={14} /> Remove
+            <IconTrash size={14} /> Remove &amp; re-record
           </button>
         </div>
       )}

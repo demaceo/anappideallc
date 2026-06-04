@@ -1445,6 +1445,7 @@ cite:hover { background: rgba(192,57,43,0.14); }
   font-size: 0.62rem;
   letter-spacing: 0.1em;
   line-height: 1.55;
+  margin: 0;
 }
 
 .form-status.error { color: #e57368; }
@@ -1563,6 +1564,10 @@ cite:hover { background: rgba(192,57,43,0.14); }
 }
 .wizard-tick.done    { background: rgba(184,134,11,0.5); }
 .wizard-tick.current { background: var(--gold); }
+
+/* Programmatically focused on step change for keyboard/SR users — it isn't in
+   the tab order, so suppressing the outline here doesn't hurt keyboard nav. */
+.wizard-stage { outline: none; }
 
 .wizard-step { display: flex; flex-direction: column; gap: 0.4rem; }
 

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { SITE } from '../data/site'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
@@ -114,6 +114,7 @@ export default function Contact() {
   const [voice, setVoice] = useState<VoiceNoteData | null>(null)
   const [stepIdx, setStepIdx] = useState(0)
   const [status, setStatus] = useState<Status>('idle')
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   // The platforms step only applies when there's an app in the mix.
   const steps = useMemo<StepKey[]>(() => {
@@ -124,6 +125,19 @@ export default function Contact() {
 
   const step = steps[Math.min(stepIdx, steps.length - 1)]
   const isLast = stepIdx >= steps.length - 1
+
+  // Move focus to the active step when the step actually changes, so keyboard
+  // and screen-reader users land on the new question (and aren't stranded on a
+  // button that just changed). Comparing the previous index means we never
+  // steal focus on the initial render / page load.
+  const stageRef = useRef<HTMLDivElement>(null)
+  const prevStep = useRef(stepIdx)
+  useEffect(() => {
+    if (prevStep.current !== stepIdx) {
+      stageRef.current?.focus({ preventScroll: true })
+    }
+    prevStep.current = stepIdx
+  }, [stepIdx])
 
   function set<K extends keyof FormData>(key: K, value: FormData[K]) {
     setData((prev) => ({ ...prev, [key]: value }))
@@ -139,13 +153,16 @@ export default function Contact() {
   }
 
   function next() {
+    setErrorMsg(null)
     if (!isLast) setStepIdx((i) => i + 1)
   }
   function back() {
+    setErrorMsg(null)
     if (stepIdx > 0) setStepIdx((i) => i - 1)
   }
 
-  const canSubmit = data.name.trim() !== '' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)
+  const hasIdea = data.description.trim() !== '' || voice !== null
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -153,7 +170,20 @@ export default function Contact() {
       next()
       return
     }
-    if (!canSubmit) return
+
+    // Validate at the end and point the visitor back to whatever's missing,
+    // with a specific reason — never a silent disabled button or a generic error.
+    if (!data.name.trim() || !emailValid) {
+      setErrorMsg('Please add your name and a valid email so I can reply.')
+      return
+    }
+    if (!hasIdea) {
+      setErrorMsg('Add a sentence about your idea — or a quick voice note — so I know what we’re talking about.')
+      setStepIdx(steps.indexOf('description'))
+      return
+    }
+
+    setErrorMsg(null)
     setStatus('sending')
     try {
       const audio = voice
@@ -180,8 +210,15 @@ export default function Contact() {
           audio,
         }),
       })
-      setStatus(res.ok ? 'sent' : 'error')
+      if (res.ok) {
+        setStatus('sent')
+      } else {
+        const body = (await res.json().catch(() => null)) as { error?: string } | null
+        setErrorMsg(body?.error ?? 'Something went wrong on our end.')
+        setStatus('error')
+      }
     } catch {
+      setErrorMsg('Couldn’t reach the server — check your connection and try again.')
       setStatus('error')
     }
   }
@@ -240,6 +277,14 @@ export default function Contact() {
                 ))}
               </div>
             </div>
+
+            <div
+              className="wizard-stage"
+              ref={stageRef}
+              tabIndex={-1}
+              role="group"
+              aria-label={`Step ${stepIdx + 1} of ${steps.length}`}
+            >
 
             {step === 'type' && (
               <div className="wizard-step">
@@ -449,6 +494,7 @@ export default function Contact() {
                 </p>
               </div>
             )}
+            </div>
 
             <div className="wizard-nav">
               {stepIdx > 0 ? (
@@ -465,18 +511,20 @@ export default function Contact() {
                 <button
                   type="submit"
                   className="form-submit-btn"
-                  disabled={status === 'sending' || !canSubmit}
+                  disabled={status === 'sending'}
                 >
                   {status === 'sending' ? 'Sending…' : 'Send message'}
                 </button>
               )}
             </div>
 
-            {status === 'error' && (
-              <span className="form-status error">
-                Something went wrong — try{' '}
-                <a href={`mailto:${SITE.email}`}>emailing directly</a>.
-              </span>
+            {errorMsg && (
+              <p className="form-status error" role="alert">
+                {errorMsg}{' '}
+                {status === 'error' && (
+                  <>Or <a href={`mailto:${SITE.email}`}>email me directly</a>.</>
+                )}
+              </p>
             )}
           </form>
         )}
