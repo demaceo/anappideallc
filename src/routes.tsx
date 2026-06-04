@@ -6,6 +6,7 @@ import Work from './pages/Work'
 import Services from './pages/Services'
 import Process from './pages/Process'
 import Contact from './pages/Contact'
+import WhyNotAI from './pages/WhyNotAI'
 import ProjectDetail from './pages/ProjectDetail'
 
 export const routes: RouteObject[] = [
@@ -19,6 +20,7 @@ export const routes: RouteObject[] = [
       { path: 'work/:slug', Component: ProjectDetail },
       { path: 'services', Component: Services },
       { path: 'process', Component: Process },
+      { path: 'why-not-ai', Component: WhyNotAI },
       { path: 'contact', Component: Contact },
     ],
   },
@@ -41,5 +43,6 @@ export const PRERENDER_PATHS = [
   '/work/portfolio',
   '/services',
   '/process',
+  '/why-not-ai',
   '/contact',
 ]

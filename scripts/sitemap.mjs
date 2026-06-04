@@ -35,6 +35,7 @@ async function main() {
     '/work': { priority: '0.9', changefreq: 'monthly' },
     '/contact': { priority: '0.8', changefreq: 'monthly' },
     '/about': { priority: '0.8', changefreq: 'monthly' },
+    '/why-not-ai': { priority: '0.8', changefreq: 'monthly' },
     '/process': { priority: '0.7', changefreq: 'monthly' },
   }
 
