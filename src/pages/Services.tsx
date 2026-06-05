@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
@@ -84,6 +85,18 @@ export default function Services() {
             </div>
           )
         })}
+
+        <div className="chapter-divider">
+          <span className="ornament">✦ ✦ ✦</span>
+        </div>
+
+        <div className="verdict-box context">
+          <p>
+            Wondering why not just have AI build it? Design, security, launch,
+            and maintenance each need a dedicated human.{' '}
+            <Link to="/why-not-ai">The honest case for working with a person →</Link>
+          </p>
+        </div>
       </main>
 
       <footer className="sources-section">
