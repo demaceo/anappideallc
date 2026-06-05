@@ -163,6 +163,18 @@ export const META: Record<string, { title: string; description: string; path: st
       'Terms of Service for DrayagePro TMS (iOS & Android). Governing law: State of Colorado. Covers license, data ownership, acceptable use, disclaimers, and dispute resolution. Published by An App Idea LLC.',
     path: '/legal/drayagepro/terms',
   },
+  '/legal/zoori/privacy': {
+    title: `Privacy Policy — Zoori | ${SITE.name}`,
+    description:
+      'Privacy Policy for Zoori (iOS & Android). Covers adopter profiles, dog listings, compatibility scoring, Firebase/Expo/Resend processing, device permissions, and your data rights. Published by An App Idea LLC.',
+    path: '/legal/zoori/privacy',
+  },
+  '/legal/zoori/terms': {
+    title: `Terms of Service — Zoori | ${SITE.name}`,
+    description:
+      'Terms of Service for Zoori (iOS & Android). Covers adopter and organization roles, user conduct, content licensing, platform moderation, disclaimers, and governing law (Puerto Rico). Published by An App Idea LLC.',
+    path: '/legal/zoori/terms',
+  },
 }
 
 // Base graph present on every page: ProfessionalService + WebSite.

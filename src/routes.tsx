@@ -16,6 +16,8 @@ import PaybackPrivacy from './pages/legal/PaybackPrivacy'
 import PaybackTerms from './pages/legal/PaybackTerms'
 import YapPrivacy from './pages/legal/YapPrivacy'
 import YapTerms from './pages/legal/YapTerms'
+import ZooriPrivacy from './pages/legal/ZooriPrivacy'
+import ZooriTerms from './pages/legal/ZooriTerms'
 
 export const routes: RouteObject[] = [
   {
@@ -38,6 +40,8 @@ export const routes: RouteObject[] = [
       { path: 'legal/payback/terms', Component: PaybackTerms },
       { path: 'legal/yap/privacy', Component: YapPrivacy },
       { path: 'legal/yap/terms', Component: YapTerms },
+      { path: 'legal/zoori/privacy', Component: ZooriPrivacy },
+      { path: 'legal/zoori/terms', Component: ZooriTerms },
     ],
   },
 ]
@@ -69,4 +73,6 @@ export const PRERENDER_PATHS = [
   '/legal/payback/terms',
   '/legal/yap/privacy',
   '/legal/yap/terms',
+  '/legal/zoori/privacy',
+  '/legal/zoori/terms',
 ]
