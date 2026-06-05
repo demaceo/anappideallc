@@ -175,6 +175,18 @@ export const META: Record<string, { title: string; description: string; path: st
       'Terms of Service for Zoori (iOS & Android). Covers adopter and organization roles, user conduct, content licensing, platform moderation, disclaimers, and governing law (Puerto Rico). Published by An App Idea LLC.',
     path: '/legal/zoori/terms',
   },
+  '/legal/fengshui/privacy': {
+    title: `Privacy Policy — Feng Shui | ${SITE.name}`,
+    description:
+      'Privacy Policy for the Feng Shui app (iOS). Anonymous accounts, AI-powered room analysis via Google Gemini, no tracking or advertising. Published by An App Idea LLC.',
+    path: '/legal/fengshui/privacy',
+  },
+  '/legal/fengshui/terms': {
+    title: `Terms of Service — Feng Shui | ${SITE.name}`,
+    description:
+      'Terms of Service for the Feng Shui app (iOS). AI-generated analysis is for informational/entertainment purposes only. Governing law: Colorado. Published by An App Idea LLC.',
+    path: '/legal/fengshui/terms',
+  },
 }
 
 // Base graph present on every page: ProfessionalService + WebSite.

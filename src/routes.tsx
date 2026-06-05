@@ -18,6 +18,8 @@ import YapPrivacy from './pages/legal/YapPrivacy'
 import YapTerms from './pages/legal/YapTerms'
 import ZooriPrivacy from './pages/legal/ZooriPrivacy'
 import ZooriTerms from './pages/legal/ZooriTerms'
+import FengshuiPrivacy from './pages/legal/FengshuiPrivacy'
+import FengshuiTerms from './pages/legal/FengshuiTerms'
 
 export const routes: RouteObject[] = [
   {
@@ -42,6 +44,8 @@ export const routes: RouteObject[] = [
       { path: 'legal/yap/terms', Component: YapTerms },
       { path: 'legal/zoori/privacy', Component: ZooriPrivacy },
       { path: 'legal/zoori/terms', Component: ZooriTerms },
+      { path: 'legal/fengshui/privacy', Component: FengshuiPrivacy },
+      { path: 'legal/fengshui/terms', Component: FengshuiTerms },
     ],
   },
 ]
@@ -75,4 +79,6 @@ export const PRERENDER_PATHS = [
   '/legal/yap/terms',
   '/legal/zoori/privacy',
   '/legal/zoori/terms',
+  '/legal/fengshui/privacy',
+  '/legal/fengshui/terms',
 ]
