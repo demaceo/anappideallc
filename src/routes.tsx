@@ -12,6 +12,8 @@ import DrayageProPrivacy from './pages/legal/DrayageProPrivacy'
 import DrayageProTerms from './pages/legal/DrayageProTerms'
 import PinpointPrivacy from './pages/legal/PinpointPrivacy'
 import PinpointTerms from './pages/legal/PinpointTerms'
+import PaybackPrivacy from './pages/legal/PaybackPrivacy'
+import PaybackTerms from './pages/legal/PaybackTerms'
 
 export const routes: RouteObject[] = [
   {
@@ -30,6 +32,8 @@ export const routes: RouteObject[] = [
       { path: 'legal/drayagepro/terms', Component: DrayageProTerms },
       { path: 'legal/pinpoint/privacy', Component: PinpointPrivacy },
       { path: 'legal/pinpoint/terms', Component: PinpointTerms },
+      { path: 'legal/payback/privacy', Component: PaybackPrivacy },
+      { path: 'legal/payback/terms', Component: PaybackTerms },
     ],
   },
 ]
@@ -57,4 +61,6 @@ export const PRERENDER_PATHS = [
   '/legal/drayagepro/terms',
   '/legal/pinpoint/privacy',
   '/legal/pinpoint/terms',
+  '/legal/payback/privacy',
+  '/legal/payback/terms',
 ]

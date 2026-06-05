@@ -115,6 +115,18 @@ export const META: Record<string, { title: string; description: string; path: st
       "Case study: Demaceo Vincent's personal portfolio with a Macintosh System 7-inspired UI, draggable windows, animated project gallery, and PDF resume export — built with Next.js 15.",
     path: '/work/portfolio',
   },
+  '/legal/payback/privacy': {
+    title: `Privacy Policy — Ôwn (Payback) | ${SITE.name}`,
+    description:
+      'Privacy Policy for Ôwn (Payback Own) on iOS & Android. Local-first AES-256 encrypted architecture. Covers Google/Meta data processing, AI analysis via Gemini, GDPR, UK GDPR, CCPA, and India DPDP rights. Operated by Mile High Interface LLC.',
+    path: '/legal/payback/privacy',
+  },
+  '/legal/payback/terms': {
+    title: `Terms of Service — Ôwn (Payback) | ${SITE.name}`,
+    description:
+      'Terms of Service for Ôwn (Payback Own) on iOS & Android. 20-section agreement covering eligibility, AI analysis, data ownership, disclaimers, arbitration, and governing law (Colorado). Operated by Mile High Interface LLC.',
+    path: '/legal/payback/terms',
+  },
   '/legal/pinpoint/privacy': {
     title: `Privacy Policy — Pinpoint | ${SITE.name}`,
     description:
