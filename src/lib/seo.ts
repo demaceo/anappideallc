@@ -115,6 +115,78 @@ export const META: Record<string, { title: string; description: string; path: st
       "Case study: Demaceo Vincent's personal portfolio with a Macintosh System 7-inspired UI, draggable windows, animated project gallery, and PDF resume export — built with Next.js 15.",
     path: '/work/portfolio',
   },
+  '/legal/yap/privacy': {
+    title: `Privacy Policy — The Yap App | ${SITE.name}`,
+    description:
+      'Privacy Policy for The Yap App (iOS & Android). Covers conversation data, voice cloning, Firebase/Gemini/ElevenLabs/Deepgram/Groq processing, device permissions, and your privacy rights. Published by An App Idea LLC.',
+    path: '/legal/yap/privacy',
+  },
+  '/legal/yap/terms': {
+    title: `Terms of Service — The Yap App | ${SITE.name}`,
+    description:
+      'Terms of Service for The Yap App (iOS & Android). Covers free and Pro subscription tiers, voice cloning requirements, translation accuracy disclaimer, and governing law (Colorado). Published by An App Idea LLC.',
+    path: '/legal/yap/terms',
+  },
+  '/legal/payback/privacy': {
+    title: `Privacy Policy — Ôwn (Payback) | ${SITE.name}`,
+    description:
+      'Privacy Policy for Ôwn (Payback Own) on iOS & Android. Local-first AES-256 encrypted architecture. Covers Google/Meta data processing, AI analysis via Gemini, GDPR, UK GDPR, CCPA, and India DPDP rights. Operated by Mile High Interface LLC.',
+    path: '/legal/payback/privacy',
+  },
+  '/legal/payback/terms': {
+    title: `Terms of Service — Ôwn (Payback) | ${SITE.name}`,
+    description:
+      'Terms of Service for Ôwn (Payback Own) on iOS & Android. 20-section agreement covering eligibility, AI analysis, data ownership, disclaimers, arbitration, and governing law (Colorado). Operated by Mile High Interface LLC.',
+    path: '/legal/payback/terms',
+  },
+  '/legal/pinpoint/privacy': {
+    title: `Privacy Policy — Pinpoint | ${SITE.name}`,
+    description:
+      'Privacy Policy for the Pinpoint civic engagement app (iOS & Android). Covers account info, location data, outreach messages, Firebase storage, and your rights. Operated by Mile High Interface LLC.',
+    path: '/legal/pinpoint/privacy',
+  },
+  '/legal/pinpoint/terms': {
+    title: `Terms of Service — Pinpoint | ${SITE.name}`,
+    description:
+      'Terms of Service for the Pinpoint civic engagement app (iOS & Android). Covers acceptable use, outreach to officials, user content, moderation, and governing law (Colorado). Operated by Mile High Interface LLC.',
+    path: '/legal/pinpoint/terms',
+  },
+  '/legal/drayagepro/privacy': {
+    title: `Privacy Policy — DrayagePro TMS | ${SITE.name}`,
+    description:
+      'Privacy Policy for DrayagePro TMS (iOS & Android). All business data is stored locally on your device. We do not collect, transmit, or sell your data. Published by An App Idea LLC.',
+    path: '/legal/drayagepro/privacy',
+  },
+  '/legal/drayagepro/terms': {
+    title: `Terms of Service — DrayagePro TMS | ${SITE.name}`,
+    description:
+      'Terms of Service for DrayagePro TMS (iOS & Android). Governing law: State of Colorado. Covers license, data ownership, acceptable use, disclaimers, and dispute resolution. Published by An App Idea LLC.',
+    path: '/legal/drayagepro/terms',
+  },
+  '/legal/zoori/privacy': {
+    title: `Privacy Policy — Zoori | ${SITE.name}`,
+    description:
+      'Privacy Policy for Zoori (iOS & Android). Covers adopter profiles, dog listings, compatibility scoring, Firebase/Expo/Resend processing, device permissions, and your data rights. Published by An App Idea LLC.',
+    path: '/legal/zoori/privacy',
+  },
+  '/legal/zoori/terms': {
+    title: `Terms of Service — Zoori | ${SITE.name}`,
+    description:
+      'Terms of Service for Zoori (iOS & Android). Covers adopter and organization roles, user conduct, content licensing, platform moderation, disclaimers, and governing law (Puerto Rico). Published by An App Idea LLC.',
+    path: '/legal/zoori/terms',
+  },
+  '/legal/fengshui/privacy': {
+    title: `Privacy Policy — Feng Shui | ${SITE.name}`,
+    description:
+      'Privacy Policy for the Feng Shui app (iOS). Anonymous accounts, AI-powered room analysis via Google Gemini, no tracking or advertising. Published by An App Idea LLC.',
+    path: '/legal/fengshui/privacy',
+  },
+  '/legal/fengshui/terms': {
+    title: `Terms of Service — Feng Shui | ${SITE.name}`,
+    description:
+      'Terms of Service for the Feng Shui app (iOS). AI-generated analysis is for informational/entertainment purposes only. Governing law: Colorado. Published by An App Idea LLC.',
+    path: '/legal/fengshui/terms',
+  },
 }
 
 // Base graph present on every page: ProfessionalService + WebSite.

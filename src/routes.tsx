@@ -8,6 +8,18 @@ import Process from './pages/Process'
 import Contact from './pages/Contact'
 import WhyNotAI from './pages/WhyNotAI'
 import ProjectDetail from './pages/ProjectDetail'
+import DrayageProPrivacy from './pages/legal/DrayageProPrivacy'
+import DrayageProTerms from './pages/legal/DrayageProTerms'
+import PinpointPrivacy from './pages/legal/PinpointPrivacy'
+import PinpointTerms from './pages/legal/PinpointTerms'
+import PaybackPrivacy from './pages/legal/PaybackPrivacy'
+import PaybackTerms from './pages/legal/PaybackTerms'
+import YapPrivacy from './pages/legal/YapPrivacy'
+import YapTerms from './pages/legal/YapTerms'
+import ZooriPrivacy from './pages/legal/ZooriPrivacy'
+import ZooriTerms from './pages/legal/ZooriTerms'
+import FengshuiPrivacy from './pages/legal/FengshuiPrivacy'
+import FengshuiTerms from './pages/legal/FengshuiTerms'
 
 export const routes: RouteObject[] = [
   {
@@ -22,6 +34,18 @@ export const routes: RouteObject[] = [
       { path: 'process', Component: Process },
       { path: 'why-not-ai', Component: WhyNotAI },
       { path: 'contact', Component: Contact },
+      { path: 'legal/drayagepro/privacy', Component: DrayageProPrivacy },
+      { path: 'legal/drayagepro/terms', Component: DrayageProTerms },
+      { path: 'legal/pinpoint/privacy', Component: PinpointPrivacy },
+      { path: 'legal/pinpoint/terms', Component: PinpointTerms },
+      { path: 'legal/payback/privacy', Component: PaybackPrivacy },
+      { path: 'legal/payback/terms', Component: PaybackTerms },
+      { path: 'legal/yap/privacy', Component: YapPrivacy },
+      { path: 'legal/yap/terms', Component: YapTerms },
+      { path: 'legal/zoori/privacy', Component: ZooriPrivacy },
+      { path: 'legal/zoori/terms', Component: ZooriTerms },
+      { path: 'legal/fengshui/privacy', Component: FengshuiPrivacy },
+      { path: 'legal/fengshui/terms', Component: FengshuiTerms },
     ],
   },
 ]
@@ -45,4 +69,16 @@ export const PRERENDER_PATHS = [
   '/process',
   '/why-not-ai',
   '/contact',
+  '/legal/drayagepro/privacy',
+  '/legal/drayagepro/terms',
+  '/legal/pinpoint/privacy',
+  '/legal/pinpoint/terms',
+  '/legal/payback/privacy',
+  '/legal/payback/terms',
+  '/legal/yap/privacy',
+  '/legal/yap/terms',
+  '/legal/zoori/privacy',
+  '/legal/zoori/terms',
+  '/legal/fengshui/privacy',
+  '/legal/fengshui/terms',
 ]
