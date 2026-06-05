@@ -27,6 +27,13 @@ export default function DrayageProTerms() {
           </p>
         </div>
 
+        <div className="verdict-box note">
+          <p>
+            By downloading, installing, or using the App, you agree to be bound by these Terms.
+            If you do not agree, do not use the App.
+          </p>
+        </div>
+
         {/* § 1 */}
         <div className="section-header">
           <span className="section-num">01</span>

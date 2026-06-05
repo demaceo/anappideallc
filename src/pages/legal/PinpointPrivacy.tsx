@@ -16,7 +16,7 @@ export default function PinpointPrivacy() {
           <p className="overline">Legal · Pinpoint</p>
           <h1>Privacy <em>Policy</em></h1>
           <p className="subtitle">Pinpoint — {OPERATOR}</p>
-          <p className="date-line">Effective Date: June 4, 2026</p>
+          <p className="date-line">Effective Date: June 4, 2026 · Last Updated: June 4, 2026</p>
         </header>
       </PageHeader>
 
@@ -27,6 +27,13 @@ export default function PinpointPrivacy() {
             {OPERATOR} operates the Pinpoint app, a civic engagement platform that helps you find
             your elected officials, contact them about issues you care about, pin public issues, and
             organize with other constituents.
+          </p>
+        </div>
+
+        <div className="verdict-box note">
+          <p>
+            By creating an account or using the App, you agree to the practices described in this
+            Privacy Policy.
           </p>
         </div>
 
@@ -307,6 +314,25 @@ export default function PinpointPrivacy() {
           website, and we will update the "Effective Date" above. Continued use of the app after
           changes take effect constitutes acceptance of the updated policy.
         </p>
+
+        {/* § 10 */}
+        <div className="section-header">
+          <span className="section-num">10</span>
+          <h2>Contact Us</h2>
+          <div className="section-rule" />
+        </div>
+
+        <div className="verdict-box contact">
+          <p>
+            <strong>{OPERATOR}</strong><br />
+            Email: <a href={`mailto:${CONTACT}`}>{CONTACT}</a><br />
+            Address: Aurora, CO, U.S.A.
+          </p>
+          <p>
+            For questions about this Privacy Policy or to exercise your data rights, contact us at
+            the address above. We will respond within 30 days.
+          </p>
+        </div>
 
       </main>
 

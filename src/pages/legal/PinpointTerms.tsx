@@ -16,7 +16,7 @@ export default function PinpointTerms() {
           <p className="overline">Legal · Pinpoint</p>
           <h1>Terms of <em>Service</em></h1>
           <p className="subtitle">Pinpoint — {OPERATOR}</p>
-          <p className="date-line">Effective Date: June 4, 2026</p>
+          <p className="date-line">Effective Date: June 4, 2026 · Last Updated: June 4, 2026</p>
         </header>
       </PageHeader>
 
@@ -27,6 +27,13 @@ export default function PinpointTerms() {
             By creating an account or using the Pinpoint app, you agree to these Terms of Service
             and our{' '}
             <a href="/legal/pinpoint/privacy">Privacy Policy</a>.
+          </p>
+        </div>
+
+        <div className="verdict-box note">
+          <p>
+            By creating an account or using the App, you agree to these Terms. If you do not agree,
+            do not create an account or use the App.
           </p>
         </div>
 
@@ -221,21 +228,13 @@ export default function PinpointTerms() {
           <div className="section-rule" />
         </div>
         <div className="verdict-box warning">
-          <ul className="legal-list">
-            <li>
-              The app is provided "as is" and "as available" without warranties of any kind,
-              express or implied.
-            </li>
-            <li>
-              We do not warrant that the app will be uninterrupted or error-free, that messages to
-              officials will be delivered or answered, or that civic data will be accurate or
-              current.
-            </li>
-            <li>
-              We are not liable for user-generated content, the content of messages you send, or
-              third-party data.
-            </li>
-          </ul>
+          <p className="legal-allcaps">
+            THE APP IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS
+            OR IMPLIED. WE DO NOT WARRANT THAT THE APP WILL BE UNINTERRUPTED OR ERROR-FREE, THAT
+            MESSAGES TO OFFICIALS WILL BE DELIVERED OR ANSWERED, OR THAT CIVIC DATA WILL BE
+            ACCURATE OR CURRENT. WE ARE NOT LIABLE FOR USER-GENERATED CONTENT, THE CONTENT OF
+            MESSAGES YOU SEND, OR THIRD-PARTY DATA.
+          </p>
         </div>
 
         {/* § 11 */}
@@ -245,11 +244,11 @@ export default function PinpointTerms() {
           <div className="section-rule" />
         </div>
         <div className="verdict-box warning">
-          <p>
-            To the maximum extent permitted by applicable law, {OPERATOR} shall not be liable for
-            any indirect, incidental, special, consequential, or punitive damages arising from your
-            use of the app, including but not limited to reliance on civic data, messages sent to
-            officials, or interactions with other users.
+          <p className="legal-allcaps">
+            TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, {OPERATOR.toUpperCase()} SHALL NOT
+            BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES
+            ARISING FROM YOUR USE OF THE APP, INCLUDING BUT NOT LIMITED TO RELIANCE ON CIVIC DATA,
+            MESSAGES SENT TO OFFICIALS, OR INTERACTIONS WITH OTHER USERS.
           </p>
         </div>
 
