@@ -115,6 +115,18 @@ export const META: Record<string, { title: string; description: string; path: st
       "Case study: Demaceo Vincent's personal portfolio with a Macintosh System 7-inspired UI, draggable windows, animated project gallery, and PDF resume export — built with Next.js 15.",
     path: '/work/portfolio',
   },
+  '/legal/yap/privacy': {
+    title: `Privacy Policy — The Yap App | ${SITE.name}`,
+    description:
+      'Privacy Policy for The Yap App (iOS & Android). Covers conversation data, voice cloning, Firebase/Gemini/ElevenLabs/Deepgram/Groq processing, device permissions, and your privacy rights. Published by An App Idea LLC.',
+    path: '/legal/yap/privacy',
+  },
+  '/legal/yap/terms': {
+    title: `Terms of Service — The Yap App | ${SITE.name}`,
+    description:
+      'Terms of Service for The Yap App (iOS & Android). Covers free and Pro subscription tiers, voice cloning requirements, translation accuracy disclaimer, and governing law (Colorado). Published by An App Idea LLC.',
+    path: '/legal/yap/terms',
+  },
   '/legal/payback/privacy': {
     title: `Privacy Policy — Ôwn (Payback) | ${SITE.name}`,
     description:

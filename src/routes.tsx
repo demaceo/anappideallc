@@ -14,6 +14,8 @@ import PinpointPrivacy from './pages/legal/PinpointPrivacy'
 import PinpointTerms from './pages/legal/PinpointTerms'
 import PaybackPrivacy from './pages/legal/PaybackPrivacy'
 import PaybackTerms from './pages/legal/PaybackTerms'
+import YapPrivacy from './pages/legal/YapPrivacy'
+import YapTerms from './pages/legal/YapTerms'
 
 export const routes: RouteObject[] = [
   {
@@ -34,6 +36,8 @@ export const routes: RouteObject[] = [
       { path: 'legal/pinpoint/terms', Component: PinpointTerms },
       { path: 'legal/payback/privacy', Component: PaybackPrivacy },
       { path: 'legal/payback/terms', Component: PaybackTerms },
+      { path: 'legal/yap/privacy', Component: YapPrivacy },
+      { path: 'legal/yap/terms', Component: YapTerms },
     ],
   },
 ]
@@ -63,4 +67,6 @@ export const PRERENDER_PATHS = [
   '/legal/pinpoint/terms',
   '/legal/payback/privacy',
   '/legal/payback/terms',
+  '/legal/yap/privacy',
+  '/legal/yap/terms',
 ]
