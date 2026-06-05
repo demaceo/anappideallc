@@ -1,23 +1,16 @@
-import { RouteHead } from '../../components/SEO/RouteHead'
-import { PageHeader } from '../../components/PageHeader/PageHeader'
-import { META } from '../../lib/seo'
+import { LegalPage } from '../../components/LegalPage/LegalPage'
 import { SITE } from '../../data/site'
 
 export default function YapPrivacy() {
   return (
     <>
-      <RouteHead {...META['/legal/yap/privacy']} />
-
-      <PageHeader>
-        <header className="masthead">
-          <p className="overline">Legal · The Yap App</p>
-          <h1>Privacy <em>Policy</em></h1>
-          <p className="subtitle">The Yap App — {SITE.name}</p>
-          <p className="date-line">Effective Date: June 4, 2026 · Last Updated: June 4, 2026</p>
-        </header>
-      </PageHeader>
-
-      <main className="container" id="main-content" tabIndex={-1}>
+      <LegalPage
+        path="/legal/yap/privacy"
+        appLabel="The Yap App"
+        docType="privacy"
+        subtitle={`The Yap App — ${SITE.name}`}
+        dateLine="Effective Date: June 4, 2026 · Last Updated: June 4, 2026"
+      >
 
         <div className="intro-block">
           <p>
@@ -407,7 +400,7 @@ export default function YapPrivacy() {
           </p>
         </div>
 
-      </main>
+      </LegalPage>
 
       <footer className="sources-section">
         <div className="container">

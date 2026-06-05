@@ -1,6 +1,4 @@
-import { RouteHead } from '../../components/SEO/RouteHead'
-import { PageHeader } from '../../components/PageHeader/PageHeader'
-import { META } from '../../lib/seo'
+import { LegalPage } from '../../components/LegalPage/LegalPage'
 import { SITE } from '../../data/site'
 
 const OPERATOR = 'Mile High Interface LLC'
@@ -9,18 +7,13 @@ const CONTACT = SITE.email
 export default function PinpointTerms() {
   return (
     <>
-      <RouteHead {...META['/legal/pinpoint/terms']} />
-
-      <PageHeader>
-        <header className="masthead">
-          <p className="overline">Legal · Pinpoint</p>
-          <h1>Terms of <em>Service</em></h1>
-          <p className="subtitle">Pinpoint — {OPERATOR}</p>
-          <p className="date-line">Effective Date: June 4, 2026 · Last Updated: June 4, 2026</p>
-        </header>
-      </PageHeader>
-
-      <main className="container" id="main-content" tabIndex={-1}>
+      <LegalPage
+        path="/legal/pinpoint/terms"
+        appLabel="Pinpoint"
+        docType="terms"
+        subtitle={`Pinpoint — ${OPERATOR}`}
+        dateLine="Effective Date: June 4, 2026 · Last Updated: June 4, 2026"
+      >
 
         <div className="intro-block">
           <p>
@@ -245,7 +238,7 @@ export default function PinpointTerms() {
         </div>
         <div className="verdict-box warning">
           <p className="legal-allcaps">
-            TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, {OPERATOR.toUpperCase()} SHALL NOT
+            TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, MILE HIGH INTERFACE LLC SHALL NOT
             BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES
             ARISING FROM YOUR USE OF THE APP, INCLUDING BUT NOT LIMITED TO RELIANCE ON CIVIC DATA,
             MESSAGES SENT TO OFFICIALS, OR INTERACTIONS WITH OTHER USERS.
@@ -288,7 +281,7 @@ export default function PinpointTerms() {
           </p>
         </div>
 
-      </main>
+      </LegalPage>
 
       <footer className="sources-section">
         <div className="container">

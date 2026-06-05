@@ -1,23 +1,15 @@
-import { RouteHead } from '../../components/SEO/RouteHead'
-import { PageHeader } from '../../components/PageHeader/PageHeader'
-import { META } from '../../lib/seo'
+import { LegalPage } from '../../components/LegalPage/LegalPage'
 import { SITE } from '../../data/site'
 
 export default function ZooriTerms() {
   return (
-    <>
-      <RouteHead {...META['/legal/zoori/terms']} />
-
-      <PageHeader>
-        <header className="masthead">
-          <p className="overline">Legal · Zoori</p>
-          <h1>Terms of <em>Service</em></h1>
-          <p className="subtitle">Zoori — {SITE.name}</p>
-          <p className="date-line">Effective Date: June 5, 2026 · Last Updated: June 5, 2026</p>
-        </header>
-      </PageHeader>
-
-      <main className="container" id="main-content" tabIndex={-1}>
+    <LegalPage
+      path="/legal/zoori/terms"
+      appLabel="Zoori"
+      docType="terms"
+      subtitle={`Zoori — ${SITE.name}`}
+      dateLine="Effective Date: June 5, 2026 · Last Updated: June 5, 2026"
+    >
 
         <div className="intro-block">
           <p>
@@ -426,7 +418,6 @@ export default function ZooriTerms() {
           <p>For questions about these Terms, contact us at the address above.</p>
         </div>
 
-      </main>
-    </>
+    </LegalPage>
   )
 }

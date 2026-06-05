@@ -1,23 +1,16 @@
-import { RouteHead } from '../../components/SEO/RouteHead'
-import { PageHeader } from '../../components/PageHeader/PageHeader'
-import { META } from '../../lib/seo'
+import { LegalPage } from '../../components/LegalPage/LegalPage'
 import { SITE } from '../../data/site'
 
 export default function DrayageProTerms() {
   return (
     <>
-      <RouteHead {...META['/legal/drayagepro/terms']} />
-
-      <PageHeader>
-        <header className="masthead">
-          <p className="overline">Legal · DrayagePro TMS</p>
-          <h1>Terms of <em>Service</em></h1>
-          <p className="subtitle">DrayagePro TMS — {SITE.name}</p>
-          <p className="date-line">Effective Date: June 4, 2026 · Last Updated: June 4, 2026</p>
-        </header>
-      </PageHeader>
-
-      <main className="container" id="main-content" tabIndex={-1}>
+      <LegalPage
+        path="/legal/drayagepro/terms"
+        appLabel="DrayagePro TMS"
+        docType="terms"
+        subtitle={`DrayagePro TMS — ${SITE.name}`}
+        dateLine="Effective Date: June 4, 2026 · Last Updated: June 4, 2026"
+      >
 
         <div className="intro-block">
           <p>
@@ -438,7 +431,7 @@ export default function DrayageProTerms() {
           </p>
         </div>
 
-      </main>
+      </LegalPage>
 
       <footer className="sources-section">
         <div className="container">
