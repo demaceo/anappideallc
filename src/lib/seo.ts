@@ -115,6 +115,18 @@ export const META: Record<string, { title: string; description: string; path: st
       "Case study: Demaceo Vincent's personal portfolio with a Macintosh System 7-inspired UI, draggable windows, animated project gallery, and PDF resume export — built with Next.js 15.",
     path: '/work/portfolio',
   },
+  '/legal/drayagepro/privacy': {
+    title: `Privacy Policy — DrayagePro TMS | ${SITE.name}`,
+    description:
+      'Privacy Policy for DrayagePro TMS (iOS & Android). All business data is stored locally on your device. We do not collect, transmit, or sell your data. Published by An App Idea LLC.',
+    path: '/legal/drayagepro/privacy',
+  },
+  '/legal/drayagepro/terms': {
+    title: `Terms of Service — DrayagePro TMS | ${SITE.name}`,
+    description:
+      'Terms of Service for DrayagePro TMS (iOS & Android). Governing law: State of Colorado. Covers license, data ownership, acceptable use, disclaimers, and dispute resolution. Published by An App Idea LLC.',
+    path: '/legal/drayagepro/terms',
+  },
 }
 
 // Base graph present on every page: ProfessionalService + WebSite.

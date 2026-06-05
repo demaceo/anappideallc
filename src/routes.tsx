@@ -8,6 +8,8 @@ import Process from './pages/Process'
 import Contact from './pages/Contact'
 import WhyNotAI from './pages/WhyNotAI'
 import ProjectDetail from './pages/ProjectDetail'
+import DrayageProPrivacy from './pages/legal/DrayageProPrivacy'
+import DrayageProTerms from './pages/legal/DrayageProTerms'
 
 export const routes: RouteObject[] = [
   {
@@ -22,6 +24,8 @@ export const routes: RouteObject[] = [
       { path: 'process', Component: Process },
       { path: 'why-not-ai', Component: WhyNotAI },
       { path: 'contact', Component: Contact },
+      { path: 'legal/drayagepro/privacy', Component: DrayageProPrivacy },
+      { path: 'legal/drayagepro/terms', Component: DrayageProTerms },
     ],
   },
 ]
@@ -45,4 +49,6 @@ export const PRERENDER_PATHS = [
   '/process',
   '/why-not-ai',
   '/contact',
+  '/legal/drayagepro/privacy',
+  '/legal/drayagepro/terms',
 ]
