@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import { SITE } from '../data/site'
 import { differentiators } from '../data/case-studies'
 import { RouteHead } from '../components/SEO/RouteHead'
@@ -82,7 +83,8 @@ export default function About() {
             You work directly with the person building your product. Interface
             design, database architecture, auth, API security, and deployment
             pipelines — all from the same builder. Nothing gets outsourced or
-            glossed over.
+            glossed over.{' '}
+            <Link to="/why-not-ai">Why a human over AI? →</Link>
           </p>
         </div>
       </main>
