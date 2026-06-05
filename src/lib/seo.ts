@@ -115,6 +115,18 @@ export const META: Record<string, { title: string; description: string; path: st
       "Case study: Demaceo Vincent's personal portfolio with a Macintosh System 7-inspired UI, draggable windows, animated project gallery, and PDF resume export — built with Next.js 15.",
     path: '/work/portfolio',
   },
+  '/legal/pinpoint/privacy': {
+    title: `Privacy Policy — Pinpoint | ${SITE.name}`,
+    description:
+      'Privacy Policy for the Pinpoint civic engagement app (iOS & Android). Covers account info, location data, outreach messages, Firebase storage, and your rights. Operated by Mile High Interface LLC.',
+    path: '/legal/pinpoint/privacy',
+  },
+  '/legal/pinpoint/terms': {
+    title: `Terms of Service — Pinpoint | ${SITE.name}`,
+    description:
+      'Terms of Service for the Pinpoint civic engagement app (iOS & Android). Covers acceptable use, outreach to officials, user content, moderation, and governing law (Colorado). Operated by Mile High Interface LLC.',
+    path: '/legal/pinpoint/terms',
+  },
   '/legal/drayagepro/privacy': {
     title: `Privacy Policy — DrayagePro TMS | ${SITE.name}`,
     description:

@@ -1919,3 +1919,52 @@ main a:hover {
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+
+.legal-table-wrap {
+  overflow-x: auto;
+  margin: 1rem 0 1.25rem;
+  border: 1px solid var(--rule);
+}
+
+.legal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.legal-table th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--panel);
+  padding: 0.7rem 1rem;
+  text-align: left;
+  border-bottom: 2px solid var(--rule);
+  white-space: nowrap;
+}
+
+.legal-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+  vertical-align: top;
+}
+
+.legal-table tr:last-child td {
+  border-bottom: none;
+}
+
+.legal-table tr:nth-child(even) td {
+  background: rgba(0,0,0,0.018);
+}
+
+.legal-table-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  display: block;
+  margin-top: 0.2rem;
+}
