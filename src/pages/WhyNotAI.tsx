@@ -15,7 +15,7 @@ const REALITIES = [
     icon: IconCompass2,
     iconClass: 'icon-gold',
     eyebrow: 'Direction',
-    title: 'Knowing what to build — and what to leave out',
+    title: 'Knowing what to build, and what to leave out',
     body: "A prompt gives you what you asked for. It can't tell you that two of your five features will sink the launch, or that the thing you almost skipped is the whole product. Judgment about scope comes from having shipped before, not from generating faster.",
   },
   {
@@ -30,14 +30,14 @@ const REALITIES = [
     iconClass: 'icon-teal',
     eyebrow: 'Architecture',
     title: 'Building something that holds up at 10,000 users',
-    body: "Generated code often works for one user on your laptop. Auth, data modeling, rate limits, payments, edge cases — the unglamorous decisions that decide whether the app survives contact with real traffic — need someone accountable for the whole system.",
+    body: "Generated code often works for one user on your laptop. Auth, data modeling, rate limits, payments, edge cases (the unglamorous decisions that decide whether the app survives contact with real traffic) need someone accountable for the whole system.",
   },
   {
     icon: IconShieldCheck,
     iconClass: 'icon-green',
     eyebrow: 'Trust',
     title: 'Security and privacy you can actually stand behind',
-    body: "An AI will happily write code that leaks user data and never mention it. Handling passwords, payment details, and personal information safely is a discipline — secret scanning, encryption, secure auth — not a feature you can prompt your way to.",
+    body: "An AI will happily write code that leaks user data and never mention it. Handling passwords, payment details, and personal information safely is a discipline: secret scanning, encryption, and secure auth. Not a feature you can prompt your way to.",
   },
   {
     icon: IconTerminal,
@@ -65,7 +65,7 @@ export default function WhyNotAI() {
           <p className="overline">An App Idea LLC · A candid take</p>
           <h1>Why not just have <em>AI build it?</em></h1>
           <p className="subtitle">
-            AI is a genuinely useful tool — I use it every day. But "prompt it
+            AI is a genuinely useful tool. I use it every day. But "prompt it
             and ship" skips most of what turns an idea into an app real people
             rely on. Here's the honest version.
           </p>
@@ -87,7 +87,7 @@ export default function WhyNotAI() {
           <p>
             "You can absolutely get a head start from a prompt. But wireframing,
             testing, building, deploying, publishing, debugging, and
-            maintaining an app each ask for a dedicated human — and skipping
+            maintaining an app each ask for a dedicated human, and skipping
             them just moves the work somewhere more expensive."
           </p>
           <span className="attrib">— {SITE.founder.name}, {SITE.name}</span>
@@ -127,11 +127,11 @@ export default function WhyNotAI() {
 
         <div className="verdict-box context">
           <p>
-            I'm not anti-AI — far from it. It's excellent for sketching ideas,
+            I'm not anti-AI. Far from it. It's excellent for sketching ideas,
             drafting copy, exploring options, and speeding up the parts of the
             build that are well-understood. The difference is that I use it as a
-            power tool inside a process I'm accountable for — wireframing,
-            testing, securing, shipping, and maintaining — rather than handing
+            power tool inside a process I'm accountable for (wireframing,
+            testing, securing, shipping, and maintaining) rather than handing
             the whole thing to a chatbot and hoping. You get the speed of modern
             tools <em>and</em> a person who owns the outcome.
           </p>
@@ -170,7 +170,7 @@ export default function WhyNotAI() {
         <ConsultCTA
           eyebrow="No cost, no pressure"
           title="Bring your AI draft to a free call"
-          blurb="Already started with AI? Even better — bring what you have and we'll map the path from here to launched."
+          blurb="Already started with AI? Even better. Bring what you have and we'll map the path from here to launched."
         />
       </main>
 

@@ -20,7 +20,7 @@ export default function About() {
           <p className="overline">Dev Studio · {SITE.founder.location}</p>
           <h1><em>Founder-led,</em> Denver-based.</h1>
           <p className="subtitle">
-            {SITE.name} — run by {SITE.founder.name}.
+            {SITE.name}, run by {SITE.founder.name}.
             One builder from interface to deploy.
           </p>
           <p className="date-line">About the studio</p>
@@ -32,7 +32,7 @@ export default function About() {
           <p>
             {SITE.name} is a dev studio in {SITE.founder.location}, run by{' '}
             {SITE.founder.name}. I help founders take an app or website idea
-            from sketch to shipped product — interface, backend, and the
+            from sketch to shipped product: interface, backend, and the
             operational plumbing that makes it credible.
           </p>
         </div>
@@ -82,7 +82,7 @@ export default function About() {
           <p>
             You work directly with the person building your product. Interface
             design, database architecture, auth, API security, and deployment
-            pipelines — all from the same builder. Nothing gets outsourced or
+            pipelines. All from the same builder. Nothing gets outsourced or
             glossed over.{' '}
             <Link to="/why-not-ai">Why a human over AI? →</Link>
           </p>

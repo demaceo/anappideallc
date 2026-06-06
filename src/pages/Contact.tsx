@@ -46,7 +46,7 @@ const PROJECT_TYPES = [
   { value: 'website', label: 'A website', desc: 'Marketing site, store, portfolio, or web app', Icon: IconMonitor },
   { value: 'app', label: 'A mobile app', desc: 'iPhone and/or Android', Icon: IconSmartphone },
   { value: 'both', label: 'Both', desc: 'An app with a companion website', Icon: IconLayers },
-  { value: 'unsure', label: "I'm not sure yet", desc: "That's completely fine — we'll figure it out together", Icon: IconHelpCircle },
+  { value: 'unsure', label: "I'm not sure yet", desc: "That's completely fine. We'll figure it out together.", Icon: IconHelpCircle },
 ] as const
 
 const PLATFORMS = [
@@ -83,14 +83,14 @@ const PROMPTS = [
     iconClass: 'icon-blue',
     eyebrow: 'Where you are',
     title: 'Stage, timeline, and any existing work',
-    body: 'Sketches, wireframes, specs, or existing code — include whatever you have. A rough target date helps too, even if it\'s loose. None of it is required.',
+    body: 'Sketches, wireframes, specs, or existing code: include whatever you have. A rough target date helps too, even if it\'s loose. None of it is required.',
   },
   {
     icon: IconSend,
     iconClass: 'icon-green',
     eyebrow: 'The fit',
     title: 'Budget ballpark, if you have one',
-    body: 'A rough range helps scope the engagement. If you don\'t have a number yet, that\'s a normal place to start — just say so and we\'ll figure it out together.',
+    body: 'A rough range helps scope the engagement. If you don\'t have a number yet, that\'s a normal place to start; just say so and we\'ll figure it out together.',
   },
 ] as const
 
@@ -178,7 +178,7 @@ export default function Contact() {
       return
     }
     if (!hasIdea) {
-      setErrorMsg('Add a sentence about your idea — or a quick voice note — so I know what we’re talking about.')
+      setErrorMsg(‘Add a sentence about your idea (or a quick voice note) so I know what we’re talking about.’)
       setStepIdx(steps.indexOf('description'))
       return
     }
@@ -218,7 +218,7 @@ export default function Contact() {
         setStatus('error')
       }
     } catch {
-      setErrorMsg('Couldn’t reach the server — check your connection and try again.')
+      setErrorMsg(‘Couldn’t reach the server. Check your connection and try again.’)
       setStatus('error')
     }
   }
@@ -232,7 +232,7 @@ export default function Contact() {
           <p className="overline">An App Idea LLC · Denver, Colorado</p>
           <h1>Let's <em>talk.</em></h1>
           <p className="subtitle">
-            Got an app or website idea? Walk through a few quick questions —
+            Got an app or website idea? Walk through a few quick questions,
             or just book a free call. I respond within 1–2 business days.
           </p>
           <p className="date-line">{SITE.email}</p>
@@ -243,7 +243,7 @@ export default function Contact() {
         <div className="intro-block">
           <p>
             Early-stage conversations are welcome. The goal of the first
-            exchange is to figure out whether we're a good fit — no deck
+            exchange is to figure out whether we're a good fit. No deck
             or finished spec required.
           </p>
         </div>
@@ -257,7 +257,7 @@ export default function Contact() {
         {status === 'sent' ? (
           <div className="contact-form">
             <span className="contact-form-eyebrow">Message received</span>
-            <p className="contact-form-title">Thanks — I'll be in touch.</p>
+            <p className="contact-form-title">Thanks. I'll be in touch.</p>
             <p className="contact-form-sub">
               Expect a reply within 1–2 business days{voice ? ', voice note and all' : ''}.
             </p>
@@ -313,7 +313,7 @@ export default function Contact() {
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">Where it should live</span>
                 <p className="wizard-question">Which app stores are you aiming for?</p>
-                <p className="wizard-help">Pick any that apply. Not sure? Leave it blank — I'll advise on what makes sense.</p>
+                <p className="wizard-help">Pick any that apply. Not sure? Leave it blank; I'll advise on what makes sense.</p>
                 <div className="choice-grid two">
                   {PLATFORMS.map(({ value, label, desc }) => (
                     <button
@@ -336,7 +336,7 @@ export default function Contact() {
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">The space it's in</span>
                 <p className="wizard-question">What category does it fall into?</p>
-                <p className="wizard-help">A rough fit is plenty — this just helps me picture it.</p>
+                <p className="wizard-help">A rough fit is plenty; this just helps me picture it.</p>
                 <div className="chip-grid">
                   {CATEGORIES.map((c) => (
                     <button
@@ -366,12 +366,12 @@ export default function Contact() {
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">Getting found</span>
                 <p className="wizard-question">How much do these matter to you?</p>
-                <p className="wizard-help">Most people aren't sure yet — these are things you might not have thought about, so here's the short version.</p>
+                <p className="wizard-help">Most people aren't sure yet; these are things you might not have thought about, so here's the short version.</p>
 
                 <div className="rating-row">
                   <div className="rating-label">
                     <span className="rating-label-icon"><IconTrendingUp size={16} /></span>
-                    <span className="rating-label-title">SEO — Search Engine Optimization</span>
+                    <span className="rating-label-title">SEO: Search Engine Optimization</span>
                     <span className="rating-label-desc">Helping people find you on Google when they search for what you offer.</span>
                   </div>
                   <div className="rating-options">
@@ -392,7 +392,7 @@ export default function Contact() {
                 <div className="rating-row">
                   <div className="rating-label">
                     <span className="rating-label-icon"><IconCompass size={16} /></span>
-                    <span className="rating-label-title">GEO — Generative Engine Optimization</span>
+                    <span className="rating-label-title">GEO: Generative Engine Optimization</span>
                     <span className="rating-label-desc">Helping AI assistants like ChatGPT, Claude, and Google's AI recommend you when people ask them for suggestions.</span>
                   </div>
                   <div className="rating-options">
@@ -416,7 +416,7 @@ export default function Contact() {
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">Who it's for</span>
                 <p className="wizard-question">Who's the target audience?</p>
-                <p className="wizard-help">A sentence is plenty — "busy parents," "small landlords," "high-school students." Skip it if you're not sure.</p>
+                <p className="wizard-help">A sentence is plenty: "busy parents," "small landlords," "high-school students." Skip it if you're not sure.</p>
                 <div className="form-group">
                   <label className="form-label" htmlFor="cf-audience">
                     <span className="form-label-icon"><IconUsers size={13} /></span> Target audience
@@ -489,7 +489,7 @@ export default function Contact() {
                   </div>
                 </div>
                 <p className="wizard-summary-note">
-                  Nervous you left something out? Don't be — send what you have and
+                  Nervous you left something out? Don't be; send what you have and
                   we'll fill in the rest on the call.
                 </p>
               </div>

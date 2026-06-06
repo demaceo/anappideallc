@@ -103,7 +103,7 @@ export default function Home() {
 
         <div className="verdict-box context">
           <p>
-            "Just prompt an AI and ship it" gets you a head start — and stops
+            "Just prompt an AI and ship it" gets you a head start. And stops
             there. Wireframing, testing, security, App Store launch, and
             maintenance each need a dedicated human.{' '}
             <Link to="/why-not-ai">Here's the honest case for working with a person →</Link>
