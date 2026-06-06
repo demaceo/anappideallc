@@ -36,17 +36,17 @@ export default function Process() {
 
         <div className="stats-grid">
           <div className="stat-box neutral">
-            <span className="stat-label-top">Phase 1 — Discovery</span>
+            <span className="stat-label-top">Phase 1: Discovery</span>
             <span className="stat-num medium">1–2 weeks</span>
             <span className="stat-desc">Strategy · architecture · scope</span>
           </div>
           <div className="stat-box neutral">
-            <span className="stat-label-top">Phase 2 — Design</span>
+            <span className="stat-label-top">Phase 2: Design</span>
             <span className="stat-num medium">2–3 weeks</span>
             <span className="stat-desc">Prototypes · design system</span>
           </div>
           <div className="stat-box positive">
-            <span className="stat-label-top">Phase 3 — Development</span>
+            <span className="stat-label-top">Phase 3: Development</span>
             <span className="stat-num medium">4–8 weeks</span>
             <span className="stat-desc">Sprint builds · testing</span>
           </div>

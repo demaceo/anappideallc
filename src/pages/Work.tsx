@@ -73,7 +73,7 @@ export default function Work() {
       <main className="container">
         <div className="intro-block">
           <p>
-            Eleven products shipped end-to-end — mobile apps, logistics tools,
+            Eleven products shipped end-to-end: mobile apps, logistics tools,
             data platforms, and client sites. Interface, backend, auth, CI, and
             deploy. Each one solves a real workflow rather than showcasing a trick.
           </p>
@@ -94,12 +94,12 @@ export default function Work() {
           <div className="stat-box positive">
             <span className="stat-label-top">Longest solo build</span>
             <span className="stat-num medium">12 months</span>
-            <span className="stat-desc">Pinpoint — civic platform</span>
+            <span className="stat-desc">Pinpoint: civic platform</span>
           </div>
           <div className="stat-box neutral">
             <span className="stat-label-top">Languages supported</span>
             <span className="stat-num large">15</span>
-            <span className="stat-desc">Yap United — live translation</span>
+            <span className="stat-desc">Yap United: live translation</span>
           </div>
         </div>
 

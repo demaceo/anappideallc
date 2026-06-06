@@ -597,7 +597,7 @@ export const differentiators: Differentiator[] = [
   {
     title: 'End-to-end engineering depth',
     description:
-      'Interface design, database architecture, auth, API security, and deployment pipelines — all from the same builder. Nothing gets outsourced or glossed over.',
+      'Interface design, database architecture, auth, API security, and deployment pipelines. All from the same builder. Nothing gets outsourced or glossed over.',
   },
   {
     title: 'Shipping discipline, not just code',
@@ -607,6 +607,6 @@ export const differentiators: Differentiator[] = [
   {
     title: 'Privacy and trust as defaults',
     description:
-      'Data handling, encryption, moderation, and consent flows are built into the architecture from day one — not bolted on before launch.',
+      'Data handling, encryption, moderation, and consent flows are built into the architecture from day one, not bolted on before launch.',
   },
 ]
