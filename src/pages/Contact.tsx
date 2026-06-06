@@ -178,7 +178,7 @@ export default function Contact() {
       return
     }
     if (!hasIdea) {
-      setErrorMsg(‘Add a sentence about your idea (or a quick voice note) so I know what we’re talking about.’)
+      setErrorMsg('Add a sentence about your idea (or a quick voice note) so I know what we’re talking about.')
       setStepIdx(steps.indexOf('description'))
       return
     }
@@ -218,7 +218,7 @@ export default function Contact() {
         setStatus('error')
       }
     } catch {
-      setErrorMsg(‘Couldn’t reach the server. Check your connection and try again.’)
+      setErrorMsg('Couldn’t reach the server. Check your connection and try again.')
       setStatus('error')
     }
   }
