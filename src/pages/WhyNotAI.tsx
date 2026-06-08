@@ -119,6 +119,13 @@ export default function WhyNotAI() {
           <span className="ornament">✦ ✦ ✦</span>
         </div>
 
+        <div className="verdict-box note">
+          <p>
+            Prefer AI out of the picture entirely? That's a valid position.
+            Bring it up on the first call and we'll scope the build without it.
+          </p>
+        </div>
+
         <div className="section-header">
           <span className="section-num">The honest part</span>
           <h2>Where AI genuinely helps</h2>
