@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildStructuredData } from '../seo'
-import { SITE, SAME_AS } from '../../data/site'
+import { SITE, SAME_AS, xHandle } from '../../data/site'
 
 // Parses the JSON-LD string and returns the ProfessionalService org node.
 function orgNode(route = '/') {
@@ -31,5 +31,26 @@ describe('structured data', () => {
     for (const url of SAME_AS) {
       expect(url).toMatch(/^https?:\/\//)
     }
+  })
+})
+
+describe('xHandle (X/Twitter normalization)', () => {
+  it('strips a leading @ and surrounding whitespace', () => {
+    expect(xHandle('  @anappidea ')).toBe('anappidea')
+  })
+
+  it('accepts a bare handle', () => {
+    expect(xHandle('anappidea')).toBe('anappidea')
+  })
+
+  it('extracts the handle from a full x.com / twitter.com URL', () => {
+    expect(xHandle('https://x.com/anappidea')).toBe('anappidea')
+    expect(xHandle('https://www.twitter.com/anappidea?ref=1')).toBe('anappidea')
+  })
+
+  it('returns "" for empty input or a lone @ (no junk URL)', () => {
+    expect(xHandle('')).toBe('')
+    expect(xHandle('@')).toBe('')
+    expect(xHandle('   ')).toBe('')
   })
 })

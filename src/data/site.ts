@@ -19,11 +19,16 @@ export const SITE = {
   //      in search (and AI Overviews) instead of an unknown domain.
   //   2. The social meta tags (twitter:site).
   //
-  // ⬇️ FILL IN THE REAL URLS BELOW. Leave any you don't have as ''.
-  // Blank or non-URL entries are filtered out by SAME_AS and never shipped,
-  // so a placeholder value can't leak into the markup.
+  // ⬇️ FILL IN YOUR REAL PROFILES BELOW. Leave any you don't have as ''.
+  // Blank or non-URL entries are filtered out and never shipped, so a
+  // placeholder value can't leak into the markup.
+  //
+  // NOTE: `twitter` is a HANDLE (e.g. '@anappidea'), not a URL — it feeds the
+  // twitter:site meta tag. The remaining fields are full profile URLs. The
+  // helpers below tolerate either form for `twitter` (handle, bare name, or a
+  // pasted x.com/twitter.com URL), so a mix-up degrades gracefully.
   social: {
-    twitter: '', // e.g. '@anappidea' — powers twitter:site meta + X sameAs link
+    twitter: '', // X/Twitter handle, e.g. '@anappidea'
     facebook: '', // e.g. 'https://www.facebook.com/anappidea'
     instagram: '', // e.g. 'https://www.instagram.com/anappidea'
     linkedin: '', // e.g. 'https://www.linkedin.com/company/anappidea'
@@ -34,9 +39,28 @@ export const SITE = {
     'Dev studio in Denver helping founders ship mobile apps and websites — from interface to database to launch.',
 } as const
 
-// Normalizes an X/Twitter @handle into a full profile URL for `sameAs`.
-function xProfileUrl(handle: string): string {
-  return handle ? `https://x.com/${handle.replace(/^@/, '')}` : ''
+// Extracts a bare X/Twitter handle from a configured value. Tolerates a
+// leading '@', surrounding whitespace, or a full x.com/twitter.com profile
+// URL. Returns '' when nothing usable remains (e.g. '' or a lone '@').
+export function xHandle(value: string): string {
+  return value
+    .trim()
+    .replace(/^https?:\/\/(www\.)?(x|twitter)\.com\//i, '')
+    .replace(/^@+/, '')
+    .replace(/[/?#].*$/, '')
+    .trim()
+}
+
+// '@handle' form for the twitter:site meta tag, or '' when unset/invalid.
+export const TWITTER_HANDLE: string = xHandle(SITE.social.twitter)
+  ? `@${xHandle(SITE.social.twitter)}`
+  : ''
+
+// Normalizes a configured X/Twitter value into a full profile URL for
+// `sameAs`. Returns '' when no real handle can be derived.
+function xProfileUrl(value: string): string {
+  const handle = xHandle(value)
+  return handle ? `https://x.com/${handle}` : ''
 }
 
 // Verified profile URLs Google can use to corroborate the business identity.

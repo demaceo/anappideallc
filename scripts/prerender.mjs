@@ -34,7 +34,7 @@ async function main() {
   const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
   const { PRERENDER_PATHS } = await vite.ssrLoadModule('/src/routes.tsx')
   const { buildStructuredData, META } = await vite.ssrLoadModule('/src/lib/seo.ts')
-  const { SITE } = await vite.ssrLoadModule('/src/data/site.ts')
+  const { TWITTER_HANDLE } = await vite.ssrLoadModule('/src/data/site.ts')
 
   const template = readFileSync(path.join(root, 'dist/index.html'), 'utf-8')
 
@@ -74,8 +74,8 @@ async function main() {
       `<meta property="og:site_name" content="An App Idea LLC" />`,
       `<meta property="og:locale" content="en_US" />`,
       `<meta name="twitter:card" content="summary_large_image" />`,
-      ...(SITE.social.twitter
-        ? [`<meta name="twitter:site" content="${escHtml(SITE.social.twitter)}" />`]
+      ...(TWITTER_HANDLE
+        ? [`<meta name="twitter:site" content="${escHtml(TWITTER_HANDLE)}" />`]
         : []),
       `<meta name="twitter:title" content="${escHtml(meta.title)}" />`,
       `<meta name="twitter:description" content="${escHtml(meta.description)}" />`,

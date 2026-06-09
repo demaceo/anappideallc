@@ -1,4 +1,4 @@
-import { SITE } from '../../data/site'
+import { SITE, TWITTER_HANDLE } from '../../data/site'
 
 interface RouteHeadProps {
   path: string
@@ -33,8 +33,8 @@ export function RouteHead({ path, title, description }: RouteHeadProps) {
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      {SITE.social.twitter && (
-        <meta name="twitter:site" content={SITE.social.twitter} />
+      {TWITTER_HANDLE && (
+        <meta name="twitter:site" content={TWITTER_HANDLE} />
       )}
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
