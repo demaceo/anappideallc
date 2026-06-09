@@ -393,6 +393,7 @@ button:focus-visible {
   border-left: 4px solid transparent;
   position: relative;
   overflow: hidden;
+  text-align: center;
 }
 
 .stat-box::after {
