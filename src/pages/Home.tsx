@@ -42,7 +42,7 @@ export default function Home() {
         <div className="stats-grid">
           <div className="stat-box neutral">
             <span className="stat-label-top">Products shipped</span>
-            <span className="stat-num large">5</span>
+            <span className="stat-num large">11</span>
             <span className="stat-desc">iOS · Android · Web · AI-integrated</span>
           </div>
           <div className="stat-box positive">
@@ -51,9 +51,9 @@ export default function Home() {
             <span className="stat-desc">Sketch to production deploy</span>
           </div>
           <div className="stat-box neutral">
-            <span className="stat-label-top">Service categories</span>
+            <span className="stat-label-top">AI-integrated builds</span>
             <span className="stat-num large">4</span>
-            <span className="stat-desc">Mobile · Web · MVP · Data viz</span>
+            <span className="stat-desc">Gemini · ElevenLabs · Firebase</span>
           </div>
         </div>
 
