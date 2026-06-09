@@ -70,7 +70,7 @@ export const services: Service[] = [
       'Performance audit and optimizations',
       'Automated testing suite',
     ],
-    metric: { label: 'Performance Score', value: '95+' },
+    metric: { label: 'Accessibility', value: 'WCAG AA' },
   },
   {
     id: 'business-websites',
@@ -99,7 +99,7 @@ export const services: Service[] = [
       'SEO configuration and sitemap',
       'Analytics dashboard configured',
     ],
-    metric: { label: 'SEO Score', value: '90+' },
+    metric: { label: 'Page Load', value: '< 2s' },
   },
   {
     id: 'data-visualization',

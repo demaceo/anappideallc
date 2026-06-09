@@ -393,6 +393,7 @@ button:focus-visible {
   border-left: 4px solid transparent;
   position: relative;
   overflow: hidden;
+  text-align: center;
 }
 
 .stat-box::after {
@@ -1861,7 +1862,54 @@ cite:hover { background: rgba(192,57,43,0.14); }
   color: #7fd1a0;
 }
 
-.voice-note-audio { width: 100%; max-width: 340px; height: 38px; }
+.vn-player {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  max-width: 340px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(184,134,11,0.3);
+  padding: 0.5rem 0.75rem;
+}
+
+.vn-play {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: rgba(184,134,11,0.12);
+  border: 1px solid rgba(184,134,11,0.4);
+  color: var(--gold);
+  cursor: pointer;
+  transition: background 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+.vn-play:hover { background: rgba(184,134,11,0.26); border-color: var(--gold); }
+
+.vn-progress {
+  flex: 1;
+  height: 3px;
+  background: rgba(245,240,232,0.15);
+  cursor: pointer;
+  position: relative;
+}
+.vn-progress-fill {
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.1s linear;
+  pointer-events: none;
+}
+
+.vn-time {
+  flex-shrink: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: rgba(245,240,232,0.6);
+  white-space: nowrap;
+}
 
 .voice-note-discard {
   display: inline-flex;

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { IconMic, IconTrash, IconCheck } from '../icons'
+import { IconMic, IconTrash, IconCheck, IconPlay, IconPause } from '../icons'
 
 // Hard cap so the recording stays small enough to ride along in the JSON
 // request body (Resend attaches it to the email). At ~32 kbps Opus this is
@@ -53,20 +53,33 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
   const [elapsed, setElapsed] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
+  // Custom player state
+  const [playing, setPlaying] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
   const recorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<Blob[]>([])
   const streamRef = useRef<MediaStream | null>(null)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const startedRef = useRef(0)
 
-  // Object URL for the <audio> preview, derived from the current value and
-  // revoked on cleanup (no setState in an effect → no cascading renders).
+  // Object URL for the audio preview, derived from the current value and
+  // revoked on cleanup.
   const previewUrl = useMemo(() => (value ? URL.createObjectURL(value.blob) : null), [value])
   useEffect(() => {
     return () => {
       if (previewUrl) URL.revokeObjectURL(previewUrl)
     }
   }, [previewUrl])
+
+  // Reset player state when the recording changes.
+  useEffect(() => {
+    setPlaying(false)
+    setCurrentTime(0)
+    setDuration(0)
+  }, [value])
 
   // Tidy up the mic stream and timer if we unmount mid-recording.
   useEffect(() => {
@@ -142,6 +155,27 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
     setState('idle')
   }
 
+  function togglePlay() {
+    const el = audioRef.current
+    if (!el) return
+    if (playing) {
+      el.pause()
+      setPlaying(false)
+    } else {
+      void el.play()
+      setPlaying(true)
+    }
+  }
+
+  function seek(e: React.MouseEvent<HTMLDivElement>) {
+    const el = audioRef.current
+    if (!el || !duration) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
+    el.currentTime = ratio * duration
+    setCurrentTime(ratio * duration)
+  }
+
   if (state === 'unsupported') {
     return (
       <p className="voice-note-hint">
@@ -177,7 +211,38 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
           <span className="voice-note-saved">
             <IconCheck size={14} /> Voice note attached · {fmt(value.durationSec)}
           </span>
-          {previewUrl && <audio className="voice-note-audio" src={previewUrl} controls />}
+
+          {previewUrl && (
+            <>
+              <audio
+                ref={audioRef}
+                src={previewUrl}
+                onTimeUpdate={() => setCurrentTime(audioRef.current?.currentTime ?? 0)}
+                onLoadedMetadata={() => setDuration(audioRef.current?.duration ?? 0)}
+                onEnded={() => { setPlaying(false); setCurrentTime(0) }}
+              />
+              <div className="vn-player">
+                <button
+                  type="button"
+                  className="vn-play"
+                  onClick={togglePlay}
+                  aria-label={playing ? 'Pause' : 'Play'}
+                >
+                  {playing ? <IconPause size={12} /> : <IconPlay size={12} />}
+                </button>
+                <div className="vn-progress" onClick={seek} role="slider" aria-label="Seek" aria-valuemin={0} aria-valuemax={duration || value.durationSec} aria-valuenow={currentTime}>
+                  <div
+                    className="vn-progress-fill"
+                    style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
+                  />
+                </div>
+                <span className="vn-time">
+                  {fmt(currentTime)} / {fmt(duration || value.durationSec)}
+                </span>
+              </div>
+            </>
+          )}
+
           <button type="button" className="voice-note-discard" onClick={discard}>
             <IconTrash size={14} /> Remove &amp; re-record
           </button>

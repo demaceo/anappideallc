@@ -19,7 +19,7 @@ type Importance = '' | 'unsure' | 'nice' | 'important' | 'critical'
 interface FormData {
   projectType: ProjectType
   platforms: Platform[]
-  category: string
+  categories: string[]
   categoryOther: string
   seo: Importance
   geo: Importance
@@ -32,7 +32,7 @@ interface FormData {
 const INITIAL: FormData = {
   projectType: '',
   platforms: [],
-  category: '',
+  categories: [],
   categoryOther: '',
   seo: '',
   geo: '',
@@ -152,6 +152,15 @@ export default function Contact() {
     }))
   }
 
+  function toggleCategory(c: string) {
+    setData((prev) => ({
+      ...prev,
+      categories: prev.categories.includes(c)
+        ? prev.categories.filter((x) => x !== c)
+        : [...prev.categories, c],
+    }))
+  }
+
   function next() {
     setErrorMsg(null)
     if (!isLast) setStepIdx((i) => i + 1)
@@ -202,7 +211,10 @@ export default function Contact() {
           email: data.email,
           projectType: data.projectType,
           platforms: data.platforms,
-          category: data.category === 'Something else' ? data.categoryOther : data.category,
+          category: data.categories
+            .map((c) => (c === 'Something else' ? data.categoryOther : c))
+            .filter(Boolean)
+            .join(', '),
           seoImportance: data.seo,
           geoImportance: data.geo,
           audience: data.audience,
@@ -336,21 +348,21 @@ export default function Contact() {
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">The space it's in</span>
                 <p className="wizard-question">What category does it fall into?</p>
-                <p className="wizard-help">A rough fit is plenty; this just helps me picture it.</p>
+                <p className="wizard-help">Pick as many as fit — a rough match is plenty.</p>
                 <div className="chip-grid">
                   {CATEGORIES.map((c) => (
                     <button
                       type="button"
                       key={c}
-                      className={`chip${data.category === c ? ' selected' : ''}`}
-                      onClick={() => set('category', c)}
-                      aria-pressed={data.category === c}
+                      className={`chip${data.categories.includes(c) ? ' selected' : ''}`}
+                      onClick={() => toggleCategory(c)}
+                      aria-pressed={data.categories.includes(c)}
                     >
                       {c}
                     </button>
                   ))}
                 </div>
-                {data.category === 'Something else' && (
+                {data.categories.includes('Something else') && (
                   <input
                     className="form-input wizard-inline-input"
                     type="text"
