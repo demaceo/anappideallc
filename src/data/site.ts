@@ -24,7 +24,7 @@ export const SITE = {
   // real Calendly (or other) scheduling link; the "Book a consultation"
   // buttons across the site read from here, so updating it once is enough.
   booking: {
-    consultationUrl: 'https://calendly.com/anappidea/intro-consultation',
+    consultationUrl: 'https://calendly.com/demaceo-milehighinterface/30min',
     label: 'Book a free consultation',
     blurb: 'A free 30-minute call to talk through your idea. No pressure, no spec required.',
   },
