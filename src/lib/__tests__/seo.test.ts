@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildStructuredData } from '../seo'
-import { SITE, SAME_AS, xHandle } from '../../data/site'
+import { SITE, SAME_AS, FOUNDER_SAME_AS, xHandle } from '../../data/site'
 
 // Parses the JSON-LD string and returns the ProfessionalService org node.
 function orgNode(route = '/') {
@@ -30,6 +30,24 @@ describe('structured data', () => {
   it('SAME_AS contains only absolute http(s) URLs', () => {
     for (const url of SAME_AS) {
       expect(url).toMatch(/^https?:\/\//)
+    }
+  })
+
+  it('excludes X/Twitter from the org sameAs while the handle is unset', () => {
+    expect(SAME_AS.some((u) => /x\.com|twitter\.com/.test(u))).toBe(false)
+  })
+
+  it("attaches the founder's personal profiles to the Person node, not the org", () => {
+    const org = orgNode()
+    expect(org.founder['@type']).toBe('Person')
+    if (FOUNDER_SAME_AS.length === 0) {
+      expect(org.founder.sameAs).toBeUndefined()
+    } else {
+      expect(org.founder.sameAs).toEqual([...FOUNDER_SAME_AS])
+      // The founder's GitHub belongs to the Person, never the organization.
+      for (const url of FOUNDER_SAME_AS) {
+        expect(SAME_AS).not.toContain(url)
+      }
     }
   })
 })

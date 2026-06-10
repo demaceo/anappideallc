@@ -11,6 +11,9 @@ export const SITE = {
   founder: {
     name: 'Demaceo Vincent',
     location: 'Denver, Colorado',
+    // Personal profiles for the founder — attached to the Person node in
+    // JSON-LD (not the organization), since they identify the individual.
+    github: 'https://github.com/demaceo',
   },
   // Public profiles for this business. These power two things:
   //   1. The JSON-LD `sameAs` entity links — Google uses these to tie this
@@ -28,11 +31,12 @@ export const SITE = {
   // helpers below tolerate either form for `twitter` (handle, bare name, or a
   // pasted x.com/twitter.com URL), so a mix-up degrades gracefully.
   social: {
-    twitter: '', // X/Twitter handle, e.g. '@anappidea'
-    facebook: '', // e.g. 'https://www.facebook.com/anappidea'
-    instagram: '', // e.g. 'https://www.instagram.com/anappidea'
+    twitter: '', // Intentionally empty — the studio isn't on X. Set an '@handle' to enable.
+    facebook: 'https://www.facebook.com/profile.php?id=61590729180671',
+    instagram: 'https://www.instagram.com/anappidea',
+    threads: 'https://www.threads.com/@anappidea',
+    tiktok: 'https://www.tiktok.com/@anappidea',
     linkedin: '', // e.g. 'https://www.linkedin.com/company/anappidea'
-    github: '', // e.g. 'https://github.com/demaceo'
   },
   tagline: 'Got an app idea? Let’s build it.',
   description:
@@ -63,13 +67,23 @@ function xProfileUrl(value: string): string {
   return handle ? `https://x.com/${handle}` : ''
 }
 
-// Verified profile URLs Google can use to corroborate the business identity.
-// Only real, absolute http(s) URLs survive the filter, so unset placeholders
-// ('') are dropped automatically.
-export const SAME_AS: readonly string[] = [
+// Keeps only real, absolute http(s) URLs, dropping unset placeholders ('').
+function onlyUrls(values: string[]): readonly string[] {
+  return values.filter((url) => /^https?:\/\//.test(url))
+}
+
+// Brand profile URLs for the organization's `sameAs` — the signal Google
+// uses to corroborate the business identity behind this domain.
+export const SAME_AS: readonly string[] = onlyUrls([
   xProfileUrl(SITE.social.twitter),
   SITE.social.facebook,
   SITE.social.instagram,
+  SITE.social.threads,
+  SITE.social.tiktok,
   SITE.social.linkedin,
-  SITE.social.github,
-].filter((url) => /^https?:\/\//.test(url))
+])
+
+// Personal profile URLs for the founder's Person node `sameAs`.
+export const FOUNDER_SAME_AS: readonly string[] = onlyUrls([
+  SITE.founder.github,
+])

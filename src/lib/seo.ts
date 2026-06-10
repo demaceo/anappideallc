@@ -1,4 +1,4 @@
-import { SITE, SAME_AS } from '../data/site'
+import { SITE, SAME_AS, FOUNDER_SAME_AS } from '../data/site'
 import { services } from '../data/services'
 import { caseStudies } from '../data/case-studies'
 import { processSteps } from '../data/process'
@@ -60,6 +60,9 @@ function buildBaseGraph(): object[] {
         name: SITE.founder.name,
         jobTitle: 'Founder & Software Developer',
         worksFor: { '@id': `${SITE.url}/#org` },
+        // Founder's personal profiles (e.g. GitHub) live on the Person, not
+        // the org. Omitted entirely until at least one is configured.
+        ...(FOUNDER_SAME_AS.length ? { sameAs: FOUNDER_SAME_AS } : {}),
       },
       address: {
         '@type': 'PostalAddress',
