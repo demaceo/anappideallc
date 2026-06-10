@@ -3,8 +3,8 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-const TO_EMAIL = process.env.TO_EMAIL ?? 'hello@milehighinterface.com'
-const FROM_EMAIL = process.env.FROM_EMAIL ?? 'contact@anappidea.llc'
+const TO_EMAIL = process.env.TO_EMAIL ?? 'hello@anappidea.llc'
+const FROM_EMAIL = process.env.FROM_EMAIL ?? 'hello@anappidea.llc'
 
 // Reject voice notes larger than this once base64-decoded (~6 MB) so a single
 // request can't blow past the platform body limit or the email size cap.
@@ -87,11 +87,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const summaryHtml = rows.length
     ? `<table style="border-collapse:collapse;margin:0 0 18px">${rows
-        .map(
-          ([k, v]) =>
-            `<tr><td style="padding:4px 16px 4px 0;color:#6b6355;font-size:13px;vertical-align:top;white-space:nowrap"><strong>${escHtml(k)}</strong></td><td style="padding:4px 0;font-size:14px">${escHtml(v)}</td></tr>`,
-        )
-        .join('')}</table>`
+      .map(
+        ([k, v]) =>
+          `<tr><td style="padding:4px 16px 4px 0;color:#6b6355;font-size:13px;vertical-align:top;white-space:nowrap"><strong>${escHtml(k)}</strong></td><td style="padding:4px 0;font-size:14px">${escHtml(v)}</td></tr>`,
+      )
+      .join('')}</table>`
     : ''
 
   const descriptionHtml = description.trim()
@@ -99,9 +99,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     : ''
 
   const audioHtml = hasAudio
-    ? `<p style="margin:0 0 18px;color:#6b6355;font-size:13px">🎙️ A voice note is attached${
-        audio?.durationSec ? ` (${Math.round(audio.durationSec)}s)` : ''
-      }.</p>`
+    ? `<p style="margin:0 0 18px;color:#6b6355;font-size:13px">🎙️ A voice note is attached${audio?.durationSec ? ` (${Math.round(audio.durationSec)}s)` : ''
+    }.</p>`
     : ''
 
   // Decode + size-check the voice note, if present.

@@ -7,7 +7,7 @@ export const SITE = {
   initials: 'AAI',
   domain: 'anappidea.llc',
   url: 'https://www.anappidea.llc',
-  email: 'hello@milehighinterface.com',
+  email: 'hello@anappidea.llc',
   founder: {
     name: 'Demaceo Vincent',
     location: 'Denver, Colorado',
