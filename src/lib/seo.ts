@@ -1,4 +1,4 @@
-import { SITE } from '../data/site'
+import { SITE, SAME_AS, FOUNDER_SAME_AS } from '../data/site'
 import { services } from '../data/services'
 import { caseStudies } from '../data/case-studies'
 import { processSteps } from '../data/process'
@@ -204,6 +204,9 @@ function buildBaseGraph(): object[] {
         name: SITE.founder.name,
         jobTitle: 'Founder & Software Developer',
         worksFor: { '@id': `${SITE.url}/#org` },
+        // Founder's personal profiles (e.g. GitHub) live on the Person, not
+        // the org. Omitted entirely until at least one is configured.
+        ...(FOUNDER_SAME_AS.length ? { sameAs: FOUNDER_SAME_AS } : {}),
       },
       address: {
         '@type': 'PostalAddress',
@@ -212,6 +215,10 @@ function buildBaseGraph(): object[] {
         addressCountry: 'US',
       },
       email: SITE.email,
+      // sameAs ties this domain to the business's verified profiles, the
+      // strongest on-page signal for Knowledge Graph entity recognition.
+      // Omitted entirely until at least one real profile URL is configured.
+      ...(SAME_AS.length ? { sameAs: SAME_AS } : {}),
       slogan: SITE.tagline,
       priceRange: '$$',
       areaServed: { '@type': 'Country', name: 'United States' },
