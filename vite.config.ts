@@ -7,6 +7,23 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] }),
   ],
+  build: {
+    rolldownOptions: {
+      output: {
+        // Split the rarely-changing framework code into its own chunk so it
+        // stays cached across deploys instead of being invalidated whenever
+        // app code changes.
+        codeSplitting: {
+          groups: [
+            {
+              name: 'react-vendor',
+              test: /[\\/]node_modules[\\/](react|react-dom|react-router|scheduler)[\\/]/,
+            },
+          ],
+        },
+      },
+    },
+  },
   test: {
     environment: 'happy-dom',
     globals: true,
