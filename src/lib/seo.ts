@@ -8,15 +8,15 @@ import { processSteps } from '../data/process'
 // are intent-driven and sized for SERP truncation (~155 chars).
 export const META: Record<string, { title: string; description: string; path: string }> = {
   '/': {
-    title: `${SITE.name} — Mobile App & Web Dev Studio | Denver, CO`,
+    title: `${SITE.name} — AI-Native, Privacy-First Mobile App Studio | Denver`,
     description:
-      'Denver dev studio building mobile apps, MVPs, and web products end-to-end. Founder-led by Demaceo Vincent. React Native, TypeScript, full-stack. 5 products shipped. MVPs in 6–8 weeks.',
+      'Denver studio building AI-native mobile apps with privacy built in — real-time AI, on-device encryption, React Native, shipped end-to-end by one builder. 11 apps shipped. MVPs in 6–8 weeks.',
     path: '/',
   },
   '/about': {
     title: `About — Demaceo Vincent, App Developer | ${SITE.name}`,
     description:
-      'Demaceo Vincent builds mobile apps and web products from interface to deployment. Founder-led, Denver-based. Interface design, backend, auth, CI/CD — one builder, no handoffs.',
+      'Demaceo Vincent builds AI-native mobile apps with privacy designed in — real-time AI on top, encrypted local-first data underneath. Founder-led, Denver. One builder, no handoffs.',
     path: '/about',
   },
   '/work': {
@@ -223,6 +223,11 @@ function buildBaseGraph(): object[] {
       priceRange: '$$',
       areaServed: { '@type': 'Country', name: 'United States' },
       knowsAbout: [
+        'AI-native mobile app development',
+        'AI integration',
+        'On-device AI',
+        'Privacy-first architecture',
+        'On-device encryption',
         'Mobile app development',
         'Web app development',
         'MVP development',
@@ -292,7 +297,7 @@ function buildPageGraph(route: string): object[] {
               name: 'What does An App Idea LLC build?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'An App Idea LLC builds mobile apps (iOS and Android via React Native), web applications, MVPs, and data visualization tools. The studio is founder-led by Demaceo Vincent, based in Denver, CO.',
+                text: 'An App Idea LLC builds AI-native mobile apps (iOS and Android via React Native) with privacy-first architecture, plus web applications and MVPs. The studio leans toward products that empower people and build community, and is founder-led by Demaceo Vincent, based in Denver, CO.',
               },
             },
             {
@@ -406,7 +411,7 @@ function buildPageGraph(route: string): object[] {
           '@id': `${url}/#portfolio`,
           name: 'Portfolio — Shipped Applications',
           description:
-            'Five products shipped end-to-end by An App Idea LLC founder Demaceo Vincent.',
+            'Eleven products shipped end-to-end by An App Idea LLC founder Demaceo Vincent.',
           numberOfItems: caseStudies.length,
           itemListElement: caseStudies.map((c, i) => ({
             '@type': 'ListItem',
