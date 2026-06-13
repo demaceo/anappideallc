@@ -588,25 +588,29 @@ export interface Differentiator {
   description: string
 }
 
+// Ordered by sharpness. The first two are the positioning edge — AI-native
+// mobile and privacy-first architecture, both evidenced in the shipped work.
+// The last two (ownership, discipline) are reframed as supporting proof
+// rather than top-line claims, since every good solo dev makes them.
 export const differentiators: Differentiator[] = [
   {
-    title: 'Founder-level ownership',
+    title: 'AI-native mobile, integrated for real',
     description:
-      'You work directly with the person building your product. No handoffs between design, dev, and ops teams.',
+      'Most "AI-powered" apps wrap a single API call in a modal. I ship the harder version: streaming audio translation, on-device intelligence pipelines, multi-provider failover, and SSE voice responses — across Gemini, Groq, Deepgram, and ElevenLabs, in production.',
   },
   {
-    title: 'End-to-end engineering depth',
+    title: 'Privacy-first architecture, evidenced not claimed',
     description:
-      'Interface design, database architecture, auth, API security, and deployment pipelines. All from the same builder. Nothing gets outsourced or glossed over.',
+      'AES-256-GCM encryption on-device, local-first storage with an encrypted vault, GDPR/CCPA compliance as defaults, and AI proxies hardened with OAuth verification and rate limits. The kind of data handling that matters in health, fintech, and anything personal.',
   },
   {
-    title: 'Shipping discipline, not just code',
+    title: 'One builder, interface to deploy',
     description:
-      'Every build includes CI, secret scanning, monitoring, and release processes. The product ships ready for real users, not just a demo audience.',
+      'You work directly with the person designing the screens, modeling the data, securing the API, and shipping the build. No handoffs between design, dev, and ops — and nothing glossed over in between.',
   },
   {
-    title: 'Privacy and trust as defaults',
+    title: 'Shipped for real users, not a demo',
     description:
-      'Data handling, encryption, moderation, and consent flows are built into the architecture from day one, not bolted on before launch.',
+      'Every build carries CI, secret scanning, monitoring, and a real release process. Eleven products across civic, logistics, translation, PropTech, and spatial AI have run that gauntlet — so I know what breaks at each layer.',
   },
 ]

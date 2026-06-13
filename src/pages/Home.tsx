@@ -17,7 +17,7 @@ export default function Home() {
 
       <PageHeader>
         <header className="masthead">
-          <p className="overline">Dev Studio · Denver, Colorado</p>
+          <p className="overline">AI-Native Mobile · Privacy-First · Denver, Colorado</p>
           <h1>Got an app idea? <em>Let's build it.</em></h1>
           <p className="subtitle">{SITE.description}</p>
           <p className="date-line">{SITE.email} · {SITE.domain}</p>
@@ -27,9 +27,12 @@ export default function Home() {
       <main className="container">
         <div className="intro-block">
           <p>
-            I design the interface, build the backend, and ship the operational
-            systems that make ambitious products credible. Founder-led, one
-            builder end-to-end, Denver-based.
+            I build AI-native mobile apps — real-time translation, on-device
+            intelligence, multi-provider AI — with privacy architected in, not
+            bolted on. Founder-led, one builder from interface to encrypted
+            vault to launch. The work I care most about puts real capability in
+            people's hands and brings communities together: civic engagement,
+            cross-language conversation, rescue adoption.
           </p>
         </div>
 
@@ -59,8 +62,10 @@ export default function Home() {
 
         <div className="pullquote">
           <p>
-            "I design the interface, build the backend, and ship the
-            operational systems that make ambitious products credible."
+            "Most 'AI-powered' apps are a single API call in a modal. I build
+            the real version — streaming audio, on-device pipelines,
+            multi-provider failover — and keep your users' data where it
+            belongs."
           </p>
           <span className="attrib">— {SITE.founder.name}, {SITE.name}</span>
         </div>
