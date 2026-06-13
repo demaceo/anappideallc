@@ -21,7 +21,7 @@ export default function About() {
           <h1><em>Founder-led,</em> Denver-based.</h1>
           <p className="subtitle">
             {SITE.name}, run by {SITE.founder.name}. AI-native mobile apps
-            with privacy built in — one builder from interface to deploy.
+            with privacy built in. One builder from interface to deploy.
           </p>
           <p className="date-line">About the studio</p>
         </header>
@@ -32,7 +32,7 @@ export default function About() {
           <p>
             {SITE.name} is a dev studio in {SITE.founder.location}, run by{' '}
             {SITE.founder.name}. I build AI-native mobile apps with privacy
-            designed in from the first commit — real-time AI features on the
+            designed in from the first commit: real-time AI features on the
             front end, encrypted local-first data underneath, and one builder
             from sketch to App Store. The products I'm proudest of are the ones
             that empower people and bring communities together.
@@ -73,11 +73,10 @@ export default function About() {
 
         <div className="pullquote">
           <p>
-            "Every build includes CI, secret scanning, monitoring, and release
-            processes. The product ships ready for real users, not just a demo
-            audience."
+            "Every build carries CI, secret scanning, monitoring, and a real
+            release process. It ships for real users, not a demo audience."
           </p>
-          <span className="attrib">— {SITE.founder.name}, on shipping discipline</span>
+          <span className="attrib">{SITE.founder.name}, on shipping discipline</span>
         </div>
 
         <div className="verdict-box">

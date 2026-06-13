@@ -348,7 +348,7 @@ export default function Contact() {
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">The space it's in</span>
                 <p className="wizard-question">What category does it fall into?</p>
-                <p className="wizard-help">Pick as many as fit — a rough match is plenty.</p>
+                <p className="wizard-help">Pick as many as fit, a rough match is plenty.</p>
                 <div className="chip-grid">
                   {CATEGORIES.map((c) => (
                     <button

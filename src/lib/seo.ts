@@ -8,37 +8,37 @@ import { processSteps } from '../data/process'
 // are intent-driven and sized for SERP truncation (~155 chars).
 export const META: Record<string, { title: string; description: string; path: string }> = {
   '/': {
-    title: `${SITE.name} — AI-Native, Privacy-First Mobile App Studio | Denver`,
+    title: `${SITE.name}: AI-Native, Privacy-First Mobile App Studio | Denver`,
     description:
-      'Denver studio building AI-native mobile apps with privacy built in — real-time AI, on-device encryption, React Native, shipped end-to-end by one builder. 11 apps shipped. MVPs in 6–8 weeks.',
+      'Denver studio building AI-native mobile apps with privacy built in: real-time AI, on-device encryption, React Native, shipped end-to-end by one builder. 11 apps shipped. MVPs in 6–8 weeks.',
     path: '/',
   },
   '/about': {
-    title: `About — Demaceo Vincent, App Developer | ${SITE.name}`,
+    title: `About: Demaceo Vincent, App Developer | ${SITE.name}`,
     description:
-      'Demaceo Vincent builds AI-native mobile apps with privacy designed in — real-time AI on top, encrypted local-first data underneath. Founder-led, Denver. One builder, no handoffs.',
+      'Demaceo Vincent builds AI-native mobile apps with privacy designed in: real-time AI on top, encrypted local-first data underneath. Founder-led, Denver. One builder, no handoffs.',
     path: '/about',
   },
   '/work': {
-    title: `Work — 11 Shipped Apps & Web Products | ${SITE.name}`,
+    title: `Work: 11 Shipped Apps & Web Products | ${SITE.name}`,
     description:
       '11 products shipped: Pinpoint (civic AI), Payback (privacy analytics), RentHarbor (PropTech), Feng Shui (spatial AI), Yap United (translation), Zoori, HITLDI, and more. React Native, TypeScript, full-stack.',
     path: '/work',
   },
   '/services': {
-    title: `Services — Mobile App, MVP & Web Development | ${SITE.name}`,
+    title: `Services: Mobile App, MVP & Web Development | ${SITE.name}`,
     description:
       'Mobile app development, MVP validation, product & UI engineering, and data visualization. React Native, Next.js, TypeScript, Supabase. MVPs launch in 6–8 weeks from first conversation.',
     path: '/services',
   },
   '/process': {
-    title: `Development Process — Discovery to Launch | ${SITE.name}`,
+    title: `Development Process: Discovery to Launch | ${SITE.name}`,
     description:
       '4-phase development process: Discovery (1–2 wks), Design (2–3 wks), Development (4–8 wks), Launch. Every phase ends with a tangible deliverable. Built for founders who want full visibility.',
     path: '/process',
   },
   '/contact': {
-    title: `Hire a Mobile App Developer | ${SITE.name} — Denver, CO`,
+    title: `Hire a Mobile App Developer | ${SITE.name}, Denver, CO`,
     description:
       'Ready to build your mobile app or website? Contact Demaceo Vincent at An App Idea LLC. Early-stage conversations welcome. MVPs in 6–8 weeks. Reply within 1–2 business days.',
     path: '/contact',
@@ -46,7 +46,7 @@ export const META: Record<string, { title: string; description: string; path: st
   '/why-not-ai': {
     title: `Why Not Just Use AI to Build Your App? | ${SITE.name}`,
     description:
-      'Can AI build your app from a prompt? It gets you started — but wireframing, testing, security, App Store launch, and maintenance each need a dedicated human. The honest case for a builder over a chatbot.',
+      'Can AI build your app from a prompt? It gets you started, but wireframing, testing, security, App Store launch, and maintenance each need a dedicated human. The honest case for a builder over a chatbot.',
     path: '/why-not-ai',
   },
   '/work/pinpoint-civic-engagement': {
@@ -289,7 +289,7 @@ function buildPageGraph(route: string): object[] {
               name: 'How long does it take to build a mobile app MVP?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Most MVPs take 6–8 weeks from first conversation to production deploy — covering discovery, design, development, and launch. AI-integrated or multi-platform builds typically run 10–12 weeks.',
+                text: 'Most MVPs take 6–8 weeks from first conversation to production deploy, covering discovery, design, development, and launch. AI-integrated or multi-platform builds typically run 10–12 weeks.',
               },
             },
             {
@@ -313,7 +313,7 @@ function buildPageGraph(route: string): object[] {
               name: 'Do you work with early-stage founders?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: "Yes — early-stage conversations are welcome. No finished spec or deck required. The first conversation is about figuring out fit. Send a few sentences about your idea and we'll go from there.",
+                text: "Yes, early-stage conversations are welcome. No finished spec or deck required. The first conversation is about figuring out fit. Send a few sentences about your idea and we'll go from there.",
               },
             },
             {
@@ -345,7 +345,7 @@ function buildPageGraph(route: string): object[] {
           name: SITE.founder.name,
           jobTitle: 'Founder & Software Developer',
           description:
-            'Demaceo Vincent is a solo software developer and founder of An App Idea LLC, a dev studio in Denver, Colorado. He builds mobile apps and web products end-to-end — interface, backend, auth, and deployment.',
+            'Demaceo Vincent is a solo software developer and founder of An App Idea LLC, a dev studio in Denver, Colorado. He builds mobile apps and web products end-to-end: interface, backend, auth, and deployment.',
           worksFor: { '@id': `${SITE.url}/#org` },
           address: {
             '@type': 'PostalAddress',
@@ -378,7 +378,7 @@ function buildPageGraph(route: string): object[] {
         {
           '@type': 'ItemList',
           '@id': `${url}/#services`,
-          name: 'Development Services — An App Idea LLC',
+          name: 'Development Services · An App Idea LLC',
           description:
             'Four service categories: MVP development, product & UI engineering, business websites, and data visualization.',
           numberOfItems: services.length,
@@ -409,7 +409,7 @@ function buildPageGraph(route: string): object[] {
         {
           '@type': 'ItemList',
           '@id': `${url}/#portfolio`,
-          name: 'Portfolio — Shipped Applications',
+          name: 'Portfolio · Shipped Applications',
           description:
             'Eleven products shipped end-to-end by An App Idea LLC founder Demaceo Vincent.',
           numberOfItems: caseStudies.length,
@@ -441,7 +441,7 @@ function buildPageGraph(route: string): object[] {
         },
         {
           '@type': 'HowTo',
-          name: 'App & Web Development Process — An App Idea LLC',
+          name: 'App & Web Development Process · An App Idea LLC',
           description:
             'A 4-phase development process from Discovery to Launch. Each phase ends with a tangible deliverable.',
           totalTime: 'P8W',
@@ -485,7 +485,7 @@ function buildPageGraph(route: string): object[] {
               name: 'Can AI build my app for me?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'AI can get you a useful head start — a rough screen or a code sketch from a prompt. But that\'s roughly the first 20% of the work. Wireframing with real users, designing the data and security model, passing App Store review, deploying, debugging, and maintaining the app each require a dedicated, accountable human. Skipping them just moves the cost somewhere more expensive.',
+                text: 'AI can get you a useful head start: a rough screen or a code sketch from a prompt. But that\'s roughly the first 20% of the work. Wireframing with real users, designing the data and security model, passing App Store review, deploying, debugging, and maintaining the app each require a dedicated, accountable human. Skipping them just moves the cost somewhere more expensive.',
               },
             },
             {
@@ -493,12 +493,12 @@ function buildPageGraph(route: string): object[] {
               name: 'Why hire a developer instead of just using ChatGPT or an AI app builder?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'A prompt gives you what you asked for; it can\'t tell you which features to cut, watch a confused user struggle and fix the flow, or stand behind the security of your users\' data. A developer uses AI as a power tool inside a process they own — wireframing, testing, securing, shipping, and maintaining — so you get modern speed plus a person accountable for the outcome.',
+                text: 'A prompt gives you what you asked for; it can\'t tell you which features to cut, watch a confused user struggle and fix the flow, or stand behind the security of your users\' data. A developer uses AI as a power tool inside a process they own (wireframing, testing, securing, shipping, and maintaining), so you get modern speed plus a person accountable for the outcome.',
               },
             },
             {
               '@type': 'Question',
-              name: 'I already started my app with AI — is that wasted?',
+              name: 'I already started my app with AI: is that wasted?',
               acceptedAnswer: {
                 '@type': 'Answer',
                 text: 'Not at all. An AI draft is a great starting point and often clarifies what you want. Bring it to a free consultation and we\'ll map the path from your current draft to a launched, secure, maintainable product.',

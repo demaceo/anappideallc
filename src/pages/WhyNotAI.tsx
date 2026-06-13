@@ -44,14 +44,14 @@ const REALITIES = [
     iconClass: 'icon-navy',
     eyebrow: 'Launch',
     title: 'Getting it onto the App Store and live on the web',
-    body: 'Deploying, configuring domains, passing Apple and Google review, setting up the build pipeline — this is where most solo AI projects stall. It\'s a gauntlet of accounts, certificates, and rejections that a person who\'s been through it can clear in days, not months.',
+    body: 'Deploying, configuring domains, passing Apple and Google review, setting up the build pipeline: this is where most solo AI projects stall. It\'s a gauntlet of accounts, certificates, and rejections that a person who\'s been through it can clear in days, not months.',
   },
   {
     icon: IconLifeBuoy,
     iconClass: 'icon-orange',
     eyebrow: 'After launch',
     title: 'Debugging, iterating, and keeping it alive',
-    body: "Shipping is the start, not the finish. Something breaks at 2am, a dependency changes, users ask for the thing you didn't build. Maintenance is a standing commitment — a real person who knows your codebase, not a fresh chat with no memory of what you built last week.",
+    body: "Shipping is the start, not the finish. Something breaks at 2am, a dependency changes, users ask for the thing you didn't build. Maintenance is a standing commitment: a real person who knows your codebase, not a fresh chat with no memory of what you built last week.",
   },
 ] as const
 
@@ -77,7 +77,7 @@ export default function WhyNotAI() {
         <div className="intro-block">
           <p>
             If you can describe your idea to an AI and get something on screen,
-            that's real progress — and a great place to start. The gap shows up
+            that's real progress, and a great place to start. The gap shows up
             after: in everything between "it kind of works" and "it's live,
             secure, and people trust it." That stretch is the actual job.
           </p>
@@ -90,7 +90,7 @@ export default function WhyNotAI() {
             maintaining an app each ask for a dedicated human, and skipping
             them just moves the work somewhere more expensive."
           </p>
-          <span className="attrib">— {SITE.founder.name}, {SITE.name}</span>
+          <span className="attrib">{SITE.founder.name}, {SITE.name}</span>
         </div>
 
         <div className="section-header">
@@ -190,7 +190,7 @@ export default function WhyNotAI() {
           <ul className="source-list">
             <li>
               <strong>AI is a tool</strong>
-              Great for a head start — not a substitute for a builder.
+              Great for a head start, not a substitute for a builder.
             </li>
             <li>
               <strong>The work is the 80%</strong>

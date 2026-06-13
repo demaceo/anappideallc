@@ -596,7 +596,7 @@ export const differentiators: Differentiator[] = [
   {
     title: 'AI-native mobile, integrated for real',
     description:
-      'Most "AI-powered" apps wrap a single API call in a modal. I ship the harder version: streaming audio translation, on-device intelligence pipelines, multi-provider failover, and SSE voice responses — across Gemini, Groq, Deepgram, and ElevenLabs, in production.',
+      'Most "AI-powered" apps wrap a single API call in a modal. I ship the harder version: streaming audio translation, on-device intelligence pipelines, multi-provider failover, and SSE voice responses, across Gemini, Groq, Deepgram, and ElevenLabs, in production.',
   },
   {
     title: 'Privacy-first architecture, evidenced not claimed',
@@ -606,11 +606,11 @@ export const differentiators: Differentiator[] = [
   {
     title: 'One builder, interface to deploy',
     description:
-      'You work directly with the person designing the screens, modeling the data, securing the API, and shipping the build. No handoffs between design, dev, and ops — and nothing glossed over in between.',
+      'You work directly with the person designing the screens, modeling the data, securing the API, and shipping the build. No handoffs between design, dev, and ops, and nothing glossed over in between.',
   },
   {
     title: 'Shipped for real users, not a demo',
     description:
-      'Every build carries CI, secret scanning, monitoring, and a real release process. Eleven products across civic, logistics, translation, PropTech, and spatial AI have run that gauntlet — so I know what breaks at each layer.',
+      'Every build carries CI, secret scanning, monitoring, and a real release process. Eleven products across civic, logistics, translation, PropTech, and spatial AI have run that gauntlet, so I know what breaks at each layer.',
   },
 ]

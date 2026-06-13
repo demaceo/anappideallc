@@ -104,7 +104,7 @@ export default function Process() {
           <ul className="source-list">
             {processSteps.map((p) => (
               <li key={p.step}>
-                <strong>Phase {p.step} — {p.title}</strong>
+                <strong>Phase {p.step}: {p.title}</strong>
                 {p.timeline} · {p.deliverables.length} deliverables
               </li>
             ))}
