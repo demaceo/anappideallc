@@ -27,8 +27,8 @@ export default function Home() {
       <main className="container">
         <div className="intro-block">
           <p>
-            I build AI-native mobile apps — real-time translation, on-device
-            intelligence, multi-provider AI — with privacy architected in, not
+            I build AI-native mobile apps (real-time translation, on-device
+            intelligence, multi-provider AI) with privacy architected in, not
             bolted on. Founder-led, one builder from interface to encrypted
             vault to launch. The work I care most about puts real capability in
             people's hands and brings communities together: civic engagement,
@@ -63,11 +63,11 @@ export default function Home() {
         <div className="pullquote">
           <p>
             "Most 'AI-powered' apps are a single API call in a modal. I build
-            the real version — streaming audio, on-device pipelines,
-            multi-provider failover — and keep your users' data where it
+            the real version, with streaming audio, on-device pipelines, and
+            multi-provider failover, and keep your users' data where it
             belongs."
           </p>
-          <span className="attrib">— {SITE.founder.name}, {SITE.name}</span>
+          <span className="attrib">{SITE.founder.name}, {SITE.name}</span>
         </div>
 
         <div className="section-header">
@@ -147,7 +147,7 @@ export default function Home() {
             </li>
             <li>
               <strong>Founder</strong>
-              {SITE.founder.name} — builder end-to-end.
+              {SITE.founder.name}, builder end-to-end.
             </li>
             <li>
               <strong>Contact</strong>

@@ -109,7 +109,7 @@ export default function Services() {
             {services.map((s) => (
               <li key={s.id}>
                 <strong>{s.title}</strong>
-                {s.metric ? `${s.metric.value} — ${s.metric.label}` : s.description}
+                {s.metric ? `${s.metric.value} · ${s.metric.label}` : s.description}
               </li>
             ))}
           </ul>

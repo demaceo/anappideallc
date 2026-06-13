@@ -40,7 +40,7 @@ export const SITE = {
   },
   tagline: 'Got an app idea? Let’s build it.',
   description:
-    'Denver dev studio building AI-native mobile apps with privacy built in — real-time AI features, on-device encryption, shipped end-to-end by one builder.',
+    'Denver dev studio building AI-native mobile apps with privacy built in: real-time AI features, on-device encryption, shipped end-to-end by one builder.',
   // Booking — first consultation is free. Replace `consultationUrl` with your
   // real Calendly (or other) scheduling link; the "Book a consultation"
   // buttons across the site read from here, so updating it once is enough.
