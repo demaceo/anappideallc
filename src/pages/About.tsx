@@ -84,7 +84,8 @@ export default function About() {
             You work directly with the person building your product. Interface
             design, database architecture, auth, API security, and deployment
             pipelines. All from the same builder. Nothing gets outsourced or
-            glossed over.{' '}
+            glossed over, and the person who writes your code is the same one
+            who answers your emails.{' '}
             <Link to="/why-not-ai">Why a human over AI? →</Link>
           </p>
         </div>

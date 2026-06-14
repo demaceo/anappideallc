@@ -27,12 +27,13 @@ export default function Home() {
       <main className="container">
         <div className="intro-block">
           <p>
-            I build AI-native mobile apps (real-time translation, on-device
-            intelligence, multi-provider AI) with privacy architected in, not
-            bolted on. Founder-led, one builder from interface to encrypted
-            vault to launch. The work I care most about puts real capability in
-            people's hands and brings communities together: civic engagement,
-            cross-language conversation, rescue adoption.
+            Bring the idea, even a half-formed one. I build AI-native mobile
+            apps (real-time translation, on-device intelligence, multi-provider
+            AI) with privacy architected in, not bolted on. Founder-led, one
+            builder from interface to encrypted vault to launch. The work I care
+            most about puts real capability in people's hands and brings
+            communities together: civic engagement, cross-language conversation,
+            rescue adoption.
           </p>
         </div>
 

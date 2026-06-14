@@ -17,15 +17,16 @@ export default function Services() {
         <header className="masthead">
           <p className="overline">An App Idea LLC · What I build</p>
           <h1>Services</h1>
-          <p className="date-line">Four service categories</p>
+          <p className="date-line">Four ways I can help</p>
         </header>
       </PageHeader>
 
       <main className="container">
         <div className="intro-block">
           <p>
-            From a 6-week MVP to a production-grade interface, here's what I
-            help founders ship.
+            Whether you need a six-week MVP or a polished, production-grade
+            interface, here's how I help founders ship. Not sure which one
+            fits? That's exactly what the first call is for.
           </p>
         </div>
 
