@@ -226,7 +226,7 @@ export default function Contact() {
         setStatus('sent')
       } else {
         const body = (await res.json().catch(() => null)) as { error?: string } | null
-        setErrorMsg(body?.error ?? 'Something went wrong on our end.')
+        setErrorMsg(body?.error ?? 'Something broke on our end, not yours. Give it another try in a moment.')
         setStatus('error')
       }
     } catch {

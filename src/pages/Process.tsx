@@ -23,8 +23,9 @@ export default function Process() {
       <main className="container">
         <div className="intro-block">
           <p>
-            Four phases, one builder. Each step ends with a tangible deliverable
-            so you always know where the project stands.
+            Four phases, one builder. Every phase ends with something tangible
+            you can hold up and react to, so you're never guessing where your
+            project stands.
           </p>
         </div>
 
@@ -88,9 +89,9 @@ export default function Process() {
 
         <div className="verdict-box">
           <p>
-            Every phase ends with a concrete deliverable. You'll never be left
-            wondering what's been done or what comes next. The process is
-            designed for founders who want full visibility without micromanaging.
+            Every phase ends with something concrete, so you're never left
+            wondering what got done or what comes next. You get full visibility
+            into the build, without having to micromanage to get it.
           </p>
         </div>
       </main>
