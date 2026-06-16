@@ -36,6 +36,12 @@ const IMPORTANCE_LABELS: Record<string, string> = {
   critical: 'Must-have',
 }
 
+const PREFERRED_LABELS: Record<string, string> = {
+  email: 'Email',
+  phone: 'Phone call',
+  text: 'Text',
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -44,6 +50,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const body = (req.body ?? {}) as Record<string, unknown>
   const name = typeof body.name === 'string' ? body.name : ''
   const email = typeof body.email === 'string' ? body.email : ''
+  const phone = typeof body.phone === 'string' ? body.phone : ''
+  const otherContact = typeof body.otherContact === 'string' ? body.otherContact : ''
+  const preferredContact = typeof body.preferredContact === 'string' ? body.preferredContact : ''
 
   // The "message" of intent can arrive as `description` (wizard) or the legacy
   // `message` field. Either is fine; the voice note can stand in for both.
@@ -94,6 +103,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         .join('')}</table>`
     : ''
 
+  // Extra ways the visitor offered to be reached, shown right under "From".
+  const contactBits: string[] = []
+  if (phone.trim()) contactBits.push(`<strong>Phone:</strong> ${escHtml(phone)}`)
+  if (otherContact.trim()) contactBits.push(`<strong>Other:</strong> ${escHtml(otherContact)}`)
+  if (preferredContact) {
+    contactBits.push(`<strong>Prefers:</strong> ${escHtml(PREFERRED_LABELS[preferredContact] ?? preferredContact)}`)
+  }
+  const contactHtml = contactBits.length
+    ? `<p style="margin:0 0 12px;color:#6b6355;font-size:13px">${contactBits.join(' &nbsp;·&nbsp; ')}</p>`
+    : ''
+
   const descriptionHtml = description.trim()
     ? `<p style="margin:0 0 8px"><strong>Their idea:</strong></p><p style="white-space:pre-wrap;margin:0 0 18px">${escHtml(description)}</p>`
     : ''
@@ -127,6 +147,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       subject: `New project inquiry from ${name}`,
       html: `
         <p style="margin:0 0 12px"><strong>From:</strong> ${escHtml(name)} &lt;${escHtml(email)}&gt;</p>
+        ${contactHtml}
         ${summaryHtml}
         ${descriptionHtml}
         ${audioHtml}

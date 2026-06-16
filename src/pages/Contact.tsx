@@ -15,6 +15,7 @@ type Status = 'idle' | 'sending' | 'sent' | 'error'
 type ProjectType = 'website' | 'app' | 'both' | 'unsure' | ''
 type Platform = 'ios' | 'android' | 'web'
 type Importance = '' | 'unsure' | 'nice' | 'important' | 'critical'
+type PreferredContact = '' | 'email' | 'phone' | 'text'
 
 interface FormData {
   projectType: ProjectType
@@ -27,6 +28,9 @@ interface FormData {
   description: string
   name: string
   email: string
+  phone: string
+  otherContact: string
+  preferredContact: PreferredContact
 }
 
 const INITIAL: FormData = {
@@ -40,6 +44,9 @@ const INITIAL: FormData = {
   description: '',
   name: '',
   email: '',
+  phone: '',
+  otherContact: '',
+  preferredContact: '',
 }
 
 const PROJECT_TYPES = [
@@ -66,6 +73,12 @@ const IMPORTANCE_OPTS = [
   { value: 'nice', label: 'Nice to have' },
   { value: 'important', label: 'Important' },
   { value: 'critical', label: 'Must-have' },
+] as const
+
+const CONTACT_METHODS = [
+  { value: 'email', label: 'Email' },
+  { value: 'phone', label: 'Phone call' },
+  { value: 'text', label: 'Text' },
 ] as const
 
 // The three prompts shown below the form — kept from the original page so the
@@ -209,6 +222,9 @@ export default function Contact() {
         body: JSON.stringify({
           name: data.name,
           email: data.email,
+          phone: data.phone,
+          otherContact: data.otherContact,
+          preferredContact: data.preferredContact,
           projectType: data.projectType,
           platforms: data.platforms,
           category: data.categories
@@ -471,7 +487,7 @@ export default function Contact() {
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">Last step</span>
                 <p className="wizard-question">Where can I reach you?</p>
-                <p className="wizard-help">Just a name and email so I can reply. I read everything myself.</p>
+                <p className="wizard-help">A name and email is all I need to reply. Prefer a call or text? Add a phone or another handle and tell me which you'd rather use.</p>
                 <div className="form-row">
                   <div className="form-group">
                     <label className="form-label" htmlFor="cf-name">Name</label>
@@ -498,6 +514,51 @@ export default function Contact() {
                       value={data.email}
                       onChange={(e) => set('email', e.target.value)}
                     />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="cf-phone">Phone <span className="form-label-opt">optional</span></label>
+                    <input
+                      id="cf-phone"
+                      className="form-input"
+                      type="tel"
+                      autoComplete="tel"
+                      placeholder="(555) 123-4567"
+                      value={data.phone}
+                      onChange={(e) => set('phone', e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="cf-other">Another way <span className="form-label-opt">optional</span></label>
+                    <input
+                      id="cf-other"
+                      className="form-input"
+                      type="text"
+                      placeholder="LinkedIn, WhatsApp, Telegram…"
+                      value={data.otherContact}
+                      onChange={(e) => set('otherContact', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <span className="form-label" id="cf-preferred-label">Best way to reach you <span className="form-label-opt">optional</span></span>
+                  <div className="chip-grid" role="group" aria-labelledby="cf-preferred-label">
+                    {CONTACT_METHODS.map((m) => {
+                      const active = data.preferredContact === m.value
+                      return (
+                        <button
+                          type="button"
+                          key={m.value}
+                          className={`chip${active ? ' selected' : ''}`}
+                          // Tapping the active choice again clears it — keeps the field optional.
+                          onClick={() => set('preferredContact', active ? '' : m.value)}
+                          aria-pressed={active}
+                        >
+                          {m.label}
+                        </button>
+                      )
+                    })}
                   </div>
                 </div>
                 <p className="wizard-summary-note">
