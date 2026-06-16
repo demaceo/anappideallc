@@ -183,7 +183,9 @@ export default function Contact() {
     if (stepIdx > 0) setStepIdx((i) => i - 1)
   }
 
+  const emailEntered = data.email.trim() !== ''
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)
+  const phoneEntered = data.phone.trim() !== ''
   const hasIdea = data.description.trim() !== '' || voice !== null
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
@@ -195,8 +197,17 @@ export default function Contact() {
 
     // Validate at the end and point the visitor back to whatever's missing,
     // with a specific reason — never a silent disabled button or a generic error.
-    if (!data.name.trim() || !emailValid) {
-      setErrorMsg('Please add your name and a valid email so I can reply.')
+    // Email or phone is enough — whichever the visitor prefers.
+    if (!data.name.trim()) {
+      setErrorMsg('Please add your name so I know who I’m talking to.')
+      return
+    }
+    if (emailEntered && !emailValid) {
+      setErrorMsg('That email doesn’t look quite right — mind double-checking?')
+      return
+    }
+    if (!emailEntered && !phoneEntered) {
+      setErrorMsg('Leave an email or a phone number so I have a way to reach you.')
       return
     }
     if (!hasIdea) {
@@ -487,7 +498,7 @@ export default function Contact() {
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">Last step</span>
                 <p className="wizard-question">Where can I reach you?</p>
-                <p className="wizard-help">A name and email is all I need to reply. Prefer a call or text? Add a phone or another handle and tell me which you'd rather use.</p>
+                <p className="wizard-help">Leave an email or a phone number — whichever you'd rather I use. Add both, or another handle, if you like.</p>
                 <div className="form-row">
                   <div className="form-group">
                     <label className="form-label" htmlFor="cf-name">Name</label>
@@ -510,7 +521,6 @@ export default function Contact() {
                       type="email"
                       autoComplete="email"
                       placeholder="you@example.com"
-                      required
                       value={data.email}
                       onChange={(e) => set('email', e.target.value)}
                     />
@@ -518,7 +528,7 @@ export default function Contact() {
                 </div>
                 <div className="form-row">
                   <div className="form-group">
-                    <label className="form-label" htmlFor="cf-phone">Phone <span className="form-label-opt">optional</span></label>
+                    <label className="form-label" htmlFor="cf-phone">Phone</label>
                     <input
                       id="cf-phone"
                       className="form-input"
