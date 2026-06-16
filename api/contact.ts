@@ -70,13 +70,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const audience = typeof body.audience === 'string' ? body.audience : ''
   const audio = (body.audio ?? null) as AudioPayload | null
 
-  if (!name.trim() || !email.trim()) {
-    return res.status(400).json({ error: 'Name and email are required' })
+  if (!name.trim()) {
+    return res.status(400).json({ error: 'Name is required' })
   }
 
+  // Email or phone is enough — a visitor can reach out by whichever they prefer.
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(email)) {
+  const hasEmail = email.trim() !== ''
+  const hasPhone = phone.trim() !== ''
+  if (hasEmail && !emailRegex.test(email)) {
     return res.status(400).json({ error: 'Invalid email address' })
+  }
+  if (!hasEmail && !hasPhone) {
+    return res.status(400).json({ error: 'An email or phone number is required' })
   }
 
   const hasAudio = !!audio?.base64
@@ -143,10 +149,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await resend.emails.send({
       from: `An App Idea <${FROM_EMAIL}>`,
       to: TO_EMAIL,
-      replyTo: email,
+      // Only set a reply-to when we actually have an email to reply to.
+      ...(hasEmail ? { replyTo: email } : {}),
       subject: `New project inquiry from ${name}`,
       html: `
-        <p style="margin:0 0 12px"><strong>From:</strong> ${escHtml(name)} &lt;${escHtml(email)}&gt;</p>
+        <p style="margin:0 0 12px"><strong>From:</strong> ${escHtml(name)}${hasEmail ? ` &lt;${escHtml(email)}&gt;` : ''}</p>
         ${contactHtml}
         ${summaryHtml}
         ${descriptionHtml}
