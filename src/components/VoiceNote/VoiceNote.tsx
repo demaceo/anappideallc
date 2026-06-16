@@ -43,6 +43,76 @@ function isRecordingSupported(): boolean {
   )
 }
 
+// Mini audio player for a recorded note. Kept as its own component and keyed by
+// the recording's object URL, so its playback state resets cleanly whenever the
+// recording changes — no reset effect needed.
+function RecordedPlayer({ url, fallbackDuration }: { url: string; fallbackDuration: number }) {
+  const [playing, setPlaying] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  function togglePlay() {
+    const el = audioRef.current
+    if (!el) return
+    if (playing) {
+      el.pause()
+      setPlaying(false)
+    } else {
+      void el.play()
+      setPlaying(true)
+    }
+  }
+
+  function seek(e: React.MouseEvent<HTMLDivElement>) {
+    const el = audioRef.current
+    if (!el || !duration) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
+    el.currentTime = ratio * duration
+    setCurrentTime(ratio * duration)
+  }
+
+  return (
+    <>
+      <audio
+        ref={audioRef}
+        src={url}
+        onTimeUpdate={() => setCurrentTime(audioRef.current?.currentTime ?? 0)}
+        onLoadedMetadata={() => setDuration(audioRef.current?.duration ?? 0)}
+        onEnded={() => { setPlaying(false); setCurrentTime(0) }}
+      />
+      <div className="vn-player">
+        <button
+          type="button"
+          className="vn-play"
+          onClick={togglePlay}
+          aria-label={playing ? 'Pause' : 'Play'}
+        >
+          {playing ? <IconPause size={12} /> : <IconPlay size={12} />}
+        </button>
+        <div
+          className="vn-progress"
+          onClick={seek}
+          role="slider"
+          aria-label="Seek"
+          aria-valuemin={0}
+          aria-valuemax={duration || fallbackDuration}
+          aria-valuenow={currentTime}
+        >
+          <div
+            className="vn-progress-fill"
+            style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
+          />
+        </div>
+        <span className="vn-time">
+          {fmt(currentTime)} / {fmt(duration || fallbackDuration)}
+        </span>
+      </div>
+    </>
+  )
+}
+
 export function VoiceNote({ value, onChange }: VoiceNoteProps) {
   // Start as 'idle' on both server and client so the prerendered HTML matches
   // hydration; unsupported browsers fall back the moment Record is tapped.
@@ -52,12 +122,6 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
   const [state, setState] = useState<RecState>('idle')
   const [elapsed, setElapsed] = useState(0)
   const [error, setError] = useState<string | null>(null)
-
-  // Custom player state
-  const [playing, setPlaying] = useState(false)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(0)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
 
   const recorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<Blob[]>([])
@@ -73,13 +137,6 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
       if (previewUrl) URL.revokeObjectURL(previewUrl)
     }
   }, [previewUrl])
-
-  // Reset player state when the recording changes.
-  useEffect(() => {
-    setPlaying(false)
-    setCurrentTime(0)
-    setDuration(0)
-  }, [value])
 
   // Tidy up the mic stream and timer if we unmount mid-recording.
   useEffect(() => {
@@ -155,27 +212,6 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
     setState('idle')
   }
 
-  function togglePlay() {
-    const el = audioRef.current
-    if (!el) return
-    if (playing) {
-      el.pause()
-      setPlaying(false)
-    } else {
-      void el.play()
-      setPlaying(true)
-    }
-  }
-
-  function seek(e: React.MouseEvent<HTMLDivElement>) {
-    const el = audioRef.current
-    if (!el || !duration) return
-    const rect = e.currentTarget.getBoundingClientRect()
-    const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
-    el.currentTime = ratio * duration
-    setCurrentTime(ratio * duration)
-  }
-
   if (state === 'unsupported') {
     return (
       <p className="voice-note-hint">
@@ -213,34 +249,7 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
           </span>
 
           {previewUrl && (
-            <>
-              <audio
-                ref={audioRef}
-                src={previewUrl}
-                onTimeUpdate={() => setCurrentTime(audioRef.current?.currentTime ?? 0)}
-                onLoadedMetadata={() => setDuration(audioRef.current?.duration ?? 0)}
-                onEnded={() => { setPlaying(false); setCurrentTime(0) }}
-              />
-              <div className="vn-player">
-                <button
-                  type="button"
-                  className="vn-play"
-                  onClick={togglePlay}
-                  aria-label={playing ? 'Pause' : 'Play'}
-                >
-                  {playing ? <IconPause size={12} /> : <IconPlay size={12} />}
-                </button>
-                <div className="vn-progress" onClick={seek} role="slider" aria-label="Seek" aria-valuemin={0} aria-valuemax={duration || value.durationSec} aria-valuenow={currentTime}>
-                  <div
-                    className="vn-progress-fill"
-                    style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
-                  />
-                </div>
-                <span className="vn-time">
-                  {fmt(currentTime)} / {fmt(duration || value.durationSec)}
-                </span>
-              </div>
-            </>
+            <RecordedPlayer key={previewUrl} url={previewUrl} fallbackDuration={value.durationSec} />
           )}
 
           <button type="button" className="voice-note-discard" onClick={discard}>
