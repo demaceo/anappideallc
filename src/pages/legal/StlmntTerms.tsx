@@ -1,4 +1,5 @@
 import { LegalPage } from '../../components/LegalPage/LegalPage'
+import { SocialLinks } from '../../components/SocialLinks/SocialLinks'
 import { SITE } from '../../data/site'
 
 const OPERATOR = 'Mile High Interface LLC'
@@ -347,6 +348,7 @@ export default function StlmntTerms() {
               {CONTACT}
             </li>
           </ul>
+          <SocialLinks />
         </div>
       </footer>
     </>

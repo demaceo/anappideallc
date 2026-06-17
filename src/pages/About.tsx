@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { SITE } from '../data/site'
 import { differentiators } from '../data/case-studies'
 import { RouteHead } from '../components/SEO/RouteHead'
@@ -115,6 +116,7 @@ export default function About() {
               Founder-led · end-to-end engineering
             </li>
           </ul>
+          <SocialLinks />
         </div>
       </footer>
     </>

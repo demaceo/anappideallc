@@ -1,4 +1,5 @@
 import { LegalPage } from '../../components/LegalPage/LegalPage'
+import { SocialLinks } from '../../components/SocialLinks/SocialLinks'
 import { SITE } from '../../data/site'
 
 const OPERATOR = 'An App Idea LLC'
@@ -369,6 +370,7 @@ export default function PinpointPrivacy() {
               {CONTACT}
             </li>
           </ul>
+          <SocialLinks />
         </div>
       </footer>
     </>

@@ -1,4 +1,5 @@
 import { processSteps } from '../data/process'
+import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconSearch, IconEdit, IconTerminal, IconSend } from '../components/icons'
@@ -110,6 +111,7 @@ export default function Process() {
               </li>
             ))}
           </ul>
+          <SocialLinks />
         </div>
       </footer>
     </>

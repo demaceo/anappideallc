@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
@@ -114,6 +115,7 @@ export default function Services() {
               </li>
             ))}
           </ul>
+          <SocialLinks />
         </div>
       </footer>
     </>
