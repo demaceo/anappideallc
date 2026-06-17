@@ -861,6 +861,22 @@ cite:hover { background: rgba(192,57,43,0.14); }
   border-radius: 10px;
 }
 
+/* Full-bleed real app-icon artwork (squircle). Used when a case study ships an
+   `icon` asset; the image fills the rounded tile instead of the line glyph. */
+.app-mark--photo,
+.project-detail-mark--photo {
+  overflow: hidden;
+  background: transparent;
+}
+
+.app-mark-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: inherit;
+}
+
 /* Icon color variants */
 .icon-gold   { color: var(--gold);  border-color: rgba(184,134,11,0.4);  background: rgba(184,134,11,0.06);  }
 .icon-blue   { color: #2980b9;      border-color: rgba(41,128,185,0.4);  background: rgba(41,128,185,0.06);  }

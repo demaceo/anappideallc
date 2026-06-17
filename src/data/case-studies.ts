@@ -43,6 +43,9 @@ export interface CaseStudy {
   repoUrl?: string
   resourceLinks?: CaseStudyResourceLink[]
   theme?: CaseStudyTheme
+  // Path (under /public) to the app's real icon artwork. When present it's
+  // rendered full-bleed in the project tile instead of the line-glyph fallback.
+  icon?: string
   featured?: boolean
 }
 
@@ -245,6 +248,7 @@ export const caseStudies: CaseStudy[] = [
         { label: 'Web', value: 'PWA build' },
       ],
     },
+    icon: '/app-icons/rentharbor.png',
     theme: {
       accent: '#2563EB',
       gold: '#2ECC71',
@@ -300,6 +304,7 @@ export const caseStudies: CaseStudy[] = [
         { label: 'Alternatives', value: '2–3 layouts' },
       ],
     },
+    icon: '/app-icons/feng-shui.png',
     theme: {
       accent: '#C44536',
       gold: '#B8860B',
@@ -454,6 +459,7 @@ export const caseStudies: CaseStudy[] = [
         { label: 'Discovery', value: 'Swipe + match score' },
       ],
     },
+    icon: '/app-icons/zoori.png',
     theme: {
       accent: '#F4533C',
       gold: '#14B8A6',
@@ -559,6 +565,7 @@ export const caseStudies: CaseStudy[] = [
       ],
     },
     liveUrl: 'https://www.unmasked-coaching.com',
+    icon: '/app-icons/unmasked.png',
     theme: {
       accent: '#A855F7',
       gold: '#C499FF',
@@ -615,6 +622,7 @@ export const caseStudies: CaseStudy[] = [
       ],
     },
     liveUrl: 'https://www.timelesscoach-consult.com',
+    icon: '/app-icons/timeless.png',
     theme: {
       accent: '#2D4A3E',
       gold: '#C4714B',

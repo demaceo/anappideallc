@@ -119,10 +119,14 @@ export default function Work() {
           return (
             <Link key={c.slug} to={`/work/${c.slug}`} className="feature-item feature-item--linked">
               <div
-                className="feature-icon app-mark"
-                style={{ background: STUDY_COLORS[i] }}
+                className={`feature-icon app-mark${c.icon ? ' app-mark--photo' : ''}`}
+                style={c.icon ? undefined : { background: STUDY_COLORS[i] }}
               >
-                <ProjectLogo size={22} color="white" strokeWidth={1.75} />
+                {c.icon ? (
+                  <img src={c.icon} alt="" className="app-mark-img" loading="lazy" />
+                ) : (
+                  <ProjectLogo size={22} color="white" strokeWidth={1.75} />
+                )}
               </div>
               <div className="feature-body">
                 <span className="feature-eyebrow">{STUDY_LABELS[i]}</span>

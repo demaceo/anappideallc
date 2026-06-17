@@ -85,8 +85,15 @@ export default function ProjectDetail() {
             {project.category}
           </p>
           <div className="project-detail-hero">
-            <div className="project-detail-mark" style={{ background: color }}>
-              <ProjectLogo size={30} color="white" strokeWidth={1.5} />
+            <div
+              className={`project-detail-mark${project.icon ? ' project-detail-mark--photo' : ''}`}
+              style={project.icon ? undefined : { background: color }}
+            >
+              {project.icon ? (
+                <img src={project.icon} alt="" className="app-mark-img" />
+              ) : (
+                <ProjectLogo size={30} color="white" strokeWidth={1.5} />
+              )}
             </div>
             <h1>{project.title}</h1>
           </div>
