@@ -955,6 +955,50 @@ cite:hover { background: rgba(192,57,43,0.14); }
   text-decoration: underline;
 }
 
+/* ─── Policy index — compact per-app legal list (Support page) ─── */
+.policy-list {
+  border-top: 1px solid var(--rule);
+  margin: 0 0 1rem;
+}
+
+.policy-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem 1.5rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--rule);
+  transition: background 0.18s var(--ease);
+}
+
+.policy-row:hover {
+  background: rgba(15, 14, 12, 0.025);
+}
+
+.policy-app {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.policy-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.4rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 580px) {
+  .policy-row {
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+}
+
 /* ─── Project detail page ─── */
 
 /* Hero: icon mark + title, centered in the dark masthead */

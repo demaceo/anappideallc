@@ -129,18 +129,17 @@ export default function Support() {
           </p>
         </div>
 
-        {APPS.map((app) => (
-          <div key={app.name} className="feature-item">
-            <div className="feature-body">
-              <h3 className="feature-title">{app.name}</h3>
-              <p>
+        <div className="policy-list">
+          {APPS.map((app) => (
+            <div key={app.name} className="policy-row">
+              <span className="policy-app">{app.name}</span>
+              <span className="policy-links">
                 <Link to={app.privacy}>Privacy Policy</Link>
-                {' · '}
                 <Link to={app.terms}>Terms of Service</Link>
-              </p>
+              </span>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
 
         <div className="section-header">
           <span className="section-num">Not an app issue?</span>
