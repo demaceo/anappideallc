@@ -31,11 +31,11 @@ const SLUG_TO_LOGO: Record<string, React.ComponentType<{ size?: number; color?: 
 }
 
 const SLUG_TO_COLOR: Record<string, string> = {
-  'pinpoint-civic-engagement': '#2980b9',
+  'pinpoint-civic-engagement': '#8A1C1C',
   'payback-consumer-intelligence': '#1a3a5c',
   'rentharbor-property-management': '#27ae60',
   'feng-shui-room-analysis': '#d35400',
-  'yap-united-live-translation': '#8e44ad',
+  'yap-united-live-translation': '#0E7C86',
   'drayage-drivers': '#c0392b',
   'zoori-pet-care': '#16a085',
   'hitldi-platform': '#2c3e50',
