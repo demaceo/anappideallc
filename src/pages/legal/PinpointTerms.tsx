@@ -1,7 +1,7 @@
 import { LegalPage } from '../../components/LegalPage/LegalPage'
 import { SITE } from '../../data/site'
 
-const OPERATOR = 'Mile High Interface LLC'
+const OPERATOR = 'An App Idea LLC'
 const CONTACT = SITE.email
 
 export default function PinpointTerms() {
@@ -12,7 +12,7 @@ export default function PinpointTerms() {
         appLabel="Pinpoint"
         docType="terms"
         subtitle={`Pinpoint — ${OPERATOR}`}
-        dateLine="Effective Date: June 4, 2026 · Last Updated: June 4, 2026"
+        dateLine="Effective Date: June 4, 2026 · Last Updated: June 17, 2026"
       >
 
         <div className="intro-block">
@@ -238,7 +238,7 @@ export default function PinpointTerms() {
         </div>
         <div className="verdict-box warning">
           <p className="legal-allcaps">
-            TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, MILE HIGH INTERFACE LLC SHALL NOT
+            TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, AN APP IDEA LLC SHALL NOT
             BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES
             ARISING FROM YOUR USE OF THE APP, INCLUDING BUT NOT LIMITED TO RELIANCE ON CIVIC DATA,
             MESSAGES SENT TO OFFICIALS, OR INTERACTIONS WITH OTHER USERS.
