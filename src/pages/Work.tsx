@@ -31,11 +31,11 @@ const PROJECT_LOGOS = [
   LogoPortfolio,
 ]
 const STUDY_COLORS = [
-  '#2980b9',
+  '#8A1C1C', // The Pinpoint App — Editorial Ink oxblood
   '#1a3a5c',
   '#27ae60',
   '#d35400',
-  '#8e44ad',
+  '#0E7C86', // The Yap App — Coastal Brand deep teal
   '#c0392b',
   '#16a085',
   '#2c3e50',
@@ -94,12 +94,12 @@ export default function Work() {
           <div className="stat-box positive">
             <span className="stat-label-top">Longest solo build</span>
             <span className="stat-num medium">12 months</span>
-            <span className="stat-desc">Pinpoint: civic platform</span>
+            <span className="stat-desc">The Pinpoint App: civic platform</span>
           </div>
           <div className="stat-box neutral">
             <span className="stat-label-top">Languages supported</span>
-            <span className="stat-num large">15</span>
-            <span className="stat-desc">Yap United: live translation</span>
+            <span className="stat-num large">37</span>
+            <span className="stat-desc">The Yap App: live translation</span>
           </div>
         </div>
 
