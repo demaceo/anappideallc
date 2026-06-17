@@ -42,7 +42,7 @@ export default function Home() {
         <div className="stats-grid">
           <div className="stat-box neutral">
             <span className="stat-label-top">Products shipped</span>
-            <span className="stat-num large">11</span>
+            <span className="stat-num large">12</span>
             <span className="stat-desc">iOS · Android · Web · AI-integrated</span>
           </div>
           <div className="stat-box positive">

@@ -1321,6 +1321,122 @@ cite:hover { background: rgba(192,57,43,0.14); }
   gap: 0.6rem;
 }
 
+/* ── STLMNT case study: "Under the hood" claims-pipeline visualization ──
+   Shown only on the STLMNT project page. Carries STLMNT's own "Editorial Ink"
+   tokens (ink + paper-cream, ledger-green/stamp-red accents, IBM Plex Mono
+   figures, Fraunces labels) so the case study wears the app's identity. */
+.stlmnt-uth {
+  --stlmnt-ink: #0a0a0a;
+  --stlmnt-cream: #f6f1e7;
+  --stlmnt-hairline: #d8d2c4;
+  --stlmnt-newsprint: #6b6b6b;
+  margin-top: 1.25rem;
+  padding: clamp(1.25rem, 4vw, 1.85rem);
+  background: var(--stlmnt-cream);
+  border: 1px solid var(--stlmnt-hairline);
+  border-radius: 4px;
+  color: var(--stlmnt-ink);
+}
+
+.stlmnt-uth-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.stlmnt-uth-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--stlmnt-newsprint);
+}
+
+.stlmnt-uth-total {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--stlmnt-newsprint);
+}
+
+.stlmnt-uth-track {
+  display: flex;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--stlmnt-hairline);
+}
+
+.stlmnt-uth-seg {
+  height: 100%;
+}
+
+.stlmnt-uth-seg + .stlmnt-uth-seg {
+  box-shadow: -1px 0 0 var(--stlmnt-cream);
+}
+
+.stlmnt-uth-legend {
+  list-style: none;
+  margin: 1.1rem 0 0;
+  padding: 0;
+}
+
+.stlmnt-uth-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.42rem 0;
+  border-bottom: 1px solid var(--stlmnt-hairline);
+}
+
+.stlmnt-uth-row:last-child {
+  border-bottom: none;
+}
+
+.stlmnt-uth-swatch {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.stlmnt-uth-label {
+  flex: 1;
+  font-family: 'Fraunces', 'Playfair Display', Georgia, serif;
+  font-size: 0.95rem;
+  color: var(--stlmnt-ink);
+}
+
+.stlmnt-uth-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--stlmnt-newsprint);
+}
+
+.stlmnt-uth-pct {
+  width: 3rem;
+  text-align: right;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--stlmnt-ink);
+}
+
+.stlmnt-uth-foot {
+  margin-top: 0.9rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--stlmnt-newsprint);
+}
+
+.stlmnt-uth-note {
+  margin-top: 0.5rem;
+  max-width: 60ch;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--stlmnt-newsprint);
+}
+
 /* ─── Contact hero CTA ─── */
 .contact-hero {
   background: var(--ink);

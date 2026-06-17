@@ -3,6 +3,7 @@ import { getCaseStudyBySlug } from '../data/case-studies'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import {
+  LogoStlmnt,
   LogoPinpoint,
   LogoPayback,
   LogoRentHarbor,
@@ -15,8 +16,10 @@ import {
   LogoTimeless,
   LogoPortfolio,
 } from '../components/icons'
+import { StlmntUnderTheHood } from '../components/StlmntUnderTheHood/StlmntUnderTheHood'
 
 const SLUG_TO_LOGO: Record<string, React.ComponentType<{ size?: number; color?: string; strokeWidth?: number }>> = {
+  'stlmnt-settlement-tracker': LogoStlmnt,
   'pinpoint-civic-engagement': LogoPinpoint,
   'payback-consumer-intelligence': LogoPayback,
   'rentharbor-property-management': LogoRentHarbor,
@@ -31,6 +34,7 @@ const SLUG_TO_LOGO: Record<string, React.ComponentType<{ size?: number; color?: 
 }
 
 const SLUG_TO_COLOR: Record<string, string> = {
+  'stlmnt-settlement-tracker': '#1f6b3b',
   'pinpoint-civic-engagement': '#8A1C1C',
   'payback-consumer-intelligence': '#1a3a5c',
   'rentharbor-property-management': '#27ae60',
@@ -137,6 +141,24 @@ export default function ProjectDetail() {
             ))}
           </ul>
         </div>
+
+        {/* Under the hood — a refactored STLMNT admin visualization, on-theme */}
+        {project.slug === 'stlmnt-settlement-tracker' && (
+          <div className="project-section">
+            <div className="section-header">
+              <span className="section-num">Under the hood</span>
+              <h2>The claims pipeline</h2>
+              <div className="section-rule" />
+            </div>
+            <p className="project-section-body">
+              STLMNT's admin dashboard tracks every claim through its lifecycle — saved, filed,
+              confirmed, approved, paid, with rejected as a terminal state. Here is that
+              claims-by-status visualization, refactored from the app for the web and wearing
+              STLMNT's own Editorial Ink palette.
+            </p>
+            <StlmntUnderTheHood />
+          </div>
+        )}
 
         {/* Tech stack */}
         <div className="project-section">

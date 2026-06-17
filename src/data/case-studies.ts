@@ -33,6 +33,56 @@ export interface CaseStudy {
 
 export const caseStudies: CaseStudy[] = [
   {
+    slug: 'stlmnt-settlement-tracker',
+    title: 'STLMNT',
+    category: 'Consumer rights',
+    summary:
+      'A free app that surfaces verified, open US class action settlements, checks eligibility, and helps users fill the official claim form — copy-to-clipboard, never auto-submission — then tracks every claim in one place.',
+    metaDescription:
+      'STLMNT is a privacy-first class action settlement tracker built with Expo and Firebase: a curated catalog, eligibility self-check, KMS-encrypted claim autofill, and on-device receipts. Not a legal service — users file every claim themselves.',
+    tags: ['Consumer Rights', 'Privacy', 'Mobile', 'Legal Tech'],
+    stack: ['React Native', 'Expo Router', 'TypeScript', 'Firebase', 'Firestore', 'Cloud Functions', 'Cloud KMS', 'Anthropic Claude'],
+    outcomes: [
+      'Built a curated catalog of verified, open settlements fed by ingestion workers (FTC feed, court-administrator scrapers, CourtListener) behind an admin review gate — nothing publishes until a human approves it.',
+      'Shipped an autofill profile that envelope-encrypts sensitive fields (name, address, payment handles) with Cloud KMS, and never stores bank, SSN, or card numbers.',
+      'Kept the user in control end to end: an eligibility self-check, copy-to-clipboard claim assist (never auto-submission), on-device receipts, local deadline reminders, and one-tap account and data deletion.',
+    ],
+    stats: [
+      { label: 'Timeline', value: 'Founder-led Expo build' },
+      { label: 'Team', value: 'User + admin curation' },
+      { label: 'Platform', value: 'iOS · Android' },
+      { label: 'Impact', value: 'Verified settlements · zero sensitive data' },
+    ],
+    sections: [
+      {
+        title: 'Problem',
+        content:
+          'Open class action settlements are real money left on the table: notices are scattered across administrator sites, eligibility is buried in legalese, and the apps that aggregate them tend to hoard personal data or quietly file claims on a user\'s behalf. STLMNT had to make settlements discoverable and claimable without becoming a data broker or a fake legal service.',
+      },
+      {
+        title: 'Approach',
+        content:
+          'I built an Expo Router app on an "Editorial Ink" design system — newspaper masthead meets legal ledger — over a default-deny Firestore model. Ingestion workers (FTC RSS, JND/Atticus/Simpluris/Kroll, and a CourtListener webhook) feed a review queue that an admin curates, optionally with an Anthropic Claude drafting step, before anything reaches the public catalog. The autofill profile routes through a callable Cloud Function gateway that envelope-encrypts sensitive fields with Cloud KMS, and receipts stay on the device. Crucially, the app only ever copies a claim to the clipboard — the user submits it themselves on the official site, under penalty of perjury.',
+      },
+      {
+        title: 'Outcome',
+        content:
+          'STLMNT turns a scattered, jargon-heavy process into one honest workflow: find a settlement, check eligibility, autofill and copy the official form, file it yourself, and track status through to payout. It collects the minimum to be useful — brand names for matching, payment handles instead of account numbers — and lets users erase everything in a single tap.',
+      },
+    ],
+    cover: {
+      eyebrow: 'Class action settlement tracker',
+      headline: 'Verified open settlements, eligibility checks, and claim-form autofill — without auto-filing or hoarding your data.',
+      chips: ['Expo Router', 'Firestore default-deny', 'Cloud KMS encryption', 'Ingestion + curation'],
+      metrics: [
+        { label: 'Claim assist', value: 'Copy, never submit' },
+        { label: 'Sensitive data', value: 'KMS-encrypted' },
+        { label: 'Receipts', value: 'On-device only' },
+      ],
+    },
+    featured: true,
+  },
+  {
     slug: 'pinpoint-civic-engagement',
     title: 'The Pinpoint App',
     category: 'Civic tech',
@@ -611,6 +661,6 @@ export const differentiators: Differentiator[] = [
   {
     title: 'Shipped for real users, not a demo',
     description:
-      'Every build carries CI, secret scanning, monitoring, and a real release process. Eleven products across civic, logistics, translation, PropTech, and spatial AI have run that gauntlet, so I know what breaks at each layer.',
+      'Every build carries CI, secret scanning, monitoring, and a real release process. Twelve products across civic, logistics, translation, PropTech, spatial AI, and consumer rights have run that gauntlet, so I know what breaks at each layer.',
   },
 ]
