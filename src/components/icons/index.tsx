@@ -430,3 +430,14 @@ export function LogoPortfolio(p: IconProps) {
     </Svg>
   )
 }
+
+// STLMNT — a settlement receipt with a torn ledger edge and a verified check.
+export function LogoStlmnt(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M6 3h12v18l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3L6 21z" />
+      <path d="M9 8h6" />
+      <path d="M9.5 12.5l1.8 1.8 3.2-3.6" />
+    </Svg>
+  )
+}

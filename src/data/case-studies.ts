@@ -48,51 +48,101 @@ export interface CaseStudy {
 
 export const caseStudies: CaseStudy[] = [
   {
-    slug: 'pinpoint-civic-engagement',
-    title: 'Pinpoint',
-    category: 'Civic tech',
+    slug: 'stlmnt-settlement-tracker',
+    title: 'STLMNT',
+    category: 'Consumer rights',
     summary:
-      'A civic engagement platform across iOS, Android, and web that combines official data, legislation, AI voice chat, surveys, and moderation tooling in one system.',
+      'A free app that surfaces verified, open US class action settlements, checks eligibility, and helps users fill the official claim form — copy-to-clipboard, never auto-submission — then tracks every claim in one place.',
     metaDescription:
-      'Pinpoint is a civic engagement platform with AI voice chat, legislation data, moderation workflows, and a shared mobile and web architecture.',
-    tags: ['Civic Tech', 'Mobile + Web', 'AI Voice', 'Admin Ops'],
-    stack: ['React Native', 'Expo', 'TypeScript', 'Express', 'Prisma', 'PostgreSQL', 'Gemini', 'ElevenLabs'],
+      'STLMNT is a privacy-first class action settlement tracker built with Expo and Firebase: a curated catalog, eligibility self-check, KMS-encrypted claim autofill, and on-device receipts. Not a legal service — users file every claim themselves.',
+    tags: ['Consumer Rights', 'Privacy', 'Mobile', 'Legal Tech'],
+    stack: ['React Native', 'Expo Router', 'TypeScript', 'Firebase', 'Firestore', 'Cloud Functions', 'Cloud KMS', 'Anthropic Claude'],
     outcomes: [
-      'Shipped one shared product across iOS, Android, and web instead of a disconnected set of prototypes.',
-      'Built streaming AI official chat with personality modes and ElevenLabs voice responses.',
-      'Added durable moderation workflows, searchable civic data proxies, and an operator-facing admin dashboard.',
+      'Built a curated catalog of verified, open settlements fed by ingestion workers (FTC feed, court-administrator scrapers, CourtListener) behind an admin review gate — nothing publishes until a human approves it.',
+      'Shipped an autofill profile that envelope-encrypts sensitive fields (name, address, payment handles) with Cloud KMS, and never stores bank, SSN, or card numbers.',
+      'Kept the user in control end to end: an eligibility self-check, copy-to-clipboard claim assist (never auto-submission), on-device receipts, local deadline reminders, and one-tap account and data deletion.',
     ],
     stats: [
-      { label: 'Timeline', value: '12-month solo build' },
-      { label: 'Team', value: 'Founder-led with admin tooling' },
-      { label: 'Platform', value: 'iOS · Android · Web' },
-      { label: 'Impact', value: 'AI chat · surveys · moderation' },
+      { label: 'Timeline', value: 'Founder-led Expo build' },
+      { label: 'Team', value: 'User + admin curation' },
+      { label: 'Platform', value: 'iOS · Android' },
+      { label: 'Impact', value: 'Verified settlements · zero sensitive data' },
     ],
     sections: [
       {
         title: 'Problem',
         content:
-          'Most civic products either expose raw public data without useful context or bolt AI onto a narrow chat surface. Pinpoint needed to unify officials, legislation, surveys, community features, and moderation across mobile and web without becoming a pile of disconnected screens.',
+          'Open class action settlements are real money left on the table: notices are scattered across administrator sites, eligibility is buried in legalese, and the apps that aggregate them tend to hoard personal data or quietly file claims on a user\'s behalf. STLMNT had to make settlements discoverable and claimable without becoming a data broker or a fake legal service.',
       },
       {
         title: 'Approach',
         content:
-          'I built the stack around Expo, Express, Prisma, and PostgreSQL, then added direct Firebase token verification via Google JWKS, SSE-based Gemini chat, text-to-speech proxying, civic-data search proxies, and a durable moderation ledger. On the product side, the interface centers on a swipe-based dashboard, deep links, and dedicated admin workflows.',
+          'I built an Expo Router app on an "Editorial Ink" design system — newspaper masthead meets legal ledger — over a default-deny Firestore model. Ingestion workers (FTC RSS, JND/Atticus/Simpluris/Kroll, and a CourtListener webhook) feed a review queue that an admin curates, optionally with an Anthropic Claude drafting step, before anything reaches the public catalog. The autofill profile routes through a callable Cloud Function gateway that envelope-encrypts sensitive fields with Cloud KMS, and receipts stay on the device. Crucially, the app only ever copies a claim to the clipboard — the user submits it themselves on the official site, under penalty of perjury.',
       },
       {
         title: 'Outcome',
         content:
-          'The result is a real platform rather than a civic-tech demo: one codebase serves iOS, Android, and web, AI chats stream with voice responses, moderation decisions stay auditable, and the release process is backed by CI, secret scanning, and reliable Railway deploys.',
+          'STLMNT turns a scattered, jargon-heavy process into one honest workflow: find a settlement, check eligibility, autofill and copy the official form, file it yourself, and track status through to payout. It collects the minimum to be useful — brand names for matching, payment handles instead of account numbers — and lets users erase everything in a single tap.',
+      },
+    ],
+    cover: {
+      eyebrow: 'Class action settlement tracker',
+      headline: 'Verified open settlements, eligibility checks, and claim-form autofill — without auto-filing or hoarding your data.',
+      chips: ['Expo Router', 'Firestore default-deny', 'Cloud KMS encryption', 'Ingestion + curation'],
+      metrics: [
+        { label: 'Claim assist', value: 'Copy, never submit' },
+        { label: 'Sensitive data', value: 'KMS-encrypted' },
+        { label: 'Receipts', value: 'On-device only' },
+      ],
+    },
+    featured: true,
+  },
+  {
+    slug: 'pinpoint-civic-engagement',
+    title: 'The Pinpoint App',
+    category: 'Civic tech',
+    summary:
+      'A civic engagement app that helps constituents find their elected officials, contact them with guided outreach emails, and organize with neighbors around local issues — across iOS, Android, and web.',
+    metaDescription:
+      'The Pinpoint App is a civic engagement platform: find your representatives, send guided outreach emails through a Postmark relay, and rally support around community issues with a Firestore-backed Pinboard and group chats.',
+    tags: ['Civic Tech', 'Mobile + Web', 'Outreach', 'Community'],
+    stack: ['React Native', 'Expo SDK 54', 'Expo Router', 'TypeScript', 'Firebase', 'Firestore', 'Cloud Functions', 'Express', 'Prisma', 'PostgreSQL', 'OpenStates', 'Postmark'],
+    outcomes: [
+      'Rebuilt the product around four focused tabs — Reps, Pinboard, Posses, and a guided Outreach flow — under a custom "Editorial Ink" design system.',
+      'Shipped a Postmark-backed outreach relay with DMARC-safe sending, per-user caps, content screening, live delivery status, and copy/call/web-form fallbacks when an office takes no email.',
+      'Built a Firestore-backed issue Pinboard and group "Posses" with community-consensus resolution and moderation, with counters and safety logic owned by Firebase Cloud Functions.',
+    ],
+    stats: [
+      { label: 'Timeline', value: 'Solo build + Editorial Ink rebuild' },
+      { label: 'Team', value: 'Founder-led: app, backend, admin' },
+      { label: 'Platform', value: 'iOS · Android · Web' },
+      { label: 'Impact', value: 'Reps · Outreach · Pinboard · Posses' },
+    ],
+    sections: [
+      {
+        title: 'Problem',
+        content:
+          'Civic apps tend to dump raw government data on people or trap "contact your rep" behind a dead-end form. The Pinpoint App needed to carry a constituent from "who represents me?" all the way to a sent message and an organized group of neighbors — without burying them in screens.',
+      },
+      {
+        title: 'Approach',
+        content:
+          'I rebuilt the app around four tabs — Reps, Pinboard, Posses, and You — plus a guided Outreach flow. Officials resolve from GPS or a typed ZIP through an OpenStates backend proxy; the Outreach composer relays a constituent message via Postmark with a DMARC-safe sender and the user as reply-to, enforcing daily caps, per-office cooldowns, and content screening, and falling back to copy/call/web-form when an office has no public email. The Pinboard and Posses run directly on Cloud Firestore, while a separate set of Firebase Cloud Functions owns the derived counters, consensus, and moderation.',
+      },
+      {
+        title: 'Outcome',
+        content:
+          'The Pinpoint App now reads like a tool, not a data dump: you find your representatives, send a real message with live delivery status, raise a local issue, and organize a moderated group around it. The print-inspired Editorial Ink design system — paper, ink, and oxblood in light; charcoal, off-white, and brass in dark — ties the whole experience together across iOS, Android, and web.',
       },
     ],
     cover: {
       eyebrow: 'Civic engagement platform',
-      headline: 'Officials, legislation, AI voice chat, and moderation in one product.',
-      chips: ['Expo SDK 54', 'Express API', 'Prisma ORM', 'Railway deploys'],
+      headline: 'Find your reps, send a real message, and organize neighbors around the issues that matter.',
+      chips: ['Editorial Ink design system', 'Firestore + Cloud Functions', 'Postmark outreach relay', 'OpenStates proxy'],
       metrics: [
-        { label: 'AI voice', value: 'SSE + TTS' },
-        { label: 'Search proxy', value: '6 hr cache' },
-        { label: 'Ops trail', value: 'Decision ledger' },
+        { label: 'Outreach', value: 'Postmark relay' },
+        { label: 'Community', value: 'Pinboard + Posses' },
+        { label: 'Delivery', value: 'Live status' },
       ],
     },
     featured: true,
@@ -260,50 +310,50 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: 'yap-united-live-translation',
-    title: 'Yap United',
+    title: 'The Yap App',
     category: 'Realtime translation',
     summary:
-      'A real-time translation app built for shared-device conversations, with Gemini Live audio streaming, ElevenLabs voices, and location-based community chat.',
+      "A conversation-translation app for people who don't share a language: speak or type and it transcribes, translates, and speaks back — plus a camera Sign Scanner, hands-free Live Mode, and voice cloning.",
     metaDescription:
-      'Yap United is a real-time translation app with Gemini Live audio, multilingual voice output, and community chat zones.',
-    tags: ['Translation', 'Realtime Audio', 'Voice', 'Community'],
-    stack: ['React Native', 'Expo Router', 'Gemini Live API', 'Gemini 2.5 Flash', 'ElevenLabs', 'Firebase', 'expo-audio'],
+      'The Yap App is a real-time conversation-translation app with turn-based and hands-free Live Mode translation, a camera Sign Scanner, ElevenLabs voice cloning, and 37 supported languages.',
+    tags: ['Translation', 'Realtime Audio', 'Voice AI', 'Mobile'],
+    stack: ['React Native', 'Expo', 'Expo Router', 'Firebase', 'Firestore', 'Cloud Functions', 'Gemini 2.5', 'Groq (Llama 3.3 70B)', 'Deepgram Nova-3', 'ElevenLabs', 'RevenueCat'],
     outcomes: [
-      'Built both turn-based translation and hands-free live mode for real conversations on a shared device.',
-      'Supported 15 languages end-to-end across transcription, translation, and voice output.',
-      'Added per-user voice assignment, location-based community chat, and social moderation controls around the core translation flow.',
+      'Built turn-based conversation translation plus a hands-free Live Mode that streams speech-to-text, translation, and voice in real time and routes output to earbuds.',
+      'Shipped a camera Sign Scanner (vision OCR), personal voice cloning, and remote conversations you start by QR code or deep link — with a short-lived nearby broadcast for connecting in person.',
+      'Routed every AI provider behind Firebase Cloud Functions so no model API keys ship in the app, and supported 37 languages including classical, Indigenous, and constructed tongues.',
     ],
     stats: [
       { label: 'Timeline', value: 'Realtime audio pipeline' },
-      { label: 'Team', value: 'Two-speaker shared-device UX' },
-      { label: 'Platform', value: 'Mobile · Live audio' },
-      { label: 'Impact', value: '15 languages · L/R routing' },
+      { label: 'Team', value: 'Founder-led: app + Cloud Functions' },
+      { label: 'Platform', value: 'iOS · Android' },
+      { label: 'Impact', value: '37 languages · live + scan' },
     ],
     sections: [
       {
         title: 'Problem',
         content:
-          'Translation apps often break the rhythm of an actual conversation. Yap United needed to handle live voice, turn-taking, and multilingual community behavior without making people fight the interface.',
+          'Most translation apps break the rhythm of a real conversation: you talk, wait, then read. The Yap App needed to handle live two-way speech, printed signs, and even voice identity without making people fight the interface — and do it without leaking AI keys into a mobile binary.',
       },
       {
         title: 'Approach',
         content:
-          'I built a dual-mode speech system: a turn-based flow for shared-device conversations and a Gemini Live pipeline for hands-free mode. Audio is recorded with Expo, translated with Gemini, voiced with ElevenLabs, and routed to the correct earbud side with reconnect and backoff handling when the live session drops.',
+          "I built two translation paths: a turn-based flow powered by Gemini for transcription and translation, and a hands-free Live Mode that streams Deepgram Nova-3 speech-to-text into Groq's Llama 3.3 70B for translation and ElevenLabs for spoken output, with reconnect and backoff when a stream drops. A Gemini-vision Sign Scanner translates printed text from the camera, ElevenLabs powers optional voice cloning, and every provider call runs server-side in Firebase Cloud Functions behind short-lived minted tokens. Contacts connect by QR code or deep link, with a short-lived nearby broadcast for meeting in person.",
       },
       {
         title: 'Outcome',
         content:
-          'Yap United supports 15 languages end-to-end, lets each user keep a distinct voice identity, and extends beyond translation with community zones, moderation controls, and non-Latin script handling that keeps the conversation usable under real conditions.',
+          'The Yap App handles real conversations: turn-by-turn on one device, hands-free Live Mode through earbuds, a camera Sign Scanner, and personal voice cloning — across 37 languages spanning everyday tongues, classical and Indigenous languages, and a few constructed ones. The Coastal Brand design system — deep teal anchored by warm earth tones — keeps the dense, real-time UI calm and legible.',
       },
     ],
     cover: {
       eyebrow: 'Realtime voice translation',
-      headline: 'Shared-device conversations, live mode, and multilingual voice output that holds up in motion.',
-      chips: ['Gemini Live API', '15 languages', 'ElevenLabs TTS', 'Firebase chat'],
+      headline: 'Speak, type, or scan — The Yap App transcribes, translates, and talks back in real time.',
+      chips: ['Coastal Brand design system', 'Deepgram + Groq + ElevenLabs', 'Gemini vision Sign Scanner', 'Server-side AI keys'],
       metrics: [
-        { label: 'Mode', value: 'Live + turns' },
-        { label: 'Languages', value: '15 total' },
-        { label: 'Audio', value: 'L/R routing' },
+        { label: 'Languages', value: '37 supported' },
+        { label: 'Modes', value: 'Live · turns · scan' },
+        { label: 'Voice', value: 'Cloning + TTS' },
       ],
     },
   },
@@ -641,7 +691,7 @@ export const differentiators: Differentiator[] = [
   {
     title: 'AI-native mobile, integrated for real',
     description:
-      'Most "AI-powered" apps wrap a single API call in a modal. I ship the harder version: streaming audio translation, on-device intelligence pipelines, multi-provider failover, and SSE voice responses, across Gemini, Groq, Deepgram, and ElevenLabs, in production.',
+      'Most "AI-powered" apps wrap a single API call in a modal. I ship the harder version: streaming audio translation, on-device intelligence pipelines, multi-provider failover, and real-time voice output, across Gemini, Groq, Deepgram, and ElevenLabs, in production.',
   },
   {
     title: 'Privacy-first architecture, evidenced not claimed',
@@ -656,6 +706,6 @@ export const differentiators: Differentiator[] = [
   {
     title: 'Shipped for real users, not a demo',
     description:
-      'Every build carries CI, secret scanning, monitoring, and a real release process. Eleven products across civic, logistics, translation, PropTech, and spatial AI have run that gauntlet, so I know what breaks at each layer.',
+      'Every build carries CI, secret scanning, monitoring, and a real release process. Twelve products across civic, logistics, translation, PropTech, spatial AI, and consumer rights have run that gauntlet, so I know what breaks at each layer.',
   },
 ]

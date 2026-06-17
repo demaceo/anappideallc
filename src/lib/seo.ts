@@ -10,7 +10,7 @@ export const META: Record<string, { title: string; description: string; path: st
   '/': {
     title: `${SITE.name}: AI-Native, Privacy-First Mobile App Studio | Denver`,
     description:
-      'Denver studio building AI-native mobile apps with privacy built in: real-time AI, on-device encryption, React Native, shipped end-to-end by one builder. 11 apps shipped. MVPs in 6–8 weeks.',
+      'Denver studio building AI-native mobile apps with privacy built in: real-time AI, on-device encryption, React Native, shipped end-to-end by one builder. 12 apps shipped. MVPs in 6–8 weeks.',
     path: '/',
   },
   '/about': {
@@ -20,9 +20,9 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/about',
   },
   '/work': {
-    title: `Work: 11 Shipped Apps & Web Products | ${SITE.name}`,
+    title: `Work: 12 Shipped Apps & Web Products | ${SITE.name}`,
     description:
-      '11 products shipped: Pinpoint (civic AI), Payback (privacy analytics), RentHarbor (PropTech), Feng Shui (spatial AI), Yap United (translation), Zoori, HITLDI, and more. React Native, TypeScript, full-stack.',
+      '12 products shipped: STLMNT (settlement tracker), The Pinpoint App (civic tech), Payback (privacy analytics), Feng Shui (spatial AI), The Yap App (translation), Zoori, HITLDI, and more. React Native, TypeScript, full-stack.',
     path: '/work',
   },
   '/services': {
@@ -55,10 +55,16 @@ export const META: Record<string, { title: string; description: string; path: st
       'Support for every app by An App Idea LLC. Report a bug, delete your data, manage a subscription, or ask a question. Answered directly by the builder, within 1–2 business days. Privacy and terms for each app.',
     path: '/support',
   },
-  '/work/pinpoint-civic-engagement': {
-    title: `Pinpoint — Civic Engagement Platform | ${SITE.name}`,
+  '/work/stlmnt-settlement-tracker': {
+    title: `STLMNT — Class Action Settlement Tracker | ${SITE.name}`,
     description:
-      'How Demaceo Vincent built Pinpoint: a civic platform across iOS, Android, and web with AI voice chat, legislation data, surveys, moderation, and an Express + Prisma + PostgreSQL backend.',
+      'Case study: STLMNT, a privacy-first class action settlement tracker built with Expo and Firebase — a curated catalog, eligibility self-check, KMS-encrypted claim autofill, on-device receipts, and copy-to-clipboard claim assist (never auto-filing).',
+    path: '/work/stlmnt-settlement-tracker',
+  },
+  '/work/pinpoint-civic-engagement': {
+    title: `The Pinpoint App — Civic Engagement Platform | ${SITE.name}`,
+    description:
+      'How Demaceo Vincent built The Pinpoint App: a civic engagement app across iOS, Android, and web — find your representatives, send guided outreach emails through a Postmark relay, and organize neighbors on a Firestore-backed Pinboard and group chats.',
     path: '/work/pinpoint-civic-engagement',
   },
   '/work/payback-consumer-intelligence': {
@@ -80,9 +86,9 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/work/feng-shui-room-analysis',
   },
   '/work/yap-united-live-translation': {
-    title: `Yap United — Real-Time Translation App | ${SITE.name}`,
+    title: `The Yap App — Real-Time Translation App | ${SITE.name}`,
     description:
-      'Case study: Yap United, a real-time translation app with Gemini Live audio, ElevenLabs TTS, 15 languages, L/R earpiece routing, and location-based community chat.',
+      'Case study: The Yap App, a conversation-translation app with turn-based and hands-free Live Mode, a camera Sign Scanner, ElevenLabs voice cloning, and 37 supported languages — Gemini, Groq, and Deepgram behind Firebase Cloud Functions.',
     path: '/work/yap-united-live-translation',
   },
   '/work/drayage-drivers': {
@@ -148,13 +154,13 @@ export const META: Record<string, { title: string; description: string; path: st
   '/legal/pinpoint/privacy': {
     title: `Privacy Policy — Pinpoint | ${SITE.name}`,
     description:
-      'Privacy Policy for the Pinpoint civic engagement app (iOS & Android). Covers account info, location data, outreach messages, Firebase storage, and your rights. Operated by Mile High Interface LLC.',
+      'Privacy Policy for the Pinpoint civic engagement app (iOS & Android). Covers account info, location data, outreach messages, Firebase storage, and your rights. Operated by An App Idea LLC.',
     path: '/legal/pinpoint/privacy',
   },
   '/legal/pinpoint/terms': {
     title: `Terms of Service — Pinpoint | ${SITE.name}`,
     description:
-      'Terms of Service for the Pinpoint civic engagement app (iOS & Android). Covers acceptable use, outreach to officials, user content, moderation, and governing law (Colorado). Operated by Mile High Interface LLC.',
+      'Terms of Service for the Pinpoint civic engagement app (iOS & Android). Covers acceptable use, outreach to officials, user content, moderation, and governing law (Colorado). Operated by An App Idea LLC.',
     path: '/legal/pinpoint/terms',
   },
   '/legal/drayagepro/privacy': {
@@ -429,7 +435,7 @@ function buildPageGraph(route: string): object[] {
           '@id': `${url}/#portfolio`,
           name: 'Portfolio · Shipped Applications',
           description:
-            'Eleven products shipped end-to-end by An App Idea LLC founder Demaceo Vincent.',
+            'Twelve products shipped end-to-end by An App Idea LLC founder Demaceo Vincent.',
           numberOfItems: caseStudies.length,
           itemListElement: caseStudies.map((c, i) => ({
             '@type': 'ListItem',
