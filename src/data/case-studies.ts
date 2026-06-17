@@ -148,6 +148,7 @@ export const caseStudies: CaseStudy[] = [
         { label: 'Delivery', value: 'Live status' },
       ],
     },
+    icon: '/app-icons/pinpoint.png',
     featured: true,
   },
   {
@@ -361,6 +362,7 @@ export const caseStudies: CaseStudy[] = [
         { label: 'Voice', value: 'Cloning + TTS' },
       ],
     },
+    icon: '/app-icons/yap.png',
   },
   {
     slug: 'drayage-drivers',
