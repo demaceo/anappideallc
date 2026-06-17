@@ -9,7 +9,7 @@ export default function YapPrivacy() {
         appLabel="The Yap App"
         docType="privacy"
         subtitle={`The Yap App — ${SITE.name}`}
-        dateLine="Effective Date: June 4, 2026 · Last Updated: June 4, 2026"
+        dateLine="Effective Date: June 4, 2026 · Last Updated: June 17, 2026"
       >
 
         <div className="intro-block">
@@ -53,7 +53,7 @@ export default function YapPrivacy() {
           <li><strong>Scan history</strong> — saved results from Sign Scanner sessions</li>
         </ul>
 
-        <h3 className="legal-subsection">1.3 Voice Cloning Data (Pro Tier)</h3>
+        <h3 className="legal-subsection">1.3 Voice Cloning Data</h3>
         <p>If you choose to use Voice Cloning:</p>
         <ul className="legal-list">
           <li><strong>Voice sample audio files</strong> you record</li>
@@ -70,7 +70,7 @@ export default function YapPrivacy() {
           <li><strong>Settings</strong> — target language, selected voice, and color theme preference</li>
           <li><strong>Contacts and connection requests</strong> — display names, user numbers, and relationship status (connected, blocked, muted, custom alias)</li>
           <li><strong>Presence signals</strong> — approximate last-active timestamp and which conversation you are currently viewing; visible only to contacts and used solely to show "online" indicators</li>
-          <li><strong>Discoverability signals</strong> — if you activate the "broadcast availability" feature, a short-lived discoverability record is visible to nearby users for up to 15 minutes</li>
+          <li><strong>Discoverability signals</strong> — if you activate the "broadcast availability" feature, a short-lived discoverability record (your user number and display name) is visible to nearby users for up to 10 minutes, after which it expires automatically</li>
           <li><strong>Performance telemetry</strong> — anonymized timing data from translation pipeline stages (no message content, no personal identifiers)</li>
         </ul>
 

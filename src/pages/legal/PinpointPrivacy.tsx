@@ -1,7 +1,7 @@
 import { LegalPage } from '../../components/LegalPage/LegalPage'
 import { SITE } from '../../data/site'
 
-const OPERATOR = 'Mile High Interface LLC'
+const OPERATOR = 'An App Idea LLC'
 const CONTACT = SITE.email
 
 export default function PinpointPrivacy() {
@@ -12,7 +12,7 @@ export default function PinpointPrivacy() {
         appLabel="Pinpoint"
         docType="privacy"
         subtitle={`Pinpoint — ${OPERATOR}`}
-        dateLine="Effective Date: June 4, 2026 · Last Updated: June 4, 2026"
+        dateLine="Effective Date: June 4, 2026 · Last Updated: June 17, 2026"
       >
 
         <div className="intro-block">
@@ -45,7 +45,7 @@ export default function PinpointPrivacy() {
           <p>
             <strong>Contact:</strong>{' '}
             <a href={`mailto:${CONTACT}`}>{CONTACT}</a><br />
-            <strong>Address:</strong> Aurora, CO, U.S.A.
+            <strong>Address:</strong> Denver, CO, U.S.A.
           </p>
         </div>
 
@@ -90,7 +90,11 @@ export default function PinpointPrivacy() {
 
         <h3 className="legal-subsection">Activity and Engagement Data</h3>
         <ul className="legal-list">
-          <li>Officials and issues you pin or favorite, and upvotes/downvotes you cast</li>
+          <li>
+            Your civic engagement actions on Pinboard issues — backing (pinning) an issue, marking
+            an issue as one you've contacted an official about, and voting to mark an issue resolved
+          </li>
+          <li>Which Pinboard issues you have viewed (recorded to count unique viewers)</li>
           <li>
             Outreach history — a record, stored on your device, of which officials you have
             contacted, about which topic, and when
@@ -117,7 +121,8 @@ export default function PinpointPrivacy() {
         <p>
           When you send a message to an official through the app, we process the message subject and
           body, the official's contact email, and your name and email address (used as the reply-to
-          address) in order to deliver your message.
+          address) in order to deliver your message. We also record the delivery status of your
+          message (for example, sent, delivered, or bounced) so you can see whether it went through.
         </p>
 
         <h3 className="legal-subsection">Device Information</h3>
@@ -162,14 +167,16 @@ export default function PinpointPrivacy() {
         </div>
         <ul className="legal-list">
           <li>
-            Server-side data (your account profile, favorites, votes, and the content you post) is
-            stored on US-based infrastructure using Firebase (authentication and the Firestore
+            Server-side data (your account profile, the content you post, and your outreach record)
+            is stored on US-based infrastructure using Firebase (authentication and the Firestore
             database) and our backend hosted on Railway.
           </li>
           <li>
             Some data is stored locally on your device using on-device storage, including your
-            outreach history, follow-up reminders, favorites, votes, and app preferences. This
-            local data persists between sessions and is cleared when you sign out.
+            outreach history, follow-up reminders, your issue engagement state, saved locations, and
+            app preferences (such as your theme). This local data persists between sessions; signing
+            out clears your cached account and profile data, and deleting the app or your account
+            removes the rest.
           </li>
           <li>
             We retain server-side data until you delete your account or request its deletion. Public
@@ -208,14 +215,14 @@ export default function PinpointPrivacy() {
               </tr>
               <tr>
                 <td><strong>Pinpoint Backend</strong> (Railway)</td>
-                <td>Account profile, favorites and votes, and relaying outreach messages</td>
+                <td>Account profile, the outreach email audit log, and relaying outreach messages</td>
                 <td>Profile data, message content, official contact email</td>
               </tr>
               <tr>
                 <td>
-                  <strong>Email Delivery Provider</strong>
+                  <strong>Postmark</strong>
                   <br />
-                  <span className="legal-table-note">(e.g. Postmark / SendGrid, via our backend)</span>
+                  <span className="legal-table-note">(email delivery, via our backend)</span>
                 </td>
                 <td>Relaying the outreach emails you send to officials</td>
                 <td>
@@ -280,7 +287,8 @@ export default function PinpointPrivacy() {
             device settings, or enter your postcode manually instead.
           </li>
           <li>
-            <strong>Sign out:</strong> Signing out clears locally stored data from the device.
+            <strong>Sign out:</strong> Signing out clears your cached account and profile data from
+            the device. Deleting the app removes all locally stored data.
           </li>
         </ul>
 
@@ -319,7 +327,7 @@ export default function PinpointPrivacy() {
           <p>
             <strong>{OPERATOR}</strong><br />
             Email: <a href={`mailto:${CONTACT}`}>{CONTACT}</a><br />
-            Address: Aurora, CO, U.S.A.
+            Address: Denver, CO, U.S.A.
           </p>
           <p>
             For questions about this Privacy Policy or to exercise your data rights, contact us at

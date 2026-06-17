@@ -9,7 +9,7 @@ export default function YapTerms() {
         appLabel="The Yap App"
         docType="terms"
         subtitle={`The Yap App — ${SITE.name}`}
-        dateLine="Effective Date: June 4, 2026 · Last Updated: June 4, 2026"
+        dateLine="Effective Date: June 4, 2026 · Last Updated: June 17, 2026"
       >
 
         <div className="intro-block">
@@ -71,7 +71,7 @@ export default function YapTerms() {
           <li><strong>Conversation translation</strong> — turn-by-turn translation on a single device, or real-time back-and-forth with a remote contact</li>
           <li><strong>Sign Scanner</strong> — camera-based OCR and translation of signs and printed text</li>
           <li><strong>Live Mode</strong> — hands-free, streaming conversation translation routed to earbuds</li>
-          <li><strong>Voice Cloning</strong> — clone your voice for personalized text-to-speech playback (Pro tier only)</li>
+          <li><strong>Voice Cloning</strong> — clone your voice for personalized text-to-speech playback (available to all users during the open beta)</li>
           <li><strong>Remote connections</strong> — connect with contacts via QR code or deep link for networked, real-time bilingual conversations</li>
         </ul>
         <p>
@@ -83,58 +83,45 @@ export default function YapTerms() {
         {/* § 4 */}
         <div className="section-header">
           <span className="section-num">04</span>
-          <h2>Subscriptions and Payments</h2>
+          <h2>Access, Usage Limits, and Payments</h2>
           <div className="section-rule" />
         </div>
 
-        <h3 className="legal-subsection">4.1 Free Tier</h3>
-        <p>The App is available at no charge with the following limits (enforced server-side):</p>
+        <h3 className="legal-subsection">4.1 Open Beta — Free Access</h3>
+        <p>
+          The App is currently offered free of charge during an open beta. There is no paid
+          subscription to purchase, and we do not collect payment from you at this time. Every
+          signed-in user has access to the full feature set — including Sign Scanner, Live Mode,
+          remote and group conversations, and Voice Cloning.
+        </p>
+
+        <h3 className="legal-subsection">4.2 Fair-Use Daily Limits</h3>
+        <p>
+          To keep the service sustainable, usage is subject to per-user daily limits, enforced
+          server-side and reset each day:
+        </p>
         <ul className="legal-list">
-          <li><strong>30 translations per day</strong> (plus a one-time bonus of 10 credits upon first use)</li>
-          <li><strong>5 Sign Scanner uses per day</strong></li>
-          <li><strong>15 spoken TTS playbacks per day</strong></li>
-          <li><strong>Up to 3 active remote conversation channels</strong></li>
-          <li><strong>No access to Voice Cloning</strong></li>
+          <li><strong>100 translations per day</strong> (plus a one-time bonus of 10 credits granted at sign-up)</li>
+          <li><strong>30 Sign Scanner uses per day</strong></li>
+          <li><strong>50 spoken (text-to-speech) playbacks per day</strong></li>
         </ul>
-
-        <h3 className="legal-subsection">4.2 Pro Tier</h3>
-        <p>A Pro subscription unlocks:</p>
-        <ul className="legal-list">
-          <li><strong>Up to 1,000 translations per day</strong> (fair-use limit)</li>
-          <li><strong>Up to 200 Sign Scanner uses per day</strong></li>
-          <li><strong>Up to 500 spoken TTS playbacks per day</strong></li>
-          <li><strong>Unlimited remote conversation channels</strong></li>
-          <li><strong>Voice Cloning</strong></li>
-        </ul>
-
-        <h3 className="legal-subsection">4.3 Billing and Auto-Renewal</h3>
         <p>
-          Pro subscriptions are managed through <strong>RevenueCat</strong> and charged by Apple
-          (App Store) or Google (Google Play), depending on your platform. By subscribing, you
-          authorize the applicable platform to charge your payment method on a recurring basis.
-          Subscriptions automatically renew unless cancelled at least 24 hours before the end of
-          the then-current billing period. You can manage or cancel your subscription in your
-          device's system subscription settings.
+          We may adjust these limits at any time to manage capacity and cost. Real-time chat and
+          remote conversations are not separately metered during the beta.
         </p>
 
-        <h3 className="legal-subsection">4.4 Refunds</h3>
+        <h3 className="legal-subsection">4.3 Future Paid Subscriptions</h3>
         <p>
-          Refund requests are governed by the refund policy of the platform through which you
-          subscribed (Apple App Store or Google Play Store). We do not issue refunds directly.
-        </p>
-
-        <h3 className="legal-subsection">4.5 Price Changes</h3>
-        <p>
-          We reserve the right to modify subscription prices at any time. We will provide
-          reasonable advance notice of any price increases. Continued use of a subscription after a
-          price change takes effect constitutes your acceptance of the new price.
-        </p>
-
-        <h3 className="legal-subsection">4.6 Free Trial</h3>
-        <p>
-          If we offer a free trial period, it will be described at the time of sign-up. Your
-          subscription will automatically convert to a paid plan at the end of the trial unless
-          you cancel before the trial ends.
+          We may introduce paid subscription plans in the future. If we do, the plan features,
+          pricing, and applicable limits will be presented to you in the App before you subscribe,
+          and paid plans will be managed through <strong>RevenueCat</strong> and charged by Apple
+          (App Store) or Google (Google Play) depending on your platform. Such subscriptions would
+          renew automatically unless cancelled at least 24 hours before the end of the billing
+          period and could be managed or cancelled in your device's system subscription settings.
+          Refunds for any future purchase would be governed by the refund policy of the platform
+          through which you subscribed (Apple App Store or Google Play Store); we do not issue
+          refunds directly. We will update these Terms before charging for any feature that is free
+          today.
         </p>
 
         {/* § 5 */}
