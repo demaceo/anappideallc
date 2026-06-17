@@ -10,7 +10,7 @@ export const META: Record<string, { title: string; description: string; path: st
   '/': {
     title: `${SITE.name}: AI-Native, Privacy-First Mobile App Studio | Denver`,
     description:
-      'Denver studio building AI-native mobile apps with privacy built in: real-time AI, on-device encryption, React Native, shipped end-to-end by one builder. 11 apps shipped. MVPs in 6–8 weeks.',
+      'Denver studio building AI-native mobile apps with privacy built in: real-time AI, on-device encryption, React Native, shipped end-to-end by one builder. 12 apps shipped. MVPs in 6–8 weeks.',
     path: '/',
   },
   '/about': {
@@ -20,9 +20,9 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/about',
   },
   '/work': {
-    title: `Work: 11 Shipped Apps & Web Products | ${SITE.name}`,
+    title: `Work: 12 Shipped Apps & Web Products | ${SITE.name}`,
     description:
-      '11 products shipped: The Pinpoint App (civic tech), Payback (privacy analytics), RentHarbor (PropTech), Feng Shui (spatial AI), The Yap App (translation), Zoori, HITLDI, and more. React Native, TypeScript, full-stack.',
+      '12 products shipped: STLMNT (settlement tracker), The Pinpoint App (civic tech), Payback (privacy analytics), Feng Shui (spatial AI), The Yap App (translation), Zoori, HITLDI, and more. React Native, TypeScript, full-stack.',
     path: '/work',
   },
   '/services': {
@@ -54,6 +54,12 @@ export const META: Record<string, { title: string; description: string; path: st
     description:
       'Support for every app by An App Idea LLC. Report a bug, delete your data, manage a subscription, or ask a question. Answered directly by the builder, within 1–2 business days. Privacy and terms for each app.',
     path: '/support',
+  },
+  '/work/stlmnt-settlement-tracker': {
+    title: `STLMNT — Class Action Settlement Tracker | ${SITE.name}`,
+    description:
+      'Case study: STLMNT, a privacy-first class action settlement tracker built with Expo and Firebase — a curated catalog, eligibility self-check, KMS-encrypted claim autofill, on-device receipts, and copy-to-clipboard claim assist (never auto-filing).',
+    path: '/work/stlmnt-settlement-tracker',
   },
   '/work/pinpoint-civic-engagement': {
     title: `The Pinpoint App — Civic Engagement Platform | ${SITE.name}`,
@@ -429,7 +435,7 @@ function buildPageGraph(route: string): object[] {
           '@id': `${url}/#portfolio`,
           name: 'Portfolio · Shipped Applications',
           description:
-            'Eleven products shipped end-to-end by An App Idea LLC founder Demaceo Vincent.',
+            'Twelve products shipped end-to-end by An App Idea LLC founder Demaceo Vincent.',
           numberOfItems: caseStudies.length,
           itemListElement: caseStudies.map((c, i) => ({
             '@type': 'ListItem',

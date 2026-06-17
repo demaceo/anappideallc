@@ -4,6 +4,7 @@ import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import {
+  LogoStlmnt,
   LogoPinpoint,
   LogoPayback,
   LogoRentHarbor,
@@ -17,7 +18,9 @@ import {
   LogoPortfolio,
 } from '../components/icons'
 
+// Index-aligned with `caseStudies` (src/data/case-studies.ts). STLMNT leads.
 const PROJECT_LOGOS = [
+  LogoStlmnt,
   LogoPinpoint,
   LogoPayback,
   LogoRentHarbor,
@@ -31,6 +34,7 @@ const PROJECT_LOGOS = [
   LogoPortfolio,
 ]
 const STUDY_COLORS = [
+  '#1f6b3b', // STLMNT — Editorial Ink ledger green
   '#8A1C1C', // The Pinpoint App — Editorial Ink oxblood
   '#1a3a5c',
   '#27ae60',
@@ -44,6 +48,7 @@ const STUDY_COLORS = [
   '#2980b9',
 ] as const
 const STUDY_LABELS = [
+  'Settlements',
   'Civic',
   'Privacy',
   'PropTech',
@@ -66,14 +71,14 @@ export default function Work() {
         <header className="masthead">
           <p className="overline">An App Idea LLC · Shipped products</p>
           <h1>Work</h1>
-          <p className="date-line">Eleven shipped products</p>
+          <p className="date-line">Twelve shipped products</p>
         </header>
       </PageHeader>
 
       <main className="container">
         <div className="intro-block">
           <p>
-            Eleven products shipped end-to-end: mobile apps, logistics tools,
+            Twelve products shipped end-to-end: mobile apps, logistics tools,
             data platforms, and client sites. Interface, backend, auth, CI, and
             deploy. Each one solves a real workflow rather than showcasing a trick.
           </p>
@@ -88,7 +93,7 @@ export default function Work() {
         <div className="stats-grid">
           <div className="stat-box neutral">
             <span className="stat-label-top">Products shipped</span>
-            <span className="stat-num large">11</span>
+            <span className="stat-num large">12</span>
             <span className="stat-desc">Mobile · Web · Data</span>
           </div>
           <div className="stat-box positive">
@@ -105,7 +110,7 @@ export default function Work() {
 
         <div className="section-header">
           <span className="section-num">Case studies</span>
-          <h2>Eleven shipped products</h2>
+          <h2>Twelve shipped products</h2>
           <div className="section-rule" />
         </div>
 
