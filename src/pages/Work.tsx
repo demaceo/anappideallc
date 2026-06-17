@@ -37,14 +37,14 @@ const STUDY_COLORS = [
   '#1f6b3b', // STLMNT — Editorial Ink ledger green
   '#8A1C1C', // The Pinpoint App — Editorial Ink oxblood
   '#1a3a5c',
-  '#27ae60',
-  '#d35400',
+  '#2563EB', // RentHarbor — proptech blue
+  '#C44536', // Feng Shui — sumi-e cinnabar
   '#0E7C86', // The Yap App — Coastal Brand deep teal
   '#c0392b',
-  '#16a085',
+  '#F4533C', // Zoori — coral
   '#2c3e50',
-  '#e67e22',
-  '#8e44ad',
+  '#8B4C99', // Unmasked — silk purple
+  '#2D4A3E', // Timeless — forest
   '#2980b9',
 ] as const
 const STUDY_LABELS = [
@@ -119,10 +119,14 @@ export default function Work() {
           return (
             <Link key={c.slug} to={`/work/${c.slug}`} className="feature-item feature-item--linked">
               <div
-                className="feature-icon app-mark"
-                style={{ background: STUDY_COLORS[i] }}
+                className={`feature-icon app-mark${c.icon ? ' app-mark--photo' : ''}`}
+                style={c.icon ? undefined : { background: STUDY_COLORS[i] }}
               >
-                <ProjectLogo size={22} color="white" strokeWidth={1.75} />
+                {c.icon ? (
+                  <img src={c.icon} alt="" className="app-mark-img" loading="lazy" />
+                ) : (
+                  <ProjectLogo size={22} color="white" strokeWidth={1.75} />
+                )}
               </div>
               <div className="feature-body">
                 <span className="feature-eyebrow">{STUDY_LABELS[i]}</span>

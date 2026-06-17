@@ -8,6 +8,20 @@ export interface CaseStudyStat { label: 'Timeline' | 'Team' | 'Platform' | 'Impa
 export interface CaseStudySection { title: 'Problem' | 'Approach' | 'Outcome'; content: string }
 export interface CaseStudyResourceLink { label: string; url: string; description: string }
 
+// Optional per-project theming for the case-study detail page. Values are
+// pulled from each app's own design tokens so the case study carries a nod to
+// the product's real UI identity. `accent`/`gold` override the editorial
+// --accent/--gold CSS vars (scoped to the detail page's <main>); `mark` colors
+// the app icon tile; `gradient` paints the signature strip on the cover block;
+// `dark` opts the cover block into a dark, immersive surface treatment.
+export interface CaseStudyTheme {
+  accent: string
+  gold: string
+  mark: string
+  gradient?: string
+  dark?: boolean
+}
+
 export interface CaseStudy {
   slug: string
   title: string
@@ -28,6 +42,10 @@ export interface CaseStudy {
   liveUrl?: string
   repoUrl?: string
   resourceLinks?: CaseStudyResourceLink[]
+  theme?: CaseStudyTheme
+  // Path (under /public) to the app's real icon artwork. When present it's
+  // rendered full-bleed in the project tile instead of the line-glyph fallback.
+  icon?: string
   featured?: boolean
 }
 
@@ -187,48 +205,55 @@ export const caseStudies: CaseStudy[] = [
     title: 'RentHarbor',
     category: 'PropTech',
     summary:
-      'A multi-role property management platform for landlords, tenants, and admins with realtime messaging, payments, maintenance workflows, and 3D property previews.',
+      'A multi-role property management platform for tenants, landlords, and admins — rent payments, maintenance workflows, in-app messaging, and AI-generated community resource guides, with database-enforced access via Supabase Row Level Security and a PWA web build.',
     metaDescription:
-      'RentHarbor is a property management platform with role-based access, realtime operations, and 3D property visualization.',
-    tags: ['PropTech', 'Realtime', '3D', 'Role-Based Access'],
-    stack: ['React Native', 'Supabase', 'PostgreSQL', 'RLS', 'Three.js', 'React Three Fiber', 'expo-gl', 'Workbox'],
+      'RentHarbor is an Expo + Supabase property management platform with role-based access (tenant, landlord, admin), rent payments, maintenance workflows, AI community resource guides, and a Workbox PWA web build.',
+    tags: ['PropTech', 'Multi-role', 'Supabase RLS', 'PWA'],
+    stack: ['React Native', 'Expo SDK 54', 'Supabase', 'PostgreSQL', 'Row Level Security', 'Edge Functions', 'Gemini 2.5 Flash', 'react-native-maps', 'Workbox PWA'],
     outcomes: [
-      'Designed a three-sided product model with separate landlord, tenant, and admin capabilities backed by database-enforced access rules.',
-      'Delivered live messaging, maintenance updates, and payment status through realtime subscriptions.',
-      'Extended the product with 3D property visualization and a PWA web build instead of stopping at mobile CRUD flows.',
+      'Designed a three-role product — tenant, landlord, and admin — each with its own dashboards, capabilities, and color-themed interface, backed by Postgres Row Level Security policies.',
+      'Delivered rent payments across Venmo, bank transfer, and check, a full maintenance-request lifecycle (categories, priority, assignment, costs, scheduling), and per-role in-app messaging on one Supabase backend.',
+      'Added AI-generated community resource guides via a Gemini edge function with an admin approval workflow, plus a Workbox-powered PWA web build alongside the native iOS and Android apps.',
     ],
     stats: [
       { label: 'Timeline', value: 'Multi-role SaaS build' },
-      { label: 'Team', value: 'Landlords · tenants · admins' },
-      { label: 'Platform', value: 'Mobile · Web PWA' },
-      { label: 'Impact', value: 'Realtime ops · 3D previews' },
+      { label: 'Team', value: 'Tenant · Landlord · Admin' },
+      { label: 'Platform', value: 'iOS · Android · Web PWA' },
+      { label: 'Impact', value: 'Payments · Maintenance · AI resources' },
     ],
     sections: [
       {
         title: 'Problem',
         content:
-          'Property management software is often either admin-heavy and outdated or lightweight enough that the role model breaks down under real use. RentHarbor needed one system that respected landlord, tenant, and admin boundaries without flattening the experience.',
+          'Property management software is often either admin-heavy and outdated or lightweight enough that the role model breaks down under real use. RentHarbor needed one system that respected tenant, landlord, and admin boundaries without flattening the experience.',
       },
       {
         title: 'Approach',
         content:
-          'I built the platform around Supabase Auth, PostgreSQL, Row Level Security, Realtime, and Edge Functions. Messaging, maintenance, and payment updates stream live, while a React Native plus Three.js layer brings interactive property previews into the product instead of treating them like detached marketing assets.',
+          'I built the platform on Supabase Auth, PostgreSQL, Row Level Security, and Edge Functions, with Expo Router driving role-specific tenant, landlord, and admin layouts. Each role gets its own themed interface — blue for tenants, green for landlords, red for admins — and a Gemini-backed edge function generates localized community-resource guides that admins approve before they reach tenants.',
       },
       {
         title: 'Outcome',
         content:
-          'RentHarbor supports day-to-day property operations, approval gates, and live collaboration from the same product backbone. Database-enforced access control keeps the role model honest as new features and interfaces are added.',
+          'RentHarbor supports rent payment, maintenance, messaging, and curated community resources from one role-aware backbone. Database-enforced RLS keeps the role model honest as features are added, and a Workbox PWA build extends the same product to the web.',
       },
     ],
     cover: {
       eyebrow: 'Role-aware property ops',
-      headline: 'A landlord, tenant, and admin system with realtime updates and 3D context.',
-      chips: ['Supabase RLS', 'Realtime events', '3D previews', 'PWA build'],
+      headline: 'A tenant, landlord, and admin system with payments, maintenance, and AI community guides.',
+      chips: ['Supabase RLS', 'Edge Functions', 'Gemini resources', 'PWA build'],
       metrics: [
-        { label: 'Roles', value: '3-sided app' },
-        { label: 'Realtime', value: 'Live status' },
-        { label: 'Visualization', value: '3D property' },
+        { label: 'Roles', value: '3 themed roles' },
+        { label: 'Payments', value: 'Venmo · ACH · Check' },
+        { label: 'Web', value: 'PWA build' },
       ],
+    },
+    icon: '/app-icons/rentharbor.png',
+    theme: {
+      accent: '#2563EB',
+      gold: '#2ECC71',
+      mark: '#2563EB',
+      gradient: 'linear-gradient(180deg, #4A90E2 0%, #2ECC71 50%, #E74C3C 100%)',
     },
   },
   {
@@ -238,19 +263,19 @@ export const caseStudies: CaseStudy[] = [
     summary:
       'A spatial AI app that turns a hand-drawn room into a furnished 3D model, analyzes it with Gemini, and animates better layouts before the user commits.',
     metaDescription:
-      'Feng Shui is a spatial AI app with a drawing-to-3D pipeline, structured room analysis, and animated layout optimization.',
+      'Feng Shui is a spatial AI app with a 9-step drawing-to-3D pipeline, a 72-item furniture catalog, server-side Gemini room analysis, and animated layout optimization.',
     tags: ['Spatial AI', '3D', 'Mobile', 'Design Systems'],
-    stack: ['React Native', 'Skia', 'Three.js', 'expo-gl', 'Gemini 2.0 Flash', 'Firebase', 'Reanimated', 'simplify-js'],
+    stack: ['React Native', 'Expo SDK 54', 'Skia', 'Three.js', 'expo-gl', 'Gemini 2.0 Flash', 'Firebase Cloud Functions', 'Reanimated 4', 'Zustand + Zundo', 'simplify-js'],
     outcomes: [
-      'Built a full pipeline from freehand drawing to simplified geometry, room annotation, furnishing, and 3D preview.',
-      'Created a 69-item furniture catalog across 11 categories plus detailed wall, floor, and ceiling annotation systems.',
-      'Added AI layout optimization that presents 2-3 animated alternatives with score comparisons before the user applies changes.',
+      'Built a 9-step pipeline from freehand Skia drawing to simplified geometry, room annotation, furnishing, and a furnished 3D preview.',
+      'Created a 72-item furniture catalog across 11 categories plus a wall, floor, and ceiling annotation system for doors, windows, outlets, vents, and lighting.',
+      'Added server-side Gemini analysis (an overall score plus chi-flow, element-balance, command-position, and harmony sub-scores) with animated layout optimization that offers 2–3 scored alternatives before the user applies changes.',
     ],
     stats: [
-      { label: 'Timeline', value: '10-step guided workflow' },
+      { label: 'Timeline', value: '9-step guided workflow' },
       { label: 'Team', value: 'Founder-led spatial UX' },
       { label: 'Platform', value: 'Mobile · 3D canvas' },
-      { label: 'Impact', value: '69 items · AI layout options' },
+      { label: 'Impact', value: '72 items · AI layout options' },
     ],
     sections: [
       {
@@ -261,23 +286,30 @@ export const caseStudies: CaseStudy[] = [
       {
         title: 'Approach',
         content:
-          'I designed a 10-step flow from freehand drawing to simplified geometry, room naming, wall and fixture annotations, furnishing, 3D preview, AI analysis, and animated optimization. Skia handles the drawing surface, Three.js renders the space, and Gemini returns structured evaluations across bagua zones, element balance, chi flow, command position, and ranked recommendations.',
+          'I designed a 9-step flow — draw, refine, transform, annotate, furnish, preview, analyze, results, and optimize — wrapped in a vintage sumi-e ink-wash design system. Skia handles the freehand drawing surface, Three.js renders the space, and a Firebase Cloud Function calls Gemini server-side (the API key never ships to the client), returning structured evaluations across bagua zones, element balance, chi flow, command position, and a harmony score with ranked recommendations.',
       },
       {
         title: 'Outcome',
         content:
-          'The result is a spatial AI product with real depth: users can annotate walls and fixtures, place from a 69-item catalog, preview recommendations in motion, and choose between scored layout alternatives instead of guessing at a text-only suggestion.',
+          'The result is a spatial AI product with real depth: users annotate walls and fixtures, place from a 72-item catalog, preview recommendations in motion, and choose between scored layout alternatives instead of guessing at a text-only suggestion — with a Room Studio beta adding inline 2D/3D editing and undo/redo.',
       },
     ],
     cover: {
       eyebrow: 'Room analysis and optimization',
       headline: 'From hand-drawn floor plan to furnished 3D model and AI layout guidance.',
-      chips: ['Skia drawing', 'Three.js scene', 'Firebase functions', 'Reanimated previews'],
+      chips: ['Skia drawing', 'Three.js scene', 'Gemini Cloud Functions', 'Sumi-e design system'],
       metrics: [
-        { label: 'Workflow', value: '10 steps' },
-        { label: 'Catalog', value: '69 items' },
-        { label: 'Alternatives', value: '2-3 layouts' },
+        { label: 'Workflow', value: '9 steps' },
+        { label: 'Catalog', value: '72 items' },
+        { label: 'Alternatives', value: '2–3 layouts' },
       ],
+    },
+    icon: '/app-icons/feng-shui.png',
+    theme: {
+      accent: '#C44536',
+      gold: '#B8860B',
+      mark: '#C44536',
+      gradient: 'linear-gradient(180deg, #4A7C4E 0%, #B8860B 50%, #C44536 100%)',
     },
     featured: true,
   },
@@ -386,19 +418,19 @@ export const caseStudies: CaseStudy[] = [
     summary:
       'A bilingual dog adoption platform connecting Puerto Rico rescue organizations with adopters and fosterers, with swipe-based discovery, application workflows, in-app messaging, and an org and admin dashboard.',
     metaDescription:
-      'Zoori is a bilingual (en/es) Expo app connecting Puerto Rico rescue organizations with adopters and fosterers via swipe matching, application management, messaging, and push notifications.',
+      'Zoori is a bilingual (en/es) Expo app connecting Puerto Rico rescue organizations with adopters and fosterers via swipe matching, A–D match scoring, real-time messaging, push notifications, and RescueGroups.org listing sync.',
     tags: ['Social Impact', 'Mobile', 'Firebase', 'Bilingual', 'Multi-role'],
-    stack: ['Expo SDK 54', 'React Native 0.81', 'Expo Router v6', 'TanStack Query v5', 'Zustand v5', 'Firebase', 'Firestore', 'Cloud Functions', 'Resend', 'i18next', 'TypeScript'],
+    stack: ['Expo SDK 54', 'React Native 0.81', 'React 19', 'Expo Router v6', 'TanStack Query v5', 'Zustand v5', 'React Hook Form + Zod v4', 'Reanimated 4', 'Gesture Handler v2', 'Firebase JS SDK v12', 'Cloud Functions', 'Resend', 'i18next', 'TypeScript'],
     outcomes: [
-      'Built a three-sided platform — adopter, rescue organization, and admin — each with dedicated dashboards, workflows, and access controls backed by Firestore rules.',
-      'Delivered swipe-based dog discovery alongside a traditional browse-and-filter flow, with match scoring, saved dogs, and swipe history.',
-      'Added bilingual support (English and Spanish), in-app messaging per conversation, push notifications, and transactional email via Resend.',
+      'Built a three-sided platform — adopter, rescue organization, and admin — each with dedicated dashboards, workflows, moderation tools, and access controls backed by Firestore rules.',
+      'Delivered gesture-driven swipe discovery plus an algorithmic For-You feed with A–D match scoring, a breed glossary with bookmark alerts, saved dogs, and swipe history.',
+      'Added bilingual (en/es) support, real-time per-conversation messaging via Firestore listeners, 13 push-notification types, transactional email via Resend, and a RescueGroups.org listing sync.',
     ],
     stats: [
       { label: 'Timeline', value: 'Expo SDK 54, new arch' },
       { label: 'Team', value: 'Adopter · Org · Admin roles' },
       { label: 'Platform', value: 'iOS · Android' },
-      { label: 'Impact', value: 'Bilingual · Swipe + Browse' },
+      { label: 'Impact', value: 'Bilingual · Swipe + match scoring' },
     ],
     sections: [
       {
@@ -409,23 +441,30 @@ export const caseStudies: CaseStudy[] = [
       {
         title: 'Approach',
         content:
-          'I structured the app around Expo Router file-based routing with strict role-based layouts for adopter, organization, and admin. Firebase Auth, Firestore, and Cloud Functions power the backend. TanStack Query v5 handles server state, Zustand manages swipe and preference state client-side, and Reanimated v4 drives the swipe gesture layer. i18next covers bilingual content with locale detection.',
+          'I structured the app around Expo Router file-based routing with strict role-based layouts for adopter, organization, and admin, wrapped in a coral, teal, and purple role-themed gradient system with Poppins typography. Firebase Auth, Firestore, and Cloud Functions power the backend. TanStack Query v5 handles server state, Zustand manages swipe and preference state client-side, and Reanimated v4 plus Gesture Handler v2 drive the swipe deck. A client-side scorer grades dog–adopter fit A–D to power the For-You feed, and i18next covers bilingual content with locale detection.',
       },
       {
         title: 'Outcome',
         content:
-          'Zoori gives rescue organizations a full operations dashboard for dogs, applications, and messaging, while adopters get swipe-based and browse-based discovery tuned to their preferences. Bilingual support, push notifications, and transactional email make the platform usable for both English- and Spanish-speaking communities in Puerto Rico.',
+          'Zoori gives rescue organizations a full operations dashboard for dogs, applications, and messaging, while adopters get swipe and For-You discovery tuned to their preferences. Real-time messaging, push notifications, transactional email, a RescueGroups.org sync, and admin moderation make the platform usable for both English- and Spanish-speaking communities in Puerto Rico.',
       },
     ],
     cover: {
       eyebrow: 'Pet adoption & fostering',
-      headline: 'Swipe-based dog discovery and rescue org operations — bilingual, role-aware, real-time.',
-      chips: ['Expo SDK 54 new arch', 'Firebase + Firestore', 'TanStack Query v5', 'i18next (en/es)'],
+      headline: 'Swipe-based dog discovery and rescue-org operations — bilingual, role-aware, real-time.',
+      chips: ['Expo SDK 54 new arch', 'Firebase + Cloud Functions', 'TanStack Query v5', 'Role-themed gradients'],
       metrics: [
         { label: 'Roles', value: '3-sided app' },
         { label: 'Languages', value: 'English + Spanish' },
-        { label: 'Discovery', value: 'Swipe + Browse' },
+        { label: 'Discovery', value: 'Swipe + match score' },
       ],
+    },
+    icon: '/app-icons/zoori.png',
+    theme: {
+      accent: '#F4533C',
+      gold: '#14B8A6',
+      mark: '#F4533C',
+      gradient: 'linear-gradient(180deg, #F4533C 0%, #8B5CF6 50%, #14B8A6 100%)',
     },
   },
   {
@@ -484,19 +523,19 @@ export const caseStudies: CaseStudy[] = [
     summary:
       'A personal coaching website with a 3D silk background, Calendly booking integration, animated testimonials, and full SEO — built for an adoption-attuned coach focused on belonging and authentic confidence.',
     metaDescription:
-      'Unmasked Coaching is a React 19 coaching website with Three.js 3D backgrounds, Framer Motion animations, Calendly integration, cookie consent, and Vercel deployment.',
+      'Unmasked Coaching is a React 19 coaching website with a Three.js silk-shader background, Framer Motion animations, an embedded Calendly booking flow, a custom cookie-consent banner, GA4 analytics, and Vercel deployment.',
     tags: ['Web', 'Coaching', '3D', 'SEO', 'Vercel'],
-    stack: ['React 19', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion', 'Three.js', 'React Three Fiber', 'React Calendly', 'Vercel'],
+    stack: ['React 19', 'TypeScript', 'Vite 6', 'Tailwind CSS v4', 'Framer Motion', 'Three.js', 'React Three Fiber', 'React Router 7', 'React Calendly', 'Vercel'],
     outcomes: [
-      'Built a polished coaching site with a Three.js silk background, Framer Motion page transitions, and a Calendly booking flow embedded in the contact section.',
-      'Added full SEO coverage — sitemap, robots.txt, meta tags — alongside cookie consent and dedicated Privacy and Cookie Policy pages.',
-      'Delivered a responsive, performance-optimized build with code splitting and lazy loading for optimal Lighthouse scores.',
+      'Built a coaching site with an animated Three.js silk-shader background (with a mobile-safe static fallback), Framer Motion section transitions, and a Calendly booking flow embedded in the contact section.',
+      'Shipped full SEO — sitemap, robots.txt, Open Graph, and Person JSON-LD — alongside a custom cookie-consent banner and dedicated Privacy and Cookie Policy pages.',
+      'Optimized delivery with route and component code-splitting, lazy loading, GA4 analytics, and an auto-playing, swipeable testimonials carousel.',
     ],
     stats: [
       { label: 'Timeline', value: 'Solo client build' },
       { label: 'Team', value: 'Founder-led delivery' },
       { label: 'Platform', value: 'Web' },
-      { label: 'Impact', value: 'Live booking · 3D UI' },
+      { label: 'Impact', value: 'Live booking · silk UI' },
     ],
     sections: [
       {
@@ -507,46 +546,53 @@ export const caseStudies: CaseStudy[] = [
       {
         title: 'Approach',
         content:
-          'I built the site in React 19 with Vite and Tailwind, using Three.js and React Three Fiber for the interactive silk background and Framer Motion for section transitions. Calendly is embedded directly so visitors can book without leaving the page. Cookie consent and Privacy/Policy pages handle compliance out of the box.',
+          'I built the site in React 19 with Vite and Tailwind v4, using Three.js and React Three Fiber for a custom four-color silk-shader background that disables on low-power devices and respects reduced-motion. Framer Motion drives section reveals and the testimonials carousel, and Calendly is embedded so visitors book a 30-minute session without leaving the page. A custom cookie banner plus Privacy and Cookie Policy pages handle compliance.',
       },
       {
         title: 'Outcome',
         content:
-          'Unmasked Coaching launched with a distinctive 3D visual identity, direct session booking, and SEO infrastructure in place — ready for organic traffic and referrals without additional configuration.',
+          'Unmasked Coaching launched at unmasked-coaching.com with a distinctive purple silk identity, direct session booking, GA4 analytics, and SEO infrastructure in place — heart-forward, adoption-attuned, and ready for organic traffic and referrals.',
       },
     ],
     cover: {
       eyebrow: 'Adoption-attuned coaching',
-      headline: 'A 3D-accented coaching site with direct booking, full SEO, and privacy compliance.',
-      chips: ['Three.js silk BG', 'Framer Motion', 'Calendly embed', 'Vercel deploy'],
+      headline: 'A silk-shader coaching site with direct booking, full SEO, and privacy compliance.',
+      chips: ['Three.js silk shader', 'Framer Motion', 'Calendly embed', 'Vercel deploy'],
       metrics: [
         { label: 'Booking', value: 'Calendly inline' },
-        { label: 'Visual FX', value: 'Three.js + Reanimated' },
-        { label: 'SEO', value: 'Sitemap + meta' },
+        { label: 'Visual FX', value: 'Three.js silk' },
+        { label: 'SEO', value: 'Sitemap + JSON-LD' },
       ],
     },
-    liveUrl: 'https://unmasked-coaching.vercel.app',
+    liveUrl: 'https://www.unmasked-coaching.com',
+    icon: '/app-icons/unmasked.png',
+    theme: {
+      accent: '#A855F7',
+      gold: '#C499FF',
+      mark: '#8B4C99',
+      dark: true,
+    },
   },
   {
     slug: 'timeless-coach-consult',
     title: 'Timeless Coach Consult',
     category: 'Coaching website',
     summary:
-      'A fully static Next.js website for a certified life coach specializing in adoption, life transitions, and personal development — with a curated resource library, service packages, and an accessible contact form.',
+      'A backend-free Next.js 16 website for a certified life coach specializing in adoption, life transitions, and personal development — with a curated resource library, service packages and FAQ, and accessible mailto-based contact forms.',
     metaDescription:
-      'Timeless Coaching & Consulting is a fully static Next.js 16 site with Tailwind CSS v4, Cormorant Garamond typography, a resource library, service packages, and WCAG-compliant design.',
-    tags: ['Web', 'Next.js', 'Coaching', 'Static', 'Accessibility'],
+      'Timeless Coaching & Consulting is a backend-free Next.js 16 site with Tailwind CSS v4, Cormorant Garamond typography, a resource library, service packages, mailto contact forms, and WCAG AAA text contrast.',
+    tags: ['Web', 'Next.js', 'Coaching', 'No backend', 'Accessibility'],
     stack: ['Next.js 16', 'React 19', 'Tailwind CSS v4', 'TypeScript', 'Vercel', 'next/image', 'next/font'],
     outcomes: [
-      'Delivered a fully static Next.js site with App Router — no backend required — ready for Vercel deployment with a custom domain.',
-      'Built a multi-page structure: home, about, services with packages and FAQ, and a curated resources page with journal prompts.',
-      'Used Cormorant Garamond and Raleway for a premium editorial typographic identity aligned with the coach\'s brand.',
+      'Delivered a backend-free Next.js 16 App Router site — home, about, services, and resources — ready for Vercel with a custom domain.',
+      'Built service packages with an FAQ, a curated resource library (six recommended books plus reflection prompts), and the "3 Cs of Life" coaching framework.',
+      'Used Cormorant Garamond and Raleway over a warm cream-and-forest palette for a premium editorial identity, with WCAG AAA text contrast (charcoal and forest on cream).',
     ],
     stats: [
-      { label: 'Timeline', value: 'Static site, no backend' },
+      { label: 'Timeline', value: 'No backend or CMS' },
       { label: 'Team', value: 'Solo client build' },
       { label: 'Platform', value: 'Web' },
-      { label: 'Impact', value: 'WCAG AA · Multi-page' },
+      { label: 'Impact', value: 'WCAG AAA · 4 pages' },
     ],
     sections: [
       {
@@ -557,25 +603,32 @@ export const caseStudies: CaseStudy[] = [
       {
         title: 'Approach',
         content:
-          'I built the site with Next.js 16 App Router in fully static output mode. Tailwind CSS v4 handles the design system, with brand tokens defined as CSS custom properties. next/image optimizes the AVIF and JPEG assets, next/font loads Cormorant Garamond and Raleway without layout shift, and the contact form uses a client-side mailto fallback.',
+          'I built the site with the Next.js 16 App Router and Tailwind CSS v4, with brand tokens defined as CSS custom properties in globals.css. next/image optimizes the AVIF and JPEG hero art, next/font loads Cormorant Garamond and Raleway without layout shift, and both the contact and email-capture forms use a client-side mailto fallback — no API routes or CMS.',
       },
       {
         title: 'Outcome',
         content:
-          "Timeless Coach Consult launched as a performant, WCAG AA-compliant static site on Vercel — covering Yvonne's bio, services, resource library, and contact without any backend or CMS overhead. The brand identity translated cleanly from her Wix reference into a modern editorial format.",
+          "Timeless Coach Consult launched as a fast, accessible, backend-free site on Vercel — covering Yvonne's bio, services and packages, and a resource library — with the warm cream-and-forest brand translated cleanly from her Wix reference into a modern editorial layout.",
       },
     ],
     cover: {
       eyebrow: 'Certified life coaching',
-      headline: 'A fully static Next.js coaching site with editorial typography, service packages, and a resource library.',
-      chips: ['Next.js 16 static', 'Tailwind CSS v4', 'Cormorant Garamond', 'Vercel deploy'],
+      headline: 'A backend-free Next.js coaching site with editorial typography, service packages, and a resource library.',
+      chips: ['Next.js 16 App Router', 'Tailwind CSS v4', 'Cormorant Garamond', 'Vercel deploy'],
       metrics: [
         { label: 'Pages', value: '4 sections' },
-        { label: 'Output', value: 'Fully static' },
-        { label: 'Deploy', value: 'Vercel + CDN' },
+        { label: 'Backend', value: 'None (mailto)' },
+        { label: 'Contrast', value: 'WCAG AAA' },
       ],
     },
     liveUrl: 'https://www.timelesscoach-consult.com',
+    icon: '/app-icons/timeless.png',
+    theme: {
+      accent: '#2D4A3E',
+      gold: '#C4714B',
+      mark: '#2D4A3E',
+      gradient: 'linear-gradient(180deg, #2D4A3E 0%, #7C9A7E 50%, #C4714B 100%)',
+    },
   },
   {
     slug: 'portfolio',
