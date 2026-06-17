@@ -33,14 +33,14 @@ const SLUG_TO_LOGO: Record<string, React.ComponentType<{ size?: number; color?: 
 const SLUG_TO_COLOR: Record<string, string> = {
   'pinpoint-civic-engagement': '#2980b9',
   'payback-consumer-intelligence': '#1a3a5c',
-  'rentharbor-property-management': '#27ae60',
-  'feng-shui-room-analysis': '#d35400',
+  'rentharbor-property-management': '#2563EB',
+  'feng-shui-room-analysis': '#C44536',
   'yap-united-live-translation': '#8e44ad',
   'drayage-drivers': '#c0392b',
-  'zoori-pet-care': '#16a085',
+  'zoori-pet-care': '#F4533C',
   'hitldi-platform': '#2c3e50',
-  'unmasked-coaching': '#e67e22',
-  'timeless-coach-consult': '#8e44ad',
+  'unmasked-coaching': '#8B4C99',
+  'timeless-coach-consult': '#2D4A3E',
   'portfolio': '#2980b9',
 }
 
@@ -51,7 +51,19 @@ export default function ProjectDetail() {
   if (!project) return <Navigate to="/work" replace />
 
   const ProjectLogo = SLUG_TO_LOGO[project.slug] ?? LogoPinpoint
-  const color = SLUG_TO_COLOR[project.slug] ?? '#2980b9'
+  const color = project.theme?.mark ?? SLUG_TO_COLOR[project.slug] ?? '#2980b9'
+
+  // When a project ships its own theme, scope its accent colors to the detail
+  // page body via CSS custom properties (the editorial --accent/--gold), and
+  // expose a `data-project-theme` hook for the signature cover-block treatment
+  // in globals.css. Untouched projects keep the default Editorial Ink palette.
+  const themeStyle = project.theme
+    ? ({
+        '--accent': project.theme.accent,
+        '--gold': project.theme.gold,
+        ...(project.theme.gradient ? { '--project-gradient': project.theme.gradient } : {}),
+      } as React.CSSProperties)
+    : undefined
 
   return (
     <>
@@ -78,7 +90,11 @@ export default function ProjectDetail() {
         </header>
       </PageHeader>
 
-      <main className="container">
+      <main
+        className="container"
+        style={themeStyle}
+        data-project-theme={project.theme ? project.slug : undefined}
+      >
 
         {/* Cover headline + chips */}
         <div className="project-cover-block">

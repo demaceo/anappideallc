@@ -33,14 +33,14 @@ const PROJECT_LOGOS = [
 const STUDY_COLORS = [
   '#2980b9',
   '#1a3a5c',
-  '#27ae60',
-  '#d35400',
+  '#2563EB', // RentHarbor — proptech blue
+  '#C44536', // Feng Shui — sumi-e cinnabar
   '#8e44ad',
   '#c0392b',
-  '#16a085',
+  '#F4533C', // Zoori — coral
   '#2c3e50',
-  '#e67e22',
-  '#8e44ad',
+  '#8B4C99', // Unmasked — silk purple
+  '#2D4A3E', // Timeless — forest
   '#2980b9',
 ] as const
 const STUDY_LABELS = [
