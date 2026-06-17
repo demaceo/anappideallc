@@ -19,7 +19,7 @@ export default function Home() {
         <header className="masthead">
           <p className="overline">AI-Native Mobile · Privacy-First · Denver, Colorado</p>
           <h1>Got an app idea? <em>Let's build it.</em></h1>
-          <p className="subtitle">{SITE.description}</p>
+          <p className="subtitle">AI-native mobile apps with privacy built in, shipped end-to-end by one builder.</p>
           <p className="date-line">{SITE.email} · {SITE.domain}</p>
         </header>
       </PageHeader>
@@ -28,12 +28,8 @@ export default function Home() {
         <div className="intro-block">
           <p>
             Bring the idea, even a half-formed one. I build AI-native mobile
-            apps (real-time translation, on-device intelligence, multi-provider
-            AI) with privacy architected in, not bolted on. Founder-led, one
-            builder from interface to encrypted vault to launch. The work I care
-            most about puts real capability in people's hands and brings
-            communities together: civic engagement, cross-language conversation,
-            rescue adoption.
+            apps with privacy architected in, not bolted on, founder-led from
+            interface to encrypted vault to launch.
           </p>
         </div>
 
