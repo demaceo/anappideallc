@@ -37,6 +37,7 @@ async function main() {
     '/about': { priority: '0.8', changefreq: 'monthly' },
     '/why-not-ai': { priority: '0.8', changefreq: 'monthly' },
     '/process': { priority: '0.7', changefreq: 'monthly' },
+    '/support': { priority: '0.6', changefreq: 'monthly' },
   }
 
   const urls = PRERENDER_PATHS.map((p) => {

@@ -49,6 +49,12 @@ export const META: Record<string, { title: string; description: string; path: st
       'Can AI build your app from a prompt? It gets you started, but wireframing, testing, security, App Store launch, and maintenance each need a dedicated human. The honest case for a builder over a chatbot.',
     path: '/why-not-ai',
   },
+  '/support': {
+    title: `Support & Help Center | ${SITE.name}`,
+    description:
+      'Support for every app by An App Idea LLC. Report a bug, delete your data, manage a subscription, or ask a question. Answered directly by the builder, within 1–2 business days. Privacy and terms for each app.',
+    path: '/support',
+  },
   '/work/pinpoint-civic-engagement': {
     title: `Pinpoint — Civic Engagement Platform | ${SITE.name}`,
     description:
@@ -522,6 +528,56 @@ function buildPageGraph(route: string): object[] {
               acceptedAnswer: {
                 '@type': 'Answer',
                 text: 'Wireframing, usability testing, architecture and data modeling, authentication, payments, security and privacy, App Store and Google Play submission, deployment and build pipelines, monitoring, debugging, and ongoing maintenance. Each is a discipline of its own, and all of them require a dedicated human.',
+              },
+            },
+          ],
+        },
+      ]
+
+    case '/support':
+      return [
+        {
+          '@type': 'WebPage',
+          '@id': `${url}/#webpage`,
+          url,
+          name: meta.title,
+          description: meta.description,
+          isPartOf: { '@id': `${SITE.url}/#website` },
+          about: { '@id': `${SITE.url}/#org` },
+        },
+        {
+          '@type': 'FAQPage',
+          mainEntity: [
+            {
+              '@type': 'Question',
+              name: 'How do I get support for an An App Idea LLC app?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: `Email ${SITE.email} with the app name, your device and OS version, and a short description of the issue. Support is handled directly by the builder, ${SITE.founder.name}, with a reply within 1–2 business days.`,
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'How do I delete my account or personal data?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: `Email ${SITE.email} from the address associated with your account to request deletion of your account or personal data. Each app's privacy policy details exactly what is stored and how deletion is handled.`,
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'How do I manage a subscription or request a refund?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Subscriptions, renewals, and refunds are managed by the Apple App Store or Google Play, depending on where you purchased. If a paid feature is not unlocking after purchase, email support and it will be resolved.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'How long does support take to respond?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Most messages get a reply within 1–2 business days, often sooner. There is no ticket system or chatbot; you reach the person who built the app.',
               },
             },
           ],
