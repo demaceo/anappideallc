@@ -756,6 +756,56 @@ cite:hover { background: rgba(192,57,43,0.14); }
 }
 
 
+/* ─── Footer social links ─── */
+.social-links-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  padding-top: 0.85rem;
+  margin-top: 0.25rem;
+  border-top: 1px solid var(--rule);
+}
+
+.social-links-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  color: var(--muted);
+  border: 1px solid var(--rule);
+  background: transparent;
+  transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.15s;
+}
+
+.social-link:hover,
+.social-link:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(192, 57, 43, 0.07);
+  transform: translateY(-1px);
+}
+
+.social-link svg { display: block; }
+
+
 /* ─── Utility: mono metadata line ─── */
 .mono-meta {
   font-family: 'IBM Plex Mono', monospace;

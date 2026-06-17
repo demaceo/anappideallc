@@ -1,4 +1,5 @@
 import { SITE } from '../data/site'
+import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
@@ -205,6 +206,7 @@ export default function WhyNotAI() {
               A 30-minute call, no spec required.
             </li>
           </ul>
+          <SocialLinks />
         </div>
       </footer>
     </>

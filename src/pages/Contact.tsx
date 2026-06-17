@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { SITE } from '../data/site'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
@@ -673,6 +674,7 @@ export default function Contact() {
               1–2 business days
             </li>
           </ul>
+          <SocialLinks />
         </div>
       </footer>
     </>

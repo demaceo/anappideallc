@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { SITE } from '../data/site'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
@@ -181,6 +182,7 @@ export default function Support() {
               Managed via the App Store & Google Play.
             </li>
           </ul>
+          <SocialLinks />
         </div>
       </footer>
     </>

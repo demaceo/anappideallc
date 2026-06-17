@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { SITE } from '../data/site'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
@@ -155,6 +156,7 @@ export default function Home() {
               {SITE.domain}
             </li>
           </ul>
+          <SocialLinks />
         </div>
       </footer>
     </>

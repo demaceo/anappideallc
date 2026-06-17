@@ -1,4 +1,5 @@
 import { LegalPage } from '../../components/LegalPage/LegalPage'
+import { SocialLinks } from '../../components/SocialLinks/SocialLinks'
 import { SITE } from '../../data/site'
 
 export default function DrayageProTerms() {
@@ -465,6 +466,7 @@ export default function DrayageProTerms() {
               {SITE.email}
             </li>
           </ul>
+          <SocialLinks />
         </div>
       </footer>
     </>

@@ -1,4 +1,5 @@
 import { LegalPage } from '../../components/LegalPage/LegalPage'
+import { SocialLinks } from '../../components/SocialLinks/SocialLinks'
 import { SITE } from '../../data/site'
 
 export default function YapPrivacy() {
@@ -434,6 +435,7 @@ export default function YapPrivacy() {
               yap-united.app
             </li>
           </ul>
+          <SocialLinks />
         </div>
       </footer>
     </>

@@ -1,4 +1,5 @@
 import { LegalPage } from '../../components/LegalPage/LegalPage'
+import { SocialLinks } from '../../components/SocialLinks/SocialLinks'
 import { SITE } from '../../data/site'
 
 export default function YapTerms() {
@@ -421,6 +422,7 @@ export default function YapTerms() {
               yap-united.app
             </li>
           </ul>
+          <SocialLinks />
         </div>
       </footer>
     </>
