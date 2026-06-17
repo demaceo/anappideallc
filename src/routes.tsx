@@ -20,6 +20,8 @@ import ZooriPrivacy from './pages/legal/ZooriPrivacy'
 import ZooriTerms from './pages/legal/ZooriTerms'
 import FengshuiPrivacy from './pages/legal/FengshuiPrivacy'
 import FengshuiTerms from './pages/legal/FengshuiTerms'
+import StlmntPrivacy from './pages/legal/StlmntPrivacy'
+import StlmntTerms from './pages/legal/StlmntTerms'
 
 export const routes: RouteObject[] = [
   {
@@ -46,6 +48,8 @@ export const routes: RouteObject[] = [
       { path: 'legal/zoori/terms', Component: ZooriTerms },
       { path: 'legal/fengshui/privacy', Component: FengshuiPrivacy },
       { path: 'legal/fengshui/terms', Component: FengshuiTerms },
+      { path: 'legal/stlmnt/privacy', Component: StlmntPrivacy },
+      { path: 'legal/stlmnt/terms', Component: StlmntTerms },
     ],
   },
 ]
@@ -81,4 +85,6 @@ export const PRERENDER_PATHS = [
   '/legal/zoori/terms',
   '/legal/fengshui/privacy',
   '/legal/fengshui/terms',
+  '/legal/stlmnt/privacy',
+  '/legal/stlmnt/terms',
 ]

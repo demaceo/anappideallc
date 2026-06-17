@@ -187,6 +187,18 @@ export const META: Record<string, { title: string; description: string; path: st
       'Terms of Service for the Feng Shui app (iOS). AI-generated analysis is for informational/entertainment purposes only. Governing law: Colorado. Published by An App Idea LLC.',
     path: '/legal/fengshui/terms',
   },
+  '/legal/stlmnt/privacy': {
+    title: `Privacy Policy — STLMNT | ${SITE.name}`,
+    description:
+      'Privacy Policy for STLMNT, the class action settlement tracker (iOS & Android). Covers your account, optional autofill profile, claims, and receipts. Sensitive fields are KMS-encrypted; no bank, SSN, or card numbers — ever; receipts stay on-device. Operated by Mile High Interface LLC.',
+    path: '/legal/stlmnt/privacy',
+  },
+  '/legal/stlmnt/terms': {
+    title: `Terms of Service — STLMNT | ${SITE.name}`,
+    description:
+      'Terms of Service for STLMNT (iOS & Android). STLMNT is not a legal service and never files claims for you — you submit every claim yourself on the official site. Covers eligibility, accuracy disclaimers, payouts, and governing law (Colorado). Operated by Mile High Interface LLC.',
+    path: '/legal/stlmnt/terms',
+  },
 }
 
 // Base graph present on every page: ProfessionalService + WebSite.
