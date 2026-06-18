@@ -688,12 +688,16 @@ export const featuredCaseStudies = caseStudies.filter((c) => c.featured)
 export const getCaseStudyBySlug = (slug: string) =>
   caseStudies.find((c) => c.slug === slug)
 
+// Returns the previous/next case studies for carousel-style navigation. The
+// list wraps around: the entry before the first is the last, and the entry
+// after the last is the first, so users can loop continuously.
 export function getAdjacentCaseStudies(slug: string) {
   const idx = caseStudies.findIndex((c) => c.slug === slug)
   if (idx === -1) return { prev: null, next: null }
+  const count = caseStudies.length
   return {
-    prev: idx > 0 ? caseStudies[idx - 1] : null,
-    next: idx < caseStudies.length - 1 ? caseStudies[idx + 1] : null,
+    prev: caseStudies[(idx - 1 + count) % count],
+    next: caseStudies[(idx + 1) % count],
   }
 }
 

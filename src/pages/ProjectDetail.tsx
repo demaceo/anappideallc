@@ -87,7 +87,7 @@ export default function ProjectDetail() {
             {project.category}
           </p>
           <div className="project-study-nav">
-            {prev ? (
+            {prev && (
               <Link
                 to={`/work/${prev.slug}`}
                 className="project-study-arrow project-study-arrow--prev"
@@ -96,8 +96,6 @@ export default function ProjectDetail() {
               >
                 {'<'}
               </Link>
-            ) : (
-              <span className="project-study-arrow project-study-arrow--prev project-study-arrow--disabled" aria-hidden="true">{'<'}</span>
             )}
 
             <div className="project-detail-hero">
@@ -114,7 +112,7 @@ export default function ProjectDetail() {
               <h1>{project.title}</h1>
             </div>
 
-            {next ? (
+            {next && (
               <Link
                 to={`/work/${next.slug}`}
                 className="project-study-arrow project-study-arrow--next"
@@ -123,8 +121,6 @@ export default function ProjectDetail() {
               >
                 {'>'}
               </Link>
-            ) : (
-              <span className="project-study-arrow project-study-arrow--next project-study-arrow--disabled" aria-hidden="true">{'>'}</span>
             )}
           </div>
           <p className="date-line">{project.cover.eyebrow}</p>
