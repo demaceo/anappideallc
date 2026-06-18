@@ -688,6 +688,15 @@ export const featuredCaseStudies = caseStudies.filter((c) => c.featured)
 export const getCaseStudyBySlug = (slug: string) =>
   caseStudies.find((c) => c.slug === slug)
 
+export function getAdjacentCaseStudies(slug: string) {
+  const idx = caseStudies.findIndex((c) => c.slug === slug)
+  if (idx === -1) return { prev: null, next: null }
+  return {
+    prev: idx > 0 ? caseStudies[idx - 1] : null,
+    next: idx < caseStudies.length - 1 ? caseStudies[idx + 1] : null,
+  }
+}
+
 export interface Differentiator {
   title: string
   description: string

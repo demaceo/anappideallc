@@ -1,5 +1,5 @@
 import { useParams, Link, Navigate } from 'react-router'
-import { getCaseStudyBySlug } from '../data/case-studies'
+import { getCaseStudyBySlug, getAdjacentCaseStudies } from '../data/case-studies'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import {
@@ -54,6 +54,8 @@ export default function ProjectDetail() {
 
   if (!project) return <Navigate to="/work" replace />
 
+  const { prev, next } = getAdjacentCaseStudies(project.slug)
+
   const ProjectLogo = SLUG_TO_LOGO[project.slug] ?? LogoPinpoint
   const color = project.theme?.mark ?? SLUG_TO_COLOR[project.slug] ?? '#2980b9'
 
@@ -84,18 +86,46 @@ export default function ProjectDetail() {
             {' · '}
             {project.category}
           </p>
-          <div className="project-detail-hero">
-            <div
-              className={`project-detail-mark${project.icon ? ' project-detail-mark--photo' : ''}`}
-              style={project.icon ? undefined : { background: color }}
-            >
-              {project.icon ? (
-                <img src={project.icon} alt="" className="app-mark-img" />
-              ) : (
-                <ProjectLogo size={30} color="white" strokeWidth={1.5} />
-              )}
+          <div className="project-study-nav">
+            {prev ? (
+              <Link
+                to={`/work/${prev.slug}`}
+                className="project-study-arrow"
+                aria-label={`Previous: ${prev.title}`}
+                title={prev.title}
+              >
+                {'<'}
+              </Link>
+            ) : (
+              <span className="project-study-arrow project-study-arrow--disabled" aria-hidden="true">{'<'}</span>
+            )}
+
+            <div className="project-detail-hero">
+              <div
+                className={`project-detail-mark${project.icon ? ' project-detail-mark--photo' : ''}`}
+                style={project.icon ? undefined : { background: color }}
+              >
+                {project.icon ? (
+                  <img src={project.icon} alt="" className="app-mark-img" />
+                ) : (
+                  <ProjectLogo size={30} color="white" strokeWidth={1.5} />
+                )}
+              </div>
+              <h1>{project.title}</h1>
             </div>
-            <h1>{project.title}</h1>
+
+            {next ? (
+              <Link
+                to={`/work/${next.slug}`}
+                className="project-study-arrow"
+                aria-label={`Next: ${next.title}`}
+                title={next.title}
+              >
+                {'>'}
+              </Link>
+            ) : (
+              <span className="project-study-arrow project-study-arrow--disabled" aria-hidden="true">{'>'}</span>
+            )}
           </div>
           <p className="date-line">{project.cover.eyebrow}</p>
         </header>
