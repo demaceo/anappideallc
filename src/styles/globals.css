@@ -1067,13 +1067,44 @@ cite:hover { background: rgba(192,57,43,0.14); }
 
 /* ─── Project detail page ─── */
 
+/* Prev/next case-study nav — wraps the hero, arrows on either side */
+.project-study-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-top: 0.85rem;
+}
+
+.project-study-arrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gold);
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.15s var(--ease), transform 0.15s var(--ease);
+  padding: 0.25rem 0.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.project-study-arrow:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.project-study-arrow--disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+
 /* Hero: icon mark + title, centered in the dark masthead */
 .project-detail-hero {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  margin-top: 0.85rem;
 }
 
 .project-detail-mark {
