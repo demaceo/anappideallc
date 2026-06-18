@@ -31,11 +31,9 @@ export default function About() {
       <main className="container">
         <div className="intro-block">
           <p>
-            {SITE.name} is a dev studio in {SITE.founder.location}, run by{' '}
+            {SITE.name} is a {SITE.founder.location} dev studio run by{' '}
             {SITE.founder.name}. I build AI-native mobile apps with privacy
-            designed in from the first commit: real-time AI features on the
-            front end, encrypted local-first data underneath, and one builder
-            from sketch to App Store. The products I'm proudest of are the ones
+            designed in from the first commit, and care most about the ones
             that empower people and bring communities together.
           </p>
         </div>
