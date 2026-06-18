@@ -90,14 +90,14 @@ export default function ProjectDetail() {
             {prev ? (
               <Link
                 to={`/work/${prev.slug}`}
-                className="project-study-arrow"
+                className="project-study-arrow project-study-arrow--prev"
                 aria-label={`Previous: ${prev.title}`}
                 title={prev.title}
               >
                 {'<'}
               </Link>
             ) : (
-              <span className="project-study-arrow project-study-arrow--disabled" aria-hidden="true">{'<'}</span>
+              <span className="project-study-arrow project-study-arrow--prev project-study-arrow--disabled" aria-hidden="true">{'<'}</span>
             )}
 
             <div className="project-detail-hero">
@@ -117,14 +117,14 @@ export default function ProjectDetail() {
             {next ? (
               <Link
                 to={`/work/${next.slug}`}
-                className="project-study-arrow"
+                className="project-study-arrow project-study-arrow--next"
                 aria-label={`Next: ${next.title}`}
                 title={next.title}
               >
                 {'>'}
               </Link>
             ) : (
-              <span className="project-study-arrow project-study-arrow--disabled" aria-hidden="true">{'>'}</span>
+              <span className="project-study-arrow project-study-arrow--next project-study-arrow--disabled" aria-hidden="true">{'>'}</span>
             )}
           </div>
           <p className="date-line">{project.cover.eyebrow}</p>
