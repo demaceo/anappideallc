@@ -1156,11 +1156,6 @@ cite:hover { background: rgba(192,57,43,0.14); }
   transform: translateY(-50%) scale(1.2);
 }
 
-.project-study-arrow--disabled {
-  opacity: 0.2;
-  cursor: default;
-}
-
 /* Hero: icon mark + title, centered in the dark masthead */
 .project-detail-hero {
   display: flex;
