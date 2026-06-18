@@ -5,7 +5,6 @@ const NAV_LINKS = [
   { to: '/work',     label: 'Work',     color: '#27ae60' },
   { to: '/services', label: 'Services', color: '#16a085' },
   { to: '/process',  label: 'Process',  color: '#2980b9' },
-  { to: '/contact',  label: 'Contact',  color: '#d35400' },
 ] as const
 
 export function SiteNav() {

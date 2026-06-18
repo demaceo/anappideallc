@@ -288,6 +288,48 @@ button:focus-visible {
 }
 .back-home:hover { color: var(--paper); }
 
+/* ─── Contact FAB — fixed lower-right floating action button ─── */
+.contact-fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--ink);
+  border: 1.5px solid var(--gold);
+  border-radius: 2px;
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.28);
+  transition: background 0.2s var(--ease), box-shadow 0.2s var(--ease), transform 0.15s var(--ease);
+  color: var(--gold);
+}
+
+.contact-fab:hover {
+  background: var(--gold);
+  color: var(--ink);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.38);
+  transform: translateY(-2px);
+}
+
+.contact-fab-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .contact-fab {
+    bottom: 1.25rem;
+    right: 1.25rem;
+    padding: 0.7rem 1rem;
+  }
+}
+
 /* ─── SECTION 6: Intro block ─── */
 .intro-block {
   padding: 2.75rem 0 2.25rem;

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router'
 import { RouteFocusReset } from './components/RouteFocusReset'
+import { ContactFAB } from './components/ContactFAB/ContactFAB'
 
 function AppShell() {
   const { pathname } = useLocation()
@@ -15,6 +16,7 @@ function AppShell() {
     <>
       <RouteFocusReset />
       <Outlet />
+      <ContactFAB />
     </>
   )
 }
