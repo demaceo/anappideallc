@@ -275,18 +275,30 @@ button:focus-visible {
   top: 1.5rem;
   left: 1.5rem;
   z-index: 25;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--gold);
-  text-decoration: none;
+  display: flex;
+  align-items: center;
   line-height: 1;
-  transition: color 0.2s var(--ease);
+  text-decoration: none;
   animation: back-home-track linear both;
   animation-timeline: scroll(root);
   animation-range: var(--collapse-range);
 }
-.back-home:hover { color: var(--paper); }
+
+.back-home-icon {
+  width: 30px;
+  height: 30px;
+  display: block;
+  border-radius: 7px;
+  opacity: 0.78;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.3);
+  transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+.back-home:hover .back-home-icon,
+.back-home:focus-visible .back-home-icon {
+  opacity: 1;
+  transform: scale(1.08);
+}
 
 /* ─── SECTION 6: Intro block ─── */
 .intro-block {
