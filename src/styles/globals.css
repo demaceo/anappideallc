@@ -33,6 +33,9 @@ body {
   font-size: 16px;
   line-height: 1.78;
   border-top: 3px solid var(--gold);
+  /* Ensure no page content is obscured by the fixed contact FAB (bottom: 2rem,
+     ~44px tall = ~76px from the bottom edge of the viewport). */
+  padding-bottom: 5rem;
   /* The sticky masthead shrinks ~290px as it collapses on scroll. Scroll
      anchoring would compensate for that height change by pulling the scroll
      offset back up, which re-expands the header and creates a jittery
@@ -92,10 +95,12 @@ button:focus-visible {
   to   { padding-top: 0.3rem;  padding-bottom: 0.3rem;  }
 }
 /* Mobile only: collapse the wrapped nav into a single, horizontally
-   scrollable row so the sticky header shrinks to a slim bar when scrolled. */
+   scrollable row so the sticky header shrinks to a slim bar when scrolled.
+   overflow-x is set statically on .personas-bar so it's always scrollable —
+   animating discrete properties like overflow is unreliable across browsers. */
 @keyframes personas-collapse {
-  from { padding-top: 0.85rem; padding-bottom: 1rem;   flex-wrap: wrap;   justify-content: center;     overflow-x: hidden; }
-  to   { padding-top: 0.4rem;  padding-bottom: 0.4rem; flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto;   }
+  from { padding-top: 0.85rem; padding-bottom: 1rem;   flex-wrap: wrap;   justify-content: center;     }
+  to   { padding-top: 0.4rem;  padding-bottom: 0.4rem; flex-wrap: nowrap; justify-content: flex-start; }
 }
 
 /* ─── SECTION 4: Masthead / hero header ─── */
@@ -253,11 +258,13 @@ button:focus-visible {
 
   /* Slim-bar nav: starts as a centered, wrapped 2-row bar at the top of the
      page and collapses to a single, horizontally scrollable row when scrolled
-     (see @keyframes personas-collapse). */
+     (see @keyframes personas-collapse). overflow-x: auto is always on so the
+     Process tab is never clipped on narrow viewports. */
   .personas-bar {
     padding: 0.85rem 1rem 1rem;
     gap: 0.45rem;
     flex-wrap: wrap;
+    overflow-x: auto;
     animation: personas-collapse linear both;
     animation-timeline: scroll(root);
     animation-range: var(--collapse-range);
@@ -267,6 +274,12 @@ button:focus-visible {
   .personas-bar::-webkit-scrollbar { display: none; }
   /* Keep tags at full size and let the row scroll instead of squashing them. */
   .persona-tag { flex-shrink: 0; }
+  /* Larger tap target on mobile */
+  .persona-tag {
+    min-height: 44px;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+  }
 }
 
 /* ─── Back-to-home button — absolute within .page-header-wrap ─── */
@@ -277,6 +290,9 @@ button:focus-visible {
   z-index: 25;
   display: flex;
   align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   line-height: 1;
   text-decoration: none;
   animation: back-home-track linear both;
@@ -840,8 +856,8 @@ cite:hover { background: rgba(192,57,43,0.14); }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border-radius: 50%;
   color: var(--muted);
   border: 1px solid var(--rule);
@@ -1853,6 +1869,7 @@ main[data-project-theme="unmasked-coaching"] .project-chip {
   font-size: 0.65rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
+  min-height: 44px;
   color: var(--paper);
   background: var(--accent);
   border: none;
@@ -2056,7 +2073,8 @@ main[data-project-theme="unmasked-coaching"] .project-chip {
 
 .choice-card.selected {
   border-color: var(--gold);
-  background: rgba(184,134,11,0.1);
+  background: rgba(184,134,11,0.22);
+  box-shadow: inset 0 0 0 1px var(--gold);
 }
 
 .choice-card-icon { color: var(--gold); margin-bottom: 0.2rem; height: 20px; }
@@ -2092,7 +2110,10 @@ main[data-project-theme="unmasked-coaching"] .project-chip {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.66rem;
   letter-spacing: 0.04em;
-  padding: 0.45rem 0.8rem;
+  padding: 0.6rem 0.8rem;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
   border: 1px solid rgba(245,240,232,0.2);
   color: rgba(245,240,232,0.78);
   background: transparent;
@@ -2104,8 +2125,9 @@ main[data-project-theme="unmasked-coaching"] .project-chip {
 
 .chip.selected {
   border-color: var(--gold);
-  background: rgba(184,134,11,0.14);
-  color: var(--paper);
+  background: var(--gold);
+  color: var(--ink);
+  font-weight: 600;
 }
 
 /* SEO / GEO rating rows */
@@ -2147,7 +2169,11 @@ main[data-project-theme="unmasked-coaching"] .project-chip {
   font-size: 0.62rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 0.45rem 0.75rem;
+  padding: 0.55rem 0.75rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid rgba(245,240,232,0.2);
   color: rgba(245,240,232,0.72);
   background: transparent;
@@ -2159,8 +2185,17 @@ main[data-project-theme="unmasked-coaching"] .project-chip {
 
 .rating-opt.selected {
   border-color: var(--gold);
-  background: rgba(184,134,11,0.14);
-  color: var(--paper);
+  background: var(--gold);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .rating-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
 }
 
 .form-label-icon { color: var(--gold); vertical-align: middle; margin-right: 0.1rem; }
@@ -2205,6 +2240,7 @@ main[data-project-theme="unmasked-coaching"] .project-chip {
   border: 1px solid rgba(245,240,232,0.25);
   color: rgba(245,240,232,0.7);
   padding: 0.7rem 1.1rem;
+  min-height: 44px;
 }
 .wizard-back:hover { border-color: rgba(245,240,232,0.5); color: var(--paper); }
 
@@ -2213,6 +2249,7 @@ main[data-project-theme="unmasked-coaching"] .project-chip {
   border: none;
   color: #1a1408;
   padding: 0.72rem 1.35rem;
+  min-height: 44px;
 }
 .wizard-next:hover { background: #cd9a17; }
 
