@@ -148,6 +148,14 @@ export default function Contact() {
   const prevStep = useRef(stepIdx)
   useEffect(() => {
     if (prevStep.current !== stepIdx) {
+      const el = stageRef.current
+      if (el) {
+        const headerEl = document.querySelector('.page-header-wrap') as HTMLElement | null
+        const headerH = headerEl?.offsetHeight ?? 0
+        const rect = el.getBoundingClientRect()
+        const targetY = rect.top + window.scrollY - headerH - 16
+        window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' })
+      }
       stageRef.current?.focus({ preventScroll: true })
     }
     prevStep.current = stepIdx
