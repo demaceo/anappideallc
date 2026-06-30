@@ -169,6 +169,32 @@ export default function WhyNotAI() {
           </div>
         </div>
 
+        <div className="chapter-divider">
+          <span className="ornament">✦ ✦ ✦</span>
+        </div>
+
+        <div className="section-header">
+          <span className="section-num">Go deeper</span>
+          <h2>The broader conversation about AI</h2>
+          <div className="section-rule" />
+        </div>
+
+        <div className="verdict-box context">
+          <p>
+            <strong>The Reckoning</strong> is a roundtable podcast built for
+            people who want to think seriously about what AI means for work,
+            society, and the way we build things. If the questions on this page
+            opened something up, it's worth a listen.{' '}
+            <a
+              href="https://deus-ex-steel.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Visit the podcast →
+            </a>
+          </p>
+        </div>
+
         <div className="section-header">
           <span className="section-num">Next step</span>
           <h2>Talk it through with a person</h2>
@@ -204,6 +230,17 @@ export default function WhyNotAI() {
             <li>
               <strong>Start free</strong>
               A 30-minute call, no spec required.
+            </li>
+            <li>
+              <strong>Go deeper</strong>{' '}
+              <a
+                href="https://deus-ex-steel.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                The Reckoning podcast
+              </a>{' '}
+              explores AI's broader impact on work and society.
             </li>
           </ul>
           <SocialLinks />
