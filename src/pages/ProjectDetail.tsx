@@ -1,5 +1,6 @@
 import { useParams, Link, Navigate } from 'react-router'
 import { getCaseStudyBySlug, getAdjacentCaseStudies } from '../data/case-studies'
+import { PROJECT_COLORS } from '../data/project-colors'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import {
@@ -33,21 +34,6 @@ const SLUG_TO_LOGO: Record<string, React.ComponentType<{ size?: number; color?: 
   'portfolio': LogoPortfolio,
 }
 
-const SLUG_TO_COLOR: Record<string, string> = {
-  'stlmnt-settlement-tracker': '#1f6b3b',
-  'pinpoint-civic-engagement': '#8A1C1C',
-  'payback-consumer-intelligence': '#1a3a5c',
-  'rentharbor-property-management': '#2563EB',
-  'feng-shui-room-analysis': '#C44536',
-  'yap-united-live-translation': '#0E7C86',
-  'drayage-drivers': '#c0392b',
-  'zoori-pet-care': '#F4533C',
-  'hitldi-platform': '#2c3e50',
-  'unmasked-coaching': '#8B4C99',
-  'timeless-coach-consult': '#2D4A3E',
-  'portfolio': '#2980b9',
-}
-
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>()
   const project = slug ? getCaseStudyBySlug(slug) : null
@@ -57,19 +43,20 @@ export default function ProjectDetail() {
   const { prev, next } = getAdjacentCaseStudies(project.slug)
 
   const ProjectLogo = SLUG_TO_LOGO[project.slug] ?? LogoPinpoint
-  const color = project.theme?.mark ?? SLUG_TO_COLOR[project.slug] ?? '#2980b9'
+  const color = project.theme?.mark ?? PROJECT_COLORS[project.slug] ?? '#2980b9'
 
-  // When a project ships its own theme, its color appears only as a framed
-  // "specimen swatch" — the cover strip and first chip fill (see the
-  // data-project-theme rules in globals.css). Structural chrome (links,
-  // section numbers, focus rings) stays on the global monochrome + acid
-  // system rather than inheriting per-project accents.
-  const themeStyle = project.theme
-    ? ({
-        '--project-swatch': project.theme.accent,
-        ...(project.theme.gradient ? { '--project-gradient': project.theme.gradient } : {}),
-      } as React.CSSProperties)
-    : undefined
+  // Every project carries its own color into the cover-strip + first-chip
+  // "specimen swatch" (see the data-project-theme rules in globals.css):
+  // projects with a shipped theme.accent use that (tuned for swatch/chip
+  // legibility — e.g. Unmasked's #A855F7 vs its #8B4C99 mark); everything
+  // else falls back to the same PROJECT_COLORS value already visible on
+  // the Work index tile and this page's own hero mark. Structural chrome
+  // (links, section numbers, focus rings) stays on the global monochrome +
+  // acid system rather than inheriting per-project accents.
+  const themeStyle = {
+    '--project-swatch': project.theme?.accent ?? PROJECT_COLORS[project.slug],
+    ...(project.theme?.gradient ? { '--project-gradient': project.theme.gradient } : {}),
+  } as React.CSSProperties
 
   return (
     <>
@@ -130,7 +117,7 @@ export default function ProjectDetail() {
       <main
         className="container"
         style={themeStyle}
-        data-project-theme={project.theme ? project.slug : undefined}
+        data-project-theme={project.slug}
       >
 
         {/* Cover headline + chips */}

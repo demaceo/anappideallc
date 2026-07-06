@@ -13,6 +13,20 @@
   --c-accent: oklch(88% 0.22 125);    /* acid chartreuse: the one accent    */
   --c-accent-2: oklch(70% 0.22 35);   /* red-orange: error states ONLY      */
 
+  /* Swatch family — icon-category & stat-box semantic accents. Derived from
+     the pre-redesign brand palette, re-expressed as flat OKLCH in the same
+     medium-saturation register as the per-project theme colors (e.g.
+     #2563EB, #C44536) — richer/darker than --c-accent (L88%) so they read
+     as a distinct "data" register, not a second hero accent. Used ONLY for
+     icon glyphs, icon-box borders, and stat numerals/hover-fills. */
+  --c-swatch-gold: oklch(60% 0.12 80);      /* was #b8860b */
+  --c-swatch-blue: oklch(55% 0.125 240);    /* was #2980b9 */
+  --c-swatch-green: oklch(58% 0.15 150);    /* was #27ae60 */
+  --c-swatch-navy: oklch(36% 0.08 255);     /* was #1a3a5c */
+  --c-swatch-orange: oklch(58% 0.16 45);    /* was #d35400 */
+  --c-swatch-purple: oklch(52% 0.16 315);   /* was #8e44ad */
+  --c-swatch-teal: oklch(56% 0.095 175);    /* was #16a085 */
+
   /* Inverse-surface soft tones (bone over black) */
   --c-bg-soft: oklch(96% 0.005 90 / 0.6);
   --c-bg-faint: oklch(96% 0.005 90 / 0.18);

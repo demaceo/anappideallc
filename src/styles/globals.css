@@ -436,14 +436,23 @@ h1, h2, h3 {
   color: var(--c-bg);
 }
 
-/* Semantic variants collapse to monochrome under the single-accent system. */
-.stat-box.neutral,
+/* .neutral stays fully monochrome. .positive/.caution tint their numeral at
+   rest (a "read at a glance" signal) and invert to a solid swatch fill on
+   hover, reusing the same bone<->ink inversion pattern as every other
+   interactive surface, with the swatch color standing in for ink. */
+.stat-box.neutral { background: var(--c-bg); color: var(--c-fg); }
 .stat-box.positive,
 .stat-box.caution { background: var(--c-bg); color: var(--c-fg); }
 
-.stat-box.neutral:hover,
-.stat-box.positive:hover,
-.stat-box.caution:hover { background: var(--c-fg); color: var(--c-bg); }
+.stat-box.positive .stat-num { color: var(--c-swatch-green); }
+.stat-box.caution  .stat-num { color: var(--c-swatch-gold); }
+
+.stat-box.neutral:hover  { background: var(--c-fg); color: var(--c-bg); }
+.stat-box.positive:hover { background: var(--c-swatch-green); color: var(--c-bg); }
+.stat-box.caution:hover  { background: var(--c-swatch-gold);  color: var(--c-bg); }
+
+.stat-box.positive:hover .stat-num,
+.stat-box.caution:hover .stat-num { color: var(--c-bg); }
 
 .stat-label-top {
   font-family: var(--ff-mono);
@@ -833,14 +842,15 @@ cite:hover { background: var(--c-accent); }
   display: block;
 }
 
-/* Icon color variants — collapsed to monochrome under the single-accent
-   system. Class hooks stay so markup doesn't need to change. */
-.icon-gold, .icon-blue, .icon-green, .icon-navy,
-.icon-orange, .icon-purple, .icon-teal {
-  color: var(--c-fg);
-  border-color: var(--c-line);
-  background: var(--c-bg);
-}
+/* Icon color variants — flat glyph + border tint per category, background
+   stays bone (flat fills, no soft glows, per the brutalist system). */
+.icon-gold   { color: var(--c-swatch-gold);   border-color: var(--c-swatch-gold);   background: var(--c-bg); }
+.icon-blue   { color: var(--c-swatch-blue);   border-color: var(--c-swatch-blue);   background: var(--c-bg); }
+.icon-green  { color: var(--c-swatch-green);  border-color: var(--c-swatch-green);  background: var(--c-bg); }
+.icon-navy   { color: var(--c-swatch-navy);   border-color: var(--c-swatch-navy);   background: var(--c-bg); }
+.icon-orange { color: var(--c-swatch-orange); border-color: var(--c-swatch-orange); background: var(--c-bg); }
+.icon-purple { color: var(--c-swatch-purple); border-color: var(--c-swatch-purple); background: var(--c-bg); }
+.icon-teal   { color: var(--c-swatch-teal);   border-color: var(--c-swatch-teal);   background: var(--c-bg); }
 
 .feature-eyebrow {
   font-family: var(--ff-mono);

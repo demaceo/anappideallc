@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { caseStudies } from '../data/case-studies'
+import { PROJECT_COLORS } from '../data/project-colors'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
@@ -34,20 +35,6 @@ const PROJECT_LOGOS = [
   LogoTimeless,
   LogoPortfolio,
 ]
-const STUDY_COLORS = [
-  '#1f6b3b', // STLMNT — Editorial Ink ledger green
-  '#8A1C1C', // The Pinpoint App — Editorial Ink oxblood
-  '#1a3a5c',
-  '#2563EB', // RentHarbor — proptech blue
-  '#C44536', // Feng Shui — sumi-e cinnabar
-  '#0E7C86', // The Yap App — Coastal Brand deep teal
-  '#c0392b',
-  '#F4533C', // Zoori — coral
-  '#2c3e50',
-  '#8B4C99', // Unmasked — silk purple
-  '#2D4A3E', // Timeless — forest
-  '#2980b9',
-] as const
 const STUDY_LABELS = [
   'Settlements',
   'Civic',
@@ -121,7 +108,7 @@ export default function Work() {
             <Link key={c.slug} to={`/work/${c.slug}`} className="feature-item feature-item--linked">
               <div
                 className={`feature-icon app-mark${c.icon ? ' app-mark--photo' : ''}`}
-                style={c.icon ? undefined : { background: STUDY_COLORS[i] }}
+                style={c.icon ? undefined : { background: PROJECT_COLORS[c.slug] }}
               >
                 {c.icon ? (
                   <img src={c.icon} alt="" className="app-mark-img" loading="lazy" />
