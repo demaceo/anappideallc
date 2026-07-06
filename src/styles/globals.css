@@ -386,7 +386,7 @@ h1, h2, h3 {
 .section-header h2 {
   font-size: clamp(1.75rem, 5vw, 3rem);
   line-height: 0.9;
-  flex-shrink: 0;
+  min-width: 0;
 }
 
 .section-rule { flex: 1; min-width: 20px; }
@@ -1527,6 +1527,7 @@ main[data-project-theme] .project-cover-block::before {
   line-height: 0.95;
   letter-spacing: -0.04em;
   text-transform: uppercase;
+  min-width: 0;
 }
 
 .svc-arrow {
