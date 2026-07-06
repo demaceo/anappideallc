@@ -1,1 +1,58 @@
-/* Design tokens — cleared as part of UI reset. Rebuild when new design is applied. */
+/* ═══════════════════════════════════════════════════════════
+   Design tokens — "Layout Studio" neo-brutalist system
+   Warm bone, near-black ink, one acid-chartreuse accent.
+   Zero border-radius, zero shadows: hairlines and inversion
+   carry all structure and depth.
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  /* Color — OKLCH */
+  --c-bg: oklch(96% 0.005 90);        /* warm bone: page background         */
+  --c-fg: oklch(15% 0 0);             /* near-black: text, dark surfaces    */
+  --c-fg-soft: oklch(15% 0 0 / 0.6);  /* muted foreground                   */
+  --c-line: oklch(15% 0 0);           /* hairline rules and borders         */
+  --c-accent: oklch(88% 0.22 125);    /* acid chartreuse: the one accent    */
+  --c-accent-2: oklch(70% 0.22 35);   /* red-orange: error states ONLY      */
+
+  /* Inverse-surface soft tones (bone over black) */
+  --c-bg-soft: oklch(96% 0.005 90 / 0.6);
+  --c-bg-faint: oklch(96% 0.005 90 / 0.18);
+
+  /* Typography */
+  --ff-display: 'Archivo Black', ui-sans-serif, system-ui, sans-serif;
+  --ff-body: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Spacing scale */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 5rem;
+  --s-9: 8rem;
+  --s-10: 12rem;
+
+  /* Borders — the primary structural device */
+  --bw: 1px;
+  --bw-thick: 2px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --header-progress: 0;
+  --collapse-range: 60px 200px; /* scroll range over which the masthead collapses */
+
+  /* ── Compat aliases — legacy Editorial Ink names still referenced in
+        markup/JS (inline SVG colors, per-project theme injection). Keep
+        until every consumer reads the new tokens directly. ── */
+  --ink: var(--c-fg);
+  --paper: var(--c-bg);
+  --accent: var(--c-accent);
+  --gold: var(--c-accent);
+  --navy: var(--c-fg);
+  --muted: var(--c-fg-soft);
+  --rule: var(--c-line);
+  --panel: var(--c-bg);
+  --white: var(--c-bg);
+}

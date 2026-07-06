@@ -1,15 +1,17 @@
+import { useState } from 'react'
 import { Link } from 'react-router'
 import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
-import { IconZap, IconLayers, IconGlobe, IconBarChart } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 
-const SERVICE_ICONS = [IconZap, IconLayers, IconGlobe, IconBarChart]
-const SERVICE_ICON_CLASSES = ['icon-green', 'icon-blue', 'icon-teal', 'icon-orange'] as const
-
 export default function Services() {
+  // Accordion: one service open at a time; first item open on load so the
+  // prerendered page shows real content above the fold. Closed panels stay
+  // in the DOM (grid-rows 0fr) so all content remains crawlable.
+  const [openIndex, setOpenIndex] = useState<number | null>(0)
+
   return (
     <>
       <RouteHead {...META['/services']} />
@@ -55,41 +57,59 @@ export default function Services() {
           <div className="section-rule" />
         </div>
 
-        {services.map((s, i) => {
-          const ServiceIcon = SERVICE_ICONS[i]
-          return (
-            <div key={s.id} className="feature-item">
-              <div className={`feature-icon ${SERVICE_ICON_CLASSES[i]}`}>
-                <ServiceIcon size={20} />
-              </div>
-              <div className="feature-body">
-                {s.metric && (
-                  <span className="feature-eyebrow">
-                    {s.metric.label} · {s.metric.value}
-                  </span>
-                )}
-                <h3 className="feature-title">{s.title}</h3>
-                <p>{s.description}</p>
-                <span className="bubble-subtitle">Features</span>
-                <ul>
-                  {s.features.map((f) => (
-                    <li key={f}>{f}</li>
-                  ))}
-                </ul>
-                <span className="bubble-subtitle">Deliverables</span>
-                <ul>
-                  {s.deliverables.map((d) => (
-                    <li key={d}>{d}</li>
-                  ))}
-                </ul>
-                <span className="mono-meta">Stack: {s.technologies.join(' · ')}</span>
-              </div>
-            </div>
-          )
-        })}
+        <ul className="svc-accordion">
+          {services.map((s, i) => {
+            const open = openIndex === i
+            return (
+              <li key={s.id} className={`svc-item${open ? ' svc-item--open' : ''}`}>
+                <button
+                  type="button"
+                  className="svc-trigger"
+                  aria-expanded={open}
+                  aria-controls={`svc-panel-${s.id}`}
+                  onClick={() => setOpenIndex(open ? null : i)}
+                >
+                  <span className="svc-num">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="svc-name">{s.title}</span>
+                  <span className="svc-arrow" aria-hidden="true">+</span>
+                </button>
+                <div id={`svc-panel-${s.id}`} className="svc-panel">
+                  <div className="svc-panel-inner">
+                    <div className="svc-panel-content">
+                      <div>
+                        <p className="svc-desc">{s.description}</p>
+                        <span className="svc-sublabel">Features</span>
+                        <ul className="svc-sublist">
+                          {s.features.map((f) => (
+                            <li key={f}>{f}</li>
+                          ))}
+                        </ul>
+                        <span className="svc-meta">
+                          Stack: {s.technologies.join(' · ')}
+                          {s.metric && ` — ${s.metric.label}: ${s.metric.value}`}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="svc-sublabel">Deliverables</span>
+                        <ul className="svc-sublist">
+                          {s.deliverables.map((d) => (
+                            <li key={d}>{d}</li>
+                          ))}
+                        </ul>
+                        <Link to="/contact" className="svc-cta">
+                          Start here
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            )
+          })}
+        </ul>
 
         <div className="chapter-divider">
-          <span className="ornament">✦ ✦ ✦</span>
+          <span className="ornament">▸</span>
         </div>
 
         <div className="verdict-box context">
