@@ -59,14 +59,14 @@ export default function ProjectDetail() {
   const ProjectLogo = SLUG_TO_LOGO[project.slug] ?? LogoPinpoint
   const color = project.theme?.mark ?? SLUG_TO_COLOR[project.slug] ?? '#2980b9'
 
-  // When a project ships its own theme, scope its accent colors to the detail
-  // page body via CSS custom properties (the editorial --accent/--gold), and
-  // expose a `data-project-theme` hook for the signature cover-block treatment
-  // in globals.css. Untouched projects keep the default Editorial Ink palette.
+  // When a project ships its own theme, its color appears only as a framed
+  // "specimen swatch" — the cover strip and first chip fill (see the
+  // data-project-theme rules in globals.css). Structural chrome (links,
+  // section numbers, focus rings) stays on the global monochrome + acid
+  // system rather than inheriting per-project accents.
   const themeStyle = project.theme
     ? ({
-        '--accent': project.theme.accent,
-        '--gold': project.theme.gold,
+        '--project-swatch': project.theme.accent,
         ...(project.theme.gradient ? { '--project-gradient': project.theme.gradient } : {}),
       } as React.CSSProperties)
     : undefined

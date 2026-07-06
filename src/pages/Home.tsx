@@ -7,6 +7,16 @@ import { META } from '../lib/seo'
 import { IconZap, IconLayers, IconGlobe, IconBarChart } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
+import { Marquee } from '../components/Marquee/Marquee'
+
+const MARQUEE_ITEMS = [
+  'Apps',
+  'Websites',
+  'AI-Native',
+  'Privacy-First',
+  'Denver',
+  'Founders',
+] as const
 
 const SERVICE_ICONS = [IconZap, IconLayers, IconGlobe, IconBarChart]
 const SERVICE_ICON_CLASSES = ['icon-green', 'icon-blue', 'icon-teal', 'icon-orange'] as const
@@ -24,6 +34,8 @@ export default function Home() {
           <p className="date-line">{SITE.email} · {SITE.domain}</p>
         </header>
       </PageHeader>
+
+      <Marquee items={MARQUEE_ITEMS} />
 
       <main className="container">
         <div className="intro-block">
@@ -134,6 +146,9 @@ export default function Home() {
 
       <footer className="sources-section">
         <div className="container">
+          <p className="footer-giant">
+            An App <span>Idea</span>
+          </p>
           <div className="sources-header">
             <h3>Studio</h3>
             <div className="sources-header-rule" />

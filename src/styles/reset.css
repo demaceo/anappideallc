@@ -18,3 +18,18 @@ button {
 }
 
 a { color: inherit; }
+
+/* Brutalist chrome: acid selection + two-tone scrollbar */
+::selection {
+  background: var(--c-accent);
+  color: var(--c-fg);
+}
+
+html {
+  scrollbar-color: var(--c-fg) var(--c-accent);
+}
+
+::-webkit-scrollbar { width: 0.5rem; }
+::-webkit-scrollbar-track { background-color: var(--c-accent); }
+::-webkit-scrollbar-thumb { background-color: var(--c-fg); }
+::-webkit-scrollbar-corner { background-color: transparent; }

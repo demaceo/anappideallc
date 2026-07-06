@@ -12,7 +12,7 @@ export function PageHeader({ children }: PageHeaderProps) {
     <div className="page-header-wrap">
       {pathname !== '/' && (
         <Link to="/" className="back-home" aria-label="Back to home">
-          <img src="/icon-192.png" alt="" className="back-home-icon" />
+          ←
         </Link>
       )}
       {children}
