@@ -12,6 +12,10 @@
   --c-line: oklch(15% 0 0);           /* hairline rules and borders         */
   --c-accent: oklch(88% 0.22 125);    /* acid chartreuse: the one accent    */
   --c-accent-2: oklch(70% 0.22 35);   /* red-orange: error states ONLY      */
+  --c-cta: oklch(72% 0.19 50);        /* bright orange: primary conversion
+                                          actions ONLY (Contact, Book a time,
+                                          Send message, Start here) — not a
+                                          general second accent            */
 
   /* Swatch family — icon-category & stat-box semantic accents. Derived from
      the pre-redesign brand palette, re-expressed as flat OKLCH in the same
