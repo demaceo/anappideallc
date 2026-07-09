@@ -288,14 +288,15 @@ h1, h2, h3 {
   padding: 0.75rem 1.25rem;
   background: var(--c-bg);
   color: var(--c-fg);
-  border: var(--bw-thick) solid var(--c-line);
+  border: var(--bw-thick) solid var(--c-cta);
   text-decoration: none;
   transition: background 150ms, color 150ms;
 }
 
 .contact-fab:hover {
-  background: var(--c-fg);
-  color: var(--c-bg);
+  background: var(--c-cta);
+  border-color: var(--c-cta);
+  color: var(--c-fg);
 }
 
 .contact-fab-label {
@@ -1637,7 +1638,7 @@ main[data-project-theme] .project-cover-block::before {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 0.75rem 1rem;
-  border: var(--bw-thick) solid var(--c-bg);
+  border: var(--bw-thick) solid var(--c-cta);
   color: var(--c-bg);
   text-decoration: none;
   justify-self: start;
@@ -1647,9 +1648,9 @@ main[data-project-theme] .project-cover-block::before {
 }
 
 .svc-cta:hover {
-  background: var(--c-accent);
+  background: var(--c-cta);
   color: var(--c-fg);
-  border-color: var(--c-accent);
+  border-color: var(--c-cta);
 }
 
 .svc-cta::after { content: '→'; }
@@ -1810,7 +1811,7 @@ main[data-project-theme] .project-cover-block::before {
   min-height: 44px;
   color: var(--c-fg);
   background: var(--c-bg);
-  border: var(--bw-thick) solid var(--c-bg);
+  border: var(--bw-thick) solid var(--c-cta);
   padding: 0.75rem 1.6rem;
   cursor: pointer;
   transition: background 150ms, color 150ms, opacity 150ms;
@@ -1823,8 +1824,8 @@ main[data-project-theme] .project-cover-block::before {
 .form-submit-btn::after { content: '→'; }
 
 .form-submit-btn:hover:not(:disabled) {
-  background: var(--c-accent);
-  border-color: var(--c-accent);
+  background: var(--c-cta);
+  border-color: var(--c-cta);
   color: var(--c-fg);
 }
 .form-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -1905,15 +1906,16 @@ main[data-project-theme] .project-cover-block::before {
   text-transform: uppercase;
   text-decoration: none;
   padding: 0.75rem 1.25rem;
-  border: var(--bw-thick) solid var(--c-line);
+  border: var(--bw-thick) solid var(--c-cta);
   color: var(--c-fg);
   background: var(--c-bg);
   transition: background 150ms, color 150ms;
 }
 
 .consult-cta-btn:hover {
-  background: var(--c-fg);
-  color: var(--c-bg);
+  background: var(--c-cta);
+  border-color: var(--c-cta);
+  color: var(--c-fg);
 }
 
 @media (max-width: 600px) {
