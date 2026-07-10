@@ -2,7 +2,7 @@ import { LegalPage } from '../../components/LegalPage/LegalPage'
 import { SocialLinks } from '../../components/SocialLinks/SocialLinks'
 import { SITE } from '../../data/site'
 
-const OPERATOR = 'Mile High Interface LLC'
+const OPERATOR = 'An App Idea LLC'
 const CONTACT = SITE.email
 
 export default function PaybackTerms() {
