@@ -19,6 +19,12 @@ export default defineConfig({
               name: 'react-vendor',
               test: /[\\/]node_modules[\\/](react|react-dom|react-router|scheduler)[\\/]/,
             },
+            {
+              // GSAP + plugins are lazy-imported (progressive enhancement), so
+              // keep them in a separate cached chunk out of the app bundle.
+              name: 'gsap-vendor',
+              test: /[\\/]node_modules[\\/]gsap[\\/]/,
+            },
           ],
         },
       },

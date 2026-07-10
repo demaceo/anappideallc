@@ -33,15 +33,18 @@ main:focus { outline: none; }
 
 a:focus-visible,
 button:focus-visible {
-  outline: var(--bw-thick) solid var(--c-accent);
+  /* Ink ring + bone separator so focus reads on any loud section color
+     (the old chartreuse outline vanished on lime/yellow). */
+  outline: var(--bw-thick) solid var(--c-ink);
   outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--c-bg);
 }
 
 h1, h2, h3 {
   font-family: var(--ff-display);
-  font-weight: 400;
+  font-weight: 900;              /* Unbounded heavy */
   text-transform: uppercase;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;       /* Unbounded runs wide; loosen the negative tracking */
 }
 
 .container {
@@ -60,7 +63,7 @@ h1, h2, h3 {
   to   { max-height: 0;     opacity: 0; margin-bottom: 0;      }
 }
 @keyframes h1-collapse {
-  from { font-size: clamp(2.4rem, 7vw, 5.25rem); margin-bottom: 0.75rem; }
+  from { font-size: clamp(2rem, 6vw, 4.25rem); margin-bottom: 0.75rem; }
   to   { font-size: clamp(1.05rem, 2.2vw, 1.35rem); margin-bottom: 0;    }
 }
 @keyframes subtitle-collapse {
@@ -130,9 +133,9 @@ h1, h2, h3 {
 }
 
 .masthead h1 {
-  font-size: clamp(2.4rem, 7vw, 5.25rem);
-  line-height: 0.85;
-  letter-spacing: -0.045em;
+  font-size: clamp(2rem, 6vw, 4.25rem);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
   margin-bottom: 0.75rem;
   animation: h1-collapse linear both;
   animation-timeline: scroll(root);
@@ -141,7 +144,8 @@ h1, h2, h3 {
 
 .masthead h1 em {
   font-style: normal;
-  background: var(--c-accent);
+  background: var(--c-yellow);
+  color: var(--c-ink);
   padding: 0 0.1em;
   display: inline-block;
 }
@@ -277,6 +281,8 @@ h1, h2, h3 {
 }
 
 /* ─── Contact FAB — fixed lower-right floating action button ─── */
+/* v13 HUD Corners — floats over arbitrary section colors, so a dark slab +
+   growing corner ticks stays legible on any background. */
 .contact-fab {
   position: fixed;
   bottom: 2rem;
@@ -285,19 +291,33 @@ h1, h2, h3 {
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  padding: 0.75rem 1.25rem;
-  background: var(--c-bg);
-  color: var(--c-fg);
-  border: var(--bw-thick) solid var(--c-cta);
+  padding: 0.8rem 1.35rem;
+  background: var(--neon-btn-bg);
+  color: var(--neon-cyan);
+  border: var(--bw) solid rgba(0, 255, 255, 0.35);
   text-decoration: none;
-  transition: background 150ms, color 150ms;
+  text-shadow: 0 0 4px var(--neon-cyan);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  transition: box-shadow 150ms;
 }
 
-.contact-fab:hover {
-  background: var(--c-cta);
-  border-color: var(--c-cta);
-  color: var(--c-fg);
+.contact-fab::before,
+.contact-fab::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--neon-cyan);
+  border-style: solid;
+  border-width: 0;
+  transition: width 200ms, height 200ms;
 }
+.contact-fab::before { top: -2px; left: -2px; border-top-width: 2px; border-left-width: 2px; }
+.contact-fab::after { bottom: -2px; right: -2px; border-bottom-width: 2px; border-right-width: 2px; }
+
+.contact-fab:hover { box-shadow: 0 0 16px rgba(0, 255, 255, 0.4); }
+.contact-fab:hover::before,
+.contact-fab:hover::after { width: 16px; height: 16px; }
 
 .contact-fab-label {
   font-family: var(--ff-mono);
@@ -341,7 +361,7 @@ h1, h2, h3 {
 }
 
 .marquee-track span { padding-inline: 0.5em; }
-.marquee-track .dot { color: var(--c-accent); }
+.marquee-track .dot { color: var(--c-cyan); }
 
 @keyframes marquee {
   to { transform: translateX(-100%); }
@@ -385,8 +405,8 @@ h1, h2, h3 {
 .section-num::after  { content: ' ]'; }
 
 .section-header h2 {
-  font-size: clamp(1.75rem, 5vw, 3rem);
-  line-height: 0.9;
+  font-size: clamp(1.5rem, 4.2vw, 2.5rem);
+  line-height: 0.95;
   min-width: 0;
 }
 
@@ -621,8 +641,8 @@ cite:hover { background: var(--c-accent); }
 /* Giant footer wordmark — Home page */
 .footer-giant {
   font-family: var(--ff-display);
-  font-size: clamp(2.75rem, 13vw, 9.5rem);
-  line-height: 0.78;
+  font-size: clamp(2.2rem, 11vw, 7rem);
+  line-height: 0.82;
   letter-spacing: -0.05em;
   text-transform: uppercase;
   text-align: center;
@@ -1293,33 +1313,51 @@ cite:hover { background: var(--c-accent); }
   margin-top: 0.75rem;
 }
 
+/* v8 Ghost Fill (primary) / ghost outline (secondary). */
 .project-link-btn {
-  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-family: var(--ff-mono);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0.7rem 1.25rem;
-  border: var(--bw-thick) solid var(--c-line);
-  color: var(--c-fg);
+  border: var(--bw-thick) solid var(--neon-cyan);
+  color: var(--neon-cyan);
   text-decoration: none;
-  background: var(--c-bg);
-  transition: background 150ms, color 150ms;
+  background: var(--neon-btn-bg);
+  text-shadow: 0 0 4px var(--neon-cyan);
+  transition: color 300ms;
 }
 
-.project-link-btn:hover {
-  background: var(--c-fg);
-  color: var(--c-bg);
+.project-link-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--neon-cyan);
+  transform: translateX(-100%);
+  transition: transform 300ms ease;
+  z-index: -1;
 }
+.project-link-btn:hover { color: var(--neon-btn-bg); text-shadow: none; }
+.project-link-btn:hover::before { transform: translateX(0); }
 
 .project-link-btn.secondary {
   border-width: var(--bw);
-  color: var(--c-fg-soft);
+  border-color: rgba(0, 255, 255, 0.4);
+  color: var(--neon-cyan);
+  background: transparent;
+  text-shadow: none;
 }
-
+.project-link-btn.secondary::before { display: none; }
 .project-link-btn.secondary:hover {
-  background: var(--c-fg);
-  color: var(--c-bg);
+  color: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+  text-shadow: 0 0 4px var(--neon-cyan);
 }
 
 /* ── Bottom navigation ── */
@@ -1629,7 +1667,10 @@ main[data-project-theme] .project-cover-block::before {
 
 .svc-panel-content .svc-cta { margin-top: 1.25rem; }
 
+/* v6 Conic Flow — animated cyan→magenta gradient rim (needs @property --angle). */
 .svc-cta {
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -1637,20 +1678,20 @@ main[data-project-theme] .project-cover-block::before {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding: 0.75rem 1rem;
-  border: var(--bw-thick) solid var(--c-cta);
-  color: var(--c-bg);
+  padding: 0.8rem 1.15rem;
+  border: 2px solid transparent;
+  color: var(--neon-txt);
   text-decoration: none;
+  background:
+    linear-gradient(var(--neon-btn-bg), var(--neon-btn-bg)) padding-box,
+    conic-gradient(from var(--angle), var(--neon-cyan), var(--neon-magenta), var(--neon-cyan)) border-box;
   justify-self: start;
   align-self: end;
   white-space: nowrap;
-  transition: background 150ms, color 150ms, border-color 150ms;
 }
 
 .svc-cta:hover {
-  background: var(--c-cta);
-  color: var(--c-fg);
-  border-color: var(--c-cta);
+  animation: neonRotateAngle 2s linear infinite;
 }
 
 .svc-cta::after { content: '→'; }
@@ -1803,31 +1844,42 @@ main[data-project-theme] .project-cover-block::before {
   padding-top: 0.25rem;
 }
 
+/* v17 Battery Charge — the green fill "charges" across on hover, then fires. */
 .form-submit-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   font-family: var(--ff-mono);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   min-height: 44px;
-  color: var(--c-fg);
-  background: var(--c-bg);
-  border: var(--bw-thick) solid var(--c-cta);
+  color: var(--neon-green);
+  background: var(--neon-btn-bg);
+  border: var(--bw-thick) solid var(--neon-green);
+  text-shadow: 0 0 4px var(--neon-green);
   padding: 0.75rem 1.6rem;
   cursor: pointer;
-  transition: background 150ms, color 150ms, opacity 150ms;
+  transition: color 300ms, opacity 150ms;
   border-radius: 0;
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
 }
 
+.form-submit-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  background: var(--neon-green);
+  z-index: -1;
+  transition: width 400ms ease;
+}
 .form-submit-btn::after { content: '→'; }
 
-.form-submit-btn:hover:not(:disabled) {
-  background: var(--c-cta);
-  border-color: var(--c-cta);
-  color: var(--c-fg);
-}
+.form-submit-btn:hover:not(:disabled) { color: var(--neon-btn-bg); text-shadow: none; }
+.form-submit-btn:hover:not(:disabled)::before { width: 100%; }
 .form-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .form-status {
@@ -1895,8 +1947,12 @@ main[data-project-theme] .project-cover-block::before {
   margin: 0;
 }
 
+/* v1 Neon Pulse — the single primary conversion CTA. */
 .consult-cta-btn {
   flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -1905,17 +1961,17 @@ main[data-project-theme] .project-cover-block::before {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 0.75rem 1.25rem;
-  border: var(--bw-thick) solid var(--c-cta);
-  color: var(--c-fg);
-  background: var(--c-bg);
-  transition: background 150ms, color 150ms;
+  padding: 0.85rem 1.3rem;
+  border: var(--bw-thick) solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  background: var(--neon-btn-bg);
+  text-shadow: 0 0 4px var(--neon-cyan);
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.25);
+  transition: box-shadow 150ms;
 }
 
 .consult-cta-btn:hover {
-  background: var(--c-cta);
-  border-color: var(--c-cta);
-  color: var(--c-fg);
+  animation: neonPulse 1.2s ease-in-out infinite;
 }
 
 @media (max-width: 600px) {
@@ -2190,27 +2246,41 @@ main[data-project-theme] .project-cover-block::before {
   transition: background 150ms, border-color 150ms, color 150ms;
 }
 
+/* ghost outline — quiet secondary; lights up on hover, no glow at rest. */
 .wizard-back {
+  position: relative;
   background: transparent;
-  border: var(--bw) solid var(--c-bg-soft);
-  color: var(--c-bg);
+  border: var(--bw) solid rgba(0, 255, 255, 0.4);
+  color: var(--neon-cyan);
   padding: 0.7rem 1.1rem;
   min-height: 44px;
 }
-.wizard-back:hover { border-color: var(--c-bg); }
+.wizard-back:hover { border-color: var(--neon-cyan); text-shadow: 0 0 4px var(--neon-cyan); }
 
+/* v8 Ghost Fill — cyan fill slides in from the left on hover. */
 .wizard-next {
-  background: var(--c-bg);
-  border: var(--bw-thick) solid var(--c-bg);
-  color: var(--c-fg);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--neon-btn-bg);
+  border: var(--bw-thick) solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  text-shadow: 0 0 4px var(--neon-cyan);
   padding: 0.7rem 1.35rem;
   min-height: 44px;
+  transition: color 300ms;
 }
-.wizard-next:hover {
-  background: var(--c-accent);
-  border-color: var(--c-accent);
-  color: var(--c-fg);
+.wizard-next::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--neon-cyan);
+  transform: translateX(-100%);
+  transition: transform 300ms ease;
+  z-index: -1;
 }
+.wizard-next:hover { color: var(--neon-btn-bg); text-shadow: none; }
+.wizard-next:hover::before { transform: translateX(0); }
 
 /* ─── Voice note recorder (lives inside the dark form) ─── */
 .voice-note { display: flex; flex-direction: column; gap: 0.6rem; }
@@ -2464,4 +2534,176 @@ main a:hover {
   *::after {
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BRUTALIST "LOUD LIGHT" SYSTEM
+   Adapted from the CodePenz "Brutalist Scroll Page". Additive + opt-in:
+   only elements carrying .section--<color>, .neon-btn, or the utility
+   classes below change — the bone + ink base is untouched. --c-ink (#0a0a0a)
+   draws every thick border + outline so it reads jet-black on any hue.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* @property — lets the conic-gradient rim (neon v6) animate its angle.
+   Chromium · Safari 16.4+ · Firefox 128+; elsewhere the rim is a static
+   gradient (graceful, not broken). */
+@property --angle  { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+@property --angle2 { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
+/* ─── Full-bleed loud section blocks ───
+   .section escapes the 880px column; its inner .container keeps the measure.
+   Thick ink borders top + bottom draw the visible brutalist grid. */
+.section {
+  position: relative;
+  width: 100%;
+  border-block: var(--bw-brutal) solid var(--c-ink);
+  overflow: clip;
+}
+.section + .section { border-top: none; }           /* no doubled 8px seam */
+.section > .container { position: relative; z-index: 2; }
+.section-band { padding: clamp(3rem, 8vw, 6rem) 0; }
+
+.section--yellow   { background: var(--c-yellow);   color: var(--c-ink); }
+.section--lime     { background: var(--c-lime);     color: var(--c-ink); }
+.section--lavender { background: var(--c-lavender); color: var(--c-ink); }
+.section--orange   { background: var(--c-orange);   color: var(--c-ink); }
+.section--pink     { background: var(--c-pink);     color: var(--c-ink); }
+.section--ink      { background: var(--c-ink);      color: var(--c-bg);  }
+.section--bone     { background: var(--c-bg);       color: var(--c-fg);  }
+
+/* Per-section film grain — a low-z layer BENEATH the content (z:1 < container
+   z:2), never a global top-most color-dodge overlay (which would wash the
+   whole page and crush text contrast). Keeps grain off the text entirely. */
+.section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+.section--bone::after { opacity: calc(var(--grain-opacity) * 0.5); }
+
+/* Inside loud blocks: thicken the stat grid's hairlines to brutalist weight
+   (boxes stay bone so the numerals keep their contrast), thicken the header
+   rule, and drop the chapter-number stamp in the top-right corner. */
+.section .stats-grid {
+  gap: var(--bw-brutal);
+  background: var(--c-ink);
+  border: var(--bw-brutal) solid var(--c-ink);
+}
+.section .section-header { border-bottom-width: var(--bw-brutal); }
+.section-stamp {
+  position: absolute;
+  top: clamp(0.9rem, 3vw, 1.75rem);
+  right: clamp(0.9rem, 4vw, 2rem);
+  z-index: 3;
+}
+
+/* ─── Outline / ghost-watermark / stamp type ─── */
+.outline-word {
+  -webkit-text-stroke: 3px currentColor;
+  color: transparent;
+  /* Some engines need the standard prop alongside the -webkit one. */
+  text-stroke: 3px currentColor;
+}
+.ghost-word {
+  position: absolute;
+  z-index: 0;
+  top: -0.06em;
+  left: -0.03em;
+  font-family: var(--ff-stamp);
+  font-size: clamp(6rem, 22vw, 16rem);
+  line-height: 0.8;
+  text-transform: uppercase;
+  white-space: nowrap;
+  -webkit-text-stroke: 2px rgba(10, 10, 10, 0.08);
+  color: transparent;
+  pointer-events: none;
+  user-select: none;
+}
+.section--ink .ghost-word { -webkit-text-stroke-color: rgba(245, 244, 239, 0.07); }
+.stamp {
+  display: inline-block;
+  font-family: var(--ff-stamp);
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  letter-spacing: 0.14em;
+  padding: 0.05em 0.5em;
+  border: var(--bw-brutal) solid var(--c-ink);
+  background: var(--c-ink);
+  color: var(--c-yellow);
+  transform: rotate(-3deg);
+}
+
+/* ─── Brutalist reduced-motion / contrast / forced-colors guards ─── */
+@media (prefers-reduced-motion: reduce) {
+  .neon-btn, .neon-btn * { animation: none !important; }
+  .section::after { animation: none; }
+}
+@media (prefers-contrast: more), (forced-colors: active) {
+  .section::after { display: none; }   /* grain destroys contrast */
+  .neon-btn { box-shadow: none; }       /* drop neon glow */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CYBERPUNK NEON BUTTONS  (ported from the CodePenz "cyberpunk neon button
+   variants"). Every variant keeps the dark #0a0f1c slab body so its glow
+   reads as a jewel against the loud section colors. Shared keyframes live
+   here; each of the site's real CTA classes (below) carries one variant:
+     v1 Neon Pulse → .consult-cta-btn      (primary: Book a time)
+     v13 HUD Corners → .contact-fab         (persistent floating Contact)
+     v6 Conic Flow → .svc-cta               (Start here)
+     v17 Battery Charge → .form-submit-btn  (Send message)
+     v8 Ghost Fill → .wizard-next, .project-link-btn
+     ghost outline → .wizard-back, .project-link-btn.secondary
+   .neon-btn is a reusable base for future pages.
+   ═══════════════════════════════════════════════════════════════════════ */
+.neon-btn {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  font-family: var(--ff-mono); font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+  padding: 0.8rem 1.25rem; cursor: pointer;
+  background: var(--neon-btn-bg); color: var(--neon-cyan);
+  border: var(--bw-thick) solid var(--neon-cyan);
+  text-shadow: 0 0 4px var(--neon-cyan);
+}
+@keyframes neonPulse {
+  0%, 100% { box-shadow: 0 0 6px var(--neon-cyan), inset 0 0 6px rgba(0, 255, 255, 0.2);
+             text-shadow: 0 0 4px var(--neon-cyan); }
+  50%      { box-shadow: 0 0 22px var(--neon-cyan), inset 0 0 14px rgba(0, 255, 255, 0.4);
+             text-shadow: 0 0 12px var(--neon-cyan), 0 0 24px var(--neon-cyan); }
+}
+@keyframes neonRotateAngle { to { --angle: 360deg; } }
+
+/* ─── Custom cursor — mounted only on fine pointers (adds .has-custom-cursor) ─── */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--c-cyan);
+  border-radius: 50%;
+  background: rgba(0, 186, 226, 0.15);
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0;
+  mix-blend-mode: difference;
+  transition: width 200ms, height 200ms, background 200ms, opacity 200ms;
+  will-change: transform;
+}
+.cursor-dot.cursor-grow {
+  width: 46px;
+  height: 46px;
+  background: rgba(0, 186, 226, 0.35);
+}
+/* Hide the native cursor only while the JS cursor is active, and never over
+   text-entry controls (keep the caret/I-beam usable). */
+.has-custom-cursor,
+.has-custom-cursor *:not(input):not(textarea):not(select):not([contenteditable]) {
+  cursor: none;
 }
