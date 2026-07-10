@@ -2521,6 +2521,10 @@ main a:hover {
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; padding-left: 0; }
   .voice-note-pulse { animation: none; }
+  .contact-fab:hover {
+    animation: none;
+    box-shadow: 0 0 16px oklch(72% 0.19 50 / 0.6);
+  }
   .masthead,
   .overline,
   .masthead h1,
