@@ -289,14 +289,29 @@ h1, h2, h3 {
   background: var(--c-bg);
   color: var(--c-fg);
   border: var(--bw-thick) solid var(--c-cta);
+  box-shadow: 0 0 10px oklch(72% 0.19 50 / 0.35);
   text-decoration: none;
-  transition: background 150ms, color 150ms;
+  transition: background 150ms, color 150ms, box-shadow 150ms;
 }
 
 .contact-fab:hover {
   background: var(--c-cta);
   border-color: var(--c-cta);
   color: var(--c-fg);
+  animation: contact-fab-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes contact-fab-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 10px oklch(72% 0.19 50 / 0.5),
+      inset 0 0 8px oklch(96% 0.005 90 / 0.25);
+  }
+  50% {
+    box-shadow:
+      0 0 28px oklch(72% 0.19 50 / 0.8),
+      inset 0 0 14px oklch(96% 0.005 90 / 0.4);
+  }
 }
 
 .contact-fab-label {
@@ -2451,6 +2466,10 @@ main a:hover {
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; padding-left: 0; }
   .voice-note-pulse { animation: none; }
+  .contact-fab:hover {
+    animation: none;
+    box-shadow: 0 0 16px oklch(72% 0.19 50 / 0.6);
+  }
   .masthead,
   .overline,
   .masthead h1,
