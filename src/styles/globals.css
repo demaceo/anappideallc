@@ -2609,10 +2609,13 @@ main a:hover {
 
 /* ─── Outline / ghost-watermark / stamp type ─── */
 .outline-word {
+  /* Transparent FILL only — the stroke keeps the inherited color (currentColor
+     = the section's ink), so the outline is actually visible. Setting
+     `color: transparent` here would make currentColor transparent too and the
+     stroke would vanish. Degrades gracefully: without -webkit-text-stroke
+     support the word renders as solid inherited color, never invisible. */
+  -webkit-text-fill-color: transparent;
   -webkit-text-stroke: 3px currentColor;
-  color: transparent;
-  /* Some engines need the standard prop alongside the -webkit one. */
-  text-stroke: 3px currentColor;
 }
 .ghost-word {
   position: absolute;
