@@ -2,7 +2,7 @@ import { LegalPage } from '../../components/LegalPage/LegalPage'
 import { SocialLinks } from '../../components/SocialLinks/SocialLinks'
 import { SITE } from '../../data/site'
 
-const OPERATOR = 'Mile High Interface LLC'
+const OPERATOR = 'An App Idea LLC'
 const CONTACT = SITE.email
 
 export default function StlmntTerms() {
@@ -270,7 +270,7 @@ export default function StlmntTerms() {
         </div>
         <div className="verdict-box warning">
           <p className="legal-allcaps">
-            TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, MILE HIGH INTERFACE LLC SHALL NOT BE
+            TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, AN APP IDEA LLC SHALL NOT BE
             LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR FOR
             ANY MISSED DEADLINE, REJECTED OR DENIED CLAIM, LOST OR UNRECEIVED PAYMENT, OR RELIANCE ON
             SETTLEMENT INFORMATION, ELIGIBILITY RESULTS, OR PAYOUT ESTIMATES, ARISING FROM YOUR USE

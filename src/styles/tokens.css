@@ -35,10 +35,13 @@
   --c-bg-soft: oklch(96% 0.005 90 / 0.6);
   --c-bg-faint: oklch(96% 0.005 90 / 0.18);
 
-  /* Typography */
-  --ff-display: 'Archivo Black', ui-sans-serif, system-ui, sans-serif;
-  --ff-body: 'Archivo', ui-sans-serif, system-ui, sans-serif;
-  --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
+  /* Typography — full swap to the Brutalist Scroll Page pen's families.
+     Unbounded (display, heavy) · Space Mono (body + mono/labels) ·
+     Bebas Neue (giant ghost watermarks + stamp/badge labels). */
+  --ff-display: 'Unbounded', ui-sans-serif, system-ui, sans-serif;
+  --ff-body: 'Space Mono', ui-monospace, monospace;
+  --ff-mono: 'Space Mono', ui-monospace, monospace;
+  --ff-stamp: 'Bebas Neue', 'Unbounded', sans-serif;
 
   /* Spacing scale */
   --s-1: 0.25rem;
@@ -55,6 +58,38 @@
   /* Borders — the primary structural device */
   --bw: 1px;
   --bw-thick: 2px;
+
+  /* ═══ Brutalist "loud light" system — adapted from the CodePenz
+     "Brutalist Scroll Page". ADDITIVE + opt-in: --c-bg (warm bone) stays the
+     page canvas and --c-fg stays the default ink, so any page that never
+     applies a .section--<color> block keeps rendering exactly as before.
+     Loud colors are pulled in only by loud section blocks and neon buttons;
+     --c-ink (#0a0a0a) draws every 4–6px border and outline-text so it reads
+     jet-black on any hue. ═══ */
+  --c-yellow: #ffe500;
+  --c-green: #0ae448;
+  --c-pink: #ff2d78;
+  --c-lavender: #9d95ff;
+  --c-orange: #ff8709;
+  --c-lime: #abff84;
+  --c-cyan: #00bae2;
+  --c-ink: #0a0a0a;
+
+  /* Thick brutalist borders (--bw/--bw-thick above stay for legacy components) */
+  --bw-brutal: 4px;
+  --bw-brutal-lg: 6px;
+
+  /* Film grain overlay (riso/print texture) */
+  --grain-opacity: 0.24;
+  --grain-blend: color-dodge;
+
+  /* Neon button system — dark slab body so the glow reads on loud sections */
+  --neon-btn-bg: #0a0f1c;
+  --neon-cyan: #0ff;
+  --neon-yellow: #ffe500;
+  --neon-magenta: #ff2d78;
+  --neon-green: #0ae448;
+  --neon-txt: #e8fbff;
 
   /* Motion */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);

@@ -142,13 +142,13 @@ export const META: Record<string, { title: string; description: string; path: st
   '/legal/payback/privacy': {
     title: `Privacy Policy — Ôwn (Payback) | ${SITE.name}`,
     description:
-      'Privacy Policy for Ôwn (Payback Own) on iOS & Android. Local-first AES-256 encrypted architecture. Covers Google/Meta data processing, AI analysis via Gemini, GDPR, UK GDPR, CCPA, and India DPDP rights. Operated by Mile High Interface LLC.',
+      'Privacy Policy for Ôwn (Payback Own) on iOS & Android. Local-first AES-256 encrypted architecture. Covers Google/Meta data processing, AI analysis via Gemini, GDPR, UK GDPR, CCPA, and India DPDP rights. Operated by An App Idea LLC.',
     path: '/legal/payback/privacy',
   },
   '/legal/payback/terms': {
     title: `Terms of Service — Ôwn (Payback) | ${SITE.name}`,
     description:
-      'Terms of Service for Ôwn (Payback Own) on iOS & Android. 20-section agreement covering eligibility, AI analysis, data ownership, disclaimers, arbitration, and governing law (Colorado). Operated by Mile High Interface LLC.',
+      'Terms of Service for Ôwn (Payback Own) on iOS & Android. 20-section agreement covering eligibility, AI analysis, data ownership, disclaimers, arbitration, and governing law (Colorado). Operated by An App Idea LLC.',
     path: '/legal/payback/terms',
   },
   '/legal/pinpoint/privacy': {
@@ -202,13 +202,13 @@ export const META: Record<string, { title: string; description: string; path: st
   '/legal/stlmnt/privacy': {
     title: `Privacy Policy — STLMNT | ${SITE.name}`,
     description:
-      'Privacy Policy for STLMNT, the class action settlement tracker (iOS & Android). Covers your account, optional autofill profile, claims, and receipts. Sensitive fields are KMS-encrypted; no bank, SSN, or card numbers — ever; receipts stay on-device. Operated by Mile High Interface LLC.',
+      'Privacy Policy for STLMNT, the class action settlement tracker (iOS & Android). Covers your account, optional autofill profile, claims, and receipts. Sensitive fields are KMS-encrypted; no bank, SSN, or card numbers — ever; receipts stay on-device. Operated by An App Idea LLC.',
     path: '/legal/stlmnt/privacy',
   },
   '/legal/stlmnt/terms': {
     title: `Terms of Service — STLMNT | ${SITE.name}`,
     description:
-      'Terms of Service for STLMNT (iOS & Android). STLMNT is not a legal service and never files claims for you — you submit every claim yourself on the official site. Covers eligibility, accuracy disclaimers, payouts, and governing law (Colorado). Operated by Mile High Interface LLC.',
+      'Terms of Service for STLMNT (iOS & Android). STLMNT is not a legal service and never files claims for you — you submit every claim yourself on the official site. Covers eligibility, accuracy disclaimers, payouts, and governing law (Colorado). Operated by An App Idea LLC.',
     path: '/legal/stlmnt/terms',
   },
 }

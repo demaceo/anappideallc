@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router'
 import { RouteFocusReset } from './components/RouteFocusReset'
 import { ContactFAB } from './components/ContactFAB/ContactFAB'
+import { CustomCursor } from './components/CustomCursor/CustomCursor'
 
 function AppShell() {
   const { pathname } = useLocation()
@@ -17,6 +18,7 @@ function AppShell() {
       <RouteFocusReset />
       <Outlet />
       <ContactFAB />
+      <CustomCursor />
     </>
   )
 }
