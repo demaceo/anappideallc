@@ -2714,3 +2714,26 @@ main a:hover {
 .has-custom-cursor *:not(input):not(textarea):not(select):not([contenteditable]) {
   cursor: none;
 }
+
+/* ─── WCAG AA: muted mono labels ───
+   These secondary eyebrow/label texts were rendered at opacity:0.5, which
+   computes to ~3.5:1 on bone and on the loud section colors — below the 4.5:1
+   AA threshold for small text. Raise to 0.75 (measured >=4.8:1 on every
+   background, including lavender/orange) so they stay visibly secondary but
+   readable. Disabled-state opacity (.form-submit-btn:disabled) and decorative
+   "↳" list/prefix arrows are intentionally left as-is. */
+.section-num,
+.stat-label-top,
+.verdict-box::before,
+.sources-header h3,
+.social-links-label,
+.bubble-subtitle,
+.feature-eyebrow,
+.project-metric-label,
+.svc-num,
+.svc-sublabel,
+.consult-cta-eyebrow,
+.form-label-opt,
+.voice-note-max {
+  opacity: 0.75;
+}
