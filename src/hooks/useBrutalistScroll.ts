@@ -64,15 +64,18 @@ export function useBrutalistScroll(scopeRef: RefObject<HTMLElement | null>) {
             })
           })
 
-          // Block reveals.
+          // Block reveals. Trigger as soon as the block starts entering the
+          // viewport (start near the bottom edge) and settle quickly, so the
+          // reveal keeps pace with scroll instead of finishing after the
+          // content has already scrolled past.
           gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
             if (!belowFold(el)) return
             gsap.from(el, {
               opacity: 0,
-              y: 42,
-              duration: 0.8,
-              ease: 'power3.out',
-              scrollTrigger: { trigger: el, start: 'top 85%' },
+              y: 28,
+              duration: 0.5,
+              ease: 'power2.out',
+              scrollTrigger: { trigger: el, start: 'top 95%' },
             })
           })
 
@@ -83,12 +86,12 @@ export function useBrutalistScroll(scopeRef: RefObject<HTMLElement | null>) {
             splits.push(split)
             gsap.from(split.words, {
               opacity: 0,
-              y: 24,
+              y: 16,
               rotationX: -30,
-              stagger: 0.045,
-              duration: 0.7,
-              ease: 'power3.out',
-              scrollTrigger: { trigger: el, start: 'top 85%' },
+              stagger: 0.03,
+              duration: 0.5,
+              ease: 'power2.out',
+              scrollTrigger: { trigger: el, start: 'top 95%' },
             })
           })
 
