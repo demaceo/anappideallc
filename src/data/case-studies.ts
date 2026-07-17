@@ -150,6 +150,9 @@ export const caseStudies: CaseStudy[] = [
     },
     icon: '/app-icons/pinpoint.png',
     featured: true,
+    resourceLinks: [
+      { label: 'App Store', url: 'https://apps.apple.com/app/id6759683874', description: 'Download The Pinpoint App on the iOS App Store.' },
+    ],
   },
   {
     slug: 'payback-consumer-intelligence',
@@ -200,6 +203,9 @@ export const caseStudies: CaseStudy[] = [
       ],
     },
     featured: true,
+    resourceLinks: [
+      { label: 'App Store', url: 'https://apps.apple.com/app/id6754859483', description: 'Download Payback on the iOS App Store.' },
+    ],
   },
   {
     slug: 'rentharbor-property-management',
@@ -363,6 +369,9 @@ export const caseStudies: CaseStudy[] = [
       ],
     },
     icon: '/app-icons/yap.png',
+    resourceLinks: [
+      { label: 'App Store', url: 'https://apps.apple.com/app/id6759472914', description: 'Download The Yap App on the iOS App Store.' },
+    ],
   },
   {
     slug: 'drayage-drivers',
