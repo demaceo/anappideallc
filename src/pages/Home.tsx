@@ -5,7 +5,7 @@ import { SITE } from '../data/site'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
-import { IconZap, IconLayers, IconGlobe, IconBarChart } from '../components/icons'
+import { IconZap, IconLayers, IconGlobe, IconBarChart, IconCpu } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
 import { Marquee } from '../components/Marquee/Marquee'
@@ -21,8 +21,23 @@ const MARQUEE_ITEMS = [
   'Founders',
 ] as const
 
-const SERVICE_ICONS = [IconZap, IconLayers, IconGlobe, IconBarChart]
-const SERVICE_ICON_CLASSES = ['icon-green', 'icon-blue', 'icon-teal', 'icon-orange'] as const
+// Keyed by service id rather than array position: a new entry in services.ts
+// used to render `undefined` as a component here and crash the page. Unknown
+// ids fall back, same pattern as SLUG_TO_LOGO in ProjectDetail.
+const SERVICE_ICONS: Record<string, typeof IconZap> = {
+  'mvp-development': IconZap,
+  'ui-engineering': IconLayers,
+  'business-websites': IconGlobe,
+  'data-visualization': IconBarChart,
+  'ai-integration': IconCpu,
+}
+const SERVICE_ICON_CLASSES: Record<string, string> = {
+  'mvp-development': 'icon-green',
+  'ui-engineering': 'icon-blue',
+  'business-websites': 'icon-teal',
+  'data-visualization': 'icon-orange',
+  'ai-integration': 'icon-purple',
+}
 
 export default function Home() {
   const scopeRef = useRef<HTMLElement>(null)
@@ -49,7 +64,9 @@ export default function Home() {
             <p data-split>
               Bring the idea, even a half-formed one. I build AI-native mobile
               apps with privacy architected in, not bolted on, founder-led from
-              interface to encrypted vault to launch.
+              interface to encrypted vault to launch. And I'm a Black founder in
+              Denver building this so Colorado's Black-owned businesses aren't
+              the last ones to get what AI can do.
             </p>
           </div>
         </Section>
@@ -99,11 +116,11 @@ export default function Home() {
             <div className="section-rule" />
           </div>
 
-          {services.map((s, i) => {
-            const ServiceIcon = SERVICE_ICONS[i]
+          {services.map((s) => {
+            const ServiceIcon = SERVICE_ICONS[s.id] ?? IconZap
             return (
               <div key={s.id} className="feature-item" data-reveal data-tilt>
-                <div className={`feature-icon ${SERVICE_ICON_CLASSES[i]}`}>
+                <div className={`feature-icon ${SERVICE_ICON_CLASSES[s.id] ?? 'icon-green'}`}>
                   <ServiceIcon size={20} />
                 </div>
                 <div className="feature-body">

@@ -20,7 +20,7 @@ export default function Services() {
         <header className="masthead">
           <p className="overline">An App Idea LLC · What I build</p>
           <h1>Services</h1>
-          <p className="date-line">Four ways I can help</p>
+          <p className="date-line">Five ways I can help</p>
         </header>
       </PageHeader>
 

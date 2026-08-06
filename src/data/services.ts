@@ -129,4 +129,34 @@ export const services: Service[] = [
     ],
     metric: { label: 'Data Points Handled', value: '10M+' },
   },
+  {
+    id: 'ai-integration',
+    slug: 'ai-integration',
+    title: 'AI Integration for Existing Platforms',
+    description:
+      "Your website, store, or booking system already works. I add the AI layer on top and keep it running: chat, search, personalization, and the busywork automated, so Colorado's Black-owned businesses aren't the last ones to get it.",
+    features: [
+      'AI chat grounded in your actual content, not a generic bot',
+      'Semantic search that understands what customers mean',
+      'Personalized recommendations from what customers actually do',
+      'Automated follow-up: booking reminders, email drafts, routine replies',
+      'Fits onto what you already run: no migration, no rebuild',
+      'Server-side proxy, so your keys and customer data never reach the browser',
+      'Rate limiting, cost caps, and a fallback when a provider goes down',
+    ],
+    technologies: ['Gemini', 'Groq', 'ElevenLabs', 'Deepgram', 'Firebase', 'Vercel'],
+    useCases: [
+      'Shops and service businesses whose site works but predates AI',
+      'Booking and scheduling systems drowning in routine questions',
+      'Owners who want AI without handing customer data to a third party',
+    ],
+    deliverables: [
+      'Chat, search, personalization, and automation live on your platform',
+      'Hardened server-side AI proxy with key management and rate limits',
+      'Usage and cost dashboard',
+      'Handover doc plus a walkthrough call',
+      'Monthly tuning, model updates, and a quarterly cost review',
+    ],
+    metric: { label: 'AI providers in production', value: '5+' },
+  },
 ]
