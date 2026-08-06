@@ -26,9 +26,9 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/work',
   },
   '/services': {
-    title: `Services: Mobile App, MVP & Web Development | ${SITE.name}`,
+    title: `Services: AI Integration, Mobile App & MVP Development | ${SITE.name}`,
     description:
-      'Mobile app development, MVP validation, product & UI engineering, and data visualization. React Native, Next.js, TypeScript, Supabase. MVPs launch in 6–8 weeks from first conversation.',
+      'AI integration for existing websites and stores, MVP validation, product & UI engineering, business websites, and data visualization. Add AI chat, search, and automation to what you already run, no rebuild.',
     path: '/services',
   },
   '/process': {
@@ -249,6 +249,12 @@ function buildBaseGraph(): object[] {
       knowsAbout: [
         'AI-native mobile app development',
         'AI integration',
+        'AI integration for existing platforms',
+        'AI chatbot integration',
+        'AI-powered site search',
+        'Retrieval-augmented generation',
+        'Large language model integration',
+        'AI workflow automation',
         'On-device AI',
         'Privacy-first architecture',
         'On-device encryption',
@@ -404,7 +410,7 @@ function buildPageGraph(route: string): object[] {
           '@id': `${url}/#services`,
           name: 'Development Services · An App Idea LLC',
           description:
-            'Four service categories: MVP development, product & UI engineering, business websites, and data visualization.',
+            'Five service categories: MVP development, product & UI engineering, business websites, data visualization, and AI integration for existing platforms.',
           numberOfItems: services.length,
           itemListElement: services.map((s, i) => ({
             '@type': 'ListItem',
