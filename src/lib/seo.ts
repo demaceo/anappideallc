@@ -245,7 +245,13 @@ function buildBaseGraph(): object[] {
       ...(SAME_AS.length ? { sameAs: SAME_AS } : {}),
       slogan: SITE.tagline,
       priceRange: '$$',
-      areaServed: { '@type': 'Country', name: 'United States' },
+      // Colorado first, national reach retained: the State node is the local
+      // relevance signal, the Country node keeps the existing national claim
+      // consistent with the /support and /contact copy.
+      areaServed: [
+        { '@type': 'State', name: 'Colorado' },
+        { '@type': 'Country', name: 'United States' },
+      ],
       knowsAbout: [
         'AI-native mobile app development',
         'AI integration',

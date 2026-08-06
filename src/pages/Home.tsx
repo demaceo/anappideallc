@@ -64,7 +64,9 @@ export default function Home() {
             <p data-split>
               Bring the idea, even a half-formed one. I build AI-native mobile
               apps with privacy architected in, not bolted on, founder-led from
-              interface to encrypted vault to launch.
+              interface to encrypted vault to launch. And I'm a Black founder in
+              Denver building this so Colorado's Black-owned businesses aren't
+              the last ones to get what AI can do.
             </p>
           </div>
         </Section>
