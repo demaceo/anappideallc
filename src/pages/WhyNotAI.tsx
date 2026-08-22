@@ -74,7 +74,7 @@ export default function WhyNotAI() {
         </header>
       </PageHeader>
 
-      <main className="container">
+      <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
             If you can describe your idea to an AI and get something on screen,

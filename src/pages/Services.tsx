@@ -9,7 +9,8 @@ import { PageHeader } from '../components/PageHeader/PageHeader'
 export default function Services() {
   // Accordion: one service open at a time; first item open on load so the
   // prerendered page shows real content above the fold. Closed panels stay
-  // in the DOM (grid-rows 0fr) so all content remains crawlable.
+  // in the DOM (grid-rows 0fr) so all content remains crawlable, but carry
+  // `inert` so they're skipped by keyboard focus and assistive tech.
   const [openIndex, setOpenIndex] = useState<number | null>(0)
 
   return (
@@ -24,7 +25,7 @@ export default function Services() {
         </header>
       </PageHeader>
 
-      <main className="container">
+      <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
             Whether you need a six-week MVP or a polished, production-grade
@@ -73,7 +74,17 @@ export default function Services() {
                   <span className="svc-name">{s.title}</span>
                   <span className="svc-arrow" aria-hidden="true">+</span>
                 </button>
-                <div id={`svc-panel-${s.id}`} className="svc-panel">
+                {/* `grid-template-rows: 0fr` + `overflow: hidden` collapses the
+                    panel VISUALLY only — a closed panel's "Start here" link
+                    stayed in the tab order and the a11y tree, so keyboard focus
+                    disappeared off-screen once per closed service. `inert`
+                    removes closed panels from both while keeping their content
+                    in the DOM for crawlers. */}
+                <div
+                  id={`svc-panel-${s.id}`}
+                  className="svc-panel"
+                  inert={!open}
+                >
                   <div className="svc-panel-inner">
                     <div className="svc-panel-content">
                       <div>

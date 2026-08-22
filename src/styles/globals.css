@@ -20,8 +20,10 @@ body {
   line-height: 1.5;
   font-feature-settings: 'ss01', 'cv11';
   /* Ensure no page content is obscured by the fixed contact FAB (bottom: 2rem,
-     ~44px tall = ~76px from the bottom edge of the viewport). */
-  padding-bottom: 5rem;
+     ~44px tall = ~76px from the bottom edge of the viewport). This only guards
+     the END of the document — the FAB still floats over mid-scroll content,
+     which is why it collapses to a compact corner disc under 480px. */
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
   /* The sticky masthead shrinks as it collapses on scroll. Scroll anchoring
      would compensate for that height change by pulling the scroll offset back
      up, which re-expands the header and creates a jittery feedback loop. Opt
@@ -107,9 +109,6 @@ h1, h2, h3 {
   position: relative;
   overflow: hidden;
   border-bottom: var(--bw) solid var(--c-line);
-  animation: masthead-collapse linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
 }
 
 .page-header-wrap {
@@ -127,9 +126,10 @@ h1, h2, h3 {
   text-transform: uppercase;
   color: var(--c-fg-soft);
   overflow: hidden;
-  animation: overline-collapse linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
+  /* Mirrors the `from` state of @keyframes overline-collapse so the static
+     (no scroll-timeline) fallback matches the designed expanded masthead
+     exactly rather than sitting 21px tighter. */
+  margin-bottom: 1.3rem;
 }
 
 .masthead h1 {
@@ -137,9 +137,6 @@ h1, h2, h3 {
   line-height: 0.92;
   letter-spacing: -0.02em;
   margin-bottom: 0.75rem;
-  animation: h1-collapse linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
 }
 
 .masthead h1 em {
@@ -158,9 +155,6 @@ h1, h2, h3 {
   margin: 0.65rem auto 0;
   line-height: 1.4;
   overflow: hidden;
-  animation: subtitle-collapse linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
 }
 
 .date-line {
@@ -170,9 +164,8 @@ h1, h2, h3 {
   text-transform: uppercase;
   color: var(--c-fg-soft);
   overflow: hidden;
-  animation: dateline-collapse linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
+  /* Mirrors the `from` state of @keyframes dateline-collapse — see .overline. */
+  margin-top: 1.75rem;
 }
 
 /* ─── SECTION 5: Navigation / legend bar ─── */
@@ -184,9 +177,6 @@ h1, h2, h3 {
   gap: 0.35rem;
   justify-content: center;
   border-bottom: var(--bw) solid var(--c-line);
-  animation: personas-slim linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
 }
 
 .persona-tag {
@@ -196,9 +186,6 @@ h1, h2, h3 {
   text-decoration: none;
   transition: background 150ms, color 150ms;
   cursor: pointer;
-  animation: persona-tag-slim linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
 }
 
 .persona-tag span {
@@ -233,9 +220,6 @@ h1, h2, h3 {
     gap: 0.25rem;
     flex-wrap: wrap;
     overflow-x: auto;
-    animation: personas-collapse linear both;
-    animation-timeline: scroll(root);
-    animation-range: var(--collapse-range);
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
@@ -248,6 +232,80 @@ h1, h2, h3 {
     padding-top: 0.7rem;
     padding-bottom: 0.7rem;
   }
+}
+
+/* ─── Sticky-header collapse — gated on scroll-driven animation support ───
+   Every rule below drives a `*-collapse` keyframe off `scroll(root)`. The
+   `animation` shorthand resets `animation-duration`, and browsers WITHOUT
+   scroll-timeline support resolve that to `0s` rather than `auto`. Paired with
+   `fill-mode: both`, a 0s animation completes instantly and pins the element to
+   its END keyframe — so an unguarded rule renders the masthead permanently
+   COLLAPSED: h1 at ~21px, overline/subtitle/dateline at opacity 0. That wipes
+   out the hero on iOS <= 18, Firefox ESR, and older Chrome/Edge.
+
+   Gating on @supports keeps those browsers on the static, full-size masthead
+   declared above — the correct fallback — and only opts supporting browsers
+   into the scroll-scrubbed collapse. Do NOT move these declarations back into
+   the base rules. ─── */
+@supports (animation-timeline: scroll(root)) {
+  .masthead,
+  .overline,
+  .masthead h1,
+  .subtitle,
+  .date-line,
+  .back-home,
+  .personas-bar,
+  .persona-tag {
+    animation-timeline: scroll(root);
+    animation-range: var(--collapse-range);
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+  }
+
+  .masthead    { animation-name: masthead-collapse; }
+  .overline    { animation-name: overline-collapse; }
+  .masthead h1 { animation-name: h1-collapse; }
+  .subtitle    { animation-name: subtitle-collapse; }
+  .date-line   { animation-name: dateline-collapse; }
+  .back-home   { animation-name: back-home-track; }
+  .personas-bar { animation-name: personas-slim; }
+  .persona-tag  { animation-name: persona-tag-slim; }
+
+  /* Mobile swaps the nav's slim keyframe for the wrapped -> scrollable one. */
+  @media (max-width: 640px) {
+    .personas-bar { animation-name: personas-collapse; }
+  }
+}
+
+/* ─── Skip link — first focusable element on every page ───
+   The sticky header puts a back-home button and four nav links ahead of the
+   content on every route, so keyboard and switch users need a way past them.
+   Off-screen until focused, then it drops into the top-left corner as a solid
+   ink slab (legible over the bone masthead and over any loud section color
+   that may have scrolled beneath a collapsed header). ─── */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  /* Moved off-screen rather than removed from the box tree — a hidden or
+     undisplayed link cannot receive focus, which defeats the whole point. */
+  transform: translateY(-150%);
+  padding: 0.75rem 1.1rem;
+  background: var(--c-ink);
+  color: var(--c-bg);
+  font-family: var(--ff-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: var(--bw-thick) solid var(--c-ink);
+  transition: transform 150ms var(--ease);
+}
+
+.skip-link:focus-visible,
+.skip-link:focus {
+  transform: translateY(0);
 }
 
 /* ─── Back-to-home button — absolute within .page-header-wrap ─── */
@@ -269,9 +327,6 @@ h1, h2, h3 {
   border: var(--bw-thick) solid var(--c-line);
   background: var(--c-bg);
   transition: background 150ms, color 150ms;
-  animation: back-home-track linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
 }
 
 .back-home:hover,
@@ -331,12 +386,39 @@ h1, h2, h3 {
   content: ' ↗';
 }
 
+.contact-fab-icon { display: none; }
+
+/* The FAB is fixed, so it paints over whatever is mid-scroll — `body`'s
+   padding-bottom only protects the END of the document. At mobile widths the
+   text column runs nearly edge to edge, so the full-width pill was landing on
+   top of body copy and clipping words mid-sentence. Collapse to a compact
+   icon-only disc in the corner: same affordance, a fraction of the footprint.
+   The visible "Contact" label is swapped for the icon, and the link's own
+   aria-label keeps the accessible name intact. */
 @media (max-width: 480px) {
   .contact-fab {
-    bottom: 1.25rem;
-    right: 1.25rem;
-    padding: 0.7rem 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    right: calc(1rem + env(safe-area-inset-right, 0px));
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    gap: 0;
+    justify-content: center;
+    border-radius: 50%;
+    /* Opaque slab + a ring so the disc reads as a distinct floating object on
+       any section color it happens to pass over. */
+    background: var(--neon-btn-bg);
+    box-shadow:
+      0 0 0 2px var(--neon-btn-bg),
+      0 2px 10px rgba(0, 0, 0, 0.45);
   }
+
+  .contact-fab-label { display: none; }
+  .contact-fab-icon { display: block; }
+
+  /* The square corner ticks read as artifacts on a circle. */
+  .contact-fab::before,
+  .contact-fab::after { display: none; }
 }
 
 /* ─── Marquee — black band, giant display type, infinite scroll ─── */
@@ -2615,7 +2697,31 @@ main a:hover {
      stroke would vanish. Degrades gracefully: without -webkit-text-stroke
      support the word renders as solid inherited color, never invisible. */
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 3px currentColor;
+  /* Stroke width must track the type size. A fixed 3px on Unbounded 900 held
+     up at the desktop h2 (~40px) but merged adjacent letterforms into an
+     unreadable blob at the mobile h2 (~24px) — and the outlined half is the
+     KEYWORD of every section heading, so the least legible word was the most
+     important one. `max()` keeps a visible minimum on small type while letting
+     the stroke grow with `clamp()`-scaled headings. */
+  -webkit-text-stroke: max(1.5px, 0.045em) currentColor;
+  /* Counteract the heading's negative tracking: hollow letterforms need more
+     air between them than solid ones, or the strokes touch and read as one
+     shape. Positive tracking is scoped to the outlined word only. */
+  letter-spacing: 0.04em;
+  /* The trailing letter-space would otherwise push the following word away. */
+  margin-right: -0.04em;
+}
+
+/* Below the tablet breakpoint the heading is small enough that even a scaled
+   stroke crowds; fall back to a solid fill so the keyword stays readable.
+   The word keeps its emphasis through weight and the section's ink color. */
+@media (max-width: 640px) {
+  .outline-word {
+    -webkit-text-fill-color: currentColor;
+    -webkit-text-stroke: 0;
+    letter-spacing: normal;
+    margin-right: 0;
+  }
 }
 .ghost-word {
   position: absolute;

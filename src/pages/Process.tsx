@@ -21,7 +21,7 @@ export default function Process() {
         </header>
       </PageHeader>
 
-      <main className="container">
+      <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
             Four phases, one builder. Every phase ends with something tangible

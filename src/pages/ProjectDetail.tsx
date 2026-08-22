@@ -116,6 +116,8 @@ export default function ProjectDetail() {
 
       <main
         className="container"
+        id="main-content"
+        tabIndex={-1}
         style={themeStyle}
         data-project-theme={project.slug}
       >

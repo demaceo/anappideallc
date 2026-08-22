@@ -287,7 +287,7 @@ export default function Contact() {
         </header>
       </PageHeader>
 
-      <main className="container">
+      <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
             Early-stage conversations are welcome. The goal of the first

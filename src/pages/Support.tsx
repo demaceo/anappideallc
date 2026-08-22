@@ -71,7 +71,7 @@ export default function Support() {
         </header>
       </PageHeader>
 
-      <main className="container">
+      <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
             Every app from {SITE.name} is built and maintained by one person, so

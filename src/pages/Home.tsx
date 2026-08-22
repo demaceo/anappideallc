@@ -58,7 +58,7 @@ export default function Home() {
 
       <Marquee items={MARQUEE_ITEMS} />
 
-      <main ref={scopeRef}>
+      <main id="main-content" tabIndex={-1} ref={scopeRef}>
         <Section color="bone" ghost="IDEA">
           <div className="intro-block">
             <p data-split>

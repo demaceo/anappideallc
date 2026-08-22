@@ -28,7 +28,7 @@ export default function About() {
         </header>
       </PageHeader>
 
-      <main className="container">
+      <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
             {SITE.name} is a {SITE.founder.location} dev studio run by{' '}

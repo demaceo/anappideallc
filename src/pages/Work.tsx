@@ -63,7 +63,7 @@ export default function Work() {
         </header>
       </PageHeader>
 
-      <main className="container">
+      <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
             Twelve products shipped end-to-end: mobile apps, logistics tools,
