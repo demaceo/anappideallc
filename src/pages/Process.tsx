@@ -1,12 +1,23 @@
 import { processSteps } from '../data/process'
 import { SocialLinks } from '../components/SocialLinks/SocialLinks'
+import { FooterNav } from '../components/FooterNav/FooterNav'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconSearch, IconEdit, IconTerminal, IconSend } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 
-const PROCESS_ICONS = [IconSearch, IconEdit, IconTerminal, IconSend]
-const PROCESS_ICON_CLASSES = ['icon-navy', 'icon-purple', 'icon-green', 'icon-orange'] as const
+// Keyed by ProcessStep.step, which is already a stable discriminator in the
+// data, rather than by array position — index-aligned lookups mispair every
+// later entry on a reorder and render `undefined` as a component if the list
+// grows. Same reason Home.tsx keys SERVICE_ICONS by id.
+const PROCESS_META: Record<string, { Icon: typeof IconSearch; iconClass: string }> = {
+  '01': { Icon: IconSearch,   iconClass: 'icon-navy'   },
+  '02': { Icon: IconEdit,     iconClass: 'icon-purple' },
+  '03': { Icon: IconTerminal, iconClass: 'icon-green'  },
+  '04': { Icon: IconSend,     iconClass: 'icon-orange' },
+}
+const PROCESS_FALLBACK = { Icon: IconSearch, iconClass: 'icon-navy' }
 
 export default function Process() {
   return (
@@ -60,11 +71,11 @@ export default function Process() {
           <div className="section-rule" />
         </div>
 
-        {processSteps.map((p, i) => {
-          const ProcessIcon = PROCESS_ICONS[i]
+        {processSteps.map((p) => {
+          const { Icon: ProcessIcon, iconClass } = PROCESS_META[p.step] ?? PROCESS_FALLBACK
           return (
             <div key={p.step} className="feature-item">
-              <div className={`feature-icon ${PROCESS_ICON_CLASSES[i]}`}>
+              <div className={`feature-icon ${iconClass}`}>
                 <ProcessIcon size={20} />
               </div>
               <div className="feature-body">
@@ -88,13 +99,13 @@ export default function Process() {
           )
         })}
 
-        <div className="verdict-box">
+        <VerdictBox variant="assessment">
           <p>
             Every phase ends with something concrete, so you're never left
             wondering what got done or what comes next. You get full visibility
             into the build, without having to micromanage to get it.
           </p>
-        </div>
+        </VerdictBox>
       </main>
 
       <footer className="sources-section">
@@ -111,6 +122,7 @@ export default function Process() {
               </li>
             ))}
           </ul>
+          <FooterNav />
           <SocialLinks />
         </div>
       </footer>

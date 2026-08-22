@@ -1,12 +1,14 @@
 import { useRef } from 'react'
 import { Link } from 'react-router'
 import { SocialLinks } from '../components/SocialLinks/SocialLinks'
+import { FooterNav } from '../components/FooterNav/FooterNav'
 import { SITE } from '../data/site'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconZap, IconLayers, IconGlobe, IconBarChart, IconCpu } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
 import { Marquee } from '../components/Marquee/Marquee'
 import { Section } from '../components/Section/Section'
@@ -52,6 +54,19 @@ export default function Home() {
           <p className="overline">AI-Native Mobile · Privacy-First · Denver, Colorado</p>
           <h1>Got an app idea? <em>Let's build it.</em></h1>
           <p className="subtitle">AI-native mobile apps with privacy built in, shipped end-to-end by one builder.</p>
+          {/* The masthead filled roughly half the first screen with nothing
+              actionable in it — the first interactive element was the corner
+              FAB. This gives the strongest copy on the site somewhere to land.
+              It collapses with the rest of the masthead on scroll. */}
+          <a
+            className="hero-cta"
+            href={SITE.booking.consultationUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-analytics="hero-book-consultation"
+          >
+            Book a free call
+          </a>
           <p className="date-line">{SITE.email} · {SITE.domain}</p>
         </header>
       </PageHeader>
@@ -150,14 +165,14 @@ export default function Home() {
             <div className="section-rule" />
           </div>
 
-          <div className="verdict-box context" data-reveal>
+          <VerdictBox variant="context" data-reveal>
             <p>
               "Just prompt an AI and ship it" gets you a head start. And stops
               there. Wireframing, testing, security, App Store launch, and
               maintenance each need a dedicated human.{' '}
               <Link to="/why-not-ai">Here's the honest case for working with a person →</Link>
             </p>
-          </div>
+          </VerdictBox>
         </Section>
 
         <Section color="lavender" num="04" ghost="TALK">
@@ -169,7 +184,7 @@ export default function Home() {
 
           <ConsultCTA />
 
-          <div className="verdict-box contact" data-reveal>
+          <VerdictBox variant="contact" data-reveal>
             <p>
               Prefer to write? Got an app or website idea, or a project that needs
               a co-builder? Send a few sentences to{' '}
@@ -177,7 +192,7 @@ export default function Home() {
               <Link to="/contact">guided form</Link>.
               I read everything and respond within 1–2 business days.
             </p>
-          </div>
+          </VerdictBox>
         </Section>
       </main>
 
@@ -201,13 +216,14 @@ export default function Home() {
             </li>
             <li>
               <strong>Contact</strong>
-              {SITE.email}
+              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
             </li>
             <li>
               <strong>Domain</strong>
               {SITE.domain}
             </li>
           </ul>
+          <FooterNav />
           <SocialLinks />
         </div>
       </footer>

@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { SocialLinks } from '../components/SocialLinks/SocialLinks'
+import { FooterNav } from '../components/FooterNav/FooterNav'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 
 export default function Services() {
   // Accordion: one service open at a time; first item open on load so the
@@ -123,13 +125,13 @@ export default function Services() {
           <span className="ornament">▸</span>
         </div>
 
-        <div className="verdict-box context">
+        <VerdictBox variant="context">
           <p>
             Wondering why not just have AI build it? Design, security, launch,
             and maintenance each need a dedicated human.{' '}
             <Link to="/why-not-ai">The honest case for working with a person →</Link>
           </p>
-        </div>
+        </VerdictBox>
       </main>
 
       <footer className="sources-section">
@@ -146,6 +148,7 @@ export default function Services() {
               </li>
             ))}
           </ul>
+          <FooterNav />
           <SocialLinks />
         </div>
       </footer>

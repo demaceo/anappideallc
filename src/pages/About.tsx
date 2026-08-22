@@ -1,15 +1,25 @@
 import { Link } from 'react-router'
 import { SocialLinks } from '../components/SocialLinks/SocialLinks'
+import { FooterNav } from '../components/FooterNav/FooterNav'
 import { SITE } from '../data/site'
 import { differentiators } from '../data/case-studies'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { IconCpu, IconLock, IconKey, IconShieldCheck } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 
-const DIFF_ICONS = [IconCpu, IconLock, IconKey, IconShieldCheck]
-const DIFF_ICON_CLASSES = ['icon-blue', 'icon-navy', 'icon-gold', 'icon-green'] as const
-const DIFF_EYEBROWS = ['AI-Native', 'Privacy-First', 'Ownership', 'Discipline'] as const
+// Keyed by differentiator title rather than array position: index-aligned
+// lookups silently mispair every later entry when the source array is
+// reordered, and render `undefined` as a component when it grows. Same reason
+// Home.tsx keys SERVICE_ICONS by id.
+const DIFF_META: Record<string, { Icon: typeof IconCpu; iconClass: string; eyebrow: string }> = {
+  'ai-native':     { Icon: IconCpu,         iconClass: 'icon-blue',  eyebrow: 'AI-Native'     },
+  'privacy-first': { Icon: IconLock,        iconClass: 'icon-navy',  eyebrow: 'Privacy-First' },
+  'ownership':     { Icon: IconKey,         iconClass: 'icon-gold',  eyebrow: 'Ownership'     },
+  'discipline':    { Icon: IconShieldCheck, iconClass: 'icon-green', eyebrow: 'Discipline'    },
+}
+const DIFF_FALLBACK = { Icon: IconCpu, iconClass: 'icon-blue', eyebrow: 'Approach' }
 
 export default function About() {
   return (
@@ -44,15 +54,15 @@ export default function About() {
           <div className="section-rule" />
         </div>
 
-        {differentiators.map((d, i) => {
-          const DiffIcon = DIFF_ICONS[i]
+        {differentiators.map((d) => {
+          const { Icon: DiffIcon, iconClass, eyebrow } = DIFF_META[d.id] ?? DIFF_FALLBACK
           return (
-            <div key={d.title} className="feature-item">
-              <div className={`feature-icon ${DIFF_ICON_CLASSES[i]}`}>
+            <div key={d.id} className="feature-item">
+              <div className={`feature-icon ${iconClass}`}>
                 <DiffIcon size={20} />
               </div>
               <div className="feature-body">
-                <span className="feature-eyebrow">{DIFF_EYEBROWS[i]}</span>
+                <span className="feature-eyebrow">{eyebrow}</span>
                 <h3 className="feature-title">{d.title}</h3>
                 <p>{d.description}</p>
               </div>
@@ -78,7 +88,7 @@ export default function About() {
           <span className="attrib">{SITE.founder.name}, on shipping discipline</span>
         </div>
 
-        <div className="verdict-box">
+        <VerdictBox variant="assessment">
           <p>
             You work directly with the person building your product. Interface
             design, database architecture, auth, API security, and deployment
@@ -87,7 +97,7 @@ export default function About() {
             who answers your emails.{' '}
             <Link to="/why-not-ai">Why a human over AI? →</Link>
           </p>
-        </div>
+        </VerdictBox>
       </main>
 
       <footer className="sources-section">
@@ -107,13 +117,14 @@ export default function About() {
             </li>
             <li>
               <strong>Contact</strong>
-              {SITE.email}
+              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
             </li>
             <li>
               <strong>Approach</strong>
               Founder-led · end-to-end engineering
             </li>
           </ul>
+          <FooterNav />
           <SocialLinks />
         </div>
       </footer>

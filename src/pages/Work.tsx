@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { SocialLinks } from '../components/SocialLinks/SocialLinks'
+import { FooterNav } from '../components/FooterNav/FooterNav'
 import { caseStudies } from '../data/case-studies'
 import { PROJECT_COLORS } from '../data/project-colors'
 import { RouteHead } from '../components/SEO/RouteHead'
@@ -20,35 +21,40 @@ import {
   LogoPortfolio,
 } from '../components/icons'
 
-// Index-aligned with `caseStudies` (src/data/case-studies.ts). STLMNT leads.
-const PROJECT_LOGOS = [
-  LogoStlmnt,
-  LogoPinpoint,
-  LogoPayback,
-  LogoRentHarbor,
-  LogoFengShui,
-  LogoYapUnited,
-  LogoDrayage,
-  LogoZoori,
-  LogoHITLDI,
-  LogoUnmasked,
-  LogoTimeless,
-  LogoPortfolio,
-]
-const STUDY_LABELS = [
-  'Settlements',
-  'Civic',
-  'Privacy',
-  'PropTech',
-  'Spatial',
-  'Translation',
-  'Logistics',
-  'Pet Care',
-  'Platform',
-  'Coaching',
-  'Consulting',
-  'Portfolio',
-] as const
+// Keyed by slug rather than array position. These used to be index-aligned
+// with `caseStudies`, so reordering that array — or inserting an entry anywhere
+// but the end — silently paired every later study with the wrong logo and
+// eyebrow, and a study with no matching index rendered `undefined` as a
+// component and crashed the page. That exact failure is recorded in Home.tsx's
+// SERVICE_ICONS comment; ProjectDetail.tsx keys by slug for the same reason.
+const PROJECT_LOGOS: Record<string, typeof LogoStlmnt> = {
+  'stlmnt-settlement-tracker': LogoStlmnt,
+  'pinpoint-civic-engagement': LogoPinpoint,
+  'payback-consumer-intelligence': LogoPayback,
+  'rentharbor-property-management': LogoRentHarbor,
+  'feng-shui-room-analysis': LogoFengShui,
+  'yap-united-live-translation': LogoYapUnited,
+  'drayage-drivers': LogoDrayage,
+  'zoori-pet-care': LogoZoori,
+  'hitldi-platform': LogoHITLDI,
+  'unmasked-coaching': LogoUnmasked,
+  'timeless-coach-consult': LogoTimeless,
+  'portfolio': LogoPortfolio,
+}
+const STUDY_LABELS: Record<string, string> = {
+  'stlmnt-settlement-tracker': 'Settlements',
+  'pinpoint-civic-engagement': 'Civic',
+  'payback-consumer-intelligence': 'Privacy',
+  'rentharbor-property-management': 'PropTech',
+  'feng-shui-room-analysis': 'Spatial',
+  'yap-united-live-translation': 'Translation',
+  'drayage-drivers': 'Logistics',
+  'zoori-pet-care': 'Pet Care',
+  'hitldi-platform': 'Platform',
+  'unmasked-coaching': 'Coaching',
+  'timeless-coach-consult': 'Consulting',
+  'portfolio': 'Portfolio',
+}
 
 export default function Work() {
   return (
@@ -102,8 +108,8 @@ export default function Work() {
           <div className="section-rule" />
         </div>
 
-        {caseStudies.map((c, i) => {
-          const ProjectLogo = PROJECT_LOGOS[i]
+        {caseStudies.map((c) => {
+          const ProjectLogo = PROJECT_LOGOS[c.slug] ?? LogoPinpoint
           return (
             <Link key={c.slug} to={`/work/${c.slug}`} className="feature-item feature-item--linked">
               <div
@@ -117,7 +123,7 @@ export default function Work() {
                 )}
               </div>
               <div className="feature-body">
-                <span className="feature-eyebrow">{STUDY_LABELS[i]}</span>
+                <span className="feature-eyebrow">{STUDY_LABELS[c.slug] ?? c.category}</span>
                 <h3 className="feature-title">{c.title}</h3>
                 <p>{c.summary}</p>
                 <span className="bubble-subtitle">Outcomes</span>
@@ -134,7 +140,7 @@ export default function Work() {
                   ))}
                 </div>
                 <span className="mono-meta">Stack: {c.stack.join(' · ')}</span>
-                <span className="feature-cta">View case study →</span>
+                <span className="feature-cta">View case study</span>
               </div>
             </Link>
           )
@@ -155,6 +161,7 @@ export default function Work() {
               </li>
             ))}
           </ul>
+          <FooterNav />
           <SocialLinks />
         </div>
       </footer>

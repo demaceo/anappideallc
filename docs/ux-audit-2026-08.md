@@ -15,17 +15,20 @@ glass-cube / "Velvet Stage" design and no longer describes this site.
 
 ## Scorecard
 
-| Dimension | Score | Rationale |
-|---|---|---|
-| Visual design / brand | **7**/10 | Distinctive and confident; undermined by three competing visual languages |
-| Typography | **5**/10 | Great display face; `font-weight: 500` is a no-op ×11, 35 ad-hoc sizes, outlined keyword illegible |
-| Layout & spacing | **6**/10 | Clean hairline grid; 44 ad-hoc spacing values, dead spacing scale, thin content density |
-| Accessibility | **6**/10 | Above-average baseline; 4 real contrast failures, focus lost in closed panels, no skip link |
-| Responsive design | **6**/10 | Thoughtful breakpoints and nav collapse; horizontal scroll on project pages at every phone width, FAB covered copy on mobile |
-| Navigation & IA | **5**/10 | Good sticky collapse; no active state, Contact/Support absent from nav, no footer nav |
-| Content & conversion | **6**/10 | Genuinely strong copy and a best-in-class wizard; no CTA above the fold |
-| Robustness / progressive enhancement | **3**/10 | Hero silently disappears on non-supporting browsers |
-| **Overall** | **6.0**/10 | Strong point of view and real craft, held back by a handful of concrete defects |
+Scored as found, with the score after this pass alongside. Nothing here is
+graded on intent — every "after" is a re-measurement.
+
+| Dimension | Before | After | What moved |
+|---|---|---|---|
+| Visual design / brand | **7**/10 | **7**/10 | Unchanged — the three competing visual languages are a design decision, still open |
+| Typography | **5**/10 | **7**/10 | 11 no-op weights now render; outlined keyword legible at every size. 35 ad-hoc sizes remain |
+| Layout & spacing | **6**/10 | **7**/10 | Footer seam gone, 23 dead tokens out. No enforced spacing scale yet — deliberately, see below |
+| Accessibility | **6**/10 | **9**/10 | 0 contrast failures (was 4, plus a 5th on hover), skip link, `inert` panels, `aria-current`, decorative glyphs out of names, system cursor restored |
+| Responsive design | **6**/10 | **9**/10 | No horizontal scroll at any width; FAB no longer covers copy |
+| Navigation & IA | **5**/10 | **8**/10 | Active state + `aria-current`, footer index on all 8 pages, `mailto:` links |
+| Content & conversion | **6**/10 | **7**/10 | Hero CTA above the fold, LinkedIn restored. Still no pricing signal |
+| Robustness / progressive enhancement | **3**/10 | **9**/10 | Hero renders on every browser in the declared support target; guards are tested |
+| **Overall** | **6.0**/10 | **7.9**/10 | The concrete defects are closed; what remains is design judgement |
 
 ### What is working and should be protected
 
@@ -217,7 +220,7 @@ at its `clamp()` floor.
 
 ---
 
-## P2 — Open (documented, not yet fixed)
+## P2 — Fixed
 
 ### Four measured contrast failures
 
@@ -233,8 +236,39 @@ class of problem; these four selectors were simply missed. Note that
 `.project-metric-label` was raised to 0.75 but its sibling `.project-stat-label`
 was left at 0.4.
 
-Invisible form placeholders on the conversion-critical page are the most
-consequential of these.
+**A fifth failure, worse than any of the above, only turned up during the fix.**
+The sweep measures resting state — it never hovers. `.stat-box.positive` and
+`.caution` invert on hover to a solid swatch fill with bone text, and the muted
+label opacities (0.75 and 0.6) still apply on top of that already-tinted
+ground:
+
+| | before | after |
+|---|---|---|
+| hover `.stat-label-top` on green | **2.66**:1 | 4.59:1 |
+| hover `.stat-desc` on green | **2.21**:1 | 4.59:1 |
+| hover `.stat-desc` on gold | **2.25**:1 | 5.00:1 |
+
+**Fixed** by darkening the only two swatches that carry text — green 58% → 52%
+and gold 60% → 52% — which lifts both the resting numeral and the inverted
+hover fill past AA, and by dropping the muted opacities on those inverted
+states (size and tracking already mark the labels as secondary). The other five
+swatches are glyph-only, sit under WCAG 1.4.11's 3:1 graphics floor, and keep
+their original values. Placeholders got their own token rather than sharing
+`--c-bg-faint`, which is correct at 0.18 for the hairlines it also feeds.
+
+Re-measured in Chromium across 10 routes × 2 viewports: **0 contrast failures.**
+Two entries in that final sweep were tool artifacts, not defects, and are worth
+recording so nobody re-chases them:
+
+- `.svc-cta` read 1.05:1 because it paints its slab with
+  `linear-gradient(#0a0f1c, #0a0f1c)` rather than a `background-color`, so the
+  probe read straight through to the page bone. It actually renders #e8fbff on
+  #0a0f1c — **17.9:1**, confirmed from computed styles and a screenshot.
+- The nav's `↳` marker read 3.60:1. It is `aria-hidden` ornament, which WCAG
+  1.4.3 exempts as pure decoration.
+
+The probe now skips `aria-hidden` subtrees and refuses to guess at gradient
+grounds instead of reporting against the wrong surface.
 
 ### `font-weight: 500` renders as 400 — 11 silent no-ops
 
@@ -254,8 +288,12 @@ So `.stat-pill strong`, `.source-list li strong`, `.project-stat-value`,
 `.rating-opt.selected` and `.feature-cta` all render with **no emphasis at all**.
 The hierarchy the CSS describes never reaches the screen.
 
-Related: **Unbounded 700 is downloaded but never used** — only 400 and 900 are
-referenced — and can come out of the font request.
+**Fixed**: all eleven are 700, the nearest weight the family actually ships.
+The two `font-weight: 600` rules did render bold (600 resolves *up* to 700) but
+are normalised to 700 as well, so the file states what it paints.
+
+Related and also fixed: **Unbounded 700 was downloaded but never used** — only
+400 and 900 are referenced — and is now out of the font request.
 
 ### The design system is half-wired
 
@@ -277,6 +315,19 @@ primary-conversion color, but every real CTA uses the neon system instead.
 The colour half of the system is genuinely well-built. Spacing and type are not
 a system at all yet — they're ad hoc values that happen to look consistent.
 
+**Fixed**: 23 dead tokens removed, 62 → 39, and a test now fails if a token is
+declared without a consumer. `--c-pink` stays: it backs the `pink` variant in
+Section's colour union, which is a real if currently unused option in the
+system, unlike the nine compat aliases whose migration was finished.
+
+**The spacing scale was deleted rather than adopted, and that is a judgement
+call worth stating.** Adopting it would mean snapping 44 distinct values onto
+10 steps across every page and breakpoint — a spacing redesign with real
+regression risk, and many of the current values are deliberate (fluid `clamp()`
+ranges, optical adjustments like `0.42rem`). Deleting it makes the token file
+honest about what exists today. **Introducing a genuine enforced spacing and
+type scale remains open**, and is a design decision rather than a cleanup.
+
 ### Navigation and IA gaps
 
 - `SiteNav` uses `Link`, not `NavLink` — there is **no active state and no
@@ -294,9 +345,27 @@ a system at all yet — they're ad hoc values that happen to look consistent.
   content cannot be `aria-hidden`, so these need to move to `background-image`
   or into an `aria-hidden` span.
 
+**All fixed.** `SiteNav` uses `NavLink`, so the current route now carries
+`aria-current="page"` and an inverted active tab with an accent underline. A
+`FooterNav` on all eight pages gives every route — including Contact, Support
+and Why not AI — a link from every other. Footer emails are `mailto:` links.
+The nav's `↳` moved into an `aria-hidden` span; the rest use the
+`content: <string> / <alt>` syntax to supply empty alternative text, gated on
+`@supports` so browsers below Safari 17.4 keep the visible ornament rather than
+silently losing it — the same shape as the P0 guard.
+
+One find along the way: `.feature-cta` rendered **"View case study → ↗"**, a
+literal arrow in the JSX plus a second from CSS. The literal one is gone.
+
+The `.verdict-box` category labels ("Assessment", "Note", "Warning", "Context",
+"Get in touch") were *also* CSS `content`, but they are real words rather than
+ornament — not selectable, not translatable, invisible to text extraction. They
+now come from a `VerdictBox` component as actual DOM text, across all 11
+usages.
+
 ---
 
-## P3 — Open (minor)
+## P3 — Fixed
 
 - **The reduced-motion guard misses the actual CTAs.** The guard kills animation
   on `.neon-btn`, but the shipped CTAs are `.consult-cta-btn` (`neonPulse`,
@@ -324,6 +393,31 @@ a system at all yet — they're ad hoc values that happen to look consistent.
   cursor back".
 - **No LinkedIn** (`SITE.social.linkedin: ''`). For a founder-led B2B studio
   that is the single most load-bearing credibility profile.
+
+**All fixed.** The reduced-motion guard now names the CTAs that actually
+shipped (`.consult-cta-btn`, `.svc-cta`) rather than a `.neon-btn` base class no
+button carries — hovering "Book a time" pulsed forever with reduced motion
+requested. Both sub-24px links meet SC 2.5.8. `Work.tsx`, `About.tsx` and
+`Process.tsx` key their icon/label lookups by slug, id and step instead of array
+position; `Differentiator` gained a stable `id` for that purpose, since keying
+on prose titles would break on any copy edit. The footer's `margin-top` moved
+inside as padding, so it meets the preceding colour block flush.
+
+**The custom cursor keeps its dot but no longer hides the system pointer.**
+`cursor: none` was applied to the whole document; that removes the affordance
+people with low vision or motor impairments use to track position, and
+`mix-blend-mode: difference` can render the replacement invisible against
+mid-greys, leaving nothing at all. The dot is an accent on top of the real
+cursor now.
+
+**LinkedIn is set**, which restores the footer icon and adds the profile to the
+JSON-LD `sameAs` entity links.
+
+**A hero CTA was added.** The masthead filled 49% of the desktop fold and 54% of
+mobile with nothing actionable in it — the first interactive element was the
+corner FAB. "Book a free call" now sits under the subtitle, drawn from the
+brutalist vocabulary (ink slab, square corners, inversion on hover) rather than
+the neon CTA set, and collapses with the rest of the masthead on scroll.
 
 ---
 

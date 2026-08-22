@@ -1,9 +1,11 @@
 import { Link } from 'react-router'
 import { SocialLinks } from '../components/SocialLinks/SocialLinks'
+import { FooterNav } from '../components/FooterNav/FooterNav'
 import { SITE } from '../data/site'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 import {
   IconLifeBuoy, IconTerminal, IconShieldCheck, IconCalendar, IconSend,
 } from '../components/icons'
@@ -104,14 +106,14 @@ export default function Support() {
           )
         })}
 
-        <div className="verdict-box contact">
+        <VerdictBox variant="contact">
           <p>
             <IconSend size={16} /> The fastest way to reach support is email:{' '}
             <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. Include the app
             name, your device and OS version, and a short description. Screenshots
             or a screen recording make a fix faster.
           </p>
-        </div>
+        </VerdictBox>
 
         <div className="chapter-divider">
           <span className="ornament">✦ ✦ ✦</span>
@@ -148,14 +150,14 @@ export default function Support() {
           <div className="section-rule" />
         </div>
 
-        <div className="verdict-box context">
+        <VerdictBox variant="context">
           <p>
             If you're here about a new project rather than an existing app, head
             to the <Link to="/contact">contact page</Link> or email{' '}
             <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. Early-stage ideas
             are welcome, no finished spec required.
           </p>
-        </div>
+        </VerdictBox>
       </main>
 
       <footer className="sources-section">
@@ -167,7 +169,7 @@ export default function Support() {
           <ul className="source-list">
             <li>
               <strong>Contact</strong>
-              {SITE.email}
+              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
             </li>
             <li>
               <strong>Response time</strong>
@@ -182,6 +184,7 @@ export default function Support() {
               Managed via the App Store & Google Play.
             </li>
           </ul>
+          <FooterNav />
           <SocialLinks />
         </div>
       </footer>
