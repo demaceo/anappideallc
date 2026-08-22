@@ -134,3 +134,38 @@ describe('globals.css — skip link (audit P1)', () => {
     expect(GLOBALS_CSS).not.toMatch(/\.skip-link\s*\{[^}]*display:\s*none/)
   })
 })
+
+/**
+ * Regression — 2026-08 audit P1 (horizontal scroll on project pages).
+ *
+ * Grid items default to `min-width: auto`, so a track can never shrink below
+ * its content's min-content width. A long metric value ("KMS-encrypted",
+ * "Live status") pushed .project-metrics-row wider than the viewport and
+ * scrolled the WHOLE document sideways. Measured before the fix:
+ *   320px -> doc 378px (+58) / 401px (+81)
+ *   360px -> doc 378px (+18) / 401px (+41)
+ *   390px -> doc 401px (+11)   <- iPhone 14/15/16 Pro
+ * i.e. every common phone width, not just small legacy devices.
+ */
+describe('globals.css — project grids can shrink below content (audit P1)', () => {
+  it('clears the min-width:auto grid trap on both metric strips', () => {
+    expect(GLOBALS_CSS).toMatch(
+      /\.project-metric-cell\s*\{[^}]*min-width:\s*0/,
+    )
+    expect(GLOBALS_CSS).toMatch(
+      /\.project-stat-item\s*\{[^}]*min-width:\s*0/,
+    )
+  })
+
+  it('lets a long metric value wrap instead of spilling out of its cell', () => {
+    expect(GLOBALS_CSS).toMatch(
+      /\.project-metric-value\s*\{[^}]*overflow-wrap:\s*break-word/,
+    )
+  })
+
+  it('drops the metrics strip to one column on narrow phones', () => {
+    expect(GLOBALS_CSS).toMatch(
+      /@media\s*\(max-width:\s*400px\)\s*\{\s*\.project-metrics-row\s*\{[^}]*grid-template-columns:\s*1fr/,
+    )
+  })
+})

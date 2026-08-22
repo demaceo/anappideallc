@@ -21,7 +21,7 @@ glass-cube / "Velvet Stage" design and no longer describes this site.
 | Typography | **5**/10 | Great display face; `font-weight: 500` is a no-op ×11, 35 ad-hoc sizes, outlined keyword illegible |
 | Layout & spacing | **6**/10 | Clean hairline grid; 44 ad-hoc spacing values, dead spacing scale, thin content density |
 | Accessibility | **6**/10 | Above-average baseline; 4 real contrast failures, focus lost in closed panels, no skip link |
-| Responsive design | **6**/10 | Solid at 360px+; breaks at 320px, FAB covers copy on mobile |
+| Responsive design | **6**/10 | Thoughtful breakpoints and nav collapse; horizontal scroll on project pages at every phone width, FAB covered copy on mobile |
 | Navigation & IA | **5**/10 | Good sticky collapse; no active state, Contact/Support absent from nav, no footer nav |
 | Content & conversion | **6**/10 | Genuinely strong copy and a best-in-class wizard; no CTA above the fold |
 | Robustness / progressive enhancement | **3**/10 | Hero silently disappears on non-supporting browsers |
@@ -171,6 +171,34 @@ carries, following the convention `LegalPage` already used.
 
 ---
 
+## P1 — Also fixed
+
+### Horizontal scroll on project pages at every common phone width
+
+`.project-metrics-row` is a grid whose items default to `min-width: auto`, so a
+track can never shrink below its content's min-content width. A long metric
+value ("KMS-encrypted", "Live status") therefore pushed the row wider than the
+viewport and scrolled the **whole document** sideways. Measured across a
+320 / 360 / 390 / 540px sweep:
+
+| viewport | `/work/stlmnt-settlement-tracker` | `/work/pinpoint-civic-engagement` |
+|---|---|---|
+| 320px | doc 378px (**+58px**) | doc 401px (**+81px**) |
+| 360px | doc 378px (**+18px**) | doc 401px (**+41px**) |
+| 390px | clean | doc 401px (**+11px**) |
+| 540px | clean | clean |
+
+390px is the iPhone 14/15/16 Pro viewport, so this affects the single most
+common phone width — not just small legacy devices.
+
+**Fixed** with `min-width: 0` on `.project-metric-cell` and `.project-stat-item`
+so the tracks can shrink, `overflow-wrap: break-word` on `.project-metric-value`
+so a long token wraps inside the cell instead of spilling out of it, and a
+single column below 400px where two columns can no longer hold a metric value
+at its `clamp()` floor.
+
+---
+
 ## P2 — Open (documented, not yet fixed)
 
 ### Four measured contrast failures
@@ -189,17 +217,6 @@ was left at 0.4.
 
 Invisible form placeholders on the conversion-critical page are the most
 consequential of these.
-
-### Horizontal scroll at 320px on project pages
-
-`.project-metrics-row` is a grid whose items default to `min-width: auto` and so
-cannot shrink below their content. Measured:
-
-- `/work/stlmnt-settlement-tracker` — document **378px** against a 320px viewport (**+58px**)
-- `/work/pinpoint-civic-engagement` — document **401px** (**+81px**)
-
-Clean at 360px and above. Fix is `min-width: 0` on `.project-metric-cell` and
-`.project-stat-item`, plus a single column below ~360px.
 
 ### `font-weight: 500` renders as 400 — 11 silent no-ops
 

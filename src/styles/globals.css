@@ -1233,9 +1233,24 @@ cite:hover { background: var(--c-accent); }
   }
 }
 
+/* Below ~400px two columns can't hold a metric value at its clamp() floor
+   without breaking mid-word, so drop to a single column and let each metric
+   have the full measure. */
+@media (max-width: 400px) {
+  .project-metrics-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .project-metric-cell {
   padding: 1.4rem 1.5rem;
   background: var(--c-bg);
+  /* Grid items default to `min-width: auto`, so a track can never shrink below
+     its content's min-content width. A long metric value ("KMS-encrypted",
+     "Live status") therefore pushed the whole row wider than the viewport and
+     scrolled the entire document sideways — measured at 320px (+58/+81px),
+     360px (+18/+41px) and 390px (+11px), i.e. every common phone width. */
+  min-width: 0;
 }
 
 .project-metric-value {
@@ -1246,6 +1261,9 @@ cite:hover { background: var(--c-accent); }
   letter-spacing: -0.03em;
   color: var(--c-fg);
   line-height: 0.95;
+  /* With the track free to shrink, a long token would otherwise spill past the
+     cell instead of wrapping inside it. */
+  overflow-wrap: break-word;
 }
 
 .project-metric-label {
@@ -1278,6 +1296,8 @@ cite:hover { background: var(--c-accent); }
 .project-stat-item {
   padding: 1.1rem 1rem;
   background: var(--c-bg);
+  /* Same `min-width: auto` grid trap as .project-metric-cell above. */
+  min-width: 0;
 }
 
 .project-stat-label {
