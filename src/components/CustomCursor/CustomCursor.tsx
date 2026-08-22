@@ -45,7 +45,7 @@ export function CustomCursor() {
       const t = e.target as Element | null
       dot.classList.toggle(
         'cursor-grow',
-        !!t && !!t.closest('a, button, [role="button"], .neon-btn'),
+        !!t && !!t.closest('a, button, [role="button"]'),
       )
     }
 

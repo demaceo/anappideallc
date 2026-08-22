@@ -53,14 +53,65 @@
   --ff-mono: 'Space Mono', ui-monospace, monospace;
   --ff-stamp: 'Bebas Neue', 'Unbounded', sans-serif;
 
-  /* NOTE: a 10-step spacing scale (--s-1 … --s-10) used to be declared here
-     and was referenced exactly zero times — every padding, margin and gap in
-     globals.css is a literal, across 44 distinct rem values. Removed rather
-     than left as decoration, because a token block nothing consumes reads as
-     a system that exists when it doesn't. Introducing a real enforced scale
-     (and a type scale — there are 35 distinct font sizes across 109
-     declarations) is a live design decision, not a cleanup; it is written up
-     in docs/ux-audit-2026-08.md. */
+  /* ═══ Spacing — a 4px grid, not a ladder ═══
+     Every padding / margin / gap is a multiple of 0.25rem (4px). The tokens
+     below name the twelve steps that carry real weight; the rule is the grid,
+     so an unnamed multiple of 4px is still legal for one-offs.
+
+     Derived from measurement rather than taste. Before this, 315 declarations
+     used 44 distinct rem values — six of them inside a single 2.4px band, which
+     no viewer can distinguish. Snapping to a 4px grid leaves 52% of
+     declarations already exact, moves only 4 of 315 by >=2px, and never moves
+     anything more than 2.7px.
+
+     A named 12-step ladder was measured too and rejected: it forces 1.75rem
+     (11 uses), 2.25rem (8) and 2.75rem (3) to snap a full 4px each, hitting 9%
+     of declarations with shifts up to 8px. On a 4px grid those are legal.
+
+     This is also the post-mortem on the previous --s-1…--s-10 scale, which was
+     declared here and referenced exactly zero times: it omitted 1.25rem, which
+     has 32 uses. A scale that can't express the code's most common values will
+     not get adopted. */
+  --space-1: 0.25rem;    /*  4px */
+  --space-2: 0.5rem;     /*  8px */
+  --space-3: 0.75rem;    /* 12px */
+  --space-4: 1rem;       /* 16px */
+  --space-5: 1.25rem;    /* 20px */
+  --space-6: 1.5rem;     /* 24px */
+  --space-7: 1.75rem;    /* 28px */
+  --space-8: 2rem;       /* 32px */
+  --space-9: 2.25rem;    /* 36px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-11: 3rem;      /* 48px */
+  --space-12: 4rem;      /* 64px */
+
+  /* ═══ Type — six fixed steps and seven fluid ones ═══
+     Fixed sizes covered 88 declarations across 13 values, ten of them crowded
+     between 0.72rem and 1.05rem where the differences are sub-pixel at reading
+     distance. */
+  --text-2xs: 0.625rem;    /* 10px — micro labels, eyebrows, stat captions */
+  --text-xs: 0.6875rem;    /* 11px */
+  --text-sm: 0.75rem;      /* 12px */
+  --text-md: 0.8125rem;    /* 13px */
+  --text-base: 0.9375rem;  /* 15px */
+  --text-lg: 1rem;         /* 16px */
+
+  /* Fluid steps. Every heading used to carry its own bespoke clamp() — 21
+     declarations, 21 distinct curves, no two sharing a ramp. Four of them
+     already resolved to an identical 18.4→24px range while written three
+     different ways (3vw / 3vw / 3.2vw / 2.5vw), so they agreed at both ends and
+     drifted apart everywhere in between — exactly where the eye catches things
+     not lining up. These seven steps reproduce the current endpoints. */
+  --text-fluid-1: clamp(0.875rem, 2vw, 1.125rem);   /* 14 → 18px */
+  --text-fluid-2: clamp(1rem, 2vw, 1.3rem);         /* 16 → 20.8px */
+  --text-fluid-3: clamp(1.15rem, 3vw, 1.5rem);      /* 18.4 → 24px */
+  --text-fluid-4: clamp(1.25rem, 2.5vw, 1.85rem);   /* 20 → 29.6px */
+  --text-fluid-5: clamp(1.35rem, 3.5vw, 2rem);      /* 21.6 → 32px */
+  --text-fluid-6: clamp(1.5rem, 4vw, 2.5rem);       /* 24 → 40px */
+  --text-fluid-7: clamp(2rem, 6vw, 4.25rem);        /* 32 → 68px */
+
+  /* .footer-giant (35→112px) and .ghost-word (96→256px) stay bespoke in
+     globals.css — they are one-off showpieces, not scale members. */
 
   /* Borders — the primary structural device */
   --bw: 1px;
@@ -88,12 +139,9 @@
   --grain-opacity: 0.24;
   --grain-blend: color-dodge;
 
-  /* Neon button system — dark slab body so the glow reads on loud sections */
-  --neon-btn-bg: #0a0f1c;
-  --neon-cyan: #0ff;
-  --neon-magenta: #ff2d78;
-  --neon-green: #0ae448;
-  --neon-txt: #e8fbff;
+  /* The neon button palette (--neon-btn-bg #0a0f1c, cyan, magenta, green, txt)
+     lived here. It was retired along with the third visual language it
+     supported: --c-accent is the site's one accent, as this file always said. */
 
   /* Motion */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
