@@ -36,7 +36,7 @@ export const SITE = {
     instagram: 'https://www.instagram.com/anappidea',
     threads: 'https://www.threads.com/@anappidea',
     tiktok: 'https://www.tiktok.com/@anappidea',
-    linkedin: '', // e.g. 'https://www.linkedin.com/company/anappidea'
+    linkedin: 'https://www.linkedin.com/company/an-app-idea/',
   },
   tagline: 'Got an app idea? Let’s build it.',
   description:

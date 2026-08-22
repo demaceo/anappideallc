@@ -20,8 +20,10 @@ body {
   line-height: 1.5;
   font-feature-settings: 'ss01', 'cv11';
   /* Ensure no page content is obscured by the fixed contact FAB (bottom: 2rem,
-     ~44px tall = ~76px from the bottom edge of the viewport). */
-  padding-bottom: 5rem;
+     ~44px tall = ~76px from the bottom edge of the viewport). This only guards
+     the END of the document — the FAB still floats over mid-scroll content,
+     which is why it collapses to a compact corner disc under 480px. */
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
   /* The sticky masthead shrinks as it collapses on scroll. Scroll anchoring
      would compensate for that height change by pulling the scroll offset back
      up, which re-expands the header and creates a jittery feedback loop. Opt
@@ -107,9 +109,6 @@ h1, h2, h3 {
   position: relative;
   overflow: hidden;
   border-bottom: var(--bw) solid var(--c-line);
-  animation: masthead-collapse linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
 }
 
 .page-header-wrap {
@@ -127,9 +126,10 @@ h1, h2, h3 {
   text-transform: uppercase;
   color: var(--c-fg-soft);
   overflow: hidden;
-  animation: overline-collapse linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
+  /* Mirrors the `from` state of @keyframes overline-collapse so the static
+     (no scroll-timeline) fallback matches the designed expanded masthead
+     exactly rather than sitting 21px tighter. */
+  margin-bottom: 1.3rem;
 }
 
 .masthead h1 {
@@ -137,9 +137,6 @@ h1, h2, h3 {
   line-height: 0.92;
   letter-spacing: -0.02em;
   margin-bottom: 0.75rem;
-  animation: h1-collapse linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
 }
 
 .masthead h1 em {
@@ -158,9 +155,48 @@ h1, h2, h3 {
   margin: 0.65rem auto 0;
   line-height: 1.4;
   overflow: hidden;
-  animation: subtitle-collapse linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
+}
+
+/* Hero call to action — drawn from the brutalist vocabulary (ink slab, square
+   corners, inversion on hover) rather than the neon CTA set, so the masthead
+   keeps one voice. Collapses with the rest of the header on scroll; see the
+   @supports block below. */
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding: 0.85rem 1.6rem;
+  min-height: 44px;
+  font-family: var(--ff-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--c-bg);
+  background: var(--c-fg);
+  border: var(--bw-thick) solid var(--c-fg);
+  overflow: hidden;
+  transition: background 150ms, color 150ms;
+}
+
+.hero-cta::after {
+  content: '→';
+  transition: transform 200ms var(--ease);
+}
+
+.hero-cta:hover {
+  background: var(--c-accent);
+  color: var(--c-fg);
+  border-color: var(--c-fg);
+}
+
+.hero-cta:hover::after { transform: translateX(3px); }
+
+@keyframes hero-cta-collapse {
+  from { max-height: 4rem; opacity: 1; margin-top: 1.25rem; }
+  to   { max-height: 0;    opacity: 0; margin-top: 0;       }
 }
 
 .date-line {
@@ -170,9 +206,8 @@ h1, h2, h3 {
   text-transform: uppercase;
   color: var(--c-fg-soft);
   overflow: hidden;
-  animation: dateline-collapse linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
+  /* Mirrors the `from` state of @keyframes dateline-collapse — see .overline. */
+  margin-top: 1.75rem;
 }
 
 /* ─── SECTION 5: Navigation / legend bar ─── */
@@ -184,9 +219,6 @@ h1, h2, h3 {
   gap: 0.35rem;
   justify-content: center;
   border-bottom: var(--bw) solid var(--c-line);
-  animation: personas-slim linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
 }
 
 .persona-tag {
@@ -196,9 +228,6 @@ h1, h2, h3 {
   text-decoration: none;
   transition: background 150ms, color 150ms;
   cursor: pointer;
-  animation: persona-tag-slim linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
 }
 
 .persona-tag span {
@@ -209,15 +238,30 @@ h1, h2, h3 {
   color: inherit;
 }
 
-.persona-tag span::before {
-  content: '↳ ';
+/* Decorative marker, previously a ::before on the label. Pseudo-element
+   content cannot carry aria-hidden, so screen readers announced every nav item
+   as "↳ About"; it is a real aria-hidden span now (see SiteNav.tsx). */
+.persona-tag-mark {
   opacity: 0.5;
+  margin-right: 0.35em;
 }
 
 .persona-tag:hover {
   background: var(--c-fg);
   color: var(--c-bg);
 }
+
+/* Current route. NavLink also sets aria-current="page"; this is its visible
+   counterpart, using the same ink/bone inversion as hover so the bar keeps one
+   vocabulary, plus an accent underline so active and hover stay distinguishable
+   when the pointer is over the active tab. */
+.persona-tag--active {
+  background: var(--c-fg);
+  color: var(--c-bg);
+  box-shadow: inset 0 -3px 0 var(--c-accent);
+}
+
+.persona-tag--active .persona-tag-mark { opacity: 0.8; }
 
 @media (max-width: 640px) {
   /* On small screens, collapse the masthead almost immediately as the user
@@ -233,9 +277,6 @@ h1, h2, h3 {
     gap: 0.25rem;
     flex-wrap: wrap;
     overflow-x: auto;
-    animation: personas-collapse linear both;
-    animation-timeline: scroll(root);
-    animation-range: var(--collapse-range);
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
@@ -248,6 +289,82 @@ h1, h2, h3 {
     padding-top: 0.7rem;
     padding-bottom: 0.7rem;
   }
+}
+
+/* ─── Sticky-header collapse — gated on scroll-driven animation support ───
+   Every rule below drives a `*-collapse` keyframe off `scroll(root)`. The
+   `animation` shorthand resets `animation-duration`, and browsers WITHOUT
+   scroll-timeline support resolve that to `0s` rather than `auto`. Paired with
+   `fill-mode: both`, a 0s animation completes instantly and pins the element to
+   its END keyframe — so an unguarded rule renders the masthead permanently
+   COLLAPSED: h1 at ~21px, overline/subtitle/dateline at opacity 0. That wipes
+   out the hero on iOS <= 18, Firefox ESR, and older Chrome/Edge.
+
+   Gating on @supports keeps those browsers on the static, full-size masthead
+   declared above — the correct fallback — and only opts supporting browsers
+   into the scroll-scrubbed collapse. Do NOT move these declarations back into
+   the base rules. ─── */
+@supports (animation-timeline: scroll(root)) {
+  .masthead,
+  .overline,
+  .masthead h1,
+  .subtitle,
+  .date-line,
+  .hero-cta,
+  .back-home,
+  .personas-bar,
+  .persona-tag {
+    animation-timeline: scroll(root);
+    animation-range: var(--collapse-range);
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+  }
+
+  .masthead    { animation-name: masthead-collapse; }
+  .overline    { animation-name: overline-collapse; }
+  .masthead h1 { animation-name: h1-collapse; }
+  .subtitle    { animation-name: subtitle-collapse; }
+  .date-line   { animation-name: dateline-collapse; }
+  .hero-cta    { animation-name: hero-cta-collapse; }
+  .back-home   { animation-name: back-home-track; }
+  .personas-bar { animation-name: personas-slim; }
+  .persona-tag  { animation-name: persona-tag-slim; }
+
+  /* Mobile swaps the nav's slim keyframe for the wrapped -> scrollable one. */
+  @media (max-width: 640px) {
+    .personas-bar { animation-name: personas-collapse; }
+  }
+}
+
+/* ─── Skip link — first focusable element on every page ───
+   The sticky header puts a back-home button and four nav links ahead of the
+   content on every route, so keyboard and switch users need a way past them.
+   Off-screen until focused, then it drops into the top-left corner as a solid
+   ink slab (legible over the bone masthead and over any loud section color
+   that may have scrolled beneath a collapsed header). ─── */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  /* Moved off-screen rather than removed from the box tree — a hidden or
+     undisplayed link cannot receive focus, which defeats the whole point. */
+  transform: translateY(-150%);
+  padding: 0.75rem 1.1rem;
+  background: var(--c-ink);
+  color: var(--c-bg);
+  font-family: var(--ff-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: var(--bw-thick) solid var(--c-ink);
+  transition: transform 150ms var(--ease);
+}
+
+.skip-link:focus-visible,
+.skip-link:focus {
+  transform: translateY(0);
 }
 
 /* ─── Back-to-home button — absolute within .page-header-wrap ─── */
@@ -269,9 +386,6 @@ h1, h2, h3 {
   border: var(--bw-thick) solid var(--c-line);
   background: var(--c-bg);
   transition: background 150ms, color 150ms;
-  animation: back-home-track linear both;
-  animation-timeline: scroll(root);
-  animation-range: var(--collapse-range);
 }
 
 .back-home:hover,
@@ -319,24 +433,62 @@ h1, h2, h3 {
 .contact-fab:hover::before,
 .contact-fab:hover::after { width: 16px; height: 16px; }
 
+/* NOTE ON WEIGHTS: Space Mono ships 400 and 700 only. CSS font matching
+   resolves a requested 500 DOWN to 400 whenever 400 is available (it only
+   synthesises above 500), so every `font-weight: 500` in this file used to
+   render identically to surrounding body text — measured: the same string at
+   400 and 500 laid out to the same 190.00px, while 600 and 700 both gave
+   183.03px. Eleven rules asked for emphasis and got none. They are 700 now,
+   which is the nearest weight the family actually has.
+
+   The two `font-weight: 600` rules did render bold — 600 resolves UP to 700
+   when 700 is available — but are normalised to 700 as well so the file states
+   what it paints rather than what it would like. */
 .contact-fab-label {
   font-family: var(--ff-mono);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .contact-fab-label::after {
   content: ' ↗';
 }
 
+.contact-fab-icon { display: none; }
+
+/* The FAB is fixed, so it paints over whatever is mid-scroll — `body`'s
+   padding-bottom only protects the END of the document. At mobile widths the
+   text column runs nearly edge to edge, so the full-width pill was landing on
+   top of body copy and clipping words mid-sentence. Collapse to a compact
+   icon-only disc in the corner: same affordance, a fraction of the footprint.
+   The visible "Contact" label is swapped for the icon, and the link's own
+   aria-label keeps the accessible name intact. */
 @media (max-width: 480px) {
   .contact-fab {
-    bottom: 1.25rem;
-    right: 1.25rem;
-    padding: 0.7rem 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    right: calc(1rem + env(safe-area-inset-right, 0px));
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    gap: 0;
+    justify-content: center;
+    border-radius: 50%;
+    /* Opaque slab + a ring so the disc reads as a distinct floating object on
+       any section color it happens to pass over. */
+    background: var(--neon-btn-bg);
+    box-shadow:
+      0 0 0 2px var(--neon-btn-bg),
+      0 2px 10px rgba(0, 0, 0, 0.45);
   }
+
+  .contact-fab-label { display: none; }
+  .contact-fab-icon { display: block; }
+
+  /* The square corner ticks read as artifacts on a circle. */
+  .contact-fab::before,
+  .contact-fab::after { display: none; }
 }
 
 /* ─── Marquee — black band, giant display type, infinite scroll ─── */
@@ -475,6 +627,16 @@ h1, h2, h3 {
 .stat-box.positive:hover .stat-num,
 .stat-box.caution:hover .stat-num { color: var(--c-bg); }
 
+/* On the inverted (swatch-filled) hover states the muted label opacities stack
+   on top of an already-tinted ground: bone at 0.75/0.6 over the old green
+   measured 2.66:1 and 2.21:1. Size and tracking already mark these as
+   secondary, so drop the opacity here and let the darkened swatch carry the
+   contrast (>=4.55:1). The neutral hover fills with ink and needs no override. */
+.stat-box.positive:hover .stat-label-top,
+.stat-box.caution:hover .stat-label-top,
+.stat-box.positive:hover .stat-desc,
+.stat-box.caution:hover .stat-desc { opacity: 1; }
+
 .stat-label-top {
   font-family: var(--ff-mono);
   font-size: 0.625rem;
@@ -536,7 +698,7 @@ cite:hover { background: var(--c-accent); }
 .pullquote p {
   font-family: var(--ff-body);
   font-size: clamp(1.05rem, 2vw, 1.25rem);
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.4;
   color: var(--c-bg);
 }
@@ -588,8 +750,10 @@ cite:hover { background: var(--c-accent); }
   position: relative;
 }
 
-.verdict-box::before {
-  content: 'Assessment';
+/* The label text now comes from VerdictBox.tsx rather than CSS `content` —
+   these are real words, so they belong in the DOM where they can be selected,
+   translated and extracted. This rule only styles them. */
+.verdict-box-label {
   display: block;
   font-family: var(--ff-mono);
   font-size: 0.625rem;
@@ -599,10 +763,10 @@ cite:hover { background: var(--c-accent); }
   margin-bottom: 0.5rem;
 }
 
-.verdict-box.note::before    { content: 'Note'; }
-.verdict-box.warning::before { content: 'Warning'; color: var(--c-accent-2); opacity: 1; }
-.verdict-box.context::before { content: 'Context'; }
-.verdict-box.contact::before { content: 'Get in touch'; }
+.verdict-box.warning .verdict-box-label {
+  color: var(--c-accent-2);
+  opacity: 1;
+}
 
 .verdict-box p {
   font-family: var(--ff-body);
@@ -628,8 +792,12 @@ cite:hover { background: var(--c-accent); }
   background: var(--c-fg);
   color: var(--c-bg);
   border-top: var(--bw) solid var(--c-line);
-  padding: 2.75rem 0 3.5rem;
-  margin-top: 3.5rem;
+  /* The 3.5rem top margin was invisible on bone pages but left a ~56px bone
+     stripe between the last full-bleed color block and the black footer on
+     Home, reading as a rendering glitch rather than a divider. The breathing
+     room moves inside as padding, so the footer always meets whatever precedes
+     it flush. */
+  padding: 4rem 0 3.5rem;
 }
 
 .sources-section .container {
@@ -663,7 +831,7 @@ cite:hover { background: var(--c-accent); }
 .sources-header h3 {
   font-family: var(--ff-mono);
   font-size: 0.6875rem;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.5;
@@ -701,10 +869,58 @@ cite:hover { background: var(--c-accent); }
   color: var(--c-bg);
   display: block;
   margin-bottom: 0.1rem;
-  font-weight: 500;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
+
+/* ─── Footer navigation ───
+   The masthead nav carries only the four main sections, so Contact used to be
+   reachable only via the floating action button, and Support / Why not AI only
+   from prose links mid-page. This is the full index, and it gives every page a
+   crawlable link to every other. */
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.4rem;
+  padding-top: 0.85rem;
+  margin-top: 0.25rem;
+  border-top: var(--bw) solid var(--c-bg-faint);
+}
+
+.footer-nav-link {
+  font-family: var(--ff-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--c-bg-soft);
+  text-decoration: none;
+  /* 24px minimum target height (WCAG 2.2 SC 2.5.8) without visually padding
+     the row apart — the line box carries the height. */
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  transition: color 150ms;
+}
+
+.footer-nav-link:hover {
+  color: var(--c-bg);
+  text-decoration: underline;
+  text-decoration-thickness: var(--bw-thick);
+  text-decoration-color: var(--c-accent);
+}
+
+/* Footer links live on the ink slab, so the global `main a` bone/acid
+   treatment does not reach them; the email link needs its own. */
+.source-list a {
+  color: var(--c-bg);
+  text-decoration: underline;
+  text-decoration-thickness: var(--bw);
+  text-decoration-color: var(--c-bg-soft);
+  text-underline-offset: 2px;
+}
+
+.source-list a:hover { text-decoration-color: var(--c-accent); }
 
 /* ─── Footer social links ─── */
 .social-links-row {
@@ -809,7 +1025,7 @@ cite:hover { background: var(--c-accent); }
 
 .stat-pill strong {
   color: var(--c-fg);
-  font-weight: 500;
+  font-weight: 700;
 }
 
 /* ─── Feature Item — hairline-divided editorial rows ─── */
@@ -963,7 +1179,7 @@ cite:hover { background: var(--c-accent); }
   font-size: 0.75rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .feature-cta::after { content: ' ↗'; }
@@ -1072,10 +1288,21 @@ cite:hover { background: var(--c-accent); }
 .overline a {
   color: inherit;
   text-decoration: none;
-  opacity: 0.75;
-  transition: opacity 150ms;
+  /* Measured 47x16 — under the SC 2.5.8 floor (standalone link). */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  /* Inherits --c-fg-soft, itself 0.6 alpha. The old opacity: 0.75 compounded
+     with it to an effective 0.45 and measured 3.06:1. The hover cue moves to
+     an underline so the resting state can stay at full token strength. */
+  transition: text-decoration-color 150ms;
+  text-decoration-color: transparent;
 }
-.overline a:hover { opacity: 1; }
+.overline a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: var(--bw);
+  text-underline-offset: 3px;
+}
 .overline a::before {
   content: '↳ ';
   opacity: 0.5;
@@ -1151,9 +1378,24 @@ cite:hover { background: var(--c-accent); }
   }
 }
 
+/* Below ~400px two columns can't hold a metric value at its clamp() floor
+   without breaking mid-word, so drop to a single column and let each metric
+   have the full measure. */
+@media (max-width: 400px) {
+  .project-metrics-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .project-metric-cell {
   padding: 1.4rem 1.5rem;
   background: var(--c-bg);
+  /* Grid items default to `min-width: auto`, so a track can never shrink below
+     its content's min-content width. A long metric value ("KMS-encrypted",
+     "Live status") therefore pushed the whole row wider than the viewport and
+     scrolled the entire document sideways — measured at 320px (+58/+81px),
+     360px (+18/+41px) and 390px (+11px), i.e. every common phone width. */
+  min-width: 0;
 }
 
 .project-metric-value {
@@ -1164,6 +1406,9 @@ cite:hover { background: var(--c-accent); }
   letter-spacing: -0.03em;
   color: var(--c-fg);
   line-height: 0.95;
+  /* With the track free to shrink, a long token would otherwise spill past the
+     cell instead of wrapping inside it. */
+  overflow-wrap: break-word;
 }
 
 .project-metric-label {
@@ -1196,6 +1441,8 @@ cite:hover { background: var(--c-accent); }
 .project-stat-item {
   padding: 1.1rem 1rem;
   background: var(--c-bg);
+  /* Same `min-width: auto` grid trap as .project-metric-cell above. */
+  min-width: 0;
 }
 
 .project-stat-label {
@@ -1212,7 +1459,7 @@ cite:hover { background: var(--c-accent); }
   display: block;
   font-family: var(--ff-mono);
   font-size: 0.8125rem;
-  font-weight: 500;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--c-fg);
@@ -1380,6 +1627,9 @@ cite:hover { background: var(--c-accent); }
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  /* Measured 76x18 — under the 24px floor of WCAG 2.2 SC 2.5.8, and a
+     standalone link so the inline-in-a-sentence exception doesn't apply. */
+  min-height: 24px;
   transition: color 150ms, gap 200ms var(--ease);
 }
 
@@ -1480,7 +1730,7 @@ main[data-project-theme] .project-cover-block::before {
 .stlmnt-uth-label {
   flex: 1;
   font-family: var(--ff-body);
-  font-weight: 500;
+  font-weight: 700;
   font-size: 0.9rem;
   color: var(--stlmnt-ink);
 }
@@ -1565,7 +1815,7 @@ main[data-project-theme] .project-cover-block::before {
 .svc-num {
   font-family: var(--ff-mono);
   font-size: clamp(0.875rem, 2vw, 1.125rem);
-  font-weight: 500;
+  font-weight: 700;
   opacity: 0.5;
   transition: color 200ms;
 }
@@ -1822,7 +2072,10 @@ main[data-project-theme] .project-cover-block::before {
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-  color: var(--c-bg-faint);
+  /* Was --c-bg-faint (0.18 alpha) = 1.60:1 — effectively invisible, on the
+     one form that carries every conversion. Placeholders are text and owe the
+     full 4.5:1. */
+  color: var(--c-bg-placeholder);
 }
 
 .form-input:focus,
@@ -2096,7 +2349,7 @@ main[data-project-theme] .project-cover-block::before {
 .choice-card-label {
   font-family: var(--ff-body);
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.3;
 }
 
@@ -2137,7 +2390,7 @@ main[data-project-theme] .project-cover-block::before {
   border-color: var(--c-accent);
   background: var(--c-accent);
   color: var(--c-fg);
-  font-weight: 500;
+  font-weight: 700;
 }
 
 /* SEO / GEO rating rows */
@@ -2152,7 +2405,7 @@ main[data-project-theme] .project-cover-block::before {
 .rating-label-title {
   font-family: var(--ff-body);
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--c-bg);
   margin-left: 0.45rem;
   vertical-align: middle;
@@ -2198,7 +2451,7 @@ main[data-project-theme] .project-cover-block::before {
   border-color: var(--c-accent);
   background: var(--c-accent);
   color: var(--c-fg);
-  font-weight: 500;
+  font-weight: 700;
 }
 
 @media (max-width: 480px) {
@@ -2530,6 +2783,7 @@ main a:hover {
   .masthead h1,
   .subtitle,
   .date-line,
+  .hero-cta,
   .back-home,
   .personas-bar,
   .persona-tag { animation: none; }
@@ -2615,7 +2869,31 @@ main a:hover {
      stroke would vanish. Degrades gracefully: without -webkit-text-stroke
      support the word renders as solid inherited color, never invisible. */
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 3px currentColor;
+  /* Stroke width must track the type size. A fixed 3px on Unbounded 900 held
+     up at the desktop h2 (~40px) but merged adjacent letterforms into an
+     unreadable blob at the mobile h2 (~24px) — and the outlined half is the
+     KEYWORD of every section heading, so the least legible word was the most
+     important one. `max()` keeps a visible minimum on small type while letting
+     the stroke grow with `clamp()`-scaled headings. */
+  -webkit-text-stroke: max(1.5px, 0.045em) currentColor;
+  /* Counteract the heading's negative tracking: hollow letterforms need more
+     air between them than solid ones, or the strokes touch and read as one
+     shape. Positive tracking is scoped to the outlined word only. */
+  letter-spacing: 0.04em;
+  /* The trailing letter-space would otherwise push the following word away. */
+  margin-right: -0.04em;
+}
+
+/* Below the tablet breakpoint the heading is small enough that even a scaled
+   stroke crowds; fall back to a solid fill so the keyword stays readable.
+   The word keeps its emphasis through weight and the section's ink color. */
+@media (max-width: 640px) {
+  .outline-word {
+    -webkit-text-fill-color: currentColor;
+    -webkit-text-stroke: 0;
+    letter-spacing: normal;
+    margin-right: 0;
+  }
 }
 .ghost-word {
   position: absolute;
@@ -2647,7 +2925,14 @@ main a:hover {
 
 /* ─── Brutalist reduced-motion / contrast / forced-colors guards ─── */
 @media (prefers-reduced-motion: reduce) {
-  .neon-btn, .neon-btn * { animation: none !important; }
+  /* .neon-btn is the reusable base, but none of the CTAs actually shipped with
+     it — the real ones are .consult-cta-btn (neonPulse, infinite) and .svc-cta
+     (neonRotateAngle, infinite), both triggered on hover. So the guard was
+     naming a class no button had, and hovering the primary "Book a time" CTA
+     pulsed forever with reduced motion requested. */
+  .neon-btn, .neon-btn *,
+  .consult-cta-btn, .consult-cta-btn:hover,
+  .svc-cta, .svc-cta:hover { animation: none !important; }
   .section::after { animation: none; }
 }
 @media (prefers-contrast: more), (forced-colors: active) {
@@ -2686,7 +2971,8 @@ main a:hover {
 }
 @keyframes neonRotateAngle { to { --angle: 360deg; } }
 
-/* ─── Custom cursor — mounted only on fine pointers (adds .has-custom-cursor) ─── */
+/* ─── Custom cursor — an accent dot that trails the real pointer, mounted
+   only on fine pointers and never under reduced motion ─── */
 .cursor-dot {
   position: fixed;
   top: 0;
@@ -2708,11 +2994,45 @@ main a:hover {
   height: 46px;
   background: rgba(0, 186, 226, 0.35);
 }
-/* Hide the native cursor only while the JS cursor is active, and never over
-   text-entry controls (keep the caret/I-beam usable). */
-.has-custom-cursor,
-.has-custom-cursor *:not(input):not(textarea):not(select):not([contenteditable]) {
-  cursor: none;
+/* The dot trails the real pointer rather than replacing it. This used to set
+   `cursor: none` across the whole document, which removed the one affordance
+   people with low vision or motor impairments rely on to track where they are
+   — and `mix-blend-mode: difference` can render the replacement invisible
+   against mid-greys, leaving no pointer at all. The system cursor stays; the
+   dot is an accent on top of it. */
+
+/* ─── WCAG AA: decorative generated content ───
+   The "↳", "↗", "→", "[ ]" and "//" glyphs above are ornament, but CSS
+   pseudo-element content cannot carry aria-hidden, so screen readers folded
+   them into the surrounding text — nav items announced as "↳ About", the
+   breadcrumb as "↳ Work", list items as "↳ …", and the case-study link as
+   "View case study ↗".
+
+   The `content: <string> / <alt>` syntax supplies empty alternative text so
+   the glyph stays visible and drops out of the accessibility tree. It is
+   gated on @supports because a browser that does not understand the alt form
+   discards the whole declaration, which would silently delete the ornament
+   (Safari only gained it in 17.4, below this project's 16.4 target floor).
+   Unsupported browsers keep the plain glyph — the same progressive-enhancement
+   shape as the scroll-timeline guard above.
+
+   Only ornament belongs in this list. The verdict-box category labels
+   ("Assessment", "Note", "Warning", "Context", "Get in touch") were generated
+   content too, but they are real words — they now come from VerdictBox.tsx as
+   actual DOM text, so they stay selectable, translatable and announced. */
+@supports (content: 'a' / 'b') {
+  .section-num::before        { content: '[ ' / ''; }
+  .section-num::after         { content: ' ]' / ''; }
+  .pullquote .attrib::before  { content: '↳ ' / ''; }
+  .bubble-subtitle::before    { content: '// ' / ''; }
+  .feature-body li::before    { content: '↳ ' / ''; }
+  .feature-cta::after         { content: ' ↗' / ''; }
+  .overline a::before         { content: '↳ ' / ''; }
+  .project-outcomes li::before { content: '↳' / ''; }
+  .svc-sublist li::before     { content: '↳ ' / ''; }
+  .svc-sublabel::before       { content: '// ' / ''; }
+  .svc-cta::after             { content: '→' / ''; }
+  .contact-fab-label::after   { content: ' ↗' / ''; }
 }
 
 /* ─── WCAG AA: muted mono labels ───
@@ -2724,12 +3044,13 @@ main a:hover {
    "↳" list/prefix arrows are intentionally left as-is. */
 .section-num,
 .stat-label-top,
-.verdict-box::before,
+.verdict-box-label,
 .sources-header h3,
 .social-links-label,
 .bubble-subtitle,
 .feature-eyebrow,
 .project-metric-label,
+.project-stat-label,
 .svc-num,
 .svc-sublabel,
 .consult-cta-eyebrow,

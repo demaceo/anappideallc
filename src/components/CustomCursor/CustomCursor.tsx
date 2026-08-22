@@ -1,10 +1,16 @@
 import { useEffect, useRef } from 'react'
 
-// Blend-mode cursor dot that grows over interactive elements. Client-only and
-// fine-pointer-only, disabled under reduced motion. The node always renders
-// (so server and client markup match); the behavior attaches in the effect,
-// which also toggles `.has-custom-cursor` on <html> — CSS then hides the native
-// cursor everywhere EXCEPT text-entry controls, which keep their caret/I-beam.
+// Blend-mode cursor dot that trails the pointer and grows over interactive
+// elements. Client-only and fine-pointer-only, disabled under reduced motion.
+// The node always renders (so server and client markup match); the behavior
+// attaches in the effect.
+//
+// This used to also toggle `.has-custom-cursor` on <html>, which drove a
+// `cursor: none` rule across the document. That removed the system pointer —
+// the affordance people with low vision or motor impairments rely on to track
+// where they are — and `mix-blend-mode: difference` can render the replacement
+// invisible against mid-greys, leaving no pointer at all. The dot is an accent
+// on top of the real cursor now, so the class had no consumer left.
 export function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null)
 
@@ -15,8 +21,6 @@ export function CustomCursor() {
     const dot = dotRef.current
     if (!dot) return
 
-    const root = document.documentElement
-    root.classList.add('has-custom-cursor')
 
     let targetX = window.innerWidth / 2
     let targetY = window.innerHeight / 2
@@ -62,7 +66,6 @@ export function CustomCursor() {
       window.removeEventListener('pointermove', onMove)
       window.removeEventListener('pointerover', onOver)
       document.removeEventListener('pointerleave', onLeave)
-      root.classList.remove('has-custom-cursor')
     }
   }, [])
 

@@ -12,10 +12,6 @@
   --c-line: oklch(15% 0 0);           /* hairline rules and borders         */
   --c-accent: oklch(88% 0.22 125);    /* acid chartreuse: the one accent    */
   --c-accent-2: oklch(70% 0.22 35);   /* red-orange: error states ONLY      */
-  --c-cta: oklch(72% 0.19 50);        /* bright orange: primary conversion
-                                          actions ONLY (Contact, Book a time,
-                                          Send message, Start here) — not a
-                                          general second accent            */
 
   /* Swatch family — icon-category & stat-box semantic accents. Derived from
      the pre-redesign brand palette, re-expressed as flat OKLCH in the same
@@ -23,17 +19,31 @@
      #2563EB, #C44536) — richer/darker than --c-accent (L88%) so they read
      as a distinct "data" register, not a second hero accent. Used ONLY for
      icon glyphs, icon-box borders, and stat numerals/hover-fills. */
-  --c-swatch-gold: oklch(60% 0.12 80);      /* was #b8860b */
+  --c-swatch-gold: oklch(52% 0.12 80);      /* was #b8860b; 60% -> 52%, see note */
   --c-swatch-blue: oklch(55% 0.125 240);    /* was #2980b9 */
-  --c-swatch-green: oklch(58% 0.15 150);    /* was #27ae60 */
+  --c-swatch-green: oklch(52% 0.15 150);    /* was #27ae60; 58% -> 52%, see note */
   --c-swatch-navy: oklch(36% 0.08 255);     /* was #1a3a5c */
   --c-swatch-orange: oklch(58% 0.16 45);    /* was #d35400 */
   --c-swatch-purple: oklch(52% 0.16 315);   /* was #8e44ad */
   --c-swatch-teal: oklch(56% 0.095 175);    /* was #16a085 */
 
+  /* Gold and green are the only two swatches used as TEXT rather than as icon
+     glyphs: .stat-box.caution/.positive tint their numeral at rest and invert
+     to a solid swatch fill on hover. At their original 60%/58% lightness both
+     measured 3.57:1 on bone — under the 4.5:1 AA floor for the 18.4px mobile
+     numeral, and under it again for the bone label text sitting on the hover
+     fill. 52% brings both sides to >=4.55:1 while staying in the same visual
+     register. The other five swatches are glyph-only (WCAG 1.4.11 graphics,
+     3:1 floor) and keep their original values. */
+
   /* Inverse-surface soft tones (bone over black) */
   --c-bg-soft: oklch(96% 0.005 90 / 0.6);
   --c-bg-faint: oklch(96% 0.005 90 / 0.18);
+  /* Form placeholders previously reused --c-bg-faint and measured 1.60:1 on
+     the dark form panel (the typed value is 17.6:1). --c-bg-faint stays at
+     0.18 because the hairlines and rules it also feeds are non-text; this is
+     a separate token at the alpha the AA floor actually needs (5.69:1). */
+  --c-bg-placeholder: oklch(96% 0.005 90 / 0.55);
 
   /* Typography — full swap to the Brutalist Scroll Page pen's families.
      Unbounded (display, heavy) · Space Mono (body + mono/labels) ·
@@ -43,17 +53,14 @@
   --ff-mono: 'Space Mono', ui-monospace, monospace;
   --ff-stamp: 'Bebas Neue', 'Unbounded', sans-serif;
 
-  /* Spacing scale */
-  --s-1: 0.25rem;
-  --s-2: 0.5rem;
-  --s-3: 0.75rem;
-  --s-4: 1rem;
-  --s-5: 1.5rem;
-  --s-6: 2rem;
-  --s-7: 3rem;
-  --s-8: 5rem;
-  --s-9: 8rem;
-  --s-10: 12rem;
+  /* NOTE: a 10-step spacing scale (--s-1 … --s-10) used to be declared here
+     and was referenced exactly zero times — every padding, margin and gap in
+     globals.css is a literal, across 44 distinct rem values. Removed rather
+     than left as decoration, because a token block nothing consumes reads as
+     a system that exists when it doesn't. Introducing a real enforced scale
+     (and a type scale — there are 35 distinct font sizes across 109
+     declarations) is a live design decision, not a cleanup; it is written up
+     in docs/ux-audit-2026-08.md. */
 
   /* Borders — the primary structural device */
   --bw: 1px;
@@ -67,7 +74,6 @@
      --c-ink (#0a0a0a) draws every 4–6px border and outline-text so it reads
      jet-black on any hue. ═══ */
   --c-yellow: #ffe500;
-  --c-green: #0ae448;
   --c-pink: #ff2d78;
   --c-lavender: #9d95ff;
   --c-orange: #ff8709;
@@ -77,7 +83,6 @@
 
   /* Thick brutalist borders (--bw/--bw-thick above stay for legacy components) */
   --bw-brutal: 4px;
-  --bw-brutal-lg: 6px;
 
   /* Film grain overlay (riso/print texture) */
   --grain-opacity: 0.24;
@@ -86,26 +91,16 @@
   /* Neon button system — dark slab body so the glow reads on loud sections */
   --neon-btn-bg: #0a0f1c;
   --neon-cyan: #0ff;
-  --neon-yellow: #ffe500;
   --neon-magenta: #ff2d78;
   --neon-green: #0ae448;
   --neon-txt: #e8fbff;
 
   /* Motion */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --header-progress: 0;
   --collapse-range: 60px 200px; /* scroll range over which the masthead collapses */
 
-  /* ── Compat aliases — legacy Editorial Ink names still referenced in
-        markup/JS (inline SVG colors, per-project theme injection). Keep
-        until every consumer reads the new tokens directly. ── */
-  --ink: var(--c-fg);
-  --paper: var(--c-bg);
-  --accent: var(--c-accent);
-  --gold: var(--c-accent);
-  --navy: var(--c-fg);
-  --muted: var(--c-fg-soft);
-  --rule: var(--c-line);
-  --panel: var(--c-bg);
-  --white: var(--c-bg);
+  /* The nine legacy "Editorial Ink" compat aliases (--ink, --paper, --accent,
+     --gold, --navy, --muted, --rule, --panel, --white) lived here with a note
+     to keep them until every consumer read the new tokens directly. That
+     migration is done — all nine had zero references — so they are gone. */
 }

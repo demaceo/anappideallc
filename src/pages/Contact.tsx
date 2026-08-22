@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { SocialLinks } from '../components/SocialLinks/SocialLinks'
+import { FooterNav } from '../components/FooterNav/FooterNav'
 import { SITE } from '../data/site'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
@@ -9,6 +10,7 @@ import {
   IconArrowRight, IconCheck,
 } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
 import { VoiceNote, type VoiceNoteData } from '../components/VoiceNote/VoiceNote'
 
@@ -287,7 +289,7 @@ export default function Contact() {
         </header>
       </PageHeader>
 
-      <main className="container">
+      <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
             Early-stage conversations are welcome. The goal of the first
@@ -649,13 +651,13 @@ export default function Contact() {
           <div className="section-rule" />
         </div>
 
-        <div className="verdict-box note">
+        <VerdictBox variant="note">
           <p>
             {SITE.founder.location} · Mountain Time (US/Denver).
             I work with founders remotely and have built across US, UK, and
             international time zones without friction.
           </p>
-        </div>
+        </VerdictBox>
       </main>
 
       <footer className="sources-section">
@@ -667,7 +669,7 @@ export default function Contact() {
           <ul className="source-list">
             <li>
               <strong>Email</strong>
-              {SITE.email}
+              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
             </li>
             <li>
               <strong>Book a call</strong>
@@ -682,6 +684,7 @@ export default function Contact() {
               1–2 business days
             </li>
           </ul>
+          <FooterNav />
           <SocialLinks />
         </div>
       </footer>

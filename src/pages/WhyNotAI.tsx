@@ -1,8 +1,10 @@
 import { SITE } from '../data/site'
 import { SocialLinks } from '../components/SocialLinks/SocialLinks'
+import { FooterNav } from '../components/FooterNav/FooterNav'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
 import {
   IconCompass2, IconEdit, IconLayers, IconShieldCheck, IconTerminal,
@@ -74,7 +76,7 @@ export default function WhyNotAI() {
         </header>
       </PageHeader>
 
-      <main className="container">
+      <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
             If you can describe your idea to an AI and get something on screen,
@@ -120,12 +122,12 @@ export default function WhyNotAI() {
           <span className="ornament">✦ ✦ ✦</span>
         </div>
 
-        <div className="verdict-box note">
+        <VerdictBox variant="note">
           <p>
             Prefer AI out of the picture entirely? That's a valid position.
             Bring it up on the first call and we'll scope the build without it.
           </p>
-        </div>
+        </VerdictBox>
 
         <div className="section-header">
           <span className="section-num">The honest part</span>
@@ -133,7 +135,7 @@ export default function WhyNotAI() {
           <div className="section-rule" />
         </div>
 
-        <div className="verdict-box context">
+        <VerdictBox variant="context">
           <p>
             I'm not anti-AI. Far from it. It's excellent for sketching ideas,
             drafting copy, exploring options, and speeding up the parts of the
@@ -143,7 +145,7 @@ export default function WhyNotAI() {
             the whole thing to a chatbot and hoping. You get the speed of modern
             tools <em>and</em> a person who owns the outcome.
           </p>
-        </div>
+        </VerdictBox>
 
         <div className="section-header">
           <span className="section-num">The math</span>
@@ -179,7 +181,7 @@ export default function WhyNotAI() {
           <div className="section-rule" />
         </div>
 
-        <div className="verdict-box context">
+        <VerdictBox variant="context">
           <p>
             <strong>The Reckoning</strong> is a roundtable podcast built for
             people who want to think seriously about what AI means for work,
@@ -193,7 +195,7 @@ export default function WhyNotAI() {
               Visit the podcast →
             </a>
           </p>
-        </div>
+        </VerdictBox>
 
         <div className="section-header">
           <span className="section-num">Next step</span>
@@ -243,6 +245,7 @@ export default function WhyNotAI() {
               explores AI's broader impact on work and society.
             </li>
           </ul>
+          <FooterNav />
           <SocialLinks />
         </div>
       </footer>
