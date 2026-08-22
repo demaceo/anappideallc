@@ -320,13 +320,39 @@ declared without a consumer. `--c-pink` stays: it backs the `pink` variant in
 Section's colour union, which is a real if currently unused option in the
 system, unlike the nine compat aliases whose migration was finished.
 
-**The spacing scale was deleted rather than adopted, and that is a judgement
-call worth stating.** Adopting it would mean snapping 44 distinct values onto
-10 steps across every page and breakpoint — a spacing redesign with real
-regression risk, and many of the current values are deliberate (fluid `clamp()`
-ranges, optical adjustments like `0.42rem`). Deleting it makes the token file
-honest about what exists today. **Introducing a genuine enforced spacing and
-type scale remains open**, and is a design decision rather than a cleanup.
+**The spacing scale was deleted rather than adopted in the first pass**, on the
+grounds that snapping 44 values onto 10 steps was a redesign rather than a
+cleanup. That was right about the risk and wrong about the model.
+
+**Now closed.** Measuring two models settled it:
+
+| model | steps | already exact | shift ≥2px | worst |
+|---|---|---|---|---|
+| 12-step named ladder | 12 | 45% | 9% | 8.0px |
+| **4px grid (0.25rem)** | 16 | **52%** | **1% (4 of 315)** | **2.7px** |
+| 2px grid | 24 | 52% | 0% | 0.9px |
+
+The **4px grid** is now the rule: every padding, margin and gap is a multiple of
+`0.25rem`, with twelve named `--space-*` tokens for the steps that carry weight.
+The named ladder was rejected for a specific reason — it forces `1.75rem` (11
+uses), `2.25rem` (8) and `2.75rem` (3) to snap a full 4px each, which is where
+its 9% came from. On a grid those are legal values.
+
+That is also the post-mortem on the deleted `--s-*` scale: it omitted `1.25rem`,
+which has **32 uses**. A scale that cannot express the code's most common value
+will not be adopted, however well-intentioned.
+
+**Type is closed too.** 21 fluid headings carried 21 distinct `clamp()` curves.
+Four already resolved to an identical 18.4→24px range while written three
+different ways (`3vw` / `3vw` / `3.2vw` / `2.5vw`) — agreeing at both ends and
+drifting apart at every width in between, which is exactly where the eye catches
+things not lining up. Now seven shared `--text-fluid-*` steps plus six fixed
+`--text-*` steps, with `.footer-giant` and `.ghost-word` left bespoke as
+deliberate showpieces.
+
+Measured effect: aggregate page height across 5 pages × 3 widths moved **+1.6%**
+(range −2.4% to +4.5%; `/work` is the outlier because it repeats 12 case-study
+rows, so per-row snaps accumulate there).
 
 ### Navigation and IA gaps
 
@@ -437,17 +463,39 @@ the eye works harder than it should. Keeping mono for labels, metadata and
 eyebrows while moving body copy to a proportional face would buy real
 readability without costing any of the brand's edge.
 
-**Three visual languages in one page.** Bone/ink brutalism, loud riso colour
-blocks, and cyberpunk neon slabs (`#0a0f1c` with cyan/green glow). The neon set
-owns *every* primary CTA while belonging to none of the rest of the system — a
-dark glowing pill inside a bone card on a lavender field is three grammars in
-one component. Deriving the CTA treatment from the brutalist vocabulary instead
-would tighten the brand considerably, and `--c-cta` is already defined and
-waiting for exactly that job.
+**Three visual languages in one page — now closed.** Bone/ink brutalism, loud
+riso colour blocks, and cyberpunk neon slabs (`#0a0f1c` with cyan/green glow).
 
-**A CTA above the fold.** Half the first screen is masthead and none of it is
-actionable. A single button under the subtitle — "Book a free call" — would give
-the strongest copy on the site somewhere to land.
+The tell was that `tokens.css` opens by declaring the system's rule — *"zero
+border-radius, zero shadows: hairlines and inversion carry all structure and
+depth"* — while the codebase shipped **17 glow declarations** against it. Not a
+matter of taste: a stated principle the code did not follow.
+
+The damage was in *where* the third language lived. All seven neon components
+were things a visitor had to act on, so the entire conversion path was styled in
+a vocabulary that appeared nowhere else, while brutalism and riso owned all the
+static content. `ConsultCTA` showed it in one element: a bone card (language A)
+inside a full-bleed lavender block (B) containing a dark slab with a pulsing
+cyan glow (C) — and that button was the only dark object on the screen.
+
+**Resolved by retiring neon.** All seven CTAs now use the same ink/bone
+inversion as the rest of the system, in two surface variants — ink fill on bone
+(`.consult-cta-btn`, `.project-link-btn`, `.contact-fab`), bone fill on ink
+(`.svc-cta`, `.form-submit-btn`, `.wizard-next`), plus a bone hairline secondary
+(`.wizard-back`) — with `--c-accent` as the single accent the token file always
+claimed. The five `--neon-*` tokens, the `.neon-btn` base, both infinite
+keyframes and the `@property --angle` that fed the conic rim are gone. Glow
+declarations: **17 → 0**; the three remaining `box-shadow`s are solid rings (a
+focus indicator, the nav active underline, a 1px separator).
+
+Two guards became unnecessary and were removed with it: the reduced-motion
+override for `.consult-cta-btn` / `.svc-cta` had nothing left to stop, and the
+`forced-colors` rule that dropped `.neon-btn`'s glow no longer had a target.
+
+**A CTA above the fold — done.** Half the first screen was masthead with nothing
+actionable in it. "Book a free call" now sits under the subtitle, and it was the
+first button drawn from the brutalist vocabulary — the precedent the other seven
+were later ported to.
 
 **No pricing or engagement signal** anywhere on the site. Every visitor has to
 book a call to learn whether they are in range, which filters out qualified

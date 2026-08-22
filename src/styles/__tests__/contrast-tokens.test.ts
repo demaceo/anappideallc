@@ -179,3 +179,116 @@ describe('tokens.css — no resurrected dead tokens (audit P2)', () => {
     expect(unused).toEqual([])
   })
 })
+
+/**
+ * Regression — 2026-08 scales adoption.
+ *
+ * Before this, 315 spacing declarations used 44 distinct rem values — six of
+ * them inside a single 2.4px band. The rule now is a 4px grid: every
+ * padding/margin/gap length is a multiple of 0.25rem. Snapping left 52% of
+ * declarations already exact and moved only 4 of 315 by >=2px.
+ *
+ * A named 12-step ladder was measured and rejected: it forces 1.75rem (11
+ * uses), 2.25rem (8) and 2.75rem (3) to snap a full 4px each. That is also the
+ * post-mortem on the deleted --s-1…--s-10 scale, which had zero consumers
+ * because it omitted 1.25rem — 32 uses.
+ */
+describe('globals.css — spacing sits on the 4px grid (scales adoption)', () => {
+  const SPACING_PROP = /(?:padding|margin|gap|inset|row-gap|column-gap)[a-z-]*:\s*([^;{}]*)/g
+
+  it('uses no spacing length that is off the 0.25rem grid', () => {
+    const offGrid = new Set<string>()
+    for (const m of GLOBALS.matchAll(SPACING_PROP)) {
+      for (const [, num] of m[1].matchAll(/([0-9]*\.?[0-9]+)rem/g)) {
+        const v = parseFloat(num)
+        if (Math.abs(Math.round(v / 0.25) * 0.25 - v) > 1e-9) offGrid.add(`${v}rem`)
+      }
+    }
+    expect([...offGrid]).toEqual([])
+  })
+
+  it('declares the twelve weighted steps', () => {
+    for (let i = 1; i <= 12; i++) {
+      expect(stripComments(TOKENS)).toMatch(new RegExp(`--space-${i}:`))
+    }
+    // 1.25rem has 32 uses and was the omission that killed the previous scale.
+    expect(stripComments(TOKENS)).toMatch(/--space-5:\s*1\.25rem/)
+  })
+})
+
+/**
+ * Regression — 2026-08 type scale.
+ *
+ * 21 fluid headings carried 21 distinct clamp() curves. Four already resolved
+ * to an identical 18.4→24px range while written three different ways (3vw /
+ * 3vw / 3.2vw / 2.5vw), so they agreed at both ends and drifted apart at every
+ * width in between.
+ */
+describe('globals.css — type comes from the scale (scales adoption)', () => {
+  // The two deliberate showpieces that are not scale members.
+  const BESPOKE = 2
+
+  it('declares no bespoke clamp() outside the two showpieces', () => {
+    const clamps = GLOBALS.match(/font-size:\s*clamp\(/g) ?? []
+    expect(clamps).toHaveLength(BESPOKE)
+  })
+
+  it('uses no raw rem font-size anywhere', () => {
+    expect(GLOBALS).not.toMatch(/font-size:\s*[0-9.]+rem/)
+  })
+
+  it('declares six fixed steps and seven fluid ones', () => {
+    const t = stripComments(TOKENS)
+    for (const step of ['2xs', 'xs', 'sm', 'md', 'base', 'lg']) {
+      expect(t).toMatch(new RegExp(`--text-${step}:`))
+    }
+    for (let i = 1; i <= 7; i++) expect(t).toMatch(new RegExp(`--text-fluid-${i}:`))
+  })
+})
+
+/**
+ * Regression — 2026-08 neon retirement.
+ *
+ * tokens.css opens by declaring "zero border-radius, zero shadows: hairlines
+ * and inversion carry all structure and depth". The codebase shipped 17 glow
+ * declarations against that, and the neon language owned the entire conversion
+ * path — all seven neon components were things a visitor had to act on.
+ */
+describe('one visual language (neon retirement)', () => {
+  it('has no neon token, class or keyframe left', () => {
+    expect(stripComments(TOKENS)).not.toMatch(/--neon-/)
+    const g = GLOBALS
+    expect(g).not.toMatch(/var\(--neon-/)
+    expect(g).not.toMatch(/^\.neon-btn/m)
+    expect(g).not.toMatch(/@keyframes\s+neon/)
+    // The conic rim was the only consumer of these.
+    expect(g).not.toMatch(/@property\s+--angle/)
+  })
+
+  it('uses no glow — every remaining box-shadow is a solid ring', () => {
+    // A shadow's third length is its blur radius. Zero blur is a solid ring
+    // (focus indicator, active underline, hairline separator); anything above
+    // zero is a glow. Lengths may be written unitless when zero — `0 0 12px`
+    // is the commonest glow form — so the token pattern has to allow that.
+    const LEN = String.raw`-?(?:\d*\.)?\d+(?:px|rem|em)?`
+    const SHADOW = new RegExp(`(?:^|,)\\s*(?:inset\\s+)?(${LEN})\\s+(${LEN})\\s+(${LEN})`, 'g')
+    const glows: string[] = []
+    for (const m of GLOBALS.matchAll(/box-shadow:\s*([^;]*)/g)) {
+      for (const layer of m[1].matchAll(SHADOW)) {
+        if (parseFloat(layer[3]) !== 0) glows.push(m[1].trim())
+      }
+    }
+    expect(glows).toEqual([])
+    expect(GLOBALS).not.toMatch(/text-shadow:\s*0 0/)
+  })
+
+  it('gives the ported CTAs the ink/bone inversion', () => {
+    for (const sel of ['\\.consult-cta-btn', '\\.project-link-btn', '\\.contact-fab']) {
+      expect(GLOBALS).toMatch(new RegExp(`${sel}\\s*\\{[^}]*background:\\s*var\\(--c-fg\\)`))
+    }
+    // On the ink form panel the inversion runs the other way.
+    for (const sel of ['\\.svc-cta', '\\.wizard-next']) {
+      expect(GLOBALS).toMatch(new RegExp(`${sel}\\s*\\{[^}]*background:\\s*var\\(--c-bg\\)`))
+    }
+  })
+})

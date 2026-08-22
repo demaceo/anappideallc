@@ -16,7 +16,7 @@ body {
   background: var(--c-bg);
   color: var(--c-fg);
   font-family: var(--ff-body);
-  font-size: 1rem;
+  font-size: var(--text-lg);
   line-height: 1.5;
   font-feature-settings: 'ss01', 'cv11';
   /* Ensure no page content is obscured by the fixed contact FAB (bottom: 2rem,
@@ -58,22 +58,22 @@ h1, h2, h3 {
 /* ─── Scroll-driven keyframes (Chrome 115+, Firefox 114+, Safari 18+) ─── */
 @keyframes masthead-collapse {
   from { padding-top: clamp(2.25rem, 6vw, 4rem); padding-bottom: clamp(1.75rem, 4vw, 3rem); }
-  to   { padding-top: 0.65rem;                   padding-bottom: 0.5rem;                    }
+  to   { padding-top: var(--space-3);                   padding-bottom: var(--space-2);                    }
 }
 @keyframes overline-collapse {
-  from { max-height: 3rem;  opacity: 1; margin-bottom: 1.3rem; }
+  from { max-height: 3rem;  opacity: 1; margin-bottom: var(--space-5); }
   to   { max-height: 0;     opacity: 0; margin-bottom: 0;      }
 }
 @keyframes h1-collapse {
-  from { font-size: clamp(2rem, 6vw, 4.25rem); margin-bottom: 0.75rem; }
-  to   { font-size: clamp(1.05rem, 2.2vw, 1.35rem); margin-bottom: 0;    }
+  from { font-size: var(--text-fluid-7); margin-bottom: var(--space-3); }
+  to   { font-size: var(--text-fluid-2); margin-bottom: 0;    }
 }
 @keyframes subtitle-collapse {
-  from { max-height: 10rem; opacity: 1; margin-top: 0.65rem; }
+  from { max-height: 10rem; opacity: 1; margin-top: var(--space-3); }
   to   { max-height: 0;     opacity: 0; margin-top: 0;       }
 }
 @keyframes dateline-collapse {
-  from { max-height: 4rem;  opacity: 1; margin-top: 1.75rem; }
+  from { max-height: 4rem;  opacity: 1; margin-top: var(--space-7); }
   to   { max-height: 0;     opacity: 0; margin-top: 0;       }
 }
 @keyframes back-home-track {
@@ -84,20 +84,20 @@ h1, h2, h3 {
    header reduces toward just its title. Links stay visible (persona-tag-slim
    only trims their padding, never their content). */
 @keyframes personas-slim {
-  from { padding-top: 0.85rem; padding-bottom: 0.95rem; }
-  to   { padding-top: 0.35rem; padding-bottom: 0.4rem;  }
+  from { padding-top: var(--space-3); padding-bottom: var(--space-4); }
+  to   { padding-top: var(--space-1); padding-bottom: var(--space-2);  }
 }
 @keyframes persona-tag-slim {
-  from { padding-top: 0.55rem; padding-bottom: 0.55rem; }
-  to   { padding-top: 0.3rem;  padding-bottom: 0.3rem;  }
+  from { padding-top: var(--space-2); padding-bottom: var(--space-2); }
+  to   { padding-top: var(--space-1);  padding-bottom: var(--space-1);  }
 }
 /* Mobile only: collapse the wrapped nav into a single, horizontally
    scrollable row so the sticky header shrinks to a slim bar when scrolled.
    overflow-x is set statically on .personas-bar so it's always scrollable —
    animating discrete properties like overflow is unreliable across browsers. */
 @keyframes personas-collapse {
-  from { padding-top: 0.85rem; padding-bottom: 1rem;   flex-wrap: wrap;   justify-content: center;     }
-  to   { padding-top: 0.4rem;  padding-bottom: 0.4rem; flex-wrap: nowrap; justify-content: flex-start; }
+  from { padding-top: var(--space-3); padding-bottom: var(--space-4);   flex-wrap: wrap;   justify-content: center;     }
+  to   { padding-top: var(--space-2);  padding-bottom: var(--space-2); flex-wrap: nowrap; justify-content: flex-start; }
 }
 
 /* ─── SECTION 4: Masthead / hero header ─── */
@@ -121,7 +121,7 @@ h1, h2, h3 {
 
 .overline {
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-fg-soft);
@@ -129,14 +129,14 @@ h1, h2, h3 {
   /* Mirrors the `from` state of @keyframes overline-collapse so the static
      (no scroll-timeline) fallback matches the designed expanded masthead
      exactly rather than sitting 21px tighter. */
-  margin-bottom: 1.3rem;
+  margin-bottom: var(--space-5);
 }
 
 .masthead h1 {
-  font-size: clamp(2rem, 6vw, 4.25rem);
+  font-size: var(--text-fluid-7);
   line-height: 0.92;
   letter-spacing: -0.02em;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
 }
 
 .masthead h1 em {
@@ -149,10 +149,10 @@ h1, h2, h3 {
 
 .subtitle {
   font-family: var(--ff-body);
-  font-size: 1rem;
+  font-size: var(--text-lg);
   color: var(--c-fg-soft);
   max-width: 580px;
-  margin: 0.65rem auto 0;
+  margin: var(--space-3) auto 0;
   line-height: 1.4;
   overflow: hidden;
 }
@@ -164,12 +164,12 @@ h1, h2, h3 {
 .hero-cta {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 1.25rem;
-  padding: 0.85rem 1.6rem;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  padding: var(--space-3) var(--space-6);
   min-height: 44px;
   font-family: var(--ff-mono);
-  font-size: 0.8125rem;
+  font-size: var(--text-md);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -195,28 +195,28 @@ h1, h2, h3 {
 .hero-cta:hover::after { transform: translateX(3px); }
 
 @keyframes hero-cta-collapse {
-  from { max-height: 4rem; opacity: 1; margin-top: 1.25rem; }
+  from { max-height: 4rem; opacity: 1; margin-top: var(--space-5); }
   to   { max-height: 0;    opacity: 0; margin-top: 0;       }
 }
 
 .date-line {
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-fg-soft);
   overflow: hidden;
   /* Mirrors the `from` state of @keyframes dateline-collapse — see .overline. */
-  margin-top: 1.75rem;
+  margin-top: var(--space-7);
 }
 
 /* ─── SECTION 5: Navigation / legend bar ─── */
 .personas-bar {
   background: var(--c-bg);
-  padding: 0.85rem 2rem 0.95rem;
+  padding: var(--space-3) var(--space-8) var(--space-4);
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: var(--space-1);
   justify-content: center;
   border-bottom: var(--bw) solid var(--c-line);
 }
@@ -224,7 +224,7 @@ h1, h2, h3 {
 .persona-tag {
   display: flex;
   align-items: center;
-  padding: 0.55rem 0.9rem;
+  padding: var(--space-2) var(--space-4);
   text-decoration: none;
   transition: background 150ms, color 150ms;
   cursor: pointer;
@@ -232,7 +232,7 @@ h1, h2, h3 {
 
 .persona-tag span {
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: inherit;
@@ -273,8 +273,8 @@ h1, h2, h3 {
      (see @keyframes personas-collapse). overflow-x: auto is always on so the
      Process tab is never clipped on narrow viewports. */
   .personas-bar {
-    padding: 0.85rem 1rem 1rem;
-    gap: 0.25rem;
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    gap: var(--space-1);
     flex-wrap: wrap;
     overflow-x: auto;
     scrollbar-width: none;
@@ -286,8 +286,8 @@ h1, h2, h3 {
   /* Larger tap target on mobile */
   .persona-tag {
     min-height: 44px;
-    padding-top: 0.7rem;
-    padding-bottom: 0.7rem;
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
   }
 }
 
@@ -350,11 +350,11 @@ h1, h2, h3 {
   /* Moved off-screen rather than removed from the box tree — a hidden or
      undisplayed link cannot receive focus, which defeats the whole point. */
   transform: translateY(-150%);
-  padding: 0.75rem 1.1rem;
+  padding: var(--space-3) var(--space-4);
   background: var(--c-ink);
   color: var(--c-bg);
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
@@ -381,7 +381,7 @@ h1, h2, h3 {
   line-height: 1;
   text-decoration: none;
   font-family: var(--ff-mono);
-  font-size: 1rem;
+  font-size: var(--text-lg);
   color: var(--c-fg);
   border: var(--bw-thick) solid var(--c-line);
   background: var(--c-bg);
@@ -395,8 +395,9 @@ h1, h2, h3 {
 }
 
 /* ─── Contact FAB — fixed lower-right floating action button ─── */
-/* v13 HUD Corners — floats over arbitrary section colors, so a dark slab +
-   growing corner ticks stays legible on any background. */
+/* The only button that floats over an arbitrary background, so it carries a
+   bone border for separation instead of the glow it used to. A border is
+   structure, which this system allows; a shadow is not. */
 .contact-fab {
   position: fixed;
   bottom: 2rem;
@@ -404,34 +405,20 @@ h1, h2, h3 {
   z-index: 100;
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.8rem 1.35rem;
-  background: var(--neon-btn-bg);
-  color: var(--neon-cyan);
-  border: var(--bw) solid rgba(0, 255, 255, 0.35);
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  background: var(--c-fg);
+  color: var(--c-bg);
+  border: var(--bw-thick) solid var(--c-bg);
+  outline: var(--bw) solid var(--c-ink);
   text-decoration: none;
-  text-shadow: 0 0 4px var(--neon-cyan);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
-  transition: box-shadow 150ms;
+  transition: background 150ms, color 150ms;
 }
 
-.contact-fab::before,
-.contact-fab::after {
-  content: '';
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-color: var(--neon-cyan);
-  border-style: solid;
-  border-width: 0;
-  transition: width 200ms, height 200ms;
+.contact-fab:hover {
+  background: var(--c-accent);
+  color: var(--c-fg);
 }
-.contact-fab::before { top: -2px; left: -2px; border-top-width: 2px; border-left-width: 2px; }
-.contact-fab::after { bottom: -2px; right: -2px; border-bottom-width: 2px; border-right-width: 2px; }
-
-.contact-fab:hover { box-shadow: 0 0 16px rgba(0, 255, 255, 0.4); }
-.contact-fab:hover::before,
-.contact-fab:hover::after { width: 16px; height: 16px; }
 
 /* NOTE ON WEIGHTS: Space Mono ships 400 and 700 only. CSS font matching
    resolves a requested 500 DOWN to 400 whenever 400 is available (it only
@@ -446,7 +433,7 @@ h1, h2, h3 {
    what it paints rather than what it would like. */
 .contact-fab-label {
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 700;
@@ -475,12 +462,10 @@ h1, h2, h3 {
     gap: 0;
     justify-content: center;
     border-radius: 50%;
-    /* Opaque slab + a ring so the disc reads as a distinct floating object on
-       any section color it happens to pass over. */
-    background: var(--neon-btn-bg);
-    box-shadow:
-      0 0 0 2px var(--neon-btn-bg),
-      0 2px 10px rgba(0, 0, 0, 0.45);
+    /* Ink disc with a bone ring, so it stays a distinct object over any section
+       colour it passes. The ring is the border already set above; the outline
+       adds the outer hairline without reaching for a shadow. */
+    background: var(--c-fg);
   }
 
   .contact-fab-label { display: none; }
@@ -499,11 +484,11 @@ h1, h2, h3 {
   overflow: hidden;
   white-space: nowrap;
   font-family: var(--ff-display);
-  font-size: clamp(1.5rem, 4vw, 3rem);
+  font-size: var(--text-fluid-6);
   text-transform: uppercase;
   letter-spacing: -0.02em;
-  padding: 0.75rem 0;
-  margin-top: 2.5rem;
+  padding: var(--space-3) 0;
+  margin-top: var(--space-10);
 }
 
 .marquee-track {
@@ -521,13 +506,13 @@ h1, h2, h3 {
 
 /* ─── SECTION 6: Intro block ─── */
 .intro-block {
-  padding: 2.75rem 0 2.25rem;
+  padding: 2.75rem 0 var(--space-9);
   border-bottom: var(--bw) solid var(--c-line);
 }
 
 .intro-block p {
   font-family: var(--ff-body);
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-size: var(--text-fluid-2);
   color: var(--c-fg);
   max-width: 45ch;
   line-height: 1.35;
@@ -537,27 +522,27 @@ h1, h2, h3 {
 .section-header {
   display: flex;
   align-items: baseline;
-  gap: 0.9rem;
-  padding: 2.75rem 0 1.25rem;
+  gap: var(--space-4);
+  padding: 2.75rem 0 var(--space-5);
   border-bottom: var(--bw) solid var(--c-line);
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-6);
 }
 
 .section-num {
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   opacity: 0.5;
   flex-shrink: 0;
-  padding-top: 0.1rem;
+  padding-top: var(--space-1);
 }
 
 .section-num::before { content: '[ '; }
 .section-num::after  { content: ' ]'; }
 
 .section-header h2 {
-  font-size: clamp(1.5rem, 4.2vw, 2.5rem);
+  font-size: var(--text-fluid-6);
   line-height: 0.95;
   min-width: 0;
 }
@@ -570,7 +555,7 @@ h1, h2, h3 {
   .section-header {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.4rem;
+    gap: var(--space-2);
   }
   .section-header h2 { flex-shrink: 1; }
   .section-header .section-rule { flex: none; }
@@ -583,7 +568,7 @@ h1, h2, h3 {
   gap: var(--bw);
   background: var(--c-line);
   border: var(--bw) solid var(--c-line);
-  margin: 0.5rem 0 2.5rem;
+  margin: var(--space-2) 0 var(--space-10);
 }
 
 /* A trailing partial row would expose the grid's line-color background as a
@@ -597,7 +582,7 @@ h1, h2, h3 {
 }
 
 .stat-box {
-  padding: 1.25rem 1.25rem 1.35rem;
+  padding: var(--space-5) var(--space-5) var(--space-5);
   background: var(--c-bg);
   color: var(--c-fg);
   text-align: left;
@@ -639,11 +624,11 @@ h1, h2, h3 {
 
 .stat-label-top {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.5;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
   display: block;
 }
 
@@ -652,16 +637,16 @@ h1, h2, h3 {
   line-height: 0.9;
   letter-spacing: -0.03em;
   text-transform: uppercase;
-  margin-bottom: 0.4rem;
+  margin-bottom: var(--space-2);
   display: block;
 }
 
-.stat-num.large  { font-size: clamp(1.6rem, 4vw,   2.4rem); }
-.stat-num.medium { font-size: clamp(1.15rem, 2.5vw, 1.5rem); }
+.stat-num.large  { font-size: var(--text-fluid-6); }
+.stat-num.medium { font-size: var(--text-fluid-3); }
 
 .stat-desc {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   opacity: 0.6;
@@ -673,12 +658,12 @@ h1, h2, h3 {
 cite {
   display: inline-block;
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   font-style: normal;
   color: var(--c-fg);
   border: var(--bw) solid var(--c-line);
-  padding: 0.08rem 0.32rem;
-  margin-left: 0.2rem;
+  padding: var(--space-1) var(--space-1);
+  margin-left: var(--space-1);
   vertical-align: middle;
   line-height: 1.2;
   transition: background 150ms;
@@ -689,15 +674,15 @@ cite:hover { background: var(--c-accent); }
 
 /* ─── SECTION 11: Pullquote — black slab ─── */
 .pullquote {
-  margin: 2rem 0;
-  padding: 1.5rem 1.6rem 1.6rem;
+  margin: var(--space-8) 0;
+  padding: var(--space-6) var(--space-6) var(--space-6);
   background: var(--c-fg);
   color: var(--c-bg);
 }
 
 .pullquote p {
   font-family: var(--ff-body);
-  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-size: var(--text-fluid-2);
   font-weight: 700;
   line-height: 1.4;
   color: var(--c-bg);
@@ -706,11 +691,11 @@ cite:hover { background: var(--c-accent); }
 .pullquote .attrib {
   display: block;
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--c-accent);
-  margin-top: 0.75rem;
+  margin-top: var(--space-3);
 }
 
 .pullquote .attrib::before {
@@ -722,8 +707,8 @@ cite:hover { background: var(--c-accent); }
 .chapter-divider {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 2.25rem 0 0;
+  gap: var(--space-4);
+  padding: var(--space-9) 0 0;
 }
 
 .chapter-divider::before,
@@ -736,15 +721,15 @@ cite:hover { background: var(--c-accent); }
 
 .chapter-divider .ornament {
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.3em;
   color: var(--c-fg);
 }
 
 /* ─── SECTION 13: Assessment / verdict box ─── */
 .verdict-box {
-  margin: 1.75rem 0 0.5rem;
-  padding: 1.1rem 1.4rem 1.25rem;
+  margin: var(--space-7) 0 var(--space-2);
+  padding: var(--space-4) var(--space-6) var(--space-5);
   border: var(--bw-thick) solid var(--c-line);
   background: var(--c-bg);
   position: relative;
@@ -756,11 +741,11 @@ cite:hover { background: var(--c-accent); }
 .verdict-box-label {
   display: block;
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.5;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
 }
 
 .verdict-box.warning .verdict-box-label {
@@ -770,7 +755,7 @@ cite:hover { background: var(--c-accent); }
 
 .verdict-box p {
   font-family: var(--ff-body);
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   line-height: 1.55;
   color: var(--c-fg);
 }
@@ -797,13 +782,13 @@ cite:hover { background: var(--c-accent); }
      Home, reading as a rendering glitch rather than a divider. The breathing
      room moves inside as padding, so the footer always meets whatever precedes
      it flush. */
-  padding: 4rem 0 3.5rem;
+  padding: var(--space-12) 0 3.5rem;
 }
 
 .sources-section .container {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem;
+  gap: var(--space-5);
 }
 
 /* Giant footer wordmark — Home page */
@@ -814,7 +799,7 @@ cite:hover { background: var(--c-accent); }
   letter-spacing: -0.05em;
   text-transform: uppercase;
   text-align: center;
-  margin: 0 0 1rem;
+  margin: 0 0 var(--space-4);
   color: var(--c-bg);
 }
 
@@ -823,14 +808,14 @@ cite:hover { background: var(--c-accent); }
 .sources-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding-bottom: 0.75rem;
+  gap: var(--space-4);
+  padding-bottom: var(--space-3);
   border-bottom: var(--bw) solid var(--c-bg-faint);
 }
 
 .sources-header h3 {
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -855,10 +840,10 @@ cite:hover { background: var(--c-accent); }
 
 .source-list li {
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   line-height: 1.65;
   color: var(--c-bg-soft);
-  padding: 0.45rem 0 0.45rem 0.9rem;
+  padding: var(--space-2) 0 var(--space-2) var(--space-4);
   border-left: var(--bw) solid var(--c-bg-faint);
   transition: border-color 150ms;
 }
@@ -868,7 +853,7 @@ cite:hover { background: var(--c-accent); }
 .source-list li strong {
   color: var(--c-bg);
   display: block;
-  margin-bottom: 0.1rem;
+  margin-bottom: var(--space-1);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -882,15 +867,15 @@ cite:hover { background: var(--c-accent); }
 .footer-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem 1.4rem;
-  padding-top: 0.85rem;
-  margin-top: 0.25rem;
+  gap: var(--space-2) var(--space-6);
+  padding-top: var(--space-3);
+  margin-top: var(--space-1);
   border-top: var(--bw) solid var(--c-bg-faint);
 }
 
 .footer-nav-link {
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--c-bg-soft);
@@ -926,16 +911,16 @@ cite:hover { background: var(--c-accent); }
 .social-links-row {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: var(--space-3);
   flex-wrap: wrap;
-  padding-top: 0.85rem;
-  margin-top: 0.25rem;
+  padding-top: var(--space-3);
+  margin-top: var(--space-1);
   border-top: var(--bw) solid var(--c-bg-faint);
 }
 
 .social-links-label {
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.5;
@@ -944,7 +929,7 @@ cite:hover { background: var(--c-accent); }
 .social-links {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: var(--space-2);
   flex-wrap: wrap;
 }
 
@@ -972,34 +957,34 @@ cite:hover { background: var(--c-accent); }
 /* ─── Utility: mono metadata line ─── */
 .mono-meta {
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   opacity: 0.6;
   line-height: 1.55;
-  margin-top: 0.65rem;
+  margin-top: var(--space-3);
   display: block;
 }
 
 /* ─── Utility: bubble heading / sub-section label (legacy names) ─── */
 .bubble-title {
   font-family: var(--ff-display);
-  font-size: 1.05rem;
+  font-size: var(--text-lg);
   line-height: 1.2;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: var(--c-fg);
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--space-2);
 }
 
 .bubble-subtitle {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.5;
   display: block;
-  margin: 0.9rem 0 0.35rem;
+  margin: var(--space-4) 0 var(--space-1);
 }
 
 .bubble-subtitle::before { content: '// '; }
@@ -1008,18 +993,18 @@ cite:hover { background: var(--c-accent); }
 .stat-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: 0.5rem 0 0.65rem;
+  gap: var(--space-2);
+  margin: var(--space-2) 0 var(--space-3);
 }
 
 .stat-pill {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--c-fg-soft);
   border: var(--bw) solid var(--c-line);
-  padding: 0.18rem 0.5rem;
+  padding: var(--space-1) var(--space-2);
   line-height: 1.5;
 }
 
@@ -1032,8 +1017,8 @@ cite:hover { background: var(--c-accent); }
 .feature-item {
   display: grid;
   grid-template-columns: 52px 1fr;
-  gap: 0 1.5rem;
-  padding: 2rem 0;
+  gap: 0 var(--space-6);
+  padding: var(--space-8) 0;
   border-bottom: var(--bw) solid var(--c-line);
   align-items: start;
 }
@@ -1045,7 +1030,7 @@ cite:hover { background: var(--c-accent); }
 @media (max-width: 580px) {
   .feature-item {
     grid-template-columns: 1fr;
-    gap: 0.85rem 0;
+    gap: var(--space-3) 0;
   }
 }
 
@@ -1091,30 +1076,30 @@ cite:hover { background: var(--c-accent); }
 
 .feature-eyebrow {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.5;
   display: block;
-  margin-bottom: 0.35rem;
+  margin-bottom: var(--space-1);
 }
 
 .feature-title {
   font-family: var(--ff-display);
-  font-size: clamp(1.15rem, 3vw, 1.5rem);
+  font-size: var(--text-fluid-3);
   line-height: 1;
   letter-spacing: -0.03em;
   text-transform: uppercase;
   color: inherit;
-  margin: 0 0 0.75rem;
+  margin: 0 0 var(--space-3);
 }
 
 .feature-body > p {
   font-family: var(--ff-body);
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   line-height: 1.55;
   color: inherit;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
 }
 
 .feature-body > p:last-child { margin-bottom: 0; }
@@ -1123,17 +1108,17 @@ cite:hover { background: var(--c-accent); }
 .feature-body ol {
   list-style: none;
   padding-left: 0;
-  margin-top: 0.4rem;
-  margin-bottom: 0.7rem;
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 
 .feature-body li {
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.03em;
   line-height: 1.7;
   opacity: 0.75;
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--space-1);
 }
 
 .feature-body li::before {
@@ -1145,8 +1130,8 @@ cite:hover { background: var(--c-accent); }
 .feature-item--linked {
   display: grid;
   grid-template-columns: 52px 1fr;
-  gap: 0 1.5rem;
-  padding: 2rem 0;
+  gap: 0 var(--space-6);
+  padding: var(--space-8) 0;
   border-bottom: var(--bw) solid var(--c-line);
   align-items: start;
   text-decoration: none;
@@ -1156,8 +1141,8 @@ cite:hover { background: var(--c-accent); }
 }
 
 .feature-item--linked {
-  padding-inline: 0.75rem;
-  margin-inline: -0.75rem;
+  padding-inline: var(--space-3);
+  margin-inline: -var(--space-3);
 }
 
 .feature-item--linked:hover {
@@ -1168,15 +1153,15 @@ cite:hover { background: var(--c-accent); }
 @media (max-width: 580px) {
   .feature-item--linked {
     grid-template-columns: 1fr;
-    gap: 0.85rem 0;
+    gap: var(--space-3) 0;
   }
 }
 
 .feature-cta {
   display: inline-block;
-  margin-top: 0.9rem;
+  margin-top: var(--space-4);
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-weight: 700;
@@ -1189,21 +1174,21 @@ cite:hover { background: var(--c-accent); }
 /* ─── Policy index — compact per-app legal list (Support page) ─── */
 .policy-list {
   border-top: var(--bw) solid var(--c-line);
-  margin: 0 0 1rem;
+  margin: 0 0 var(--space-4);
 }
 
 .policy-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.4rem 1.5rem;
-  padding: 1.1rem 0;
+  gap: var(--space-2) var(--space-6);
+  padding: var(--space-4) 0;
   border-bottom: var(--bw) solid var(--c-line);
 }
 
 .policy-app {
   font-family: var(--ff-display);
-  font-size: 1rem;
+  font-size: var(--text-lg);
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: var(--c-fg);
@@ -1213,9 +1198,9 @@ cite:hover { background: var(--c-accent); }
 .policy-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem 1.4rem;
+  gap: var(--space-2) var(--space-6);
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -1223,7 +1208,7 @@ cite:hover { background: var(--c-accent); }
 @media (max-width: 580px) {
   .policy-row {
     flex-direction: column;
-    gap: 0.55rem;
+    gap: var(--space-2);
   }
 }
 
@@ -1236,7 +1221,7 @@ cite:hover { background: var(--c-accent); }
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 0.85rem;
+  margin-top: var(--space-3);
   /* Reserve room at both ends so a long title can't slide under the arrows. */
   padding: 0 2.75rem;
 }
@@ -1246,7 +1231,7 @@ cite:hover { background: var(--c-accent); }
   top: 50%;
   transform: translateY(-50%);
   font-family: var(--ff-mono);
-  font-size: 1rem;
+  font-size: var(--text-lg);
   width: 2.25rem;
   height: 2.25rem;
   display: grid;
@@ -1271,7 +1256,7 @@ cite:hover { background: var(--c-accent); }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .project-detail-mark {
@@ -1311,7 +1296,7 @@ cite:hover { background: var(--c-accent); }
 /* ── Cover block: swatch-strip editorial headline ── */
 .project-cover-block {
   position: relative;
-  padding: 2.25rem 0 2rem 1.75rem;
+  padding: var(--space-9) 0 var(--space-8) var(--space-7);
   border-bottom: var(--bw) solid var(--c-line);
 }
 
@@ -1327,30 +1312,30 @@ cite:hover { background: var(--c-accent); }
 
 .project-cover-headline {
   font-family: var(--ff-display);
-  font-size: clamp(1.35rem, 3.5vw, 2rem);
+  font-size: var(--text-fluid-5);
   text-transform: uppercase;
   letter-spacing: -0.03em;
   color: var(--c-fg);
   line-height: 1.05;
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--space-5);
   max-width: 40ch;
 }
 
 .project-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: var(--space-2);
 }
 
 .project-chip {
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--c-fg);
   background: var(--c-bg);
   border: var(--bw) solid var(--c-line);
-  padding: 0.3rem 0.7rem;
+  padding: var(--space-1) var(--space-3);
 }
 
 .project-chip:first-child {
@@ -1388,7 +1373,7 @@ cite:hover { background: var(--c-accent); }
 }
 
 .project-metric-cell {
-  padding: 1.4rem 1.5rem;
+  padding: var(--space-6) var(--space-6);
   background: var(--c-bg);
   /* Grid items default to `min-width: auto`, so a track can never shrink below
      its content's min-content width. A long metric value ("KMS-encrypted",
@@ -1401,7 +1386,7 @@ cite:hover { background: var(--c-accent); }
 .project-metric-value {
   display: block;
   font-family: var(--ff-display);
-  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-size: var(--text-fluid-5);
   text-transform: uppercase;
   letter-spacing: -0.03em;
   color: var(--c-fg);
@@ -1414,11 +1399,11 @@ cite:hover { background: var(--c-accent); }
 .project-metric-label {
   display: block;
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.5;
-  margin-top: 0.4rem;
+  margin-top: var(--space-2);
 }
 
 /* ── Stats bar: 4-column metadata strip ── */
@@ -1429,7 +1414,7 @@ cite:hover { background: var(--c-accent); }
   background: var(--c-line);
   border: var(--bw) solid var(--c-line);
   border-top: none;
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--space-1);
 }
 
 @media (max-width: 580px) {
@@ -1439,7 +1424,7 @@ cite:hover { background: var(--c-accent); }
 }
 
 .project-stat-item {
-  padding: 1.1rem 1rem;
+  padding: var(--space-4) var(--space-4);
   background: var(--c-bg);
   /* Same `min-width: auto` grid trap as .project-metric-cell above. */
   min-width: 0;
@@ -1448,17 +1433,17 @@ cite:hover { background: var(--c-accent); }
 .project-stat-label {
   display: block;
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.4;
-  margin-bottom: 0.3rem;
+  margin-bottom: var(--space-1);
 }
 
 .project-stat-value {
   display: block;
   font-family: var(--ff-mono);
-  font-size: 0.8125rem;
+  font-size: var(--text-md);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -1468,33 +1453,33 @@ cite:hover { background: var(--c-accent); }
 
 /* ── Content sections ── */
 .project-section {
-  margin: 3rem 0 0;
+  margin: var(--space-11) 0 0;
 }
 
 .project-section-body {
   font-family: var(--ff-body);
-  font-size: 1rem;
+  font-size: var(--text-lg);
   line-height: 1.6;
   color: var(--c-fg);
   max-width: 65ch;
-  margin-top: 0.5rem;
+  margin-top: var(--space-2);
 }
 
 /* ── Outcomes: mono arrow list ── */
 .project-outcomes {
   list-style: none;
   padding: 0;
-  margin-top: 0.75rem;
+  margin-top: var(--space-3);
 }
 
 .project-outcomes li {
   position: relative;
-  padding-left: 1.5rem;
+  padding-left: var(--space-6);
   font-family: var(--ff-body);
-  font-size: 1rem;
+  font-size: var(--text-lg);
   line-height: 1.55;
   color: var(--c-fg);
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
 }
 
 .project-outcomes li::before {
@@ -1511,19 +1496,19 @@ cite:hover { background: var(--c-accent); }
 .project-stack-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
 }
 
 .project-stack-pill {
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--c-fg);
   background: var(--c-bg);
   border: var(--bw) solid var(--c-line);
-  padding: 0.35rem 0.8rem;
+  padding: var(--space-1) var(--space-3);
   transition: background 150ms, color 150ms;
 }
 
@@ -1536,19 +1521,19 @@ cite:hover { background: var(--c-accent); }
 .project-tags-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 1.25rem;
-  padding-top: 1.25rem;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
   border-top: var(--bw) solid var(--c-line);
 }
 
 .project-tag {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-fg-soft);
-  padding: 0.22rem 0.6rem;
+  padding: var(--space-1) var(--space-2);
   border: var(--bw) solid var(--c-line);
 }
 
@@ -1556,61 +1541,49 @@ cite:hover { background: var(--c-accent); }
 .project-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 0.75rem;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
 }
 
-/* v8 Ghost Fill (primary) / ghost outline (secondary). */
+/* Primary (ink slab) and secondary (hairline outline), both on bone. */
 .project-link-btn {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: var(--space-2);
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 0.7rem 1.25rem;
-  border: var(--bw-thick) solid var(--neon-cyan);
-  color: var(--neon-cyan);
+  padding: var(--space-3) var(--space-5);
+  min-height: 44px;
+  border: var(--bw-thick) solid var(--c-fg);
+  color: var(--c-bg);
   text-decoration: none;
-  background: var(--neon-btn-bg);
-  text-shadow: 0 0 4px var(--neon-cyan);
-  transition: color 300ms;
+  background: var(--c-fg);
+  transition: background 150ms, color 150ms;
 }
 
-.project-link-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--neon-cyan);
-  transform: translateX(-100%);
-  transition: transform 300ms ease;
-  z-index: -1;
+.project-link-btn:hover {
+  background: var(--c-accent);
+  color: var(--c-fg);
 }
-.project-link-btn:hover { color: var(--neon-btn-bg); text-shadow: none; }
-.project-link-btn:hover::before { transform: translateX(0); }
 
 .project-link-btn.secondary {
-  border-width: var(--bw);
-  border-color: rgba(0, 255, 255, 0.4);
-  color: var(--neon-cyan);
   background: transparent;
-  text-shadow: none;
+  color: var(--c-fg);
+  font-weight: 400;
 }
-.project-link-btn.secondary::before { display: none; }
+
 .project-link-btn.secondary:hover {
-  color: var(--neon-cyan);
-  border-color: var(--neon-cyan);
-  text-shadow: 0 0 4px var(--neon-cyan);
+  background: var(--c-fg);
+  color: var(--c-bg);
 }
 
 /* ── Bottom navigation ── */
 .project-back-nav {
-  margin: 3rem 0 4rem;
-  padding-top: 2rem;
+  margin: var(--space-11) 0 var(--space-12);
+  padding-top: var(--space-8);
   border-top: var(--bw) solid var(--c-line);
   display: flex;
   align-items: center;
@@ -1619,14 +1592,14 @@ cite:hover { background: var(--c-accent); }
 
 .project-back-link {
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--c-fg-soft);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: var(--space-2);
   /* Measured 76x18 — under the 24px floor of WCAG 2.2 SC 2.5.8, and a
      standalone link so the inline-in-a-sentence exception doesn't apply. */
   min-height: 24px;
@@ -1635,7 +1608,7 @@ cite:hover { background: var(--c-accent); }
 
 .project-back-link:hover {
   color: var(--c-fg);
-  gap: 0.6rem;
+  gap: var(--space-2);
 }
 
 /* ─── Per-project case-study theming ─────────────────────────────────────────
@@ -1663,8 +1636,8 @@ main[data-project-theme] .project-cover-block::before {
   --stlmnt-cream: #f6f1e7;
   --stlmnt-hairline: #d8d2c4;
   --stlmnt-newsprint: #6b6b6b;
-  margin-top: 1.25rem;
-  padding: clamp(1.25rem, 4vw, 1.85rem);
+  margin-top: var(--space-5);
+  padding: clamp(1.25rem, 4vw, 1.75rem);
   background: var(--stlmnt-cream);
   border: var(--bw) solid var(--c-line);
   color: var(--stlmnt-ink);
@@ -1674,13 +1647,13 @@ main[data-project-theme] .project-cover-block::before {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 0.9rem;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
 }
 
 .stlmnt-uth-eyebrow {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--stlmnt-newsprint);
@@ -1688,7 +1661,7 @@ main[data-project-theme] .project-cover-block::before {
 
 .stlmnt-uth-total {
   font-family: var(--ff-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-sm);
   color: var(--stlmnt-newsprint);
 }
 
@@ -1707,15 +1680,15 @@ main[data-project-theme] .project-cover-block::before {
 
 .stlmnt-uth-legend {
   list-style: none;
-  margin: 1.1rem 0 0;
+  margin: var(--space-4) 0 0;
   padding: 0;
 }
 
 .stlmnt-uth-row {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.42rem 0;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
   border-bottom: 1px solid var(--stlmnt-hairline);
 }
 
@@ -1731,13 +1704,13 @@ main[data-project-theme] .project-cover-block::before {
   flex: 1;
   font-family: var(--ff-body);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: var(--text-base);
   color: var(--stlmnt-ink);
 }
 
 .stlmnt-uth-count {
   font-family: var(--ff-mono);
-  font-size: 0.8rem;
+  font-size: var(--text-md);
   color: var(--stlmnt-newsprint);
 }
 
@@ -1745,21 +1718,21 @@ main[data-project-theme] .project-cover-block::before {
   width: 3rem;
   text-align: right;
   font-family: var(--ff-mono);
-  font-size: 0.8rem;
+  font-size: var(--text-md);
   color: var(--stlmnt-ink);
 }
 
 .stlmnt-uth-foot {
-  margin-top: 0.9rem;
+  margin-top: var(--space-4);
   font-family: var(--ff-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-sm);
   color: var(--stlmnt-newsprint);
 }
 
 .stlmnt-uth-note {
-  margin-top: 0.5rem;
+  margin-top: var(--space-2);
   max-width: 60ch;
-  font-size: 0.78rem;
+  font-size: var(--text-sm);
   line-height: 1.6;
   color: var(--stlmnt-newsprint);
 }
@@ -1767,7 +1740,7 @@ main[data-project-theme] .project-cover-block::before {
 /* ─── Services accordion ─── */
 .svc-accordion {
   list-style: none;
-  margin: 0.5rem 0 0;
+  margin: var(--space-2) 0 0;
   padding: 0;
   border-block: var(--bw) solid var(--c-line);
 }
@@ -1791,9 +1764,9 @@ main[data-project-theme] .project-cover-block::before {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-4);
   width: 100%;
-  padding: 1.4rem clamp(0.75rem, 2vw, 1.25rem);
+  padding: var(--space-6) clamp(0.75rem, 2vw, 1.25rem);
   text-align: left;
   font: inherit;
   color: inherit;
@@ -1814,7 +1787,7 @@ main[data-project-theme] .project-cover-block::before {
 
 .svc-num {
   font-family: var(--ff-mono);
-  font-size: clamp(0.875rem, 2vw, 1.125rem);
+  font-size: var(--text-fluid-1);
   font-weight: 700;
   opacity: 0.5;
   transition: color 200ms;
@@ -1822,7 +1795,7 @@ main[data-project-theme] .project-cover-block::before {
 
 .svc-name {
   font-family: var(--ff-display);
-  font-size: clamp(1.35rem, 4.5vw, 2.5rem);
+  font-size: var(--text-fluid-6);
   line-height: 0.95;
   letter-spacing: -0.04em;
   text-transform: uppercase;
@@ -1831,7 +1804,7 @@ main[data-project-theme] .project-cover-block::before {
 
 .svc-arrow {
   font-family: var(--ff-mono);
-  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-size: var(--text-fluid-4);
   display: inline-block;
   transition: transform 300ms var(--ease);
   line-height: 1;
@@ -1854,22 +1827,22 @@ main[data-project-theme] .project-cover-block::before {
   padding: 1rem clamp(0.75rem, 2vw, 1.25rem) 2rem;
   border-top: var(--bw) solid var(--c-bg);
   display: grid;
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
 @media (min-width: 720px) {
   .svc-panel-content {
     grid-template-columns: 1.4fr 1fr;
     align-items: start;
-    gap: 2rem;
+    gap: var(--space-8);
   }
 }
 
 .svc-desc {
   font-family: var(--ff-body);
-  font-size: clamp(0.9375rem, 1.4vw, 1.0625rem);
+  font-size: var(--text-fluid-1);
   line-height: 1.45;
-  margin: 0 0 1rem;
+  margin: 0 0 var(--space-4);
   max-width: 50ch;
 }
 
@@ -1878,12 +1851,12 @@ main[data-project-theme] .project-cover-block::before {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.5rem 1rem;
+  gap: var(--space-2) var(--space-4);
 }
 
 .svc-sublist li {
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -1895,27 +1868,27 @@ main[data-project-theme] .project-cover-block::before {
 
 .svc-meta {
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   opacity: 0.6;
   display: block;
-  margin-top: 1.25rem;
+  margin-top: var(--space-5);
 }
 
 .svc-sublabel {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   opacity: 0.5;
   display: block;
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--space-2);
 }
 
 .svc-sublabel::before { content: '// '; }
 
-.svc-panel-content .svc-cta { margin-top: 1.25rem; }
+.svc-panel-content .svc-cta { margin-top: var(--space-5); }
 
 /* v6 Conic Flow — animated cyan→magenta gradient rim (needs @property --angle). */
 .svc-cta {
@@ -1923,25 +1896,30 @@ main[data-project-theme] .project-cover-block::before {
   isolation: isolate;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding: 0.8rem 1.15rem;
-  border: 2px solid transparent;
-  color: var(--neon-txt);
+  padding: var(--space-3) var(--space-5);
+  /* On the ink panel of an open accordion, so the inversion runs the other
+     way: bone fill, ink text. */
+  border: var(--bw-thick) solid var(--c-bg);
+  background: var(--c-bg);
+  color: var(--c-fg);
+  font-weight: 700;
+  min-height: 44px;
   text-decoration: none;
-  background:
-    linear-gradient(var(--neon-btn-bg), var(--neon-btn-bg)) padding-box,
-    conic-gradient(from var(--angle), var(--neon-cyan), var(--neon-magenta), var(--neon-cyan)) border-box;
   justify-self: start;
   align-self: end;
   white-space: nowrap;
+  transition: background 150ms, color 150ms;
 }
 
 .svc-cta:hover {
-  animation: neonRotateAngle 2s linear infinite;
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  color: var(--c-fg);
 }
 
 .svc-cta::after { content: '→'; }
@@ -1950,16 +1928,16 @@ main[data-project-theme] .project-cover-block::before {
 .contact-hero {
   background: var(--c-fg);
   color: var(--c-bg);
-  margin: 1.75rem 0 0.5rem;
+  margin: var(--space-7) 0 var(--space-2);
   padding: 2rem clamp(1.25rem, 4vw, 2.25rem);
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: var(--space-3);
 }
 
 .contact-hero-label {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-bg-soft);
@@ -1968,7 +1946,7 @@ main[data-project-theme] .project-cover-block::before {
 
 .contact-hero-email {
   font-family: var(--ff-display);
-  font-size: clamp(1.25rem, 4vw, 1.85rem);
+  font-size: var(--text-fluid-4);
   text-transform: uppercase;
   color: var(--c-bg);
   text-decoration: none;
@@ -1982,28 +1960,28 @@ main[data-project-theme] .project-cover-block::before {
 
 .contact-hero-sub {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-bg-soft);
   display: block;
-  margin-top: 0.15rem;
+  margin-top: var(--space-1);
 }
 
 /* ─── Contact Form — black panel, brutalist fields ─── */
 .contact-form {
   background: var(--c-fg);
   color: var(--c-bg);
-  margin: 1.75rem 0 0.5rem;
+  margin: var(--space-7) 0 var(--space-2);
   padding: 2rem clamp(1.25rem, 4vw, 2.25rem) 2.25rem;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--space-5);
 }
 
 .contact-form-eyebrow {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-bg-soft);
@@ -2012,7 +1990,7 @@ main[data-project-theme] .project-cover-block::before {
 
 .contact-form-title {
   font-family: var(--ff-display);
-  font-size: clamp(1.15rem, 3vw, 1.5rem);
+  font-size: var(--text-fluid-3);
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: var(--c-bg);
@@ -2022,7 +2000,7 @@ main[data-project-theme] .project-cover-block::before {
 
 .contact-form-sub {
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--c-bg-soft);
@@ -2032,7 +2010,7 @@ main[data-project-theme] .project-cover-block::before {
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 @media (max-width: 580px) {
@@ -2042,12 +2020,12 @@ main[data-project-theme] .project-cover-block::before {
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: var(--space-2);
 }
 
 .form-label {
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-bg-soft);
@@ -2057,10 +2035,10 @@ main[data-project-theme] .project-cover-block::before {
 .form-textarea {
   background: var(--c-fg);
   border: var(--bw-thick) solid var(--c-bg-soft);
-  padding: 0.75rem 0.9rem;
+  padding: var(--space-3) var(--space-4);
   color: var(--c-bg);
   font-family: var(--ff-mono);
-  font-size: 0.8125rem;
+  font-size: var(--text-md);
   line-height: 1.6;
   width: 100%;
   transition: border-color 150ms;
@@ -2092,9 +2070,9 @@ main[data-project-theme] .project-cover-block::before {
 .form-submit-row {
   display: flex;
   align-items: center;
-  gap: 1.1rem;
+  gap: var(--space-4);
   flex-wrap: wrap;
-  padding-top: 0.25rem;
+  padding-top: var(--space-1);
 }
 
 /* v17 Battery Charge — the green fill "charges" across on hover, then fires. */
@@ -2103,21 +2081,22 @@ main[data-project-theme] .project-cover-block::before {
   overflow: hidden;
   isolation: isolate;
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   min-height: 44px;
-  color: var(--neon-green);
-  background: var(--neon-btn-bg);
-  border: var(--bw-thick) solid var(--neon-green);
-  text-shadow: 0 0 4px var(--neon-green);
-  padding: 0.75rem 1.6rem;
+  /* On the ink form panel: bone fill, ink text. The charge-across sweep is
+     kept — it is motion, not glow — recoloured to the one accent. */
+  color: var(--c-fg);
+  background: var(--c-bg);
+  border: var(--bw-thick) solid var(--c-bg);
+  padding: var(--space-3) var(--space-6);
   cursor: pointer;
   transition: color 300ms, opacity 150ms;
   border-radius: 0;
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
 .form-submit-btn::before {
@@ -2125,19 +2104,19 @@ main[data-project-theme] .project-cover-block::before {
   position: absolute;
   inset: 0;
   width: 0%;
-  background: var(--neon-green);
+  background: var(--c-accent);
   z-index: -1;
   transition: width 400ms ease;
 }
 .form-submit-btn::after { content: '→'; }
 
-.form-submit-btn:hover:not(:disabled) { color: var(--neon-btn-bg); text-shadow: none; }
+.form-submit-btn:hover:not(:disabled) { color: var(--c-fg); }
 .form-submit-btn:hover:not(:disabled)::before { width: 100%; }
 .form-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .form-status {
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   line-height: 1.55;
@@ -2151,9 +2130,9 @@ main[data-project-theme] .project-cover-block::before {
 .consult-cta {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  margin: 1.75rem 0 0.5rem;
-  padding: 1.35rem 1.6rem;
+  gap: var(--space-5);
+  margin: var(--space-7) 0 var(--space-2);
+  padding: var(--space-5) var(--space-6);
   background: var(--c-bg);
   border: var(--bw-thick) solid var(--c-line);
 }
@@ -2174,27 +2153,27 @@ main[data-project-theme] .project-cover-block::before {
 
 .consult-cta-eyebrow {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.5;
   display: block;
-  margin-bottom: 0.3rem;
+  margin-bottom: var(--space-1);
 }
 
 .consult-cta-title {
   font-family: var(--ff-display);
-  font-size: clamp(1.05rem, 2.8vw, 1.3rem);
+  font-size: var(--text-fluid-2);
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: var(--c-fg);
   line-height: 1.1;
-  margin: 0 0 0.25rem;
+  margin: 0 0 var(--space-1);
 }
 
 .consult-cta-blurb {
   font-family: var(--ff-body);
-  font-size: 0.9rem;
+  font-size: var(--text-base);
   line-height: 1.5;
   color: var(--c-fg-soft);
   margin: 0;
@@ -2208,48 +2187,51 @@ main[data-project-theme] .project-cover-block::before {
   isolation: isolate;
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: var(--space-2);
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 0.85rem 1.3rem;
-  border: var(--bw-thick) solid var(--neon-cyan);
-  color: var(--neon-cyan);
-  background: var(--neon-btn-bg);
-  text-shadow: 0 0 4px var(--neon-cyan);
-  box-shadow: 0 0 6px rgba(0, 255, 255, 0.25);
-  transition: box-shadow 150ms;
+  padding: var(--space-3) var(--space-5);
+  min-height: 44px;
+  font-weight: 700;
+  /* Sits on the bone card of .consult-cta, so it takes the same shape as
+     .hero-cta: ink slab, inversion to the one accent on hover. */
+  border: var(--bw-thick) solid var(--c-fg);
+  color: var(--c-bg);
+  background: var(--c-fg);
+  transition: background 150ms, color 150ms;
 }
 
 .consult-cta-btn:hover {
-  animation: neonPulse 1.2s ease-in-out infinite;
+  background: var(--c-accent);
+  color: var(--c-fg);
 }
 
 @media (max-width: 600px) {
   .consult-cta {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.9rem;
+    gap: var(--space-4);
   }
   .consult-cta-btn { align-self: stretch; justify-content: center; }
 }
 
 /* ─── Contact wizard ─── */
-.wizard { gap: 1.4rem; }
+.wizard { gap: var(--space-6); }
 
 .wizard-progress {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding-bottom: 0.25rem;
+  gap: var(--space-4);
+  padding-bottom: var(--space-1);
 }
 
 .wizard-step-count {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-bg-soft);
@@ -2271,44 +2253,44 @@ main[data-project-theme] .project-cover-block::before {
    the tab order, so suppressing the outline here doesn't hurt keyboard nav. */
 .wizard-stage { outline: none; }
 
-.wizard-step { display: flex; flex-direction: column; gap: 0.4rem; }
+.wizard-step { display: flex; flex-direction: column; gap: var(--space-2); }
 
 .wizard-question {
   font-family: var(--ff-display);
-  font-size: clamp(1.15rem, 3.2vw, 1.5rem);
+  font-size: var(--text-fluid-3);
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: var(--c-bg);
   line-height: 1.05;
-  margin: 0.2rem 0 0;
+  margin: var(--space-1) 0 0;
 }
 
 .wizard-help {
   font-family: var(--ff-body);
-  font-size: 0.875rem;
+  font-size: var(--text-md);
   line-height: 1.5;
   color: var(--c-bg-soft);
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--space-2);
   max-width: 60ch;
 }
 
 .wizard-summary-note {
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.03em;
   line-height: 1.6;
   color: var(--c-bg-soft);
-  margin: 0.4rem 0 0;
+  margin: var(--space-2) 0 0;
 }
 
-.wizard-inline-input { margin-top: 0.8rem; }
+.wizard-inline-input { margin-top: var(--space-3); }
 
 /* Choice cards (single + multi select) */
 .choice-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.7rem;
-  margin-top: 0.4rem;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
 }
 
 @media (max-width: 560px) {
@@ -2318,9 +2300,9 @@ main[data-project-theme] .project-cover-block::before {
 .choice-card {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--space-1);
   text-align: left;
-  padding: 1rem 1.1rem;
+  padding: var(--space-4) var(--space-4);
   background: var(--c-fg);
   border: var(--bw) solid var(--c-bg-soft);
   color: var(--c-bg);
@@ -2338,24 +2320,24 @@ main[data-project-theme] .project-cover-block::before {
   color: var(--c-fg);
 }
 
-.choice-card-icon { color: inherit; margin-bottom: 0.2rem; height: 20px; }
+.choice-card-icon { color: inherit; margin-bottom: var(--space-1); height: 20px; }
 
 .choice-check {
   color: inherit;
   height: 14px;
-  margin-bottom: 0.15rem;
+  margin-bottom: var(--space-1);
 }
 
 .choice-card-label {
   font-family: var(--ff-body);
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   font-weight: 700;
   line-height: 1.3;
 }
 
 .choice-card-desc {
   font-family: var(--ff-body);
-  font-size: 0.8rem;
+  font-size: var(--text-md);
   line-height: 1.45;
   opacity: 0.65;
 }
@@ -2364,16 +2346,16 @@ main[data-project-theme] .project-cover-block::before {
 .chip-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
 }
 
 .chip {
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 0.6rem 0.8rem;
+  padding: var(--space-2) var(--space-3);
   min-height: 40px;
   display: inline-flex;
   align-items: center;
@@ -2395,45 +2377,45 @@ main[data-project-theme] .project-cover-block::before {
 
 /* SEO / GEO rating rows */
 .rating-row {
-  padding: 1.1rem 0;
+  padding: var(--space-4) 0;
   border-top: var(--bw) solid var(--c-bg-faint);
 }
-.rating-row:first-of-type { border-top: none; padding-top: 0.4rem; }
+.rating-row:first-of-type { border-top: none; padding-top: var(--space-2); }
 
 .rating-label-icon { color: var(--c-accent); vertical-align: middle; }
 
 .rating-label-title {
   font-family: var(--ff-body);
-  font-size: 0.9rem;
+  font-size: var(--text-base);
   font-weight: 700;
   color: var(--c-bg);
-  margin-left: 0.45rem;
+  margin-left: var(--space-2);
   vertical-align: middle;
 }
 
 .rating-label-desc {
   display: block;
   font-family: var(--ff-body);
-  font-size: 0.82rem;
+  font-size: var(--text-md);
   line-height: 1.5;
   color: var(--c-bg-soft);
-  margin-top: 0.4rem;
+  margin-top: var(--space-2);
   max-width: 58ch;
 }
 
 .rating-options {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.7rem;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
 }
 
 .rating-opt {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 0.55rem 0.75rem;
+  padding: var(--space-2) var(--space-3);
   min-height: 44px;
   display: inline-flex;
   align-items: center;
@@ -2458,11 +2440,11 @@ main[data-project-theme] .project-cover-block::before {
   .rating-options {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 }
 
-.form-label-icon { color: var(--c-accent); vertical-align: middle; margin-right: 0.1rem; }
+.form-label-icon { color: var(--c-accent); vertical-align: middle; margin-right: var(--space-1); }
 
 /* Subtle "optional" tag inside a form label */
 .form-label-opt {
@@ -2471,7 +2453,7 @@ main[data-project-theme] .project-cover-block::before {
   text-transform: none;
   font-size: 0.92em;
   opacity: 0.5;
-  margin-left: 0.35rem;
+  margin-left: var(--space-1);
 }
 
 /* Wizard navigation row */
@@ -2479,9 +2461,9 @@ main[data-project-theme] .project-cover-block::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  margin-top: 0.4rem;
-  padding-top: 1.1rem;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+  padding-top: var(--space-4);
   border-top: var(--bw) solid var(--c-bg-faint);
 }
 
@@ -2489,9 +2471,9 @@ main[data-project-theme] .project-cover-block::before {
 .wizard-next {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: var(--space-2);
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
@@ -2499,27 +2481,31 @@ main[data-project-theme] .project-cover-block::before {
   transition: background 150ms, border-color 150ms, color 150ms;
 }
 
-/* ghost outline — quiet secondary; lights up on hover, no glow at rest. */
+/* Quiet secondary on the ink panel: bone hairline, inverts on hover. */
 .wizard-back {
-  position: relative;
   background: transparent;
-  border: var(--bw) solid rgba(0, 255, 255, 0.4);
-  color: var(--neon-cyan);
-  padding: 0.7rem 1.1rem;
+  border: var(--bw) solid var(--c-bg-soft);
+  color: var(--c-bg);
+  padding: var(--space-3) var(--space-4);
   min-height: 44px;
 }
-.wizard-back:hover { border-color: var(--neon-cyan); text-shadow: 0 0 4px var(--neon-cyan); }
+.wizard-back:hover {
+  background: var(--c-bg);
+  border-color: var(--c-bg);
+  color: var(--c-fg);
+}
 
-/* v8 Ghost Fill — cyan fill slides in from the left on hover. */
+/* Primary on the ink panel: bone fill, ink text. The fill-from-left sweep is
+   kept as motion and recoloured to the one accent. */
 .wizard-next {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  background: var(--neon-btn-bg);
-  border: var(--bw-thick) solid var(--neon-cyan);
-  color: var(--neon-cyan);
-  text-shadow: 0 0 4px var(--neon-cyan);
-  padding: 0.7rem 1.35rem;
+  background: var(--c-bg);
+  border: var(--bw-thick) solid var(--c-bg);
+  color: var(--c-fg);
+  font-weight: 700;
+  padding: var(--space-3) var(--space-5);
   min-height: 44px;
   transition: color 300ms;
 }
@@ -2527,27 +2513,27 @@ main[data-project-theme] .project-cover-block::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--neon-cyan);
+  background: var(--c-accent);
   transform: translateX(-100%);
   transition: transform 300ms ease;
   z-index: -1;
 }
-.wizard-next:hover { color: var(--neon-btn-bg); text-shadow: none; }
+.wizard-next:hover { color: var(--c-fg); }
 .wizard-next:hover::before { transform: translateX(0); }
 
 /* ─── Voice note recorder (lives inside the dark form) ─── */
-.voice-note { display: flex; flex-direction: column; gap: 0.6rem; }
+.voice-note { display: flex; flex-direction: column; gap: var(--space-2); }
 
 .voice-note-btn {
   align-self: flex-start;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 0.65rem 1.05rem;
+  padding: var(--space-3) var(--space-4);
   border: var(--bw) solid var(--c-bg-soft);
   background: transparent;
   color: var(--c-bg);
@@ -2561,7 +2547,7 @@ main[data-project-theme] .project-cover-block::before {
   color: var(--c-bg);
 }
 
-.voice-note-live { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.voice-note-live { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
 
 .voice-note-pulse {
   width: 9px;
@@ -2577,20 +2563,20 @@ main[data-project-theme] .project-cover-block::before {
 
 .voice-note-timer {
   font-family: var(--ff-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.08em;
   color: var(--c-bg-soft);
 }
 .voice-note-max { opacity: 0.5; }
 
-.voice-note-done { display: flex; flex-direction: column; gap: 0.6rem; align-items: flex-start; }
+.voice-note-done { display: flex; flex-direction: column; gap: var(--space-2); align-items: flex-start; }
 
 .voice-note-saved {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: var(--space-2);
   font-family: var(--ff-mono);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-accent);
@@ -2599,12 +2585,12 @@ main[data-project-theme] .project-cover-block::before {
 .vn-player {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: var(--space-3);
   width: 100%;
   max-width: 340px;
   background: transparent;
   border: var(--bw) solid var(--c-bg-soft);
-  padding: 0.5rem 0.75rem;
+  padding: var(--space-2) var(--space-3);
 }
 
 .vn-play {
@@ -2643,7 +2629,7 @@ main[data-project-theme] .project-cover-block::before {
 .vn-time {
   flex-shrink: 0;
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   color: var(--c-bg-soft);
   white-space: nowrap;
@@ -2652,9 +2638,9 @@ main[data-project-theme] .project-cover-block::before {
 .voice-note-discard {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--space-1);
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-bg-soft);
@@ -2667,7 +2653,7 @@ main[data-project-theme] .project-cover-block::before {
 
 .voice-note-hint {
   font-family: var(--ff-body);
-  font-size: 0.82rem;
+  font-size: var(--text-md);
   line-height: 1.5;
   color: var(--c-bg-soft);
   margin: 0;
@@ -2690,31 +2676,31 @@ main a:hover {
 /* ─── Legal document pages — readability-first token retheme ─── */
 .legal-subsection {
   font-family: var(--ff-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.6;
-  margin: 1.75rem 0 0.6rem;
-  padding-bottom: 0.35rem;
+  margin: var(--space-7) 0 var(--space-2);
+  padding-bottom: var(--space-1);
   border-bottom: var(--bw) solid var(--c-line);
 }
 
 .legal-list {
-  padding-left: 1.35rem;
-  margin: 0.6rem 0 1rem;
+  padding-left: var(--space-5);
+  margin: var(--space-2) 0 var(--space-4);
 }
 
 .legal-list li {
   font-family: var(--ff-body);
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   line-height: 1.7;
   color: var(--c-fg);
-  margin-bottom: 0.45rem;
+  margin-bottom: var(--space-2);
 }
 
 .legal-allcaps {
   font-family: var(--ff-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.04em;
   line-height: 1.72;
   text-transform: uppercase;
@@ -2722,14 +2708,14 @@ main a:hover {
 
 .legal-list.legal-allcaps li {
   font-family: var(--ff-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-sm);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .legal-table-wrap {
   overflow-x: auto;
-  margin: 1rem 0 1.25rem;
+  margin: var(--space-4) 0 var(--space-5);
   border: var(--bw) solid var(--c-line);
 }
 
@@ -2737,24 +2723,24 @@ main a:hover {
   width: 100%;
   border-collapse: collapse;
   font-family: var(--ff-body);
-  font-size: 0.9rem;
+  font-size: var(--text-base);
   line-height: 1.6;
 }
 
 .legal-table th {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.7;
-  padding: 0.7rem 1rem;
+  padding: var(--space-3) var(--space-4);
   text-align: left;
   border-bottom: var(--bw-thick) solid var(--c-line);
   white-space: nowrap;
 }
 
 .legal-table td {
-  padding: 0.85rem 1rem;
+  padding: var(--space-3) var(--space-4);
   border-bottom: var(--bw) solid var(--c-line);
   color: var(--c-fg);
   vertical-align: top;
@@ -2764,20 +2750,16 @@ main a:hover {
 
 .legal-table-note {
   font-family: var(--ff-mono);
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   opacity: 0.6;
   display: block;
-  margin-top: 0.2rem;
+  margin-top: var(--space-1);
 }
 
 /* ─── Reduced motion — kill marquee, collapse, and transitions ─── */
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; padding-left: 0; }
   .voice-note-pulse { animation: none; }
-  .contact-fab:hover {
-    animation: none;
-    box-shadow: 0 0 16px oklch(72% 0.19 50 / 0.6);
-  }
   .masthead,
   .overline,
   .masthead h1,
@@ -2797,16 +2779,10 @@ main a:hover {
 /* ═══════════════════════════════════════════════════════════════════════
    BRUTALIST "LOUD LIGHT" SYSTEM
    Adapted from the CodePenz "Brutalist Scroll Page". Additive + opt-in:
-   only elements carrying .section--<color>, .neon-btn, or the utility
+   only elements carrying .section--<color> or the utility
    classes below change — the bone + ink base is untouched. --c-ink (#0a0a0a)
    draws every thick border + outline so it reads jet-black on any hue.
    ═══════════════════════════════════════════════════════════════════════ */
-
-/* @property — lets the conic-gradient rim (neon v6) animate its angle.
-   Chromium · Safari 16.4+ · Firefox 128+; elsewhere the rim is a static
-   gradient (graceful, not broken). */
-@property --angle  { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
-@property --angle2 { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
 
 /* ─── Full-bleed loud section blocks ───
    .section escapes the 880px column; its inner .container keeps the measure.
@@ -2914,7 +2890,7 @@ main a:hover {
 .stamp {
   display: inline-block;
   font-family: var(--ff-stamp);
-  font-size: clamp(1rem, 2vw, 1.35rem);
+  font-size: var(--text-fluid-4);
   letter-spacing: 0.14em;
   padding: 0.05em 0.5em;
   border: var(--bw-brutal) solid var(--c-ink);
@@ -2925,51 +2901,25 @@ main a:hover {
 
 /* ─── Brutalist reduced-motion / contrast / forced-colors guards ─── */
 @media (prefers-reduced-motion: reduce) {
-  /* .neon-btn is the reusable base, but none of the CTAs actually shipped with
-     it — the real ones are .consult-cta-btn (neonPulse, infinite) and .svc-cta
-     (neonRotateAngle, infinite), both triggered on hover. So the guard was
-     naming a class no button had, and hovering the primary "Book a time" CTA
-     pulsed forever with reduced motion requested. */
-  .neon-btn, .neon-btn *,
-  .consult-cta-btn, .consult-cta-btn:hover,
-  .svc-cta, .svc-cta:hover { animation: none !important; }
+  /* The CTAs no longer carry infinite hover animations — .consult-cta-btn's
+     neonPulse and .svc-cta's neonRotateAngle went with the neon system — so
+     there is nothing left here to stop but the grain. The remaining button
+     motion is a one-shot fill on hover, which the global transition-duration
+     override below already flattens. */
   .section::after { animation: none; }
 }
 @media (prefers-contrast: more), (forced-colors: active) {
   .section::after { display: none; }   /* grain destroys contrast */
-  .neon-btn { box-shadow: none; }       /* drop neon glow */
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
-   CYBERPUNK NEON BUTTONS  (ported from the CodePenz "cyberpunk neon button
-   variants"). Every variant keeps the dark #0a0f1c slab body so its glow
-   reads as a jewel against the loud section colors. Shared keyframes live
-   here; each of the site's real CTA classes (below) carries one variant:
-     v1 Neon Pulse → .consult-cta-btn      (primary: Book a time)
-     v13 HUD Corners → .contact-fab         (persistent floating Contact)
-     v6 Conic Flow → .svc-cta               (Start here)
-     v17 Battery Charge → .form-submit-btn  (Send message)
-     v8 Ghost Fill → .wizard-next, .project-link-btn
-     ghost outline → .wizard-back, .project-link-btn.secondary
-   .neon-btn is a reusable base for future pages.
-   ═══════════════════════════════════════════════════════════════════════ */
-.neon-btn {
-  position: relative; overflow: hidden; isolation: isolate;
-  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-  font-family: var(--ff-mono); font-size: 0.75rem; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
-  padding: 0.8rem 1.25rem; cursor: pointer;
-  background: var(--neon-btn-bg); color: var(--neon-cyan);
-  border: var(--bw-thick) solid var(--neon-cyan);
-  text-shadow: 0 0 4px var(--neon-cyan);
-}
-@keyframes neonPulse {
-  0%, 100% { box-shadow: 0 0 6px var(--neon-cyan), inset 0 0 6px rgba(0, 255, 255, 0.2);
-             text-shadow: 0 0 4px var(--neon-cyan); }
-  50%      { box-shadow: 0 0 22px var(--neon-cyan), inset 0 0 14px rgba(0, 255, 255, 0.4);
-             text-shadow: 0 0 12px var(--neon-cyan), 0 0 24px var(--neon-cyan); }
-}
-@keyframes neonRotateAngle { to { --angle: 360deg; } }
+/* The cyberpunk neon button system lived here: a .neon-btn base, @keyframes
+   neonPulse and neonRotateAngle, and a #0a0f1c slab body carried by all seven
+   of the site's CTAs. It was a third visual language on a site whose token file
+   opens by declaring "zero border-radius, zero shadows: hairlines and inversion
+   carry all structure and depth" — and it owned the entire conversion path,
+   so every element a visitor had to act on was styled in a vocabulary that
+   appeared nowhere else. The buttons now use the same ink/bone inversion as
+   the rest of the system, in two surface variants (on bone, on ink). */
 
 /* ─── Custom cursor — an accent dot that trails the real pointer, mounted
    only on fine pointers and never under reduced motion ─── */
