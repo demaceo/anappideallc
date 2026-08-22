@@ -79,6 +79,24 @@ permanently collapsed: no headline, no subtitle, no eyebrow, no email line — o
 every route. The value proposition never renders at all. This is invisible to
 anyone testing in a current browser, which is why it survived.
 
+Worth pinning down how far inside the support window this reached. The project
+sets no `build.target` and ships no browserslist, so Vite 8's default applies —
+`baseline-widely-available`, which resolves to:
+
+```
+["chrome111", "edge111", "firefox114", "safari16.4", "ios16.4"]
+```
+
+`animation-timeline` did not reach Safari until **26**. Every Safari and iOS
+version from **16.4 through 25** therefore sat inside the project's own declared
+support target while receiving a hero that never rendered — this was not an
+edge case at the far margin of support, it was most of the declared range.
+
+(Checked and cleared while confirming the above: the CSS minifier rewrites all
+18 width media queries into Media Queries Level 4 range syntax — `width<=640px`
+rather than `max-width: 640px`. Range syntax also landed in Safari 16.4, so
+that output is exactly consistent with the target and is **not** a defect.)
+
 **Fixed** by wrapping every collapse rule in
 `@supports (animation-timeline: scroll(root))`. Unsupported browsers now get the
 static full-size masthead declared in the base rules, which is the correct
