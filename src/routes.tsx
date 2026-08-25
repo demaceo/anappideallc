@@ -9,6 +9,8 @@ import Contact from './pages/Contact'
 import WhyNotAI from './pages/WhyNotAI'
 import Support from './pages/Support'
 import ProjectDetail from './pages/ProjectDetail'
+import LegalIndex from './pages/legal/LegalIndex'
+import LegalApp from './pages/legal/LegalApp'
 import DrayageProPrivacy from './pages/legal/DrayageProPrivacy'
 import DrayageProTerms from './pages/legal/DrayageProTerms'
 import PinpointPrivacy from './pages/legal/PinpointPrivacy'
@@ -38,6 +40,8 @@ export const routes: RouteObject[] = [
       { path: 'why-not-ai', Component: WhyNotAI },
       { path: 'support', Component: Support },
       { path: 'contact', Component: Contact },
+      { path: 'legal', Component: LegalIndex },
+      { path: 'legal/:app', Component: LegalApp },
       { path: 'legal/drayagepro/privacy', Component: DrayageProPrivacy },
       { path: 'legal/drayagepro/terms', Component: DrayageProTerms },
       { path: 'legal/pinpoint/privacy', Component: PinpointPrivacy },
@@ -77,6 +81,14 @@ export const PRERENDER_PATHS = [
   '/why-not-ai',
   '/support',
   '/contact',
+  '/legal',
+  '/legal/yap',
+  '/legal/payback',
+  '/legal/pinpoint',
+  '/legal/drayagepro',
+  '/legal/zoori',
+  '/legal/fengshui',
+  '/legal/stlmnt',
   '/legal/drayagepro/privacy',
   '/legal/drayagepro/terms',
   '/legal/pinpoint/privacy',
