@@ -56,9 +56,9 @@ describe('SiteNav — current route is exposed (audit P2)', () => {
  * prose links mid-page.
  */
 describe('FooterNav — full site index (audit P2)', () => {
-  const EXPECTED = ['About', 'Work', 'Services', 'Process', 'Why not AI', 'Support', 'Contact']
+  const EXPECTED = ['About', 'Work', 'Services', 'Process', 'Why not AI', 'Support', 'Legal', 'Contact']
 
-  it.each(['/', '/about', '/work', '/services', '/process', '/contact', '/support', '/why-not-ai'])(
+  it.each(['/', '/about', '/work', '/services', '/process', '/contact', '/support', '/why-not-ai', '/legal'])(
     'renders the full link set on %s',
     (path) => {
       const { unmount } = renderRoute(path)

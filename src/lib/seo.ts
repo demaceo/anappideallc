@@ -55,6 +55,54 @@ export const META: Record<string, { title: string; description: string; path: st
       'Support for every app by An App Idea LLC. Report a bug, delete your data, manage a subscription, or ask a question. Answered directly by the builder, within 1–2 business days. Privacy and terms for each app.',
     path: '/support',
   },
+  '/legal': {
+    title: `Legal: Privacy Policy & Terms for Every App | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for every app published by An App Idea LLC: The Yap App, Ôwn (Payback), Pinpoint, DrayagePro TMS, Zoori, Feng Shui, and STLMNT.',
+    path: '/legal',
+  },
+  '/legal/yap': {
+    title: `Legal — The Yap App | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for The Yap App, the live translation app by An App Idea LLC.',
+    path: '/legal/yap',
+  },
+  '/legal/payback': {
+    title: `Legal — Ôwn (Payback) | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for Ôwn (Payback Own), the local-first consumer insights app by An App Idea LLC.',
+    path: '/legal/payback',
+  },
+  '/legal/pinpoint': {
+    title: `Legal — Pinpoint | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for Pinpoint, the civic engagement app by An App Idea LLC.',
+    path: '/legal/pinpoint',
+  },
+  '/legal/drayagepro': {
+    title: `Legal — DrayagePro TMS | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for DrayagePro TMS, the transportation management app by An App Idea LLC.',
+    path: '/legal/drayagepro',
+  },
+  '/legal/zoori': {
+    title: `Legal — Zoori | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for Zoori, the pet care app by An App Idea LLC.',
+    path: '/legal/zoori',
+  },
+  '/legal/fengshui': {
+    title: `Legal — Feng Shui | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for Feng Shui, the spatial analysis app by An App Idea LLC.',
+    path: '/legal/fengshui',
+  },
+  '/legal/stlmnt': {
+    title: `Legal — STLMNT | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for STLMNT, the class action settlement tracker by An App Idea LLC.',
+    path: '/legal/stlmnt',
+  },
   '/work/stlmnt-settlement-tracker': {
     title: `STLMNT — Class Action Settlement Tracker | ${SITE.name}`,
     description:
