@@ -13,7 +13,7 @@ export default function PaybackPrivacy() {
         appLabel="Ôwn (Payback)"
         docType="privacy"
         subtitle={`Ôwn (Payback Own) — ${OPERATOR}`}
-        dateLine="Effective: December 8, 2025 · Last Updated: May 27, 2026"
+        dateLine="Effective: December 8, 2025 · Last Updated: September 17, 2026"
       >
 
         <div className="intro-block">
@@ -28,8 +28,9 @@ export default function PaybackPrivacy() {
           <p>
             "Your data is never sold. Your vault is built on your phone and encrypted (AES-256). We
             don't keep your data on our servers. AI analysis runs only when you ask it to — and
-            what's sent for that analysis isn't retained by us. You have read-only access to the
-            sources you connect, and you can disconnect or delete everything at any time."
+            what's sent for that analysis isn't retained by us. We only read the sources you
+            connect, never changing, creating, or deleting anything in them, and you can
+            disconnect or delete everything at any time."
           </p>
           <span className="attrib">— Our promise to you, in plain language</span>
         </div>
@@ -39,9 +40,9 @@ export default function PaybackPrivacy() {
             <strong>Core Privacy Principle:</strong> Payback Own is designed with a local-first
             architecture. Most file selection, parsing, storage, and many analysis steps occur on
             your device. Some features also transmit data off-device, including Google sign-in/
-            profile data, AI analysis inputs, analytics sync records, and app-launch telemetry. We
-            do not use your data for cross-app tracking, data-broker sharing, or third-party
-            advertising.
+            profile data, AI analysis inputs, analytics sync records, and over-the-air update
+            checks. We do not use your data for cross-app tracking, data-broker sharing, or
+            third-party advertising.
           </p>
         </div>
 
@@ -90,8 +91,8 @@ export default function PaybackPrivacy() {
 
         <p><strong>Sign in with Google</strong></p>
         <ul className="legal-list">
-          <li><strong>Google OAuth Tokens (Drive):</strong> Used for Google Drive access to retrieve your Takeout files. Scope: <code>drive.readonly</code>.</li>
-          <li><strong>Google OAuth Tokens (Gmail + Calendar):</strong> Used during Instant Analysis to extract behavioral signals. Scopes: <code>gmail.readonly</code>, <code>calendar.readonly</code>.</li>
+          <li><strong>Google OAuth Tokens (Sign-in):</strong> Sign-in requests identity only. Scopes: <code>openid</code>, <code>email</code>, <code>profile</code>. No Gmail, Calendar, or Drive scope is requested at sign-in.</li>
+          <li><strong>Google OAuth Tokens (Drive, per file):</strong> Importing a file from Google Drive uses a separate, optional grant you make through the Google Picker for that specific file. Scope: <code>drive.file</code>. The App can never list or browse your Drive.</li>
           <li><strong>Google Profile Information:</strong> During sign-in, we may receive your name, email address, Google user ID, and profile photo URL from Google and Firebase authentication services.</li>
         </ul>
 
@@ -140,7 +141,7 @@ export default function PaybackPrivacy() {
         <h3 className="legal-subsection">Off-Device Processing and AI Analysis</h3>
         <p>When you use AI-powered features, some data is transmitted off-device:</p>
         <ul className="legal-list">
-          <li><strong>Instant Analysis:</strong> Gmail and Calendar behavioral signals extracted on-device, such as purchase patterns, vendor summaries, subscription summaries, travel events, destinations, recurring activities, and time-allocation signals.</li>
+          <li><strong>Instant Analysis:</strong> Signals read from your device's own calendar, photo library and contacts, and reduced on the device before anything is sent. What leaves is counts, time buckets, percentages and distances, such as how many distinct places you visited or how broad your contact network is. Event titles, photo coordinates, photo or video content, and contact names never leave the device.</li>
           <li><strong>Quick Analysis and Freestyle:</strong> Selected export or uploaded file contents and metadata may be sent for AI analysis. Depending on what you choose to analyze, this can include search history, browsing history, location history, purchases, contacts or social graph data, messages, photos or videos metadata, health or fitness exports, ad-interaction data, and other user-provided export contents.</li>
           <li><strong>What is NOT sent:</strong> Your Google or Meta passwords; payment card or bank account credentials entered outside the app; every file in a connected account by default — processing is limited to the files/signals required for the feature you use.</li>
           <li><strong>Service used:</strong> Google's paid Gemini API (model: <code>gemini-2.5-pro</code>) via our secure backend proxy. The paid tier is governed by Google's Cloud Data Processing Addendum and Google's paid-tier usage policy rather than Google AI Studio's free-tier terms.</li>
@@ -168,13 +169,13 @@ export default function PaybackPrivacy() {
             <strong>Google OAuth 2.0 / OpenID / Firebase Authentication</strong> — Authenticate you, create your app session, and associate synced features with your account. Data shared: authentication tokens, name, email, Google user ID, and profile photo URL (if available). <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>
           </li>
           <li>
-            <strong>Google Drive, Gmail, and Calendar APIs</strong> — Access the Google data sources you choose to connect. Scopes: <code>drive.readonly</code>, <code>gmail.readonly</code>, <code>calendar.readonly</code>. Only files, message signals, and calendar signals required for the feature you invoke are accessed.
+            <strong>Google Drive API</strong> — Retrieves only the individual files you grant through the Google Picker. Scope: <code>drive.file</code>. There is no Gmail scope and no Google Calendar scope; calendar signals come from your device's own calendar, not from Google.
           </li>
           <li>
             <strong>Google Gemini AI</strong> (Instant Analysis, Quick Analysis, Freestyle) — AI-powered persona generation, category matching, and behavioral analysis. Model: <code>gemini-2.5-pro</code> (paid API tier). Data shared: behavioral signals and selected file contents/metadata. Prompts may be retained by Google for up to 55 days for abuse monitoring; paid-tier data is not used to train AI/ML models. <a href="https://ai.google.dev/gemini-api/docs/usage-policies" target="_blank" rel="noopener noreferrer">Google AI Usage Policies</a> · <a href="https://cloud.google.com/terms/data-processing-addendum" target="_blank" rel="noopener noreferrer">Cloud DPA</a>
           </li>
           <li>
-            <strong>Expo / EAS Insights</strong> — Operational usage analytics for app launches and release health. Data shared: EAS client ID, project ID, app version, platform, and OS version. <a href="https://docs.expo.dev/eas-insights/introduction/" target="_blank" rel="noopener noreferrer">Expo documentation</a>
+            <strong>Expo / EAS Update</strong> — Delivers over-the-air app updates. Data shared when the app checks for an update: an install-level identifier, project ID, runtime version, release channel, platform, and OS version. <a href="https://docs.expo.dev/eas-update/introduction/" target="_blank" rel="noopener noreferrer">Expo documentation</a>
           </li>
         </ul>
 
@@ -199,8 +200,8 @@ export default function PaybackPrivacy() {
 
         <h3 className="legal-subsection">Data Processing Agreements</h3>
         <p>
-          We engage third-party processors to deliver authentication, AI analysis, telemetry, and
-          hosting. Each processor handles personal data on our behalf under an applicable Data
+          We engage third-party processors to deliver authentication, AI analysis, app updates,
+          and hosting. Each processor handles personal data on our behalf under an applicable Data
           Processing Agreement (DPA). For users in the EEA, UK, Switzerland, and other
           jurisdictions with cross-border transfer requirements, our processors maintain transfer
           safeguards such as the EU Standard Contractual Clauses, the UK International Data
@@ -227,8 +228,8 @@ export default function PaybackPrivacy() {
                 <td><a href="https://railway.com/legal/dpa" target="_blank" rel="noopener noreferrer">Railway Data Processing Addendum</a></td>
               </tr>
               <tr>
-                <td><strong>Expo (650 Industries, Inc.)</strong> — EAS Insights</td>
-                <td>Operational launch telemetry</td>
+                <td><strong>Expo (650 Industries, Inc.)</strong> — EAS Update</td>
+                <td>Over-the-air app update delivery</td>
                 <td><a href="https://expo.dev/terms" target="_blank" rel="noopener noreferrer">Expo Terms incorporating DPA terms</a></td>
               </tr>
             </tbody>
@@ -279,7 +280,7 @@ export default function PaybackPrivacy() {
           <strong>Ôwn</strong> (published as "Payback Own" by {OPERATOR}) is a local-first app
           that analyses your Google and Meta data exports to generate behavioural insights. Most
           processing happens on your device, but some features also use server-side authentication,
-          AI processing, analytics sync, and app-launch telemetry services.
+          AI processing, analytics sync, and over-the-air update delivery.
         </p>
 
         <h3 className="legal-subsection">Option 1 — Delete directly inside the app (instant)</h3>
@@ -364,10 +365,10 @@ export default function PaybackPrivacy() {
                 <td>Tokens, API keys, and AI payload bodies are redacted at the logger before emission</td>
               </tr>
               <tr>
-                <td>App-launch telemetry</td>
+                <td>Over-the-air update check metadata</td>
                 <td>Expo / EAS services</td>
                 <td>Retention governed by Expo</td>
-                <td>May include EAS client ID, project ID, app version, platform, and OS version</td>
+                <td>May include an install identifier, project ID, runtime version, release channel, platform, and OS version</td>
               </tr>
             </tbody>
           </table>
@@ -416,12 +417,20 @@ export default function PaybackPrivacy() {
           <a href={`mailto:${CONTACT}`}>{CONTACT}</a>.
         </p>
 
-        <h3 className="legal-subsection">Operational Telemetry</h3>
+        <h3 className="legal-subsection">App Updates</h3>
         <p>
-          The app uses <strong>Expo / EAS Insights</strong> for launch telemetry and
-          release-health monitoring. This may include EAS client ID, project ID, app version,
-          platform and OS version, and app launch events. We do not currently run a separate
-          crash-reporting or session-replay SDK beyond this operational telemetry.
+          The app uses <strong>Expo / EAS Update</strong> to deliver over-the-air updates. When the
+          app checks for an update, Expo's servers receive the request and may record an
+          install-level identifier, project ID, runtime version, release channel, platform and OS
+          version. This is what an update check necessarily sends in order to return the correct
+          update. It is not usage analytics: no screen views, no session lengths, no
+          feature-engagement events.
+        </p>
+        <p>
+          <strong>We run no analytics, crash-reporting or session-replay SDK of any kind.</strong>{' '}
+          Until version 1.2.0 the app also bundled Expo / EAS Insights, which collected app-launch,
+          performance, crash and device telemetry. That package was removed in 1.2.0 and no longer
+          ships.
         </p>
 
         {/* § 7 */}
@@ -537,7 +546,7 @@ export default function PaybackPrivacy() {
           <li><strong>Local Processing:</strong> Many file-selection, parsing, and storage operations occur on your device.</li>
           <li><strong>Server-Side Processing:</strong> Account/profile sync data may be processed on our backend infrastructure and databases in the United States.</li>
           <li><strong>AI Requests:</strong> When you use AI-backed features, selected signals or file contents/metadata are sent to our backend and then to Google Gemini via encrypted HTTPS.</li>
-          <li><strong>Operational Telemetry:</strong> App launch telemetry may be processed by Expo / EAS services.</li>
+          <li><strong>App Updates:</strong> Over-the-air update checks are processed by Expo / EAS services.</li>
           <li><strong>Safeguards:</strong> Third-party providers apply their own contractual and technical safeguards. Please review their privacy documentation for details.</li>
         </ul>
         <p>
@@ -653,7 +662,7 @@ export default function PaybackPrivacy() {
             </li>
             <li>
               <strong>Last Updated</strong>
-              May 27, 2026 · v1.5
+              September 17, 2026 · v1.6
             </li>
           </ul>
           <SocialLinks />
