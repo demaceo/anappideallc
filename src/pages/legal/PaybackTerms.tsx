@@ -293,7 +293,7 @@ export default function PaybackTerms() {
         <ul className="legal-list">
           <li><strong>Model:</strong> Google Gemini 2.5 Pro</li>
           <li><strong>Architecture:</strong> Backend proxy with OAuth verification</li>
-          <li><strong>Rate limiting:</strong> 5 requests per minute per user, 100 requests per 15 minutes per IP</li>
+          <li><strong>Rate limiting:</strong> a per-user request limit set by our backend configuration, plus 100 requests per 15 minutes per IP address</li>
           <li><strong>Failover:</strong> Dual API keys for high availability</li>
         </ul>
         <p>

@@ -68,7 +68,7 @@ export default function PaybackPrivacy() {
           <li>Other Google service data included in your Takeout export</li>
         </ul>
 
-        <p><strong>2. Meta (Facebook/Instagram) Exports</strong> (Folder structure uploaded to Google Drive)</p>
+        <p><strong>2. Meta (Facebook/Instagram) Exports</strong> (the downloaded <code>.zip</code>, or a folder structure in Dropbox)</p>
         <ul className="legal-list">
           <li>Instagram: Posts, stories, likes, saved posts, searches, ad interactions, messages, following list</li>
           <li>Facebook: Posts, comments, friends list, likes, searches, ad interactions, groups, pages</li>
@@ -76,6 +76,23 @@ export default function PaybackPrivacy() {
           <li>Format: JSON files (recommended) or HTML</li>
           <li>Note: Standard export analysis focuses on structured export contents and media metadata. Some user-selected uploads or export files may still include photo/video-related data depending on the feature you use.</li>
         </ul>
+
+        <p><strong>3. Device Calendar, Photo Library, and Contacts</strong> (read on-device, only if you grant the OS permission)</p>
+        <p>
+          Instant Analysis derives behavioural signals from your device rather than from a Google
+          account. Each source is optional, is requested through the standard iOS/Android
+          permission prompt, and can be revoked at any time in system Settings. The App works with
+          any subset, including none.
+        </p>
+        <ul className="legal-list">
+          <li><strong>Calendar</strong> — events from the calendars your device exposes, covering roughly the previous year and the next three months. This includes calendars synced from other accounts (for example a work Exchange or shared family calendar) if they appear in your device's calendar store. Event titles, locations, times, and attendee counts are read <strong>on your device</strong> to classify events as travel, professional or recurring. Titles and locations are <strong>not</strong> transmitted and are <strong>not</strong> stored.</li>
+          <li><strong>Photo library</strong> — metadata only, for a sample of your most recent photos: capture timestamps and, where the photo carries them, embedded location coordinates. <strong>No image or video content is read, copied, or uploaded.</strong> Coordinates are reduced on-device to a count of distinct areas and a maximum distance; the coordinates themselves never leave the device and are not stored.</li>
+          <li><strong>Contacts</strong> — a count of your contacts and a count of the distinct email domains among them, to gauge how broad your network is. <strong>No names, email addresses, or phone numbers are retained, transmitted, or stored.</strong></li>
+        </ul>
+        <p>
+          On iOS, granting "Selected Photos" or "Select Contacts…" rather than full access is fully
+          supported; the App analyses only what you shared.
+        </p>
 
         <div className="verdict-box note">
           <p>
@@ -193,7 +210,7 @@ export default function PaybackPrivacy() {
           <li><strong>Data processed:</strong> AI analysis requests, account/profile metadata, category analytics scores, consent settings, and sync metadata</li>
           <li><strong>AI request retention:</strong> We do not intentionally persist full AI request contents after request completion</li>
           <li><strong>Analytics/profile retention:</strong> Account-linked analytics and profile sync records may be retained on our backend until you delete them or request deletion, subject to backups</li>
-          <li><strong>Security:</strong> Per-user rate limiting (5 req/min), global IP rate limiting (100 req/15 min), Google OAuth token verification, dual API key failover</li>
+          <li><strong>Security:</strong> A per-user request limit set by our backend configuration, global IP rate limiting (100 req/15 min), Google OAuth token verification, dual API key failover</li>
           <li><strong>Deployment:</strong> Railway (US)</li>
           <li><strong>Logging:</strong> Request metadata and operational metrics emitted as JSON to Railway's platform log stream. Tokens, API keys, and AI payload bodies are redacted by the backend logger automatically. Log retention is governed by Railway's platform log-retention policy.</li>
         </ul>
