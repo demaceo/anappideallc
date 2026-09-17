@@ -94,6 +94,21 @@ export default function PaybackPrivacy() {
           supported; the App analyses only what you shared.
         </p>
 
+        <p><strong>4. Platforms shown in the App but not yet analysed</strong></p>
+        <p>
+          The App displays tiles for <strong>Apple, Microsoft, Amazon, TikTok, Snapchat and
+          Spotify</strong> alongside Google and Meta, each marked as coming soon. Tapping one shows
+          instructions for requesting your export from that service, so you can have it ready.
+        </p>
+        <p>
+          <strong>Only Google Takeout and Meta exports can currently be imported and analysed.</strong>{' '}
+          For the six platforms above the App does not detect, read, import, or transmit anything,
+          and no data from them reaches us or any AI provider. They appear so you can see what is
+          planned and start an export request, which those services can take days to fulfil. If
+          that changes in a future release, the handling described in this policy will apply to
+          them in the same way and this section will be updated.
+        </p>
+
         <div className="verdict-box note">
           <p>
             <strong>Important:</strong> You control what data you provide. The App only accesses

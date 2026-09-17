@@ -80,7 +80,21 @@ export default function PaybackTerms() {
           <li>Supports resumable analysis via checkpoint system</li>
         </ul>
 
-        <h3 className="legal-subsection">2.2 What Payback Own Is NOT</h3>
+        <h3 className="legal-subsection">2.2 Platforms shown but not yet supported</h3>
+        <p>
+          The App displays tiles for <strong>Apple, Microsoft, Amazon, TikTok, Snapchat and
+          Spotify</strong> alongside Google and Meta, each marked as coming soon. Tapping one shows
+          instructions for requesting your export from that service.
+        </p>
+        <p>
+          <strong>Only Google Takeout and Meta exports can currently be imported and analyzed.</strong>{' '}
+          For the six platforms above the App does not detect, read, import, or transmit anything.
+          They are shown so you can see what is planned and begin an export request, which those
+          services can take days to fulfill. Nothing in these Terms should be read as a commitment
+          to ship support for any of them, or to any timeline.
+        </p>
+
+        <h3 className="legal-subsection">2.3 What Payback Own Is NOT</h3>
         <ul className="legal-list">
           <li><strong>Not a Data Broker:</strong> We do not sell, share, or monetize your data</li>
           <li><strong>Not a Social Network:</strong> We do not share data with other users</li>
@@ -89,7 +103,7 @@ export default function PaybackTerms() {
           <li><strong>Not a Guarantee:</strong> Results depend on the quality and completeness of your export data</li>
         </ul>
 
-        <h3 className="legal-subsection">2.3 Beta Software</h3>
+        <h3 className="legal-subsection">2.4 Beta Software</h3>
         <p>
           The App is currently in beta and may contain bugs or incomplete features. We make no
           guarantees about accuracy of analysis results, compatibility with all devices,

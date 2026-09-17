@@ -9,6 +9,8 @@ export interface LegalApp {
   blurb: string
   privacy: string
   terms: string
+  /** Only Payback publishes one today; the hub renders the link when present. */
+  dataDeletion?: string
 }
 
 export const legalApps: LegalApp[] = [
@@ -25,6 +27,7 @@ export const legalApps: LegalApp[] = [
     blurb: 'Local-first consumer insights, built so your data stays on your device.',
     privacy: '/legal/payback/privacy',
     terms: '/legal/payback/terms',
+    dataDeletion: '/legal/payback/data-deletion',
   },
   {
     slug: 'pinpoint',
