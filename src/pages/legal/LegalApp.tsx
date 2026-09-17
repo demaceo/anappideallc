@@ -58,6 +58,20 @@ export default function LegalApp() {
           </div>
         </Link>
 
+        {app.dataDeletion && (
+          <Link to={app.dataDeletion} className="feature-item feature-item--linked">
+            <div className="feature-icon icon-gold">
+              <IconEdit size={20} />
+            </div>
+            <div className="feature-body">
+              <span className="feature-eyebrow">Deleting your data</span>
+              <h3 className="feature-title">Account &amp; Data Deletion</h3>
+              <p>How to delete your account and everything associated with it, and what is removed when.</p>
+              <span className="feature-cta">Read the deletion policy</span>
+            </div>
+          </Link>
+        )}
+
         <div className="project-back-nav">
           <Link to="/legal" className="project-back-link">← All apps</Link>
         </div>

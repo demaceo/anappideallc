@@ -13,7 +13,7 @@ export default function PaybackTerms() {
         appLabel="Ôwn (Payback)"
         docType="terms"
         subtitle={`Ôwn (Payback Own) — ${OPERATOR}`}
-        dateLine="Effective: December 8, 2025 · Last Updated: May 14, 2026"
+        dateLine="Effective: December 8, 2025 · Last Updated: September 17, 2026"
       >
 
         <div className="intro-block">
@@ -80,7 +80,21 @@ export default function PaybackTerms() {
           <li>Supports resumable analysis via checkpoint system</li>
         </ul>
 
-        <h3 className="legal-subsection">2.2 What Payback Own Is NOT</h3>
+        <h3 className="legal-subsection">2.2 Platforms shown but not yet supported</h3>
+        <p>
+          The App displays tiles for <strong>Apple, Microsoft, Amazon, TikTok, Snapchat and
+          Spotify</strong> alongside Google and Meta, each marked as coming soon. Tapping one shows
+          instructions for requesting your export from that service.
+        </p>
+        <p>
+          <strong>Only Google Takeout and Meta exports can currently be imported and analyzed.</strong>{' '}
+          For the six platforms above the App does not detect, read, import, or transmit anything.
+          They are shown so you can see what is planned and begin an export request, which those
+          services can take days to fulfill. Nothing in these Terms should be read as a commitment
+          to ship support for any of them, or to any timeline.
+        </p>
+
+        <h3 className="legal-subsection">2.3 What Payback Own Is NOT</h3>
         <ul className="legal-list">
           <li><strong>Not a Data Broker:</strong> We do not sell, share, or monetize your data</li>
           <li><strong>Not a Social Network:</strong> We do not share data with other users</li>
@@ -89,7 +103,7 @@ export default function PaybackTerms() {
           <li><strong>Not a Guarantee:</strong> Results depend on the quality and completeness of your export data</li>
         </ul>
 
-        <h3 className="legal-subsection">2.3 Beta Software</h3>
+        <h3 className="legal-subsection">2.4 Beta Software</h3>
         <p>
           The App is currently in beta and may contain bugs or incomplete features. We make no
           guarantees about accuracy of analysis results, compatibility with all devices,
@@ -139,14 +153,15 @@ export default function PaybackTerms() {
           name on first sign-in. No passwords are stored by Payback.
         </p>
         <p>
-          <strong>Sign in with Google.</strong> To use features that require Google data, you
-          must have a valid Google account and grant the App read-only access to your Google Drive
-          (<code>drive.readonly</code> scope) for Takeout imports. For Instant Analysis,
-          additionally grant read-only Gmail (<code>gmail.readonly</code>) and Calendar (
-          <code>calendar.readonly</code>) scopes — Gmail and Calendar signal extraction runs
-          on-device; only the extracted behavioural signals are sent off-device for AI analysis.
-          Authenticate via Google OAuth 2.0 (no passwords stored by Payback). Comply with Google's
-          Terms of Service.
+          <strong>Sign in with Google.</strong> Sign-in requires a valid Google account and
+          requests identity only (<code>openid</code>, <code>email</code>, <code>profile</code>).
+          Importing a file from Google Drive is a separate, optional grant you make for that
+          specific file through the Google Picker (<code>drive.file</code>), so the App can never
+          list or browse your Drive. No Gmail scope and no Google Calendar scope is requested.
+          Instant Analysis instead reads your device's own calendar, photo library and contacts,
+          each optional, and reduces them on the device; only the derived signals are sent
+          off-device for AI analysis. Authenticate via Google OAuth 2.0 (no passwords stored by
+          Payback). Comply with Google's Terms of Service.
         </p>
 
         <h3 className="legal-subsection">4.2 Account Security</h3>
@@ -232,7 +247,7 @@ export default function PaybackTerms() {
         <p>
           <strong>To Us:</strong> You grant us a limited license to process your data on-device to
           provide the service, send behavioral signals to AI services during Instant Analysis, and
-          use anonymized, aggregated usage data to improve the App (if you opt in to telemetry).
+          use aggregated category data to improve the App unless you opt out of analytics sync.
         </p>
 
         <h3 className="legal-subsection">6.3 Open Source Components</h3>
@@ -270,11 +285,11 @@ export default function PaybackTerms() {
         <h3 className="legal-subsection">7.4 Third-Party Data Processing</h3>
         <p>When you use Instant Analysis:</p>
         <ul className="legal-list">
-          <li>Gmail and Calendar behavioral signals are extracted on-device</li>
+          <li>Calendar, photo and contact signals are read from your device and reduced on the device before anything is sent</li>
           <li>Signals are sent to our backend proxy server for AI persona generation</li>
           <li>Backend proxy authenticates your request via Google OAuth token verification</li>
           <li>Backend proxy forwards requests to Google Gemini AI with secure server-side API keys</li>
-          <li>Backend applies per-user rate limiting (5 requests/minute)</li>
+          <li>Backend applies a per-user request limit set by our backend configuration, plus a per-IP limit</li>
           <li>AI request contents are not intentionally persisted on our backend after request completion; account-linked data (profile, analytics, consent settings) may be retained — see the Privacy Policy for details</li>
           <li>Google's Gemini API Terms apply: <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer">ai.google.dev/gemini-api/terms</a></li>
           <li>Data is not retained or used for model training per Gemini API terms</li>
@@ -292,7 +307,7 @@ export default function PaybackTerms() {
         <ul className="legal-list">
           <li><strong>Model:</strong> Google Gemini 2.5 Pro</li>
           <li><strong>Architecture:</strong> Backend proxy with OAuth verification</li>
-          <li><strong>Rate limiting:</strong> 5 requests per minute per user, 100 requests per 15 minutes per IP</li>
+          <li><strong>Rate limiting:</strong> a per-user request limit set by our backend configuration, plus 100 requests per 15 minutes per IP address</li>
           <li><strong>Failover:</strong> Dual API keys for high availability</li>
         </ul>
         <p>
@@ -303,7 +318,7 @@ export default function PaybackTerms() {
         <h3 className="legal-subsection">8.2 Accuracy Disclaimer</h3>
         <p>AI-generated personas and behavioral insights are:</p>
         <ul className="legal-list">
-          <li><strong>Approximations:</strong> Based on statistical patterns from Gmail and Calendar signals</li>
+          <li><strong>Approximations:</strong> Based on statistical patterns in the signals and export contents you provide</li>
           <li><strong>Not Guaranteed:</strong> May contain errors, inaccuracies, or biases inherent to AI models</li>
           <li><strong>For Informational Use:</strong> Not professional advice of any kind</li>
           <li><strong>Intent Scores:</strong> Categories include confidence/score ratings (1–10 scale)</li>
@@ -659,7 +674,7 @@ export default function PaybackTerms() {
             </li>
             <li>
               <strong>Last Updated</strong>
-              May 14, 2026 · v1.4
+              September 17, 2026 · v1.5
             </li>
           </ul>
           <SocialLinks />

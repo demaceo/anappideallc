@@ -199,6 +199,12 @@ export const META: Record<string, { title: string; description: string; path: st
       'Terms of Service for Ôwn (Payback Own) on iOS & Android. 20-section agreement covering eligibility, AI analysis, data ownership, disclaimers, arbitration, and governing law (Colorado). Operated by An App Idea LLC.',
     path: '/legal/payback/terms',
   },
+  '/legal/payback/data-deletion': {
+    title: `Account & Data Deletion — Ôwn (Payback) | ${SITE.name}`,
+    description:
+      'How to delete your Ôwn (Payback Own) account and all associated data, in-app or by request. Covers what is removed immediately, what takes up to 30 days, and how to revoke Google or Apple account access. Operated by An App Idea LLC.',
+    path: '/legal/payback/data-deletion',
+  },
   '/legal/pinpoint/privacy': {
     title: `Privacy Policy — Pinpoint | ${SITE.name}`,
     description:
