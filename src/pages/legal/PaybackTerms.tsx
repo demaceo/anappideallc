@@ -13,7 +13,7 @@ export default function PaybackTerms() {
         appLabel="Ôwn (Payback)"
         docType="terms"
         subtitle={`Ôwn (Payback Own) — ${OPERATOR}`}
-        dateLine="Effective: December 8, 2025 · Last Updated: September 17, 2026"
+        dateLine="Effective: December 8, 2025 · Last Updated: September 18, 2026"
       >
 
         <div className="intro-block">
@@ -175,8 +175,12 @@ export default function PaybackTerms() {
 
         <h3 className="legal-subsection">4.3 Session Management</h3>
         <p>
-          The App automatically logs you out after 30 minutes of inactivity for security purposes.
-          OAuth tokens are stored encrypted in iOS Keychain/Android Keystore.
+          Your session lasts until you sign out in the App or revoke the App's access in your
+          Google Account. The App holds a Google refresh token and uses it to renew the
+          short-lived access token automatically; if Google rejects that renewal, for example
+          because you revoked access, the App signs you out and you will need to sign in again.
+          OAuth tokens are stored encrypted in iOS Keychain/Android Keystore. The App does not
+          log you out after a period of inactivity.
         </p>
 
         {/* § 5 */}
@@ -189,7 +193,7 @@ export default function PaybackTerms() {
         <h3 className="legal-subsection">5.1 Permitted Uses</h3>
         <p>You may use the App to:</p>
         <ul className="legal-list">
-          <li>Analyze your own Google Takeout (ZIP files) and Meta export data (folders)</li>
+          <li>Analyze your own Google Takeout and Meta exports (<code>.zip</code> archives)</li>
           <li>Generate personal consumer personas and category insights</li>
           <li>View your analysis history and synthesized profile</li>
           <li>Export your persona data for personal use (if feature available)</li>
@@ -674,7 +678,7 @@ export default function PaybackTerms() {
             </li>
             <li>
               <strong>Last Updated</strong>
-              September 17, 2026 · v1.5
+              September 18, 2026 · v1.6
             </li>
           </ul>
           <SocialLinks />

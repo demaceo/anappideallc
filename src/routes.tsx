@@ -8,6 +8,7 @@ import Process from './pages/Process'
 import Contact from './pages/Contact'
 import WhyNotAI from './pages/WhyNotAI'
 import Support from './pages/Support'
+import PaybackSupport from './pages/PaybackSupport'
 import ProjectDetail from './pages/ProjectDetail'
 import LegalIndex from './pages/legal/LegalIndex'
 import LegalApp from './pages/legal/LegalApp'
@@ -40,6 +41,7 @@ export const routes: RouteObject[] = [
       { path: 'process', Component: Process },
       { path: 'why-not-ai', Component: WhyNotAI },
       { path: 'support', Component: Support },
+      { path: 'support/payback', Component: PaybackSupport },
       { path: 'contact', Component: Contact },
       { path: 'legal', Component: LegalIndex },
       { path: 'legal/:app', Component: LegalApp },
@@ -82,6 +84,7 @@ export const PRERENDER_PATHS = [
   '/process',
   '/why-not-ai',
   '/support',
+  '/support/payback',
   '/contact',
   '/legal',
   '/legal/yap',

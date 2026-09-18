@@ -187,6 +187,12 @@ export const META: Record<string, { title: string; description: string; path: st
       'Terms of Service for The Yap App (iOS & Android). Covers free and Pro subscription tiers, voice cloning requirements, translation accuracy disclaimer, and governing law (Colorado). Published by An App Idea LLC.',
     path: '/legal/yap/terms',
   },
+  '/support/payback': {
+    title: `Support — Ôwn (Payback) | ${SITE.name}`,
+    description:
+      'Help with Ôwn (Payback Own): how to request a Google Takeout or Meta data export and bring it in, what Instant and Quick Analysis each do, what stays on your device, and how to delete your account. Operated by An App Idea LLC.',
+    path: '/support/payback',
+  },
   '/legal/payback/privacy': {
     title: `Privacy Policy — Ôwn (Payback) | ${SITE.name}`,
     description:
