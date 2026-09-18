@@ -73,6 +73,15 @@ export default function Support() {
           </p>
         </div>
 
+        <VerdictBox variant="context">
+          <p>
+            Using <strong>Ôwn (Payback)</strong>? It has its own{' '}
+            <Link to="/support/payback">support page</Link>, covering how to
+            request a Google or Meta data export, what each kind of analysis
+            does, and what stays on your device.
+          </p>
+        </VerdictBox>
+
         <div className="section-header">
           <span className="section-num">How to get help</span>
           <h2>Common requests</h2>
@@ -130,6 +139,9 @@ export default function Support() {
               <span className="policy-links">
                 <Link to={app.privacy}>Privacy Policy</Link>
                 <Link to={app.terms}>Terms of Service</Link>
+                {app.dataDeletion && (
+                  <Link to={app.dataDeletion}>Account &amp; Data Deletion</Link>
+                )}
               </span>
             </div>
           ))}
