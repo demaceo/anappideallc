@@ -13,7 +13,7 @@ export default function PaybackPrivacy() {
         appLabel="Ôwn (Payback)"
         docType="privacy"
         subtitle={`Ôwn (Payback Own) — ${OPERATOR}`}
-        dateLine="Effective: December 8, 2025 · Last Updated: September 17, 2026"
+        dateLine="Effective: December 8, 2025 · Last Updated: September 18, 2026"
       >
 
         <div className="intro-block">
@@ -68,12 +68,12 @@ export default function PaybackPrivacy() {
           <li>Other Google service data included in your Takeout export</li>
         </ul>
 
-        <p><strong>2. Meta (Facebook/Instagram) Exports</strong> (the downloaded <code>.zip</code>, or a folder structure in Dropbox)</p>
+        <p><strong>2. Meta (Facebook/Instagram) Exports</strong> (the downloaded <code>.zip</code>)</p>
         <ul className="legal-list">
           <li>Instagram: Posts, stories, likes, saved posts, searches, ad interactions, messages, following list</li>
           <li>Facebook: Posts, comments, friends list, likes, searches, ad interactions, groups, pages</li>
           <li>Detection: Automatic service detection via folder name patterns and content analysis</li>
-          <li>Format: JSON files (recommended) or HTML</li>
+          <li>Format: JSON only. An HTML Meta export is not parsed, so request the export in JSON</li>
           <li>Note: Standard export analysis focuses on structured export contents and media metadata. Some user-selected uploads or export files may still include photo/video-related data depending on the feature you use.</li>
         </ul>
 
@@ -496,7 +496,7 @@ export default function PaybackPrivacy() {
         <ul className="legal-list">
           <li><strong>Encryption:</strong> AES-256 (SQLCipher 4) for data at rest, TLS 1.3 for data in transit</li>
           <li><strong>Secure Storage:</strong> iOS Keychain and Android Keystore for sensitive credentials</li>
-          <li><strong>Session Management:</strong> 30-minute inactivity timeout, automatic logout</li>
+          <li><strong>Session Management:</strong> your session lasts until you sign out in the App or revoke access in your Google Account. The short-lived Google access token is renewed automatically from a refresh token held in the iOS Keychain / Android Keystore; if Google rejects that renewal, for example because you revoked access, the App signs you out. There is no inactivity timeout</li>
           <li><strong>Code Security:</strong> Regular security audits, dependency vulnerability scanning</li>
           <li><strong>Local-First Storage:</strong> Most user-facing analysis data remains in the app's encrypted local database rather than a general-purpose cloud store</li>
         </ul>
@@ -694,7 +694,7 @@ export default function PaybackPrivacy() {
             </li>
             <li>
               <strong>Last Updated</strong>
-              September 17, 2026 · v1.6
+              September 18, 2026 · v1.7
             </li>
           </ul>
           <SocialLinks />

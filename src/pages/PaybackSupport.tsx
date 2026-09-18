@@ -120,9 +120,11 @@ export default function PaybackSupport() {
             Ôwn does not collect your history itself. You ask the service for a
             copy, they send you an archive, and you bring that archive in.{' '}
             <strong>Google Takeout and Meta exports work today.</strong> Apple,
-            Microsoft, Amazon, TikTok, Snapchat and Spotify appear in the app
-            marked as coming soon; you can read their export instructions there
-            and start a request early, but Ôwn cannot analyse them yet.
+            Microsoft, Amazon, TikTok, Snapchat and Spotify are listed in the
+            app and marked as coming next. Tapping one says so and closes: it
+            deliberately withholds export steps, because a request that takes a
+            week to fulfil is worse than useless if Ôwn would then refuse the
+            file. Steps for those platforms arrive with the support for them.
           </p>
         </div>
 
@@ -145,7 +147,7 @@ export default function PaybackSupport() {
         <h3 className="legal-subsection">Meta (Facebook and Instagram)</h3>
         <ol className="legal-list">
           <li>In the Accounts Centre, open <strong>Your information and permissions</strong>, then <strong>Download your information</strong>.</li>
-          <li>Request a download, choosing <strong>JSON</strong> format where offered. JSON reads more reliably than HTML.</li>
+          <li>Request a download and choose <strong>JSON</strong> format. This is required, not a preference: Ôwn has no parser for Meta's HTML export, so an HTML archive yields nothing.</li>
           <li>Meta emails you when it is ready.</li>
           <li>Bring the <code>.zip</code> into Ôwn the same way as a Takeout archive.</li>
         </ol>
@@ -167,8 +169,8 @@ export default function PaybackSupport() {
             <p>
               Runs from signals already on your phone: your calendar, photo
               library and contacts, each optional and each requested through the
-              usual permission prompt. It takes about a minute and gives you a
-              persona, so you can see the shape of the thing before an export
+              usual permission prompt. It takes about two minutes and gives you
+              a persona, so you can see the shape of the thing before an export
               arrives. It does not score the behavioural categories.
             </p>
           </div>
