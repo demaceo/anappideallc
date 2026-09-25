@@ -162,13 +162,61 @@ export default function PinpointPrivacy() {
           If you take Pinpoint's political affiliation or political philosophy survey, we save your
           answer to each statement (how strongly you agree or disagree) and your results to your
           account. Questions you skip aren't saved. Because survey answers can reveal your political
-          opinions and beliefs, we treat them as sensitive. We use them to show you your results. We
-          also keep your answers for AI Vote Assist, an optional feature that isn't available yet.
-          It will use them only if you turn it on, and we will describe it in this policy before it
-          launches. We don't show your individual answers or results to other users. The only
+          opinions and beliefs, we treat them as sensitive. We use them to show you your results
+          and, only if you turn it on, for AI Vote Assist (described below). We don't show your individual answers or results to other users. The only
           survey information anyone else sees is anonymous averages across everyone who has taken a
           survey, shown only after at least five people have taken it. Your device also keeps a copy
           of your answers so a retake can start from them; signing out removes it.
+        </p>
+
+        <h3 className="legal-subsection">AI Vote Assist (optional)</h3>
+        <p>
+          AI Vote Assist uses an AI model to suggest how you might vote on bills, based on your own
+          survey answers. It stays off unless you turn it on and agree to a screen that names the AI
+          provider. You review every suggestion, and only votes you approve or choose yourself are
+          cast.
+        </p>
+        <p>When you ask for suggestions, we send the AI provider:</p>
+        <ul className="legal-list">
+          <li>the statements you answered in both surveys, and your answer to each;</li>
+          <li>
+            your answers to five topic questions (agriculture, housing, transportation, veterans and
+            energy);
+          </li>
+          <li>any notes you've written for the AI;</li>
+          <li>
+            public information about each bill: its number, the legislature it's in, its title,
+            topic and plain-English summary, and the legislative steps it has been through.
+          </li>
+        </ul>
+        <p>
+          We never send your name, email address, street address, ZIP code, account ID or survey
+          results. Because the bills come from your officials, they do show which state you're in.
+        </p>
+        <p>To run the feature, we also keep:</p>
+        <ul className="legal-list">
+          <li>
+            <strong>Your agreement:</strong> which AI provider you agreed to, and when. If we change
+            providers, we ask you again before sending anything.
+          </li>
+          <li>
+            <strong>Your topic answers and notes for the AI:</strong> up to 10 short notes, until
+            you delete them.
+          </li>
+          <li>
+            <strong>A usage count:</strong> how many bills you sent and when, to enforce a daily
+            limit. It doesn't record which bills.
+          </li>
+          <li>
+            <strong>How each vote was decided:</strong> when you cast a vote through AI Vote
+            Assist, we record with that vote whether you kept the AI's suggestion or changed it.
+          </li>
+        </ul>
+        <p>
+          We don't store the AI's suggestions or its reasons on our servers, and we don't write your
+          answers, notes or the AI's suggestions to our logs. Your review (the suggestions, their
+          reasons and your decisions) stays only on your device so you can finish it later. It
+          expires after 7 days, and signing out or turning off AI Vote Assist deletes it.
         </p>
 
         <h3 className="legal-subsection">Information That Stays on Your Device</h3>
@@ -211,6 +259,7 @@ export default function PinpointPrivacy() {
           <li>To help you draft messages to officials and remind you to follow up</li>
           <li>To look up your ballot when you ask</li>
           <li>To show you your survey results</li>
+          <li>To suggest how you might vote on bills, only if you turn on AI Vote Assist</li>
           <li>To show anonymous totals that never identify anyone</li>
           <li>To maintain the security and reliability of the service and prevent abuse</li>
           <li>To comply with legal obligations</li>
@@ -230,6 +279,11 @@ export default function PinpointPrivacy() {
           <li>
             We keep your account information, votes, follows and notifications until you delete your
             account. We keep your survey answers and results until you delete them or your account.
+          </li>
+          <li>
+            We keep your AI Vote Assist agreement, notes and topic answers until you remove them
+            (see section 07) or delete your account, and its usage count until you delete your
+            account.
           </li>
           <li>
             Our hosting provider keeps server logs for a limited period, after which they are
@@ -297,6 +351,21 @@ export default function PinpointPrivacy() {
                 </td>
                 <td>Delivering push notifications to your device</td>
                 <td>Push token and notification text</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Google</strong> (Gemini API)
+                  <br />
+                  <span className="legal-table-note">(AI Vote Assist, only if you turn it on)</span>
+                </td>
+                <td>Suggesting how you might vote on bills</td>
+                <td>
+                  The survey answers, topic answers, notes and bill information described in section
+                  02. We use Google's paid API service, under which Google doesn't use this data to
+                  improve its products. Google logs requests for a limited time, solely to detect
+                  abuse and for legal disclosures. We turn off Google's option to store each request
+                  for later use.
+                </td>
               </tr>
               <tr>
                 <td><strong>Google Civic Information API</strong></td>
@@ -376,6 +445,14 @@ export default function PinpointPrivacy() {
             servers and from your device. You can also delete your whole account in the app (You
             tab → Delete account), which removes all of your survey data along with the rest of your
             account.
+          </li>
+          <li>
+            <strong>AI Vote Assist:</strong> To stop using it, open the You tab → AI Vote Assist and
+            choose "Turn off AI Vote Assist." This withdraws your agreement and deletes the review on
+            your device. You can also choose "Also delete the answers it reads," which deletes your
+            per-question survey answers and your topic answers; your survey results stay. Your notes
+            stay until you delete them on the same screen. Votes you've already cast stay cast,
+            because a vote on a bill can't be changed.
           </li>
           <li>
             <strong>Location:</strong> You may withdraw location permission at any time in your
