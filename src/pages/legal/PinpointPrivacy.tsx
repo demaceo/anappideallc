@@ -13,7 +13,7 @@ export default function PinpointPrivacy() {
         appLabel="Pinpoint"
         docType="privacy"
         subtitle={`Pinpoint — ${OPERATOR}`}
-        dateLine="Effective Date: June 4, 2026 · Last Updated: June 17, 2026"
+        dateLine="Effective Date: June 4, 2026 · Last Updated: September 25, 2026"
       >
 
         <div className="intro-block">
@@ -126,6 +126,20 @@ export default function PinpointPrivacy() {
           message (for example, sent, delivered, or bounced) so you can see whether it went through.
         </p>
 
+        <h3 className="legal-subsection">Survey Answers and Results</h3>
+        <p>
+          If you take Pinpoint's political affiliation or political philosophy survey, we save your
+          answer to each statement (how strongly you agree or disagree) and your results to your
+          account. Questions you skip aren't saved. Because survey answers can reveal your political
+          opinions and beliefs, we treat them as sensitive. We use them to show you your results. We
+          also keep your answers for AI Vote Assist, an optional feature that isn't available yet.
+          It will use them only if you turn it on, and we will describe it in this policy before it
+          launches. We don't show your individual answers or results to other users. The only
+          survey information anyone else sees is anonymous averages across everyone who has taken a
+          survey, shown only after at least five people have taken it. Your device also keeps a copy
+          of your answers so a retake can start from them; signing out removes it.
+        </p>
+
         <h3 className="legal-subsection">Device Information</h3>
         <p>
           Basic device and app information (device type, operating system, and app version) for
@@ -183,6 +197,9 @@ export default function PinpointPrivacy() {
             We retain server-side data until you delete your account or request its deletion. Public
             content you posted (such as Pinboard issues and Posse messages) may persist in aggregate
             or anonymized form where others have interacted with it.
+          </li>
+          <li>
+            We keep your survey answers and results until you delete them or your account.
           </li>
         </ul>
 
@@ -282,6 +299,13 @@ export default function PinpointPrivacy() {
             deletion of your account and associated data, by contacting us at{' '}
             <a href={`mailto:${CONTACT}`}>{CONTACT}</a>. Deleting your account removes your
             server-side profile data and clears locally stored data on the device.
+          </li>
+          <li>
+            <strong>Survey data:</strong> To delete a survey's answers and results, open your
+            results in the You tab and choose "Delete my results." This removes them from our
+            servers and from your device. You can also delete your whole account in the app (You
+            tab → Delete account), which removes all of your survey data along with the rest of your
+            account.
           </li>
           <li>
             <strong>Location:</strong> You may withdraw location permission at any time in your
