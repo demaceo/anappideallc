@@ -18,9 +18,9 @@ export default function PinpointPrivacy() {
 
         <div className="intro-block">
           <p>
-            {OPERATOR} operates the Pinpoint app, a civic engagement platform that helps you find
-            your elected officials, contact them about issues you care about, pin public issues, and
-            organize with other constituents.
+            {OPERATOR} operates the Pinpoint app, a civic engagement app that helps you find your
+            elected officials, follow the bills they vote on, compare their votes with how you would
+            vote, and write to them.
           </p>
         </div>
 
@@ -38,9 +38,9 @@ export default function PinpointPrivacy() {
           <div className="section-rule" />
         </div>
         <p>
-          {OPERATOR} ("we", "us", or "our") operates the Pinpoint app, a civic engagement platform
-          that helps you find your elected officials, contact them about issues you care about, pin
-          public issues, and organize with other constituents.
+          {OPERATOR} ("we", "us", or "our") operates the Pinpoint app, a civic engagement app that
+          helps you find your elected officials, follow the bills they vote on, compare their votes
+          with how you would vote, and write to them.
         </p>
         <div className="verdict-box contact">
           <p>
@@ -59,71 +59,102 @@ export default function PinpointPrivacy() {
 
         <h3 className="legal-subsection">Account Information</h3>
         <ul className="legal-list">
-          <li>First name and last name (collected during onboarding)</li>
+          <li>First name and last name, which you enter when you sign up and can change later</li>
           <li>Email address (from your sign-in provider)</li>
           <li>
-            Postcode / ZIP code (optional, collected during onboarding to help locate your
-            representatives)
+            Postcode / ZIP code (optional). You can enter it when you sign up, when the app asks
+            where you are, or in the You tab. We save it to your account to find your
+            representatives.
           </li>
-          <li>Authentication provider details (Google Sign-In or Apple Sign-In)</li>
-          <li>Firebase user ID</li>
+          <li>Your sign-in provider (Google Sign-In or Apple Sign-In) and your Firebase user ID</li>
+          <li>Whether you want push notifications</li>
         </ul>
         <p>
-          We do not collect or store passwords — sign-in is handled entirely by Google or Apple.
+          We do not collect or store passwords. Sign-in is handled entirely by Google or Apple.
         </p>
 
         <h3 className="legal-subsection">Location Data</h3>
         <ul className="legal-list">
           <li>
-            With your permission, your device's approximate location is used to identify your local
-            elected officials.
+            With your permission, the app reads your device's location to find the officials who
+            represent you. It asks for an approximate fix, not continuous tracking.
           </li>
           <li>
-            Location coordinates are converted into a state and postcode (reverse geocoding) to look
-            up the right representatives. We do not continuously track or store a history of your
-            location.
+            The app sends those coordinates to our servers, which match them against district maps.
+            When our maps don't cover a location, our servers send the coordinates, rounded to about
+            11 meters, to OpenStates to find your officials.
           </li>
           <li>
-            You can decline or revoke location access at any time in your device settings; you may
-            also enter a postcode manually instead.
+            The app also sends your coordinates directly to Nominatim (OpenStreetMap) to turn them
+            into a street, city, state and ZIP code. It uses Nominatim to look up a ZIP code you
+            type and to draw your city's boundary on the district map, too.
+          </li>
+          <li>
+            We don't store your coordinates on our servers. Your device keeps your most recently
+            confirmed location so the app can open where you left off, until you delete your account
+            or the app.
+          </li>
+          <li>
+            You can decline or revoke location access at any time in your device settings and enter
+            a ZIP code instead.
           </li>
         </ul>
 
-        <h3 className="legal-subsection">Activity and Engagement Data</h3>
-        <ul className="legal-list">
-          <li>
-            Your civic engagement actions on Pinboard issues — backing (pinning) an issue, marking
-            an issue as one you've contacted an official about, and voting to mark an issue resolved
-          </li>
-          <li>Which Pinboard issues you have viewed (recorded to count unique viewers)</li>
-          <li>
-            Outreach history — a record, stored on your device, of which officials you have
-            contacted, about which topic, and when
-          </li>
-          <li>Follow-up reminders you schedule, stored on your device</li>
-          <li>App preferences and onboarding progress</li>
-        </ul>
-
-        <h3 className="legal-subsection">Content You Create</h3>
-        <ul className="legal-list">
-          <li>
-            <strong>Pinboard issues</strong> you create (title, summary, category, and whether the
-            issue is local or national)
-          </li>
-          <li>Issues you "back" or co-sign</li>
-          <li>
-            <strong>Posse</strong> (group) memberships, and the text messages you post in posses
-          </li>
-          <li>Your public display name shown alongside your posts and messages</li>
-          <li>Reports you submit about other users' content</li>
-        </ul>
-
-        <h3 className="legal-subsection">Outreach Messages</h3>
+        <h3 className="legal-subsection">Bill Votes</h3>
         <p>
-          When you send a message to an official through the app, we process the message subject and
-          body, the official's contact email, and your name and email address (used as the reply-to
-          address) in order to deliver your message. We also record the delivery status of your
-          message (for example, sent, delivered, or bounced) so you can see whether it went through.
+          When you vote on a bill (yes, no, or abstain), we save your vote to your account along
+          with the bill's number and title. A vote on a bill is final: it can't be changed or
+          deleted afterwards, except by deleting your account. Your vote is counted in that bill's
+          anonymous tally, which is shown only to people who have voted on the bill themselves and
+          only once at least ten people have. We also use your votes to show how your officials voted
+          compared with you, and to tell you when a bill you voted on reaches a final outcome, such
+          as becoming law or failing. We don't show your individual votes to other users.
+        </p>
+
+        <h3 className="legal-subsection">Officials and Bills You Follow</h3>
+        <p>
+          When you follow an official or a bill, we save that to your account with its name or
+          title. We use your follows to decide what appears in your Activity. Other users see only
+          how many people follow something, and only once at least ten people do.
+        </p>
+
+        <h3 className="legal-subsection">Activity and Push Notifications</h3>
+        <ul className="legal-list">
+          <li>
+            We create notifications about the officials and bills you follow or voted on (for
+            example, "Sen. Smith voted Yes on H.R. 1") and store them with your account so you can
+            see them in Activity.
+          </li>
+          <li>
+            If you allow push notifications, we store your device's push token and its platform
+            (iOS or Android). To deliver a notification, we send the token and the notification's
+            text to Expo's push service, which passes it to Apple or Google for delivery.
+          </li>
+          <li>
+            You can turn push notifications off in the You tab or in your device settings. Signing
+            out removes this device's push token from your account.
+          </li>
+        </ul>
+
+        <h3 className="legal-subsection">Writing to Your Officials</h3>
+        <p>
+          Pinpoint helps you draft a message to an official, then copies it to your clipboard and
+          opens it in your own email app. Pinpoint doesn't send the message and never receives its
+          contents. To show you how to reach an official, the app asks our servers for their
+          contact details by the official's ID. Your device keeps a record of the messages you
+          drafted (the official, the topic and the text) and any follow-up reminders you set. They
+          stay on the device until you delete your account or the app.
+        </p>
+
+        <h3 className="legal-subsection">Ballot Lookup</h3>
+        <p>
+          If you choose to look up your ballot, you type your home address. The app saves it on
+          your device and sends it to our servers, which send it to Google's Civic Information API
+          to find your upcoming elections, ballot and polling place. Our servers keep that answer in
+          memory for up to six hours so repeat lookups are fast, and don't save your address.
+          Signing out removes the address from your device. Any notes or choices you record for
+          your ballot stay on your device only and are never sent to us; signing out removes them
+          as well.
         </p>
 
         <h3 className="legal-subsection">Survey Answers and Results</h3>
@@ -140,11 +171,29 @@ export default function PinpointPrivacy() {
           of your answers so a retake can start from them; signing out removes it.
         </p>
 
-        <h3 className="legal-subsection">Device Information</h3>
+        <h3 className="legal-subsection">Information That Stays on Your Device</h3>
         <p>
-          Basic device and app information (device type, operating system, and app version) for
-          security, diagnostics, and support.
+          Some things never leave your device: the keyword filters you save on the Bills tab, your
+          theme and display settings, and which introductions you have already seen.
         </p>
+
+        <h3 className="legal-subsection">Technical Information</h3>
+        <ul className="legal-list">
+          <li>
+            Pinpoint contains no analytics, advertising, tracking or crash-reporting tools.
+          </li>
+          <li>
+            Our servers log each request for security and troubleshooting: the page requested
+            (without the details you entered), the result, how long it took, and the app's user
+            agent, which can name the app and your device's operating system. Our hosting provider may
+            also record your IP address. We use IP addresses briefly to limit how quickly requests
+            can be made.
+          </li>
+          <li>
+            When the app opens, it checks Expo's update service for a newer version. That request
+            tells Expo your platform, the app's version and an identifier for this installation.
+          </li>
+        </ul>
 
         {/* § 3 */}
         <div className="section-header">
@@ -153,24 +202,17 @@ export default function PinpointPrivacy() {
           <div className="section-rule" />
         </div>
         <ul className="legal-list">
+          <li>To identify your elected officials from your location or ZIP code</li>
           <li>
-            To provide the core app features (finding your representatives, contacting officials,
-            the Pinboard, and Posses)
+            To show you the bills your officials vote on, record your own votes, and compare the
+            two
           </li>
-          <li>
-            To identify your local elected officials based on your location or postcode
-          </li>
-          <li>To deliver outreach messages you choose to send to officials</li>
-          <li>To remind you to follow up on messages you have sent</li>
-          <li>
-            To display your public content and display name to other users in the Pinboard and
-            Posses
-          </li>
-          <li>
-            For moderation and safety (reviewing reports, and supporting muting, banning, and
-            removal of abusive content)
-          </li>
-          <li>To maintain the security and reliability of the service</li>
+          <li>To keep your Activity up to date and send the notifications you asked for</li>
+          <li>To help you draft messages to officials and remind you to follow up</li>
+          <li>To look up your ballot when you ask</li>
+          <li>To show you your survey results</li>
+          <li>To show anonymous totals that never identify anyone</li>
+          <li>To maintain the security and reliability of the service and prevent abuse</li>
           <li>To comply with legal obligations</li>
         </ul>
 
@@ -182,24 +224,28 @@ export default function PinpointPrivacy() {
         </div>
         <ul className="legal-list">
           <li>
-            Server-side data (your account profile, the content you post, and your outreach record)
-            is stored on US-based infrastructure using Firebase (authentication and the Firestore
-            database) and our backend hosted on Railway.
+            Our servers and database run on US-based infrastructure hosted by Railway. Sign-in and
+            push tokens are handled by Firebase (Google).
           </li>
           <li>
-            Some data is stored locally on your device using on-device storage, including your
-            outreach history, follow-up reminders, your issue engagement state, saved locations, and
-            app preferences (such as your theme). This local data persists between sessions; signing
-            out clears your cached account and profile data, and deleting the app or your account
-            removes the rest.
+            We keep your account information, votes, follows and notifications until you delete your
+            account. We keep your survey answers and results until you delete them or your account.
           </li>
           <li>
-            We retain server-side data until you delete your account or request its deletion. Public
-            content you posted (such as Pinboard issues and Posse messages) may persist in aggregate
-            or anonymized form where others have interacted with it.
+            Our hosting provider keeps server logs for a limited period, after which they are
+            deleted.
           </li>
           <li>
-            We keep your survey answers and results until you delete them or your account.
+            Data stored on your device is described in section 02. Signing out clears your cached
+            account data, your ballot address and notes, and your survey answers. Deleting your
+            account clears the rest, except display settings such as your theme. Deleting the app
+            removes everything it stored on the device.
+          </li>
+          <li>
+            Earlier versions of Pinpoint had community features: Pinboard issues and group
+            messages. If you posted there, that content is kept. When you delete your account, we
+            replace your name on it with "Former member" and remove your backings and group
+            memberships.
           </li>
         </ul>
 
@@ -225,45 +271,62 @@ export default function PinpointPrivacy() {
             <tbody>
               <tr>
                 <td><strong>Firebase</strong> (Google)</td>
-                <td>
-                  Authentication and the Firestore database that stores issues, posses, messages,
-                  profiles, and reports
-                </td>
-                <td>Email, name, auth tokens, and the content you post</td>
+                <td>Sign-in, and storing push tokens</td>
+                <td>Email, name, Firebase user ID, push token</td>
               </tr>
               <tr>
-                <td><strong>Pinpoint Backend</strong> (Railway)</td>
-                <td>Account profile, the outreach email audit log, and relaying outreach messages</td>
-                <td>Profile data, message content, official contact email</td>
+                <td><strong>Google Sign-In</strong> / <strong>Sign in with Apple</strong></td>
+                <td>Signing in</td>
+                <td>What you choose to share with the sign-in provider</td>
+              </tr>
+              <tr>
+                <td><strong>Railway</strong></td>
+                <td>Hosting our servers, database and server logs</td>
+                <td>The account, vote, follow, notification and survey data described above</td>
+              </tr>
+              <tr>
+                <td><strong>Expo</strong></td>
+                <td>Delivering push notifications, and app updates</td>
+                <td>Push token and notification text; platform, app version and an installation identifier</td>
               </tr>
               <tr>
                 <td>
-                  <strong>Postmark</strong>
+                  <strong>Apple</strong> and <strong>Google</strong>
                   <br />
-                  <span className="legal-table-note">(email delivery, via our backend)</span>
+                  <span className="legal-table-note">(push delivery)</span>
                 </td>
-                <td>Relaying the outreach emails you send to officials</td>
+                <td>Delivering push notifications to your device</td>
+                <td>Push token and notification text</td>
+              </tr>
+              <tr>
+                <td><strong>Google Civic Information API</strong></td>
+                <td>Finding your elections, ballot and polling place</td>
+                <td>The address you type for a ballot lookup</td>
+              </tr>
+              <tr>
+                <td><strong>Nominatim</strong> (OpenStreetMap)</td>
                 <td>
-                  Your name, your email (as reply-to), message content, official's email
+                  Turning coordinates into an address, looking up ZIP codes, and city boundaries
+                </td>
+                <td>
+                  Coordinates or ZIP code, sent directly from your device (so Nominatim also sees
+                  your IP address)
                 </td>
               </tr>
               <tr>
                 <td><strong>OpenStates</strong></td>
                 <td>Elected official and legislative data</td>
-                <td>Location or jurisdiction lookups (public data)</td>
-              </tr>
-              <tr>
-                <td><strong>Nominatim</strong> (OpenStreetMap)</td>
-                <td>Reverse geocoding (turning coordinates into a state/postcode)</td>
-                <td>Approximate location coordinates</td>
+                <td>
+                  Coordinates rounded to about 11 meters, only when our own district maps don't
+                  cover your location
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
         <p>
-          Outreach emails are relayed through our backend — your device does not email officials
-          directly, and the email delivery provider receives only what is needed to deliver your
-          message.
+          We also read public legislative and election data from Congress.gov, the U.S. Senate and
+          the Federal Election Commission. We send them no information about you.
         </p>
 
         {/* § 6 */}
@@ -273,13 +336,16 @@ export default function PinpointPrivacy() {
           <div className="section-rule" />
         </div>
         <ul className="legal-list">
-          <li>We do not sell your personal data.</li>
+          <li>We do not sell your personal data, or use it for advertising or tracking.</li>
           <li>
-            Content you post publicly — including Pinboard issues, Posse messages, and your public
-            display name — is visible to other users of the app.
+            Other users never see your individual votes, follows, survey answers or results. They
+            see only anonymous totals, each withheld until enough people have contributed that it
+            can't point to anyone.
           </li>
           <li>
-            Aggregated or anonymized data may be used for product improvement or reporting.
+            A small number of authorized administrators can see account details (name, email, and
+            account status) to operate the service and handle abuse. Administrative changes to an
+            account are logged.
           </li>
           <li>
             We may disclose data if required by law, or to protect the rights, safety, and security
@@ -295,10 +361,14 @@ export default function PinpointPrivacy() {
         </div>
         <ul className="legal-list">
           <li>
-            <strong>Access and deletion:</strong> You may request a copy of your data, or request
-            deletion of your account and associated data, by contacting us at{' '}
-            <a href={`mailto:${CONTACT}`}>{CONTACT}</a>. Deleting your account removes your
-            server-side profile data and clears locally stored data on the device.
+            <strong>Access:</strong> You may request a copy of your data by contacting us at{' '}
+            <a href={`mailto:${CONTACT}`}>{CONTACT}</a>.
+          </li>
+          <li>
+            <strong>Deletion:</strong> You can delete your account in the app (You tab → Delete
+            account), or ask us to by email. Deleting your account removes your profile, votes,
+            follows, notifications, survey data and push tokens from our servers, and clears the
+            data the app stored on your device.
           </li>
           <li>
             <strong>Survey data:</strong> To delete a survey's answers and results, open your
@@ -309,11 +379,16 @@ export default function PinpointPrivacy() {
           </li>
           <li>
             <strong>Location:</strong> You may withdraw location permission at any time in your
-            device settings, or enter your postcode manually instead.
+            device settings, or enter your ZIP code manually instead.
           </li>
           <li>
-            <strong>Sign out:</strong> Signing out clears your cached account and profile data from
-            the device. Deleting the app removes all locally stored data.
+            <strong>Notifications:</strong> You can turn push notifications off in the You tab or in
+            your device settings.
+          </li>
+          <li>
+            <strong>Sign out:</strong> Signing out clears your cached account data, ballot address
+            and notes, and survey answers from the device. Deleting the app removes all locally
+            stored data.
           </li>
         </ul>
 
@@ -337,7 +412,7 @@ export default function PinpointPrivacy() {
         </div>
         <p>
           We may update this policy from time to time. Changes will be posted in-app and on our
-          website, and we will update the "Effective Date" above. Continued use of the app after
+          website, and we will update the "Last Updated" date above. Continued use of the app after
           changes take effect constitutes acceptance of the updated policy.
         </p>
 
