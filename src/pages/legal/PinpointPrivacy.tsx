@@ -13,7 +13,7 @@ export default function PinpointPrivacy() {
         appLabel="Pinpoint"
         docType="privacy"
         subtitle={`Pinpoint — ${OPERATOR}`}
-        dateLine="Effective Date: June 4, 2026 · Last Updated: September 25, 2026"
+        dateLine="Effective Date: June 4, 2026 · Last Updated: October 1, 2026"
       >
 
         <div className="intro-block">
@@ -116,6 +116,18 @@ export default function PinpointPrivacy() {
           When you follow an official or a bill, we save that to your account with its name or
           title. We use your follows to decide what appears in your Activity. Other users see only
           how many people follow something, and only once at least ten people do.
+        </p>
+
+        <h3 className="legal-subsection">Notes You Write About Officials and Bills</h3>
+        <p>
+          If you write a note on an official or a bill, we save it to your account with what the
+          note is about: the official's name, role and party, or the bill's number, title and
+          state. That lets you read and edit it on any device you sign in on, and find it under
+          Notes in the You tab. Your notes are private. Other users never see them, we don't send
+          them to AI Vote Assist or any other third party, and we don't write their contents to our
+          logs. You can edit or delete a note at any time, and deleting your account deletes all of
+          them. These are separate from your notes for AI Vote Assist and your ballot notes,
+          described below.
         </p>
 
         <h3 className="legal-subsection">Activity and Push Notifications</h3>
@@ -257,6 +269,7 @@ export default function PinpointPrivacy() {
           </li>
           <li>To keep your Activity up to date and send the notifications you asked for</li>
           <li>To help you draft messages to officials and remind you to follow up</li>
+          <li>To keep the notes you write about officials and bills, for you alone</li>
           <li>To look up your ballot when you ask</li>
           <li>To show you your survey results</li>
           <li>To suggest how you might vote on bills, only if you turn on AI Vote Assist</li>
@@ -279,6 +292,10 @@ export default function PinpointPrivacy() {
           <li>
             We keep your account information, votes, follows and notifications until you delete your
             account. We keep your survey answers and results until you delete them or your account.
+          </li>
+          <li>
+            We keep each note you write about an official or a bill until you delete it or your
+            account.
           </li>
           <li>
             We keep your AI Vote Assist agreement, notes and topic answers until you remove them
@@ -336,7 +353,7 @@ export default function PinpointPrivacy() {
               <tr>
                 <td><strong>Railway</strong></td>
                 <td>Hosting our servers, database and server logs</td>
-                <td>The account, vote, follow, notification and survey data described above</td>
+                <td>The account, vote, follow, note, notification and survey data described above</td>
               </tr>
               <tr>
                 <td><strong>Expo</strong></td>
@@ -407,7 +424,7 @@ export default function PinpointPrivacy() {
         <ul className="legal-list">
           <li>We do not sell your personal data, or use it for advertising or tracking.</li>
           <li>
-            Other users never see your individual votes, follows, survey answers or results. They
+            Other users never see your individual votes, follows, notes, survey answers or results. They
             see only anonymous totals, each withheld until enough people have contributed that it
             can't point to anyone.
           </li>
@@ -436,8 +453,12 @@ export default function PinpointPrivacy() {
           <li>
             <strong>Deletion:</strong> You can delete your account in the app (You tab → Delete
             account), or ask us to by email. Deleting your account removes your profile, votes,
-            follows, notifications, survey data and push tokens from our servers, and clears the
-            data the app stored on your device.
+            follows, notes, notifications, survey data and push tokens from our servers, and clears
+            the data the app stored on your device.
+          </li>
+          <li>
+            <strong>Notes:</strong> To delete a note, open it from the official's or bill's page, or
+            from the You tab → Notes, and choose "Delete note." This removes it from our servers.
           </li>
           <li>
             <strong>Survey data:</strong> To delete a survey's answers and results, open your
