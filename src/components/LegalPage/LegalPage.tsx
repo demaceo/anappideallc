@@ -6,7 +6,7 @@ import { META } from '../../lib/seo'
 interface LegalPageProps {
   path: string
   appLabel: string
-  docType: 'privacy' | 'terms'
+  docType: 'privacy' | 'terms' | 'data-deletion'
   subtitle: string
   dateLine: string
   children: ReactNode
@@ -16,8 +16,10 @@ export function LegalPage({ path, appLabel, docType, subtitle, dateLine, childre
   const heading =
     docType === 'privacy' ? (
       <>Privacy <em>Policy</em></>
-    ) : (
+    ) : docType === 'terms' ? (
       <>Terms of <em>Service</em></>
+    ) : (
+      <>Account &amp; Data <em>Deletion</em></>
     )
 
   return (

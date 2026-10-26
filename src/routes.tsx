@@ -8,13 +8,17 @@ import Process from './pages/Process'
 import Contact from './pages/Contact'
 import WhyNotAI from './pages/WhyNotAI'
 import Support from './pages/Support'
+import PaybackSupport from './pages/PaybackSupport'
 import ProjectDetail from './pages/ProjectDetail'
+import LegalIndex from './pages/legal/LegalIndex'
+import LegalApp from './pages/legal/LegalApp'
 import DrayageProPrivacy from './pages/legal/DrayageProPrivacy'
 import DrayageProTerms from './pages/legal/DrayageProTerms'
 import PinpointPrivacy from './pages/legal/PinpointPrivacy'
 import PinpointTerms from './pages/legal/PinpointTerms'
 import PaybackPrivacy from './pages/legal/PaybackPrivacy'
 import PaybackTerms from './pages/legal/PaybackTerms'
+import PaybackDataDeletion from './pages/legal/PaybackDataDeletion'
 import YapPrivacy from './pages/legal/YapPrivacy'
 import YapTerms from './pages/legal/YapTerms'
 import ZooriPrivacy from './pages/legal/ZooriPrivacy'
@@ -37,13 +41,17 @@ export const routes: RouteObject[] = [
       { path: 'process', Component: Process },
       { path: 'why-not-ai', Component: WhyNotAI },
       { path: 'support', Component: Support },
+      { path: 'support/payback', Component: PaybackSupport },
       { path: 'contact', Component: Contact },
+      { path: 'legal', Component: LegalIndex },
+      { path: 'legal/:app', Component: LegalApp },
       { path: 'legal/drayagepro/privacy', Component: DrayageProPrivacy },
       { path: 'legal/drayagepro/terms', Component: DrayageProTerms },
       { path: 'legal/pinpoint/privacy', Component: PinpointPrivacy },
       { path: 'legal/pinpoint/terms', Component: PinpointTerms },
       { path: 'legal/payback/privacy', Component: PaybackPrivacy },
       { path: 'legal/payback/terms', Component: PaybackTerms },
+      { path: 'legal/payback/data-deletion', Component: PaybackDataDeletion },
       { path: 'legal/yap/privacy', Component: YapPrivacy },
       { path: 'legal/yap/terms', Component: YapTerms },
       { path: 'legal/zoori/privacy', Component: ZooriPrivacy },
@@ -76,13 +84,23 @@ export const PRERENDER_PATHS = [
   '/process',
   '/why-not-ai',
   '/support',
+  '/support/payback',
   '/contact',
+  '/legal',
+  '/legal/yap',
+  '/legal/payback',
+  '/legal/pinpoint',
+  '/legal/drayagepro',
+  '/legal/zoori',
+  '/legal/fengshui',
+  '/legal/stlmnt',
   '/legal/drayagepro/privacy',
   '/legal/drayagepro/terms',
   '/legal/pinpoint/privacy',
   '/legal/pinpoint/terms',
   '/legal/payback/privacy',
   '/legal/payback/terms',
+  '/legal/payback/data-deletion',
   '/legal/yap/privacy',
   '/legal/yap/terms',
   '/legal/zoori/privacy',

@@ -2,6 +2,7 @@ import { Link } from 'react-router'
 import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { FooterNav } from '../components/FooterNav/FooterNav'
 import { SITE } from '../data/site'
+import { legalApps } from '../data/legal-apps'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
@@ -44,18 +45,6 @@ const HELP_TOPICS = [
   },
 ] as const
 
-// Apps with published policies. Each row links to its privacy and terms so the
-// Support page doubles as the per-app legal index the App Store review expects.
-const APPS = [
-  { name: 'The Yap App', privacy: '/legal/yap/privacy', terms: '/legal/yap/terms' },
-  { name: 'Ôwn (Payback)', privacy: '/legal/payback/privacy', terms: '/legal/payback/terms' },
-  { name: 'Pinpoint', privacy: '/legal/pinpoint/privacy', terms: '/legal/pinpoint/terms' },
-  { name: 'DrayagePro TMS', privacy: '/legal/drayagepro/privacy', terms: '/legal/drayagepro/terms' },
-  { name: 'Zoori', privacy: '/legal/zoori/privacy', terms: '/legal/zoori/terms' },
-  { name: 'Feng Shui', privacy: '/legal/fengshui/privacy', terms: '/legal/fengshui/terms' },
-  { name: 'STLMNT', privacy: '/legal/stlmnt/privacy', terms: '/legal/stlmnt/terms' },
-] as const
-
 export default function Support() {
   return (
     <>
@@ -83,6 +72,15 @@ export default function Support() {
             days, often sooner.
           </p>
         </div>
+
+        <VerdictBox variant="context">
+          <p>
+            Using <strong>Ôwn (Payback)</strong>? It has its own{' '}
+            <Link to="/support/payback">support page</Link>, covering how to
+            request a Google or Meta data export, what each kind of analysis
+            does, and what stays on your device.
+          </p>
+        </VerdictBox>
 
         <div className="section-header">
           <span className="section-num">How to get help</span>
@@ -129,16 +127,21 @@ export default function Support() {
           <p>
             Privacy policy and terms of service for each published app. They cover
             what data is collected, how it's stored, and how to request deletion.
+            See the full <Link to="/legal">legal index</Link> to browse each app's
+            documents on its own page.
           </p>
         </div>
 
         <div className="policy-list">
-          {APPS.map((app) => (
-            <div key={app.name} className="policy-row">
+          {legalApps.map((app) => (
+            <div key={app.slug} className="policy-row">
               <span className="policy-app">{app.name}</span>
               <span className="policy-links">
                 <Link to={app.privacy}>Privacy Policy</Link>
                 <Link to={app.terms}>Terms of Service</Link>
+                {app.dataDeletion && (
+                  <Link to={app.dataDeletion}>Account &amp; Data Deletion</Link>
+                )}
               </span>
             </div>
           ))}

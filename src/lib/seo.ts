@@ -55,6 +55,54 @@ export const META: Record<string, { title: string; description: string; path: st
       'Support for every app by An App Idea LLC. Report a bug, delete your data, manage a subscription, or ask a question. Answered directly by the builder, within 1–2 business days. Privacy and terms for each app.',
     path: '/support',
   },
+  '/legal': {
+    title: `Legal: Privacy Policy & Terms for Every App | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for every app published by An App Idea LLC: The Yap App, Ôwn (Payback), Pinpoint, DrayagePro TMS, Zoori, Feng Shui, and STLMNT.',
+    path: '/legal',
+  },
+  '/legal/yap': {
+    title: `Legal — The Yap App | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for The Yap App, the live translation app by An App Idea LLC.',
+    path: '/legal/yap',
+  },
+  '/legal/payback': {
+    title: `Legal — Ôwn (Payback) | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for Ôwn (Payback Own), the local-first consumer insights app by An App Idea LLC.',
+    path: '/legal/payback',
+  },
+  '/legal/pinpoint': {
+    title: `Legal — Pinpoint | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for Pinpoint, the civic engagement app by An App Idea LLC.',
+    path: '/legal/pinpoint',
+  },
+  '/legal/drayagepro': {
+    title: `Legal — DrayagePro TMS | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for DrayagePro TMS, the transportation management app by An App Idea LLC.',
+    path: '/legal/drayagepro',
+  },
+  '/legal/zoori': {
+    title: `Legal — Zoori | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for Zoori, the pet care app by An App Idea LLC.',
+    path: '/legal/zoori',
+  },
+  '/legal/fengshui': {
+    title: `Legal — Feng Shui | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for Feng Shui, the spatial analysis app by An App Idea LLC.',
+    path: '/legal/fengshui',
+  },
+  '/legal/stlmnt': {
+    title: `Legal — STLMNT | ${SITE.name}`,
+    description:
+      'Privacy Policy and Terms of Service for STLMNT, the class action settlement tracker by An App Idea LLC.',
+    path: '/legal/stlmnt',
+  },
   '/work/stlmnt-settlement-tracker': {
     title: `STLMNT — Class Action Settlement Tracker | ${SITE.name}`,
     description:
@@ -139,6 +187,12 @@ export const META: Record<string, { title: string; description: string; path: st
       'Terms of Service for The Yap App (iOS & Android). Covers free and Pro subscription tiers, voice cloning requirements, translation accuracy disclaimer, and governing law (Colorado). Published by An App Idea LLC.',
     path: '/legal/yap/terms',
   },
+  '/support/payback': {
+    title: `Support — Ôwn (Payback) | ${SITE.name}`,
+    description:
+      'Help with Ôwn (Payback Own): how to request a Google Takeout or Meta data export and bring it in, what Instant and Quick Analysis each do, what stays on your device, and how to delete your account. Operated by An App Idea LLC.',
+    path: '/support/payback',
+  },
   '/legal/payback/privacy': {
     title: `Privacy Policy — Ôwn (Payback) | ${SITE.name}`,
     description:
@@ -150,6 +204,12 @@ export const META: Record<string, { title: string; description: string; path: st
     description:
       'Terms of Service for Ôwn (Payback Own) on iOS & Android. 20-section agreement covering eligibility, AI analysis, data ownership, disclaimers, arbitration, and governing law (Colorado). Operated by An App Idea LLC.',
     path: '/legal/payback/terms',
+  },
+  '/legal/payback/data-deletion': {
+    title: `Account & Data Deletion — Ôwn (Payback) | ${SITE.name}`,
+    description:
+      'How to delete your Ôwn (Payback Own) account and all associated data, in-app or by request. Covers what is removed immediately, what takes up to 30 days, and how to revoke Google or Apple account access. Operated by An App Idea LLC.',
+    path: '/legal/payback/data-deletion',
   },
   '/legal/pinpoint/privacy': {
     title: `Privacy Policy — Pinpoint | ${SITE.name}`,
