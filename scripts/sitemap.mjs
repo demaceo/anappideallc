@@ -26,7 +26,7 @@ async function main() {
     return mod
   })
 
-  const base = 'https://www.anappidea.llc'
+  const base = 'https://anappidea.llc'
   const today = new Date().toISOString().split('T')[0]
 
   const PRIORITIES = {
@@ -57,7 +57,8 @@ ${urls}
 </urlset>
 `
   writeFileSync(path.join(root, 'dist/sitemap.xml'), sitemap)
-  console.log(`  emitted dist/sitemap.xml (${PRERENDER_PATHS.length} urls)`)
+  writeFileSync(path.join(root, 'public/sitemap.xml'), sitemap)
+  console.log(`  emitted dist/sitemap.xml and public/sitemap.xml (${PRERENDER_PATHS.length} urls)`)
 
   const robots = `User-agent: *
 Allow: /
@@ -65,7 +66,8 @@ Allow: /
 Sitemap: ${base}/sitemap.xml
 `
   writeFileSync(path.join(root, 'dist/robots.txt'), robots)
-  console.log('  emitted dist/robots.txt')
+  writeFileSync(path.join(root, 'public/robots.txt'), robots)
+  console.log('  emitted dist/robots.txt and public/robots.txt')
 }
 
 main().catch((e) => {

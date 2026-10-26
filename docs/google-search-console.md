@@ -52,24 +52,34 @@ step 2.)
 ## 3. Submit the sitemap
 
 1. First sanity-check that it's live: open
-   <https://www.anappidea.llc/sitemap.xml> in a browser. The build generates it
+   <https://anappidea.llc/sitemap.xml> in a browser. The build generates it
    automatically (`scripts/sitemap.mjs`).
 2. In Search Console, left sidebar → **Sitemaps**.
-3. Under "Add a new sitemap," enter `https://www.anappidea.llc/sitemap.xml`
+3. Under "Add a new sitemap," enter `https://anappidea.llc/sitemap.xml`
    (a Domain property prefills the host — just type `sitemap.xml`).
-4. Click **Submit**. Status should reach **Success** within minutes to a day,
-   listing **6 discovered URLs**: `/`, `/about`, `/work`, `/services`,
-   `/process`, `/contact`.
+4. Click **Submit**. Status should reach **Success** within minutes to a day.
 
 ## 4. Request indexing on the homepage
 
 1. Click the **URL inspection** bar at the top.
-2. Paste `https://www.anappidea.llc` and press Enter.
+2. Paste `https://anappidea.llc` and press Enter.
 3. Wait for "Retrieving data from Google index" to finish.
 4. Click **Request Indexing** (runs a ~30–60s live test, then queues the URL).
 5. Repeat for the highest-value pages — at minimum
-   `https://www.anappidea.llc/work` and `https://www.anappidea.llc/services`.
+   `https://anappidea.llc/work` and `https://anappidea.llc/services`.
    There's a daily quota of ~10–12 manual requests, so prioritize.
+
+---
+
+## 5. Domain Migration from Mile High Interface
+
+If migrating from `milehighinterface.com`:
+1. In Vercel, ensure both `milehighinterface.com` and `www.milehighinterface.com`
+   are added and configured to **Redirect to anappidea.llc** with status **301 (Moved Permanently)**.
+2. In Search Console, open the property for `milehighinterface.com`.
+3. Go to **Settings** → **Change of address**.
+4. Select `anappidea.llc` from the dropdown and run the validation check.
+5. Google will verify the 301 redirects and transfer domain authority.
 
 ---
 
@@ -78,13 +88,13 @@ step 2.)
 - **Timing:** indexing a brand-new domain usually takes **a few days to ~2
   weeks**, even after requesting. Knowledge Graph / AI Overview recognition
   lags further. This is normal — there's no faster lever.
-- **Keep `www` canonical.** The code canonicalizes to
-  `https://www.anappidea.llc`. Confirm in **Vercel → Domains** that
-  `www.anappidea.llc` is **primary** and bare `anappidea.llc` **redirects** to
+- **Apex domain canonical:** The code canonicalizes to
+  `https://anappidea.llc`. Confirm in **Vercel → Domains** that
+  `anappidea.llc` is **primary** and `www.anappidea.llc` **redirects** to
   it. Serving both without a redirect splits ranking signals.
 - **The `.llc` TLD is fully supported** by Google — no special handling needed.
-- **Strengthen `sameAs`:** add `https://www.anappidea.llc` to the bio of each
-  linked profile (Facebook, Instagram, Threads, TikTok). `sameAs` is a
+- **Strengthen `sameAs`:** add `https://anappidea.llc` to the bio of each
+  linked profile (Facebook, Instagram, Threads, TikTok, LinkedIn). `sameAs` is a
   bidirectional trust signal — Google weights it far more when the profile
   links back to the domain.
 - **Track progress** under **Pages** (indexed vs. not) and **Performance**

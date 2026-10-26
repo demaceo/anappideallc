@@ -4,6 +4,13 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/portfolio",
+      "destination": "/work",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)\\.(svg|png|jpg|jpeg|gif|webp|woff2)",

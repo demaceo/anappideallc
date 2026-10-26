@@ -8,9 +8,9 @@ import { processSteps } from '../data/process'
 // are intent-driven and sized for SERP truncation (~155 chars).
 export const META: Record<string, { title: string; description: string; path: string }> = {
   '/': {
-    title: `${SITE.name}: AI-Native, Privacy-First Mobile App Studio | Denver`,
+    title: 'An App Idea LLC | Demaceo Vincent Howard | Software & App Development',
     description:
-      'Denver studio building AI-native mobile apps with privacy built in: real-time AI, on-device encryption, React Native, shipped end-to-end by one builder. 12 apps shipped. MVPs in 6–8 weeks.',
+      'An App Idea LLC (formerly Mile High Interface), founded by Demaceo Vincent Howard, builds custom mobile and web applications.',
     path: '/',
   },
   '/about': {
@@ -213,23 +213,23 @@ export const META: Record<string, { title: string; description: string; path: st
   },
 }
 
-// Base graph present on every page: ProfessionalService + WebSite.
+// Base graph present on every page: Organization/ProfessionalService + Person + WebSite.
 function buildBaseGraph(): object[] {
   return [
     {
       '@type': 'ProfessionalService',
-      '@id': `${SITE.url}/#org`,
+      '@id': `${SITE.url}/#organization`,
       name: SITE.name,
+      alternateName: SITE.alternateName,
       url: SITE.url,
+      logo: `${SITE.url}/logo.png`,
       description: SITE.description,
       founder: {
         '@type': 'Person',
         '@id': `${SITE.url}/#founder`,
         name: SITE.founder.name,
-        jobTitle: 'Founder & Software Developer',
-        worksFor: { '@id': `${SITE.url}/#org` },
-        // Founder's personal profiles (e.g. GitHub) live on the Person, not
-        // the org. Omitted entirely until at least one is configured.
+        jobTitle: SITE.founder.jobTitle,
+        worksFor: { '@id': `${SITE.url}/#organization` },
         ...(FOUNDER_SAME_AS.length ? { sameAs: FOUNDER_SAME_AS } : {}),
       },
       address: {
@@ -291,11 +291,19 @@ function buildBaseGraph(): object[] {
       },
     },
     {
+      '@type': 'Person',
+      '@id': `${SITE.url}/#founder`,
+      name: SITE.founder.name,
+      jobTitle: SITE.founder.jobTitle,
+      worksFor: { '@id': `${SITE.url}/#organization` },
+      ...(FOUNDER_SAME_AS.length ? { sameAs: FOUNDER_SAME_AS } : {}),
+    },
+    {
       '@type': 'WebSite',
       '@id': `${SITE.url}/#website`,
       url: SITE.url,
       name: SITE.name,
-      publisher: { '@id': `${SITE.url}/#org` },
+      publisher: { '@id': `${SITE.url}/#organization` },
     },
   ]
 }
@@ -315,7 +323,7 @@ function buildPageGraph(route: string): object[] {
           name: meta.title,
           description: meta.description,
           isPartOf: { '@id': `${SITE.url}/#website` },
-          about: { '@id': `${SITE.url}/#org` },
+          about: { '@id': `${SITE.url}/#organization` },
         },
         {
           '@type': 'FAQPage',
@@ -373,7 +381,7 @@ function buildPageGraph(route: string): object[] {
           name: meta.title,
           description: meta.description,
           isPartOf: { '@id': `${SITE.url}/#website` },
-          about: { '@id': `${SITE.url}/#org` },
+          about: { '@id': `${SITE.url}/#organization` },
         },
         {
           '@type': 'Person',
@@ -382,7 +390,7 @@ function buildPageGraph(route: string): object[] {
           jobTitle: 'Founder & Software Developer',
           description:
             'Demaceo Vincent is a solo software developer and founder of An App Idea LLC, a dev studio in Denver, Colorado. He builds mobile apps and web products end-to-end: interface, backend, auth, and deployment.',
-          worksFor: { '@id': `${SITE.url}/#org` },
+          worksFor: { '@id': `${SITE.url}/#organization` },
           address: {
             '@type': 'PostalAddress',
             addressLocality: 'Denver',
@@ -425,7 +433,7 @@ function buildPageGraph(route: string): object[] {
               '@type': 'Service',
               name: s.title,
               description: s.description,
-              provider: { '@id': `${SITE.url}/#org` },
+              provider: { '@id': `${SITE.url}/#organization` },
               serviceOutput: s.deliverables.join(', '),
             },
           })),
@@ -511,7 +519,7 @@ function buildPageGraph(route: string): object[] {
           name: meta.title,
           description: meta.description,
           isPartOf: { '@id': `${SITE.url}/#website` },
-          about: { '@id': `${SITE.url}/#org` },
+          about: { '@id': `${SITE.url}/#organization` },
         },
         {
           '@type': 'FAQPage',
@@ -561,7 +569,7 @@ function buildPageGraph(route: string): object[] {
           name: meta.title,
           description: meta.description,
           isPartOf: { '@id': `${SITE.url}/#website` },
-          about: { '@id': `${SITE.url}/#org` },
+          about: { '@id': `${SITE.url}/#organization` },
         },
         {
           '@type': 'FAQPage',

@@ -3,13 +3,15 @@
 
 export const SITE = {
   name: 'An App Idea LLC',
+  alternateName: 'Mile High Interface',
   short: 'An App Idea',
   initials: 'AAI',
   domain: 'anappidea.llc',
-  url: 'https://www.anappidea.llc',
+  url: 'https://anappidea.llc',
   email: 'hello@anappidea.llc',
   founder: {
-    name: 'Demaceo Vincent',
+    name: 'Demaceo Vincent Howard',
+    jobTitle: 'Founder & CEO',
     location: 'Denver, Colorado',
     // Personal profiles for the founder — attached to the Person node in
     // JSON-LD (not the organization), since they identify the individual.

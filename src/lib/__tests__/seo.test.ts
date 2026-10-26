@@ -14,6 +14,9 @@ describe('structured data', () => {
     expect(org).toBeTruthy()
     expect(org.name).toBe(SITE.name)
     expect(org.url).toBe(SITE.url)
+    expect(org.alternateName).toBe('Mile High Interface')
+    expect(org.founder.name).toBe('Demaceo Vincent Howard')
+    expect(org.founder.jobTitle).toBe('Founder & CEO')
   })
 
   it('only includes sameAs when at least one real profile URL is configured', () => {
