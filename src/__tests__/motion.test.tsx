@@ -56,7 +56,11 @@ describe('reduced motion never loads GSAP', () => {
     render(<RouterProvider router={createMemoryRouter(routes, { initialEntries: ['/'] })} />)
     await new Promise((r) => setTimeout(r, 50))
     expect(loaded).not.toHaveBeenCalled()
-  })
+    // resetModules() makes this reload the whole app's module graph cold,
+    // which takes several seconds under parallel workers: past Vitest's 5s
+    // default, though it passes in ~1s alone. The time is the import, not a
+    // wait on anything flaky.
+  }, 30_000)
 })
 
 describe('scenes', () => {
