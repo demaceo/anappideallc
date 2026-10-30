@@ -85,9 +85,9 @@ export default function Home() {
           <div className="intro-block">
             <p data-split>
               Bring the idea, even a half-formed one. I'm a Black founder in
-              Denver, and I build websites, apps, and AI tools so Black and
-              brown business owners aren't the last ones to get what
-              technology can do. Then I hand you the keys and the know-how.
+              Denver, and I build websites, apps, and AI tools for Black and
+              brown business owners who've had the drive all along and not the
+              backing. Then I hand you the keys and the know-how.
             </p>
           </div>
 

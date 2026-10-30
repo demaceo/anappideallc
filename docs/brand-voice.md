@@ -209,9 +209,13 @@ The site tells the founder story one chapter per page, in nav order (Home →
 About → Work → Services → Process → Why not AI → Contact). The copy lives in
 `src/data/story.ts`; edit it there, never inline in a page.
 
-- **The belief:** access shouldn't depend on who you are. Black and brown
+- **The through-line:** *the second job*, running the tech on top of running
+  the business. Chapter 1 names it, each chapter takes a piece of it off the
+  owner's plate, chapter 7 closes on it. Every chapter opens on a short
+  second-person scene and ends with a `bridge` teaser into the next.
+- **The belief:** the drive is there; the backing isn't. Black and brown
   communities in the U.S. have been underfunded and under-resourced for
-  generations, and tech is where the gap shows most.
+  generations, and tech is where the gap shows.
 - **The promise:** *Built for you. Handed to you.* I build it, then teach you
   to run it (the Own It package): updating the site, reading analytics,
   checking site health, using AI safely.
@@ -232,3 +236,8 @@ About → Work → Services → Process → Why not AI → Contact). The copy li
   personal and historical." Add personal moments only when the founder
   supplies them.
 - **Mission-first, not memoir.** Lead with the belief; use specifics as proof.
+- **Every number is cited.** Stats live in `EVIDENCE` in `src/data/story.ts`
+  with source, URL, and date, checked against the primary source. Use the
+  source's own wording (the Fed says "Hispanic-owned"), and don't claim what
+  the data doesn't show: Black and Hispanic owners adopt AI at the same rate as
+  white owners, so never say they're "behind" or "the last to get it."

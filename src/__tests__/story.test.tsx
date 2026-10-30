@@ -2,7 +2,7 @@ import { render, screen, within } from '@testing-library/react'
 import { RouterProvider, createMemoryRouter } from 'react-router'
 import { describe, it, expect } from 'vitest'
 import { routes, PRERENDER_PATHS } from '../routes'
-import { STORY, STORY_PROOF, STORY_CLOSING } from '../data/story'
+import { STORY, STORY_PROOF, STORY_CLOSING, EVIDENCE } from '../data/story'
 import { caseStudies } from '../data/case-studies'
 
 function renderRoute(path: string) {
@@ -29,11 +29,30 @@ describe('founder story data', () => {
 
   it('follows the brand voice: no em-dashes in story copy', () => {
     const copy = [
-      ...STORY.flatMap((c) => [c.title, c.heading, ...c.body]),
+      ...STORY.flatMap((c) => [c.title, c.heading, ...c.body, ...(c.personal ?? []), c.bridge ?? '']),
       ...STORY_PROOF.map((p) => p.line),
+      ...Object.values(EVIDENCE).map((e) => e.label),
       STORY_CLOSING,
     ]
     for (const text of copy) expect(text).not.toMatch(/—/)
+  })
+
+  it('gives every chapter but the last a bridge into the next', () => {
+    STORY.slice(0, -1).forEach((c) => expect(c.bridge?.trim()).toBeTruthy())
+    expect(STORY[STORY.length - 1].bridge).toBeUndefined()
+  })
+
+  // Fact-based copy is only as good as its citations: every figure must link
+  // to a real source and say when it was published.
+  it('cites a source URL and date for every piece of evidence', () => {
+    for (const e of Object.values(EVIDENCE)) {
+      expect(e.url).toMatch(/^https:\/\//)
+      expect(e.source.trim()).toBeTruthy()
+      expect(e.date).toMatch(/^[A-Z][a-z]{2} \d{4}$/)
+      expect(Number.isFinite(e.value)).toBe(true)
+    }
+    const used = new Set(STORY.flatMap((c) => c.evidence ?? []))
+    for (const id of used) expect(EVIDENCE[id]).toBeTruthy()
   })
 })
 
@@ -50,11 +69,23 @@ describe('founder story on each page', () => {
         within(section).getByText(`Chapter ${pad(i + 1)} / ${pad(STORY.length)}`),
       ).toBeInTheDocument()
 
+      // Evidence figures are real numbers in the markup, not blank until JS.
+      for (const id of chapter.evidence ?? []) {
+        const e = EVIDENCE[id]
+        expect(
+          within(section).getByText(`${e.value.toFixed(e.decimals ?? 0)}${e.suffix}`),
+        ).toBeInTheDocument()
+        const sources = within(section).getAllByRole('link', { name: new RegExp(e.date) })
+        expect(sources.some((l) => l.getAttribute('href') === e.url)).toBe(true)
+      }
+
       const next = STORY[i + 1]
       const nav = screen.queryByRole('navigation', { name: 'Founder story' })
       if (next) {
         expect(nav).not.toBeNull()
-        expect(within(nav as HTMLElement).getByRole('link')).toHaveAttribute('href', next.path)
+        const link = within(nav as HTMLElement).getByRole('link')
+        expect(link).toHaveAttribute('href', next.path)
+        expect(link).toHaveTextContent(chapter.bridge as string)
       } else {
         expect(nav).toBeNull()
       }

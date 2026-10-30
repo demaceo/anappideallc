@@ -77,7 +77,7 @@ export const services: Service[] = [
     slug: 'ai-integration',
     title: 'AI Integration for Existing Platforms',
     description:
-      "Your website, store, or booking system already works. I add the AI layer on top and keep it running: chat, search, personalization, and the busywork automated, so Black and brown-owned businesses aren't the last ones to get it.",
+      "Your website, store, or booking system already works. I add the AI layer on top and keep it running: chat, search, personalization, and the busywork automated, without the cost and risk landing on you.",
     features: [
       'AI chat grounded in your actual content, not a generic bot',
       'Semantic search that understands what customers mean',

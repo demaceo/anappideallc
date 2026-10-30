@@ -3126,6 +3126,79 @@ main a:hover {
 
 .story-next-link:hover { background: var(--c-accent); color: var(--c-ink); }
 
+/* Scene-setting first line of each chapter reads a size up. */
+.story-chapter-opening {
+  font-size: var(--text-fluid-2);
+  font-weight: 700;
+}
+
+/* Founder's own words, when supplied: set off with an accent rule. */
+.story-chapter-personal {
+  padding-left: var(--space-4);
+  border-left: var(--bw-brutal) solid var(--c-accent);
+  font-style: italic;
+}
+
+/* Sourced evidence: big figure, one line of context, linked source. */
+.evidence-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: var(--space-4);
+  margin: var(--space-7) 0 0;
+  padding: 0;
+}
+
+.evidence {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--c-ink);
+  color: var(--c-bg);
+}
+
+.evidence-value {
+  font-family: var(--ff-display);
+  font-size: var(--text-fluid-7);
+  line-height: 0.9;
+  color: var(--c-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.evidence-label {
+  font-family: var(--ff-body);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--c-bg);
+}
+
+.evidence-source {
+  margin-top: auto;
+  padding-top: var(--space-2);
+  min-height: 24px;
+  font-family: var(--ff-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--c-bg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.evidence-source::after { content: ' ↗' / ''; }
+.evidence-source:hover { color: var(--c-accent); }
+
+/* Next-chapter link: title + one-line teaser for the coming chapter. */
+.story-next-link { flex-wrap: wrap; text-align: left; }
+.story-next-title { font-weight: 700; }
+.story-next-bridge {
+  font-family: var(--ff-body);
+  font-size: var(--text-sm);
+  opacity: 0.85;
+}
+.story-next-bridge::before { content: '· ' / ''; }
+
 /* The closing line ("If not me, then who?") on About and Contact. */
 .story-closing p {
   font-family: var(--ff-display);
