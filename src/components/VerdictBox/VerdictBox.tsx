@@ -21,16 +21,14 @@ const LABELS: Record<VerdictVariant, string> = {
 interface VerdictBoxProps {
   variant?: VerdictVariant
   children: ReactNode
-  // Hook read by useBrutalistScroll for the scroll-reveal tween.
-  'data-reveal'?: boolean | ''
 }
 
-export function VerdictBox({ variant = 'assessment', children, ...rest }: VerdictBoxProps) {
+export function VerdictBox({ variant = 'assessment', children }: VerdictBoxProps) {
   // The modifier class names are unchanged so the existing per-variant styling
   // in globals.css keeps applying.
   const modifier = variant === 'assessment' ? '' : ` ${variant}`
   return (
-    <div className={`verdict-box${modifier}`} {...rest}>
+    <div className={`verdict-box${modifier}`}>
       <span className="verdict-box-label">{LABELS[variant]}</span>
       {children}
     </div>

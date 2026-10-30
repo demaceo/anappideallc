@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { Link } from 'react-router'
 import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { FooterNav } from '../components/FooterNav/FooterNav'
@@ -12,8 +11,9 @@ import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
 import { Marquee } from '../components/Marquee/Marquee'
 import { Section } from '../components/Section/Section'
-import { useBrutalistScroll } from '../hooks/useBrutalistScroll'
 import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
+import { UnfoldScene } from '../components/scenes/UnfoldScene'
+import { Counter } from '../components/Counter/Counter'
 
 const MARQUEE_ITEMS = [
   'Websites',
@@ -45,9 +45,6 @@ const SERVICE_ICON_CLASSES: Record<string, string> = {
 }
 
 export default function Home() {
-  const scopeRef = useRef<HTMLElement>(null)
-  useBrutalistScroll(scopeRef)
-
   return (
     <>
       <RouteHead {...META['/']} />
@@ -80,10 +77,10 @@ export default function Home() {
 
       <Marquee items={MARQUEE_ITEMS} />
 
-      <main id="main-content" tabIndex={-1} ref={scopeRef}>
+      <main id="main-content" tabIndex={-1}>
         <Section color="bone" ghost="IDEA">
           <div className="intro-block">
-            <p data-split>
+            <p>
               Bring the idea, even a half-formed one. I'm a Black founder in
               Denver, and I build websites, apps, and AI tools for Black and
               brown business owners who've had the drive all along and not the
@@ -91,7 +88,10 @@ export default function Home() {
             </p>
           </div>
 
-          <StoryChapter id="belief" />
+          <div className="split">
+            <StoryChapter id="belief" />
+            <UnfoldScene />
+          </div>
         </Section>
 
         <Section color="yellow" num="01" ghost="SHIP">
@@ -101,10 +101,10 @@ export default function Home() {
             <div className="section-rule" />
           </div>
 
-          <div className="stats-grid" data-reveal>
+          <div className="stats-grid">
             <div className="stat-box neutral" data-tilt>
               <span className="stat-label-top">Products shipped</span>
-              <span className="stat-num large">12</span>
+              <Counter className="stat-num large" value={12} />
               <span className="stat-desc">iOS · Android · Web · AI-integrated</span>
             </div>
             <div className="stat-box positive" data-tilt>
@@ -114,14 +114,14 @@ export default function Home() {
             </div>
             <div className="stat-box neutral" data-tilt>
               <span className="stat-label-top">AI-integrated builds</span>
-              <span className="stat-num large">4</span>
+              <Counter className="stat-num large" value={4} />
               <span className="stat-desc">Gemini · ElevenLabs · Firebase</span>
             </div>
           </div>
         </Section>
 
         <Section color="ink">
-          <div className="pullquote" data-reveal>
+          <div className="pullquote">
             <p>
               "Most 'AI-powered' apps are a single API call in a modal. I build
               the real version, with streaming audio, on-device pipelines, and
@@ -139,10 +139,11 @@ export default function Home() {
             <div className="section-rule" />
           </div>
 
+          <div className="grid-3">
           {services.map((s) => {
             const ServiceIcon = SERVICE_ICONS[s.id] ?? IconZap
             return (
-              <div key={s.id} className="feature-item" data-reveal data-tilt>
+              <div key={s.id} className="feature-item" data-tilt>
                 <div className={`feature-icon ${SERVICE_ICON_CLASSES[s.id] ?? 'icon-green'}`}>
                   <ServiceIcon size={20} />
                 </div>
@@ -158,6 +159,7 @@ export default function Home() {
               </div>
             )
           })}
+          </div>
         </Section>
 
         <div className="container">
@@ -173,7 +175,7 @@ export default function Home() {
             <div className="section-rule" />
           </div>
 
-          <VerdictBox variant="context" data-reveal>
+          <VerdictBox variant="context">
             <p>
               "Just prompt an AI and ship it" gets you a head start. And stops
               there. Wireframing, testing, security, App Store launch, and
@@ -193,7 +195,7 @@ export default function Home() {
 
           <ConsultCTA showFormLink={false} />
 
-          <VerdictBox variant="contact" data-reveal>
+          <VerdictBox variant="contact">
             <p>
               Prefer to write? Got an app or website idea, or a project that needs
               a co-builder? Send a few sentences to{' '}

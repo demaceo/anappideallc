@@ -60,6 +60,7 @@ export default function About() {
           <div className="section-rule" />
         </div>
 
+        <div className="grid-2">
         {differentiators.map((d) => {
           const { Icon: DiffIcon, iconClass, eyebrow } = DIFF_META[d.id] ?? DIFF_FALLBACK
           return (
@@ -75,6 +76,7 @@ export default function About() {
             </div>
           )
         })}
+        </div>
 
         <div className="chapter-divider">
           <span className="ornament">✦ ✦ ✦</span>

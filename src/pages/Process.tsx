@@ -76,6 +76,7 @@ export default function Process() {
           <div className="section-rule" />
         </div>
 
+        <div className="grid-2">
         {processSteps.map((p) => {
           const { Icon: ProcessIcon, iconClass } = PROCESS_META[p.step] ?? PROCESS_FALLBACK
           return (
@@ -103,6 +104,7 @@ export default function Process() {
             </div>
           )
         })}
+        </div>
 
         <VerdictBox variant="assessment">
           <p>

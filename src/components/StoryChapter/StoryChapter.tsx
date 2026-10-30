@@ -23,20 +23,29 @@ export function StoryChapter({ id, children }: StoryChapterProps) {
   const [opening, ...rest] = chapter.body
   return (
     <section className="story-chapter" aria-labelledby={headingId}>
-      <p className="story-chapter-label">
-        <span className="story-chapter-count">{chapterCount(index)}</span>
-        <span aria-hidden="true"> · </span>
-        {chapter.title}
-      </p>
-      <h2 id={headingId} className="story-chapter-heading">{chapter.heading}</h2>
-      {/* The opening line sets the scene, so it reads a size up. */}
-      <p className="story-chapter-body story-chapter-opening">{opening}</p>
-      {chapter.personal?.map((p) => (
-        <p key={p} className="story-chapter-body story-chapter-personal">{p}</p>
-      ))}
-      {rest.map((p) => (
-        <p key={p} className="story-chapter-body">{p}</p>
-      ))}
+      {/* The card's border, drawn as SVG so it can draw itself in on scroll.
+          Fully drawn in the markup: without motion it's simply the border. */}
+      <svg className="story-chapter-frame" aria-hidden="true">
+        <rect data-frame width="100%" height="100%" />
+      </svg>
+      <div className="story-chapter-head">
+        <p className="story-chapter-label">
+          <span className="story-chapter-count">{chapterCount(index)}</span>
+          <span aria-hidden="true"> · </span>
+          {chapter.title}
+        </p>
+        <h2 id={headingId} className="story-chapter-heading">{chapter.heading}</h2>
+      </div>
+      <div className="story-chapter-text">
+        {/* The opening line sets the scene, so it reads a size up. */}
+        <p className="story-chapter-body story-chapter-opening">{opening}</p>
+        {chapter.personal?.map((p) => (
+          <p key={p} className="story-chapter-body story-chapter-personal">{p}</p>
+        ))}
+        {rest.map((p) => (
+          <p key={p} className="story-chapter-body">{p}</p>
+        ))}
+      </div>
       {chapter.evidence?.length ? <Evidence ids={chapter.evidence} /> : null}
       {children}
     </section>

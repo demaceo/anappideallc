@@ -9,7 +9,7 @@ interface MarqueeProps {
 export function Marquee({ items }: MarqueeProps) {
   return (
     <div className="marquee" aria-hidden="true">
-      <div className="marquee-track">
+      <div className="marquee-track" data-marquee>
         {[...items, ...items].map((item, i) => (
           <span key={`${item}-${i}`}>
             {item}
