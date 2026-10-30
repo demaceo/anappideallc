@@ -10,6 +10,7 @@ import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 import { STORY_CLOSING } from '../data/story'
+import { NextStep } from '../components/NextStep/NextStep'
 
 // Keyed by differentiator title rather than array position: index-aligned
 // lookups silently mispair every later entry when the source array is
@@ -108,6 +109,11 @@ export default function About() {
           <p>{STORY_CLOSING}</p>
           <span className="attrib">{SITE.founder.name}, on why this studio exists</span>
         </div>
+
+        <NextStep
+          heading="Work with the builder directly"
+          blurb="A free 30-minute call with the person who'd build it. Bring the idea, even a half-formed one."
+        />
 
         <StoryNext id="story" />
       </main>

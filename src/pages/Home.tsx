@@ -109,8 +109,8 @@ export default function Home() {
             </div>
             <div className="stat-box positive" data-tilt>
               <span className="stat-label-top">MVP timeline</span>
-              <span className="stat-num medium">6–8 weeks</span>
-              <span className="stat-desc">Sketch to production deploy</span>
+              <span className="stat-num medium">7–13 weeks</span>
+              <span className="stat-desc">Discovery to finished build</span>
             </div>
             <div className="stat-box neutral" data-tilt>
               <span className="stat-label-top">AI-integrated builds</span>
@@ -191,7 +191,7 @@ export default function Home() {
             <div className="section-rule" />
           </div>
 
-          <ConsultCTA />
+          <ConsultCTA showFormLink={false} />
 
           <VerdictBox variant="contact" data-reveal>
             <p>

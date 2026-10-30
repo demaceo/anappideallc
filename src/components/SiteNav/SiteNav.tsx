@@ -5,6 +5,10 @@ const NAV_LINKS = [
   { to: '/work',     label: 'Work'     },
   { to: '/services', label: 'Services' },
   { to: '/process',  label: 'Process'  },
+  // Contact used to be reachable only through the floating button and the
+  // footer, so the one page every prospect is heading for was missing from
+  // the place they look first.
+  { to: '/contact',  label: 'Contact'  },
 ] as const
 
 export function SiteNav() {

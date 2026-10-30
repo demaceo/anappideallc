@@ -8,6 +8,7 @@ import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 import { STORY_PROOF } from '../data/story'
+import { NextStep } from '../components/NextStep/NextStep'
 import {
   LogoStlmnt,
   LogoPinpoint,
@@ -58,11 +59,13 @@ const STUDY_LABELS: Record<string, string> = {
   'portfolio': 'Portfolio',
 }
 
-// The five mission apps lead the list, in the order the proof chapter tells
-// them; everything else keeps its existing order (Array.sort is stable).
+// Order: the five mission apps first, in the order the proof chapter tells
+// them; then client work; then the studio's own products. Array.prototype.sort
+// is stable, so ties keep data order.
 const PROOF_RANK = new Map(STORY_PROOF.map((p, i) => [p.slug, i]))
-const rank = (slug: string) => PROOF_RANK.get(slug) ?? STORY_PROOF.length
-const orderedStudies = [...caseStudies].sort((a, b) => rank(a.slug) - rank(b.slug))
+const rank = (c: (typeof caseStudies)[number]) =>
+  PROOF_RANK.get(c.slug) ?? STORY_PROOF.length + (c.client ? 0 : 1)
+const orderedStudies = [...caseStudies].sort((a, b) => rank(a) - rank(b))
 const studyBySlug = new Map(caseStudies.map((c) => [c.slug, c]))
 
 export default function Work() {
@@ -150,7 +153,9 @@ export default function Work() {
                 )}
               </div>
               <div className="feature-body">
-                <span className="feature-eyebrow">{STUDY_LABELS[c.slug] ?? c.category}</span>
+                <span className="feature-eyebrow">
+                  {c.client ? `Client work · ${c.client}` : STUDY_LABELS[c.slug] ?? c.category}
+                </span>
                 <h3 className="feature-title">{c.title}</h3>
                 <p>{c.summary}</p>
                 <span className="bubble-subtitle">Outcomes</span>
@@ -172,6 +177,11 @@ export default function Work() {
             </Link>
           )
         })}
+
+        <NextStep
+          heading="Got something like these in mind?"
+          blurb="Tell me what you're building. A free 30-minute call, no spec required."
+        />
 
         <StoryNext id="proof" />
       </main>

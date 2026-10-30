@@ -112,9 +112,9 @@ The relationship is collaborative — write like a partner, not a vendor.
 - **No em-dashes (`—`)** in copy. Use a comma, a colon, parentheses, or the
   brand's middot (`·`) separator instead. (Em-dashes read as AI-generated and
   we're the human-builder studio — practice what we preach.)
-- **Keep en-dashes (`–`)** in numeric ranges: `6–8 weeks`, `10–12 weeks`.
+- **Keep en-dashes (`–`)** in numeric ranges: `7–13 weeks`, `1–2 weeks`.
 - **The `·` middot** is our separator for peer items: `iOS · Android · Web`,
-  `Time to Launch · 6–8 weeks`.
+  `Time to build · 7–13 weeks`.
 - **Sentence case** for most headings; Title Case is fine for nav and proper
   page titles.
 - **Curly quotes** in prose (`"like this"`), straight quotes in code.

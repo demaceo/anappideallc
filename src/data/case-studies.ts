@@ -47,6 +47,11 @@ export interface CaseStudy {
   // rendered full-bleed in the project tile instead of the line-glyph fallback.
   icon?: string
   featured?: boolean
+  // Who the project was built for, when it was client work rather than one
+  // of the studio's own products. Set → tagged "Client work" and listed first
+  // on /work, because a prospect's first question is "have you built for
+  // someone like me?". Leave unset for in-house products.
+  client?: string
 }
 
 export const caseStudies: CaseStudy[] = [

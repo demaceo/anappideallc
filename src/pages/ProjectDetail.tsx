@@ -3,6 +3,7 @@ import { getCaseStudyBySlug, getAdjacentCaseStudies } from '../data/case-studies
 import { PROJECT_COLORS } from '../data/project-colors'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+import { NextStep } from '../components/NextStep/NextStep'
 import {
   LogoStlmnt,
   LogoPinpoint,
@@ -71,7 +72,7 @@ export default function ProjectDetail() {
           <p className="overline">
             <Link to="/work">Work</Link>
             {' · '}
-            {project.category}
+            {project.client ? `Client work for ${project.client}` : project.category}
           </p>
           <div className="project-study-nav">
             {prev && (
@@ -248,6 +249,11 @@ export default function ProjectDetail() {
             </div>
           </div>
         )}
+
+        <NextStep
+          heading={`Building something like ${project.title}?`}
+          blurb="A free 30-minute call to talk through your idea with the person who built this one."
+        />
 
         {/* Back nav */}
         <div className="project-back-nav">
