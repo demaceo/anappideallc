@@ -440,38 +440,33 @@ h1, h2, h3 {
 }
 
 .contact-fab-label::after {
-  content: ' ↗';
+  content: ' →';
 }
 
-.contact-fab-icon { display: none; }
+/* The FAB is fixed, so it paints over whatever is mid-scroll. At phone widths
+   the text column runs nearly edge to edge, so a floating pill landed on body
+   copy and clipped words mid-sentence; the icon-only disc that replaced it
+   still covered a 48px square of text, and a paper plane alone did not say
+   "contact" to a first-time visitor.
 
-/* The FAB is fixed, so it paints over whatever is mid-scroll — `body`'s
-   padding-bottom only protects the END of the document. At mobile widths the
-   text column runs nearly edge to edge, so the full-width pill was landing on
-   top of body copy and clipping words mid-sentence. Collapse to a compact
-   icon-only disc in the corner: same affordance, a fraction of the footprint.
-   The visible "Contact" label is swapped for the icon, and the link's own
-   aria-label keeps the accessible name intact. */
+   Below 480px it docks as a full-width bar instead: always labelled, never
+   over text, because body reserves matching padding at the end of the page
+   and the bar sits below the reading column rather than on it. */
 @media (max-width: 480px) {
   .contact-fab {
-    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
-    right: calc(1rem + env(safe-area-inset-right, 0px));
-    width: 3rem;
-    height: 3rem;
-    padding: 0;
-    gap: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     justify-content: center;
-    border-radius: 50%;
-    /* Ink disc with a bone ring, so it stays a distinct object over any section
-       colour it passes. The ring is the border already set above; the outline
-       adds the outer hairline without reaching for a shadow. */
-    background: var(--c-fg);
+    padding: var(--space-3) var(--space-4)
+      calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+    min-height: 48px;
+    border: 0;
+    border-top: var(--bw-thick) solid var(--c-bg);
+    outline: 0;
   }
 
-  .contact-fab-label { display: none; }
-  .contact-fab-icon { display: block; }
-
-  /* The square corner ticks read as artifacts on a circle. */
+  /* The square corner ticks read as artifacts on a full-width bar. */
   .contact-fab::before,
   .contact-fab::after { display: none; }
 }
@@ -2007,6 +2002,29 @@ main[data-project-theme] .project-cover-block::before {
   margin: 0;
 }
 
+.contact-form-sub a {
+  color: var(--c-bg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  display: inline-block;
+  min-height: 24px;
+}
+
+.contact-form-sub a:hover { color: var(--c-accent); }
+
+/* What happens after "Send" — a numbered list because the order is the point. */
+.contact-next-steps {
+  margin: 0;
+  padding-left: 1.5em;
+  font-family: var(--ff-body);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--c-bg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2177,6 +2195,24 @@ main[data-project-theme] .project-cover-block::before {
   line-height: 1.5;
   color: var(--c-fg-soft);
   margin: 0;
+}
+
+/* The written alternative to booking. Secondary by size and placement, but a
+   real underlined link so it reads as an action rather than a caption. */
+.consult-cta-alt {
+  font-family: var(--ff-mono);
+  font-size: var(--text-sm);
+  color: var(--c-fg-soft);
+  margin: var(--space-3) 0 0;
+}
+
+.consult-cta-alt a {
+  color: var(--c-fg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  /* WCAG 2.5.8: a standalone link needs a 24px target. */
+  display: inline-block;
+  min-height: 24px;
 }
 
 /* v1 Neon Pulse — the single primary conversion CTA. */
@@ -2982,7 +3018,7 @@ main a:hover {
   .svc-sublist li::before     { content: '↳ ' / ''; }
   .svc-sublabel::before       { content: '// ' / ''; }
   .svc-cta::after             { content: '→' / ''; }
-  .contact-fab-label::after   { content: ' ↗' / ''; }
+  .contact-fab-label::after   { content: ' →' / ''; }
 }
 
 /* ─── WCAG AA: muted mono labels ───

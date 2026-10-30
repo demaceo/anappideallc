@@ -11,6 +11,7 @@ import {
 } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
+import { PricingNote } from '../components/PricingNote/PricingNote'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
 import { VoiceNote, type VoiceNoteData } from '../components/VoiceNote/VoiceNote'
 
@@ -29,6 +30,7 @@ interface FormData {
   geo: Importance
   audience: string
   description: string
+  budget: string
   name: string
   email: string
   phone: string
@@ -45,6 +47,7 @@ const INITIAL: FormData = {
   geo: '',
   audience: '',
   description: '',
+  budget: '',
   name: '',
   email: '',
   phone: '',
@@ -130,13 +133,25 @@ export default function Contact() {
   const [voice, setVoice] = useState<VoiceNoteData | null>(null)
   const [stepIdx, setStepIdx] = useState(0)
   const [status, setStatus] = useState<Status>('idle')
+  // Whether the API managed to email the visitor a confirmation. The success
+  // view only promises one when it actually went out.
+  const [confirmationSent, setConfirmationSent] = useState(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
-  // The platforms step only applies when there's an app in the mix.
+  // The platforms step only applies when there's an app in the mix, and the
+  // search-visibility step only when there's a website in it (or the visitor
+  // hasn't said): ranking on Google is a website question, and an app-only
+  // founder was being asked to rate two acronyms that don't apply to them.
+  // The two swap, so the step count holds at 6 for every answer but "Both".
   const steps = useMemo<StepKey[]>(() => {
     const base: StepKey[] = ['type', 'platforms', 'reach', 'category', 'audience', 'description', 'details']
-    const showPlatforms = data.projectType === 'app' || data.projectType === 'both'
-    return base.filter((s) => (s === 'platforms' ? showPlatforms : true))
+    const hasApp = data.projectType === 'app' || data.projectType === 'both'
+    const hasWeb = data.projectType !== 'app'
+    return base.filter((s) => {
+      if (s === 'platforms') return hasApp
+      if (s === 'reach') return hasWeb
+      return true
+    })
   }, [data.projectType])
 
   const step = steps[Math.min(stepIdx, steps.length - 1)]
@@ -257,10 +272,13 @@ export default function Contact() {
           geoImportance: data.geo,
           audience: data.audience,
           description: data.description,
+          budget: data.budget,
           audio,
         }),
       })
       if (res.ok) {
+        const body = (await res.json().catch(() => null)) as { confirmationSent?: boolean } | null
+        setConfirmationSent(body?.confirmationSent === true)
         setStatus('sent')
       } else {
         const body = (await res.json().catch(() => null)) as { error?: string } | null
@@ -298,18 +316,51 @@ export default function Contact() {
           </p>
         </div>
 
+        <PricingNote />
+
         <ConsultCTA
+          showFormLink={false}
           eyebrow="Prefer to talk?"
           title={SITE.booking.label}
           blurb="Skip the form and grab a free 30-minute call. Bring as much or as little as you've got."
         />
 
         {status === 'sent' ? (
-          <div className="contact-form">
+          // A visitor who just sent their idea is at their most committed, and
+          // this used to be a dead end: a thank-you line and nothing to do.
+          // Now it says what happens next and offers the call straight away.
+          <div className="contact-form" role="status">
             <span className="contact-form-eyebrow">Message received</span>
             <p className="contact-form-title">Thanks. I'll be in touch.</p>
+            <ol className="contact-next-steps">
+              <li>
+                I read every message myself and reply within 1–2 business
+                days{voice ? ', voice note and all' : ''}.
+              </li>
+              <li>
+                If it looks like a fit, we set up a free 30-minute call to
+                talk it through.
+              </li>
+              <li>
+                You leave that call with a clear next step, whether or not
+                it's with me.
+              </li>
+            </ol>
+            {confirmationSent && (
+              <p className="contact-form-sub">
+                A confirmation is on its way to {data.email}.
+              </p>
+            )}
             <p className="contact-form-sub">
-              Expect a reply within 1–2 business days{voice ? ', voice note and all' : ''}.
+              Don't want to wait?{' '}
+              <a
+                href={SITE.booking.consultationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-analytics="book-consultation-after-form"
+              >
+                Book the call now →
+              </a>
             </p>
           </div>
         ) : (
@@ -340,7 +391,7 @@ export default function Contact() {
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">Tell me about your idea</span>
                 <p className="wizard-question">What are you looking to build?</p>
-                <p className="wizard-help">Every question here is optional, and "not sure" is always a fine answer.</p>
+                <p className="wizard-help">Skip anything you like; "not sure" is always a fine answer. At the end I'll just need your name, a way to reach you, and a line about the idea.</p>
                 <div className="choice-grid">
                   {PROJECT_TYPES.map(({ value, label, desc, Icon }) => (
                     <button
@@ -415,14 +466,14 @@ export default function Contact() {
             {step === 'reach' && (
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">Getting found</span>
-                <p className="wizard-question">How much do these matter to you?</p>
-                <p className="wizard-help">Most people aren't sure yet; these are things you might not have thought about, so here's the short version.</p>
+                <p className="wizard-question">How will people find it?</p>
+                <p className="wizard-help">Most people haven't thought about this yet, and "not sure" is a perfectly good answer. Skip it if you like.</p>
 
                 <div className="rating-row">
                   <div className="rating-label">
                     <span className="rating-label-icon"><IconTrendingUp size={16} /></span>
-                    <span className="rating-label-title">SEO: Search Engine Optimization</span>
-                    <span className="rating-label-desc">Helping people find you on Google when they search for what you offer.</span>
+                    <span className="rating-label-title">Showing up on Google</span>
+                    <span className="rating-label-desc">When someone searches for what you offer, your site appears near the top. (Often called SEO.)</span>
                   </div>
                   <div className="rating-options">
                     {IMPORTANCE_OPTS.map((o) => (
@@ -442,8 +493,8 @@ export default function Contact() {
                 <div className="rating-row">
                   <div className="rating-label">
                     <span className="rating-label-icon"><IconCompass size={16} /></span>
-                    <span className="rating-label-title">GEO: Generative Engine Optimization</span>
-                    <span className="rating-label-desc">Helping AI assistants like ChatGPT, Claude, and Google's AI recommend you when people ask them for suggestions.</span>
+                    <span className="rating-label-title">Getting recommended by AI assistants</span>
+                    <span className="rating-label-desc">When someone asks ChatGPT, Claude, or Google's AI for a suggestion, it names you. (Sometimes called GEO.)</span>
                   </div>
                   <div className="rating-options">
                     {IMPORTANCE_OPTS.map((o) => (
@@ -501,6 +552,22 @@ export default function Contact() {
                 <div className="form-group">
                   <span className="form-label">Or talk it through (optional)</span>
                   <VoiceNote value={voice} onChange={setVoice} />
+                </div>
+                {/* The "What to include" section below has always said a budget
+                    range helps scope the work, but the form had nowhere to put
+                    one. Free text so "not sure yet" is as valid as a number. */}
+                <div className="form-group">
+                  <label className="form-label" htmlFor="cf-budget">
+                    Budget ballpark <span className="form-label-opt">optional</span>
+                  </label>
+                  <input
+                    id="cf-budget"
+                    className="form-input"
+                    type="text"
+                    placeholder="A rough range, or “not sure yet”"
+                    value={data.budget}
+                    onChange={(e) => set('budget', e.target.value)}
+                  />
                 </div>
               </div>
             )}
@@ -583,8 +650,9 @@ export default function Contact() {
                   </div>
                 </div>
                 <p className="wizard-summary-note">
-                  Nervous you left something out? Don't be; send what you have and
-                  we'll fill in the rest on the call.
+                  Name, a way to reach you, and a line about the idea are all
+                  I need. Nervous you left something out? Don't be; we'll fill
+                  in the rest on the call.
                 </p>
               </div>
             )}

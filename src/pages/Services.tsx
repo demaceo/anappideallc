@@ -7,6 +7,8 @@ import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
+import { PricingNote } from '../components/PricingNote/PricingNote'
+import { NextStep } from '../components/NextStep/NextStep'
 
 export default function Services() {
   // Accordion: one service open at a time; first item open on load so the
@@ -35,6 +37,8 @@ export default function Services() {
             fits? That's exactly what the first call is for.
           </p>
         </div>
+
+        <PricingNote />
 
         <div className="section-header">
           <span className="section-num">Metrics</span>
@@ -132,6 +136,11 @@ export default function Services() {
             <Link to="/why-not-ai">The honest case for working with a person →</Link>
           </p>
         </VerdictBox>
+
+        <NextStep
+          heading="Not sure which one fits?"
+          blurb="That's what the first call is for. Thirty minutes, free, and you'll leave knowing which shape your project takes."
+        />
       </main>
 
       <footer className="sources-section">

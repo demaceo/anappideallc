@@ -47,9 +47,19 @@ export const SITE = {
   // real Calendly (or other) scheduling link; the "Book a consultation"
   // buttons across the site read from here, so updating it once is enough.
   booking: {
+    // Also hard-coded as BOOKING_URL in api/contact.ts (the confirmation
+    // email) — change both together.
     consultationUrl: 'https://calendly.com/demaceo-milehighinterface/30min',
     label: 'Book a free consultation',
     blurb: 'A free 30-minute call to talk through your idea. No pressure, no spec required.',
+  },
+  // Cost signal shown on Services and Contact so visitors can self-qualify
+  // before booking. Renders nothing while `range` is blank — fill in a real
+  // range (e.g. 'MVPs typically run $X–$Y'); never ship a placeholder number.
+  pricing: {
+    range: '',
+    // Optional sentence after the range, e.g. how quotes are scoped.
+    note: '',
   },
 } as const
 

@@ -182,7 +182,7 @@ export default function Home() {
             <div className="section-rule" />
           </div>
 
-          <ConsultCTA />
+          <ConsultCTA showFormLink={false} />
 
           <VerdictBox variant="contact" data-reveal>
             <p>
