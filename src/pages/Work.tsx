@@ -6,6 +6,7 @@ import { PROJECT_COLORS } from '../data/project-colors'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+import { NextStep } from '../components/NextStep/NextStep'
 import {
   LogoStlmnt,
   LogoPinpoint,
@@ -55,6 +56,12 @@ const STUDY_LABELS: Record<string, string> = {
   'timeless-coach-consult': 'Consulting',
   'portfolio': 'Portfolio',
 }
+
+// Client work first, then the studio's own products; original order within
+// each group. Array.prototype.sort is stable, so ties keep data order.
+const orderedStudies = [...caseStudies].sort(
+  (a, b) => Number(Boolean(b.client)) - Number(Boolean(a.client)),
+)
 
 export default function Work() {
   return (
@@ -108,7 +115,7 @@ export default function Work() {
           <div className="section-rule" />
         </div>
 
-        {caseStudies.map((c) => {
+        {orderedStudies.map((c) => {
           const ProjectLogo = PROJECT_LOGOS[c.slug] ?? LogoPinpoint
           return (
             <Link key={c.slug} to={`/work/${c.slug}`} className="feature-item feature-item--linked">
@@ -123,7 +130,9 @@ export default function Work() {
                 )}
               </div>
               <div className="feature-body">
-                <span className="feature-eyebrow">{STUDY_LABELS[c.slug] ?? c.category}</span>
+                <span className="feature-eyebrow">
+                  {c.client ? `Client work · ${c.client}` : STUDY_LABELS[c.slug] ?? c.category}
+                </span>
                 <h3 className="feature-title">{c.title}</h3>
                 <p>{c.summary}</p>
                 <span className="bubble-subtitle">Outcomes</span>
@@ -145,6 +154,11 @@ export default function Work() {
             </Link>
           )
         })}
+
+        <NextStep
+          heading="Got something like these in mind?"
+          blurb="Tell me what you're building. A free 30-minute call, no spec required."
+        />
       </main>
 
       <footer className="sources-section">

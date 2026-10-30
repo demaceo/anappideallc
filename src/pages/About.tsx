@@ -8,6 +8,7 @@ import { META } from '../lib/seo'
 import { IconCpu, IconLock, IconKey, IconShieldCheck } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
+import { NextStep } from '../components/NextStep/NextStep'
 
 // Keyed by differentiator title rather than array position: index-aligned
 // lookups silently mispair every later entry when the source array is
@@ -98,6 +99,11 @@ export default function About() {
             <Link to="/why-not-ai">Why a human over AI? →</Link>
           </p>
         </VerdictBox>
+
+        <NextStep
+          heading="Work with the builder directly"
+          blurb="A free 30-minute call with the person who'd build it. Bring the idea, even a half-formed one."
+        />
       </main>
 
       <footer className="sources-section">

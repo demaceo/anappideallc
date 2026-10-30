@@ -6,6 +6,7 @@ import { META } from '../lib/seo'
 import { IconSearch, IconEdit, IconTerminal, IconSend } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
+import { NextStep } from '../components/NextStep/NextStep'
 
 // Keyed by ProcessStep.step, which is already a stable discriminator in the
 // data, rather than by array position — index-aligned lookups mispair every
@@ -106,6 +107,11 @@ export default function Process() {
             into the build, without having to micromanage to get it.
           </p>
         </VerdictBox>
+
+        <NextStep
+          heading="Phase zero is a free call"
+          blurb="Before Discovery starts, we talk it through: what you're building, who it's for, and whether we're a fit."
+        />
       </main>
 
       <footer className="sources-section">

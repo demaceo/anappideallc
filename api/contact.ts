@@ -6,6 +6,13 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 const TO_EMAIL = process.env.TO_EMAIL ?? 'hello@anappidea.llc'
 const FROM_EMAIL = process.env.FROM_EMAIL ?? 'hello@anappidea.llc'
+// Mirrors SITE.booking.consultationUrl in src/data/site.ts — keep the two in
+// step. Not imported: this function ships as its own ESM bundle on Vercel and
+// an extensionless import into src/ is a runtime resolution risk.
+const BOOKING_URL = 'https://calendly.com/demaceo-milehighinterface/30min'
+
+// Real visitors walk a 6–7 step wizard; nobody finishes it in under this.
+const MIN_FILL_MS = 3000
 
 // Reject voice notes larger than this once base64-decoded (~6 MB) so a single
 // request can't blow past the platform body limit or the email size cap.
@@ -49,6 +56,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const body = (req.body ?? {}) as Record<string, unknown>
+
+  // Bot screening, before any validation so a bot learns nothing from error
+  // messages. Both checks answer with a normal success and send nothing, so a
+  // bot has no signal to adapt to. They only stop bots that fill the form in a
+  // browser; scripted POSTs are the job of the Vercel Firewall rate-limit rule
+  // on this path (see docs/client-journey-audit-2026-10.md).
+  //  - `website` is a honeypot: visually hidden in the form, so only software
+  //    that fills every field sets it.
+  //  - `elapsedMs` is how long the form was open before submit.
+  const trap = typeof body.website === 'string' ? body.website : ''
+  const elapsedMs = typeof body.elapsedMs === 'number' ? body.elapsedMs : null
+  if (trap.trim() || (elapsedMs !== null && elapsedMs < MIN_FILL_MS)) {
+    console.warn('[contact] dropped likely bot', trap.trim() ? 'honeypot' : `elapsed=${elapsedMs}ms`)
+    return res.json({ ok: true, confirmationSent: false })
+  }
   const name = typeof body.name === 'string' ? body.name : ''
   const email = typeof body.email === 'string' ? body.email : ''
   const phone = typeof body.phone === 'string' ? body.phone : ''
@@ -68,6 +90,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const seoImportance = typeof body.seoImportance === 'string' ? body.seoImportance : ''
   const geoImportance = typeof body.geoImportance === 'string' ? body.geoImportance : ''
   const audience = typeof body.audience === 'string' ? body.audience : ''
+  const budget = typeof body.budget === 'string' ? body.budget : ''
   const audio = (body.audio ?? null) as AudioPayload | null
 
   if (!name.trim()) {
@@ -100,6 +123,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (seoImportance) rows.push(['SEO importance', IMPORTANCE_LABELS[seoImportance] ?? seoImportance])
   if (geoImportance) rows.push(['GEO importance', IMPORTANCE_LABELS[geoImportance] ?? geoImportance])
   if (audience) rows.push(['Target audience', audience])
+  if (budget.trim()) rows.push(['Budget', budget])
 
   const summaryHtml = rows.length
     ? `<table style="border-collapse:collapse;margin:0 0 18px">${rows
@@ -145,8 +169,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     attachments = [{ filename: `voice-note.${ext}`, content: buffer }]
   }
 
+  // The Resend SDK does not throw when the API rejects a send (bad key, quota,
+  // unverified domain): it resolves with `{ data: null, error }`. This used to
+  // rely on try/catch alone, so a rejected send still answered `{ ok: true }`
+  // and the visitor saw "Thanks, I'll be in touch" for a message that never
+  // arrived. The catch now only covers network failures; `error` is checked.
   try {
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: `An App Idea <${FROM_EMAIL}>`,
       to: TO_EMAIL,
       // Only set a reply-to when we actually have an email to reply to.
@@ -161,11 +190,73 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       `,
       ...(attachments ? { attachments } : {}),
     })
-
-    return res.json({ ok: true })
+    if (error) {
+      console.error('[contact] send rejected', error.name, error.message)
+      return res.status(502).json({ error: 'Failed to send message' })
+    }
   } catch (err) {
     console.error('[contact] send error', err)
     return res.status(500).json({ error: 'Failed to send message' })
+  }
+
+  // Best-effort confirmation to the visitor. The inquiry already reached the
+  // inbox, so a failure here is logged and reported, never surfaced as an error.
+  // Only for submissions that came through the current form (which reports
+  // `elapsedMs`): a request without it is either a page cached from before this
+  // field existed — whose inquiry still arrives, so no lead is lost — or a
+  // direct POST, which must not be able to make this domain mail arbitrary
+  // addresses.
+  const confirmationSent = hasEmail && elapsedMs !== null ? await sendConfirmation(email) : false
+
+  return res.json({ ok: true, confirmationSent })
+}
+
+// Fixed copy only — deliberately no echo of the name or message. The endpoint
+// has no rate limit or bot check, so anyone can enter a stranger's address;
+// echoing form text would let them send arbitrary content from this domain.
+// A static note with the booking link carries no abuse payload.
+async function sendConfirmation(to: string): Promise<boolean> {
+  const text = [
+    'Thanks for reaching out to An App Idea.',
+    '',
+    'Your message arrived. Here is what happens next:',
+    '1. I read every message myself and reply within 1–2 business days.',
+    '2. If it looks like a fit, we set up a free 30-minute call.',
+    '',
+    `Want to skip the wait? Book the call now: ${BOOKING_URL}`,
+    '',
+    'Demaceo, An App Idea LLC',
+    '',
+    "If you didn't contact An App Idea, you can ignore this email.",
+  ].join('\n')
+
+  try {
+    const { error } = await resend.emails.send({
+      from: `An App Idea <${FROM_EMAIL}>`,
+      to,
+      replyTo: TO_EMAIL,
+      subject: 'Got your message — An App Idea',
+      text,
+      html: `
+        <p style="margin:0 0 12px">Thanks for reaching out to An App Idea.</p>
+        <p style="margin:0 0 8px">Your message arrived. Here is what happens next:</p>
+        <ol style="margin:0 0 16px;padding-left:20px">
+          <li>I read every message myself and reply within 1–2 business days.</li>
+          <li>If it looks like a fit, we set up a free 30-minute call.</li>
+        </ol>
+        <p style="margin:0 0 16px">Want to skip the wait? <a href="${BOOKING_URL}">Book the call now</a>.</p>
+        <p style="margin:0 0 16px">Demaceo, An App Idea LLC</p>
+        <p style="margin:0;color:#6b6355;font-size:12px">If you didn't contact An App Idea, you can ignore this email.</p>
+      `,
+    })
+    if (error) {
+      console.error('[contact] confirmation rejected', error.name, error.message)
+      return false
+    }
+    return true
+  } catch (err) {
+    console.error('[contact] confirmation error', err)
+    return false
   }
 }
 

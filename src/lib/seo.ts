@@ -40,7 +40,7 @@ export const META: Record<string, { title: string; description: string; path: st
   '/contact': {
     title: `Hire a Mobile App Developer | ${SITE.name}, Denver, CO`,
     description:
-      'Ready to build your mobile app or website? Contact Demaceo Vincent at An App Idea LLC. Early-stage conversations welcome. MVPs in 6–8 weeks. Reply within 1–2 business days.',
+      'Ready to build your mobile app or website? Contact Demaceo Vincent at An App Idea LLC. Early-stage conversations welcome. MVPs built in 7–13 weeks. Reply within 1–2 business days.',
     path: '/contact',
   },
   '/why-not-ai': {
@@ -393,7 +393,7 @@ function buildPageGraph(route: string): object[] {
               name: 'How long does it take to build a mobile app MVP?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Most MVPs take 6–8 weeks from first conversation to production deploy, covering discovery, design, development, and launch. AI-integrated or multi-platform builds typically run 10–12 weeks.',
+                text: 'Most MVPs take 7–13 weeks from discovery through development, then 1–2 weeks to launch on the App Store, Google Play, or the web.',
               },
             },
             {

@@ -5,7 +5,7 @@ import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
-import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
+import { NextStep } from '../components/NextStep/NextStep'
 import {
   IconCompass2, IconEdit, IconLayers, IconShieldCheck, IconTerminal,
   IconLifeBuoy,
@@ -197,13 +197,8 @@ export default function WhyNotAI() {
           </p>
         </VerdictBox>
 
-        <div className="section-header">
-          <span className="section-num">Next step</span>
-          <h2>Talk it through with a person</h2>
-          <div className="section-rule" />
-        </div>
-
-        <ConsultCTA
+        <NextStep
+          heading="Talk it through with a person"
           eyebrow="No cost, no pressure"
           title="Bring your AI draft to a free call"
           blurb="Already started with AI? Even better. Bring what you have and we'll map the path from here to launched."

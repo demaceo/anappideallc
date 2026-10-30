@@ -23,6 +23,7 @@ describe('SiteNav — current route is exposed (audit P2)', () => {
     ['/work', 'Work'],
     ['/services', 'Services'],
     ['/process', 'Process'],
+    ['/contact', 'Contact'],
   ])('marks %s as the current page', (path, label) => {
     renderRoute(path)
     const nav = screen.getByRole('navigation', { name: /main navigation/i })
@@ -43,7 +44,7 @@ describe('SiteNav — current route is exposed (audit P2)', () => {
     for (const link of within(nav).getAllByRole('link')) {
       // "↳ About" was the announced name before the glyph moved into an
       // aria-hidden span.
-      expect(link).toHaveAccessibleName(/^(About|Work|Services|Process)$/)
+      expect(link).toHaveAccessibleName(/^(About|Work|Services|Process|Contact)$/)
     }
   })
 })
