@@ -16,17 +16,17 @@ describe('Home — brutalist redesign', () => {
   it('mounts without throwing and preserves the core messaging', () => {
     renderRoute('/')
 
-    // Tagline H1 — accessible name stays intact despite the <em> highlight.
+    // Mission H1 — accessible name stays intact despite the <em> highlight.
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: /got an app idea\? let's build it\./i,
+        name: /your business is the job\. the tech shouldn't be a second one\./i,
       }),
     ).toBeInTheDocument()
 
     // Positioning subtitle preserved verbatim.
     expect(
-      screen.getByText(/privacy built in, shipped end-to-end by one builder/i),
+      screen.getByText(/built with black and brown business owners in mind/i),
     ).toBeInTheDocument()
 
     // Section headings survive the outline-word <span> split (text unchanged).

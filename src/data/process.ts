@@ -1,7 +1,8 @@
-// 4-phase workflow ported from the old MHI repo.
+// 5-phase workflow. Phases 01–04 ported from the old MHI repo; 05 (Handoff
+// & Teaching) is the founder-story promise that owners can run what we build.
 
 export interface ProcessStep {
-  step: '01' | '02' | '03' | '04'
+  step: '01' | '02' | '03' | '04' | '05'
   title: string
   description: string
   substeps: string[]
@@ -88,6 +89,26 @@ export const processSteps: ProcessStep[] = [
       'Monitoring dashboards and alerts',
       'User and admin documentation',
       'Support and maintenance plan',
+    ],
+  },
+  {
+    step: '05',
+    title: 'Handoff & Teaching',
+    description:
+      "You don't leave with a login and a prayer. We walk through your site or app together until you can update it, read your analytics, and check its health on your own. Want to go deeper? That's the Own It package.",
+    substeps: [
+      'Live walkthrough of your admin, content, and settings',
+      'Analytics tour: where your numbers live and what they mean',
+      'Site-health basics: speed, uptime, and search visibility',
+      'Where AI fits in your day-to-day, and where it doesn\'t',
+      'Questions answered until it clicks',
+    ],
+    timeline: '1 week',
+    deliverables: [
+      'Plain-language handoff guide for your setup',
+      'Admin access and accounts in your name',
+      'Monthly site-health checklist',
+      'Optional path into the Own It package',
     ],
   },
 ]

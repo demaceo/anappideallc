@@ -1,7 +1,7 @@
 {
   "name": "An App Idea LLC",
   "short_name": "An App Idea",
-  "description": "Dev studio in Denver helping founders ship mobile apps and websites — from interface to database to launch.",
+  "description": "Denver studio building websites, apps, and AI for small businesses, then teaching owners to run them.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f0e0c",

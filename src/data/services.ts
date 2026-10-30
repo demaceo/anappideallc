@@ -16,6 +16,93 @@ export interface Service {
 
 export const services: Service[] = [
   {
+    id: 'business-websites',
+    slug: 'business-websites',
+    title: 'Business Website Development',
+    description:
+      "Professional websites that establish credibility, convert visitors, and grow with your business. Then I make sure you know how to run yours.",
+    features: [
+      'SEO-optimized architecture and content strategy',
+      'Headless CMS integration',
+      'Contact forms and lead capture',
+      'Email marketing integration',
+      'Analytics and conversion tracking',
+      'Sub-2-second page loads',
+      'Mobile-first responsive design',
+    ],
+    technologies: ['Next.js', 'Sanity CMS', 'Contentful', 'Vercel', 'Plausible', 'Schema.org', 'Resend'],
+    useCases: [
+      'Small businesses getting online or outgrowing a template site',
+      'Service businesses that need booking, quotes, or lead capture',
+      'Owners who want a site they can actually update themselves',
+    ],
+    deliverables: [
+      'Deployed production website',
+      'CMS training and documentation',
+      'SEO configuration and sitemap',
+      'Analytics dashboard configured',
+    ],
+    metric: { label: 'Page Load', value: '< 2s' },
+  },
+  {
+    id: 'own-it',
+    slug: 'own-it',
+    title: 'Own It: Learn to Run Your Site',
+    description:
+      "A separate teaching package for after the build. I teach you to manage your own website, read your analytics, check its performance, and put AI to work in your business, so you're never stuck waiting on someone else to change a price or read your traffic.",
+    features: [
+      'Updating your own pages, photos, prices, and posts',
+      'Reading your analytics: who visits, where they come from, and what they do',
+      'Checking site health: speed, uptime, and search visibility',
+      'Spotting when something breaks and knowing what to do next',
+      'Using AI tools in your daily work without exposing customer data',
+      'One-on-one sessions at your pace, in plain language',
+    ],
+    technologies: ['Plausible', 'Google Analytics', 'Google Search Console', 'PageSpeed Insights', 'Your CMS', 'Claude · ChatGPT · Gemini'],
+    useCases: [
+      'Owners who want to update their own site without calling anyone',
+      'Teams who want to understand their numbers, not just receive a report',
+      'Businesses ready to use AI but unsure where to start',
+    ],
+    deliverables: [
+      'One-on-one teaching sessions',
+      'Written guides for your exact setup',
+      'A monthly analytics and site-health checklist',
+      'An AI playbook for your business',
+    ],
+    metric: { label: 'Goal', value: 'You run it' },
+  },
+  {
+    id: 'ai-integration',
+    slug: 'ai-integration',
+    title: 'AI Integration for Existing Platforms',
+    description:
+      "Your website, store, or booking system already works. I add the AI layer on top and keep it running: chat, search, personalization, and the busywork automated, so Black and brown-owned businesses aren't the last ones to get it.",
+    features: [
+      'AI chat grounded in your actual content, not a generic bot',
+      'Semantic search that understands what customers mean',
+      'Personalized recommendations from what customers actually do',
+      'Automated follow-up: booking reminders, email drafts, routine replies',
+      'Fits onto what you already run: no migration, no rebuild',
+      'Server-side proxy, so your keys and customer data never reach the browser',
+      'Rate limiting, cost caps, and a fallback when a provider goes down',
+    ],
+    technologies: ['Gemini', 'Groq', 'ElevenLabs', 'Deepgram', 'Firebase', 'Vercel'],
+    useCases: [
+      'Shops and service businesses whose site works but predates AI',
+      'Booking and scheduling systems drowning in routine questions',
+      'Owners who want AI without handing customer data to a third party',
+    ],
+    deliverables: [
+      'Chat, search, personalization, and automation live on your platform',
+      'Hardened server-side AI proxy with key management and rate limits',
+      'Usage and cost dashboard',
+      'Handover doc plus a walkthrough call',
+      'Monthly tuning, model updates, and a quarterly cost review',
+    ],
+    metric: { label: 'AI providers in production', value: '5+' },
+  },
+  {
     id: 'mvp-development',
     slug: 'mvp-development',
     title: 'MVP Development & Validation',
@@ -73,35 +160,6 @@ export const services: Service[] = [
     metric: { label: 'Accessibility', value: 'WCAG AA' },
   },
   {
-    id: 'business-websites',
-    slug: 'business-websites',
-    title: 'Business Website Development',
-    description:
-      'Professional websites that establish credibility, convert visitors, and grow with your business.',
-    features: [
-      'SEO-optimized architecture and content strategy',
-      'Headless CMS integration',
-      'Contact forms and lead capture',
-      'Email marketing integration',
-      'Analytics and conversion tracking',
-      'Sub-2-second page loads',
-      'Mobile-first responsive design',
-    ],
-    technologies: ['Next.js', 'Sanity CMS', 'Contentful', 'Vercel', 'Plausible', 'Schema.org', 'Resend'],
-    useCases: [
-      'Professional services firms needing credibility',
-      'Startups launching with a strong web presence',
-      'Small businesses expanding online',
-    ],
-    deliverables: [
-      'Deployed production website',
-      'CMS training and documentation',
-      'SEO configuration and sitemap',
-      'Analytics dashboard configured',
-    ],
-    metric: { label: 'Page Load', value: '< 2s' },
-  },
-  {
     id: 'data-visualization',
     slug: 'data-visualization',
     title: 'Data Visualization & Analytics',
@@ -128,35 +186,5 @@ export const services: Service[] = [
       'Performance benchmarks',
     ],
     metric: { label: 'Data Points Handled', value: '10M+' },
-  },
-  {
-    id: 'ai-integration',
-    slug: 'ai-integration',
-    title: 'AI Integration for Existing Platforms',
-    description:
-      "Your website, store, or booking system already works. I add the AI layer on top and keep it running: chat, search, personalization, and the busywork automated, so Colorado's Black-owned businesses aren't the last ones to get it.",
-    features: [
-      'AI chat grounded in your actual content, not a generic bot',
-      'Semantic search that understands what customers mean',
-      'Personalized recommendations from what customers actually do',
-      'Automated follow-up: booking reminders, email drafts, routine replies',
-      'Fits onto what you already run: no migration, no rebuild',
-      'Server-side proxy, so your keys and customer data never reach the browser',
-      'Rate limiting, cost caps, and a fallback when a provider goes down',
-    ],
-    technologies: ['Gemini', 'Groq', 'ElevenLabs', 'Deepgram', 'Firebase', 'Vercel'],
-    useCases: [
-      'Shops and service businesses whose site works but predates AI',
-      'Booking and scheduling systems drowning in routine questions',
-      'Owners who want AI without handing customer data to a third party',
-    ],
-    deliverables: [
-      'Chat, search, personalization, and automation live on your platform',
-      'Hardened server-side AI proxy with key management and rate limits',
-      'Usage and cost dashboard',
-      'Handover doc plus a walkthrough call',
-      'Monthly tuning, model updates, and a quarterly cost review',
-    ],
-    metric: { label: 'AI providers in production', value: '5+' },
   },
 ]

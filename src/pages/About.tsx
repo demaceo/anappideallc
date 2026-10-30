@@ -8,6 +8,8 @@ import { META } from '../lib/seo'
 import { IconCpu, IconLock, IconKey, IconShieldCheck } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
+import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
+import { STORY_CLOSING } from '../data/story'
 
 // Keyed by differentiator title rather than array position: index-aligned
 // lookups silently mispair every later entry when the source array is
@@ -28,25 +30,28 @@ export default function About() {
 
       <PageHeader>
         <header className="masthead">
-          <p className="overline">AI-Native · Privacy-First · {SITE.founder.location}</p>
-          <h1><em>Founder-led,</em> Denver-based.</h1>
+          <p className="overline">Founder-led · {SITE.founder.location}</p>
+          <h1>Built for the owners <em>tech keeps overlooking.</em></h1>
           <p className="subtitle">
-            {SITE.name}, run by {SITE.founder.name}. AI-native mobile apps
-            with privacy built in. One builder from interface to deploy.
+            {SITE.name}, run by {SITE.founder.name}. Websites, apps, and AI
+            for small businesses, built end-to-end by one builder and handed
+            over with the know-how to run them.
           </p>
-          <p className="date-line">About the studio</p>
+          <p className="date-line">Why this studio exists</p>
         </header>
       </PageHeader>
 
       <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
-            {SITE.name} is a {SITE.founder.location} dev studio run by{' '}
-            {SITE.founder.name}. I build AI-native mobile apps with privacy
-            designed in from the first commit, and care most about the ones
-            that empower people and bring communities together.
+            {SITE.name} is a {SITE.founder.location} studio run by{' '}
+            {SITE.founder.name}. I build websites, mobile apps, and AI tools for
+            small businesses, and I teach owners to run them. Most of the people
+            I build for are Black and brown business owners. That's on purpose.
           </p>
         </div>
+
+        <StoryChapter id="story" />
 
         <div className="section-header">
           <span className="section-num">Differentiators</span>
@@ -98,6 +103,13 @@ export default function About() {
             <Link to="/why-not-ai">Why a human over AI? →</Link>
           </p>
         </VerdictBox>
+
+        <div className="pullquote story-closing">
+          <p>{STORY_CLOSING}</p>
+          <span className="attrib">{SITE.founder.name}, on why this studio exists</span>
+        </div>
+
+        <StoryNext id="story" />
       </main>
 
       <footer className="sources-section">
@@ -121,7 +133,7 @@ export default function About() {
             </li>
             <li>
               <strong>Approach</strong>
-              Founder-led · end-to-end engineering
+              Built with Black and brown business owners in mind · everyone welcome
             </li>
           </ul>
           <FooterNav />

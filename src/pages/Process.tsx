@@ -3,9 +3,10 @@ import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { FooterNav } from '../components/FooterNav/FooterNav'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
-import { IconSearch, IconEdit, IconTerminal, IconSend } from '../components/icons'
+import { IconSearch, IconEdit, IconTerminal, IconSend, IconKey } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
+import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 
 // Keyed by ProcessStep.step, which is already a stable discriminator in the
 // data, rather than by array position — index-aligned lookups mispair every
@@ -16,6 +17,7 @@ const PROCESS_META: Record<string, { Icon: typeof IconSearch; iconClass: string 
   '02': { Icon: IconEdit,     iconClass: 'icon-purple' },
   '03': { Icon: IconTerminal, iconClass: 'icon-green'  },
   '04': { Icon: IconSend,     iconClass: 'icon-orange' },
+  '05': { Icon: IconKey,      iconClass: 'icon-gold'   },
 }
 const PROCESS_FALLBACK = { Icon: IconSearch, iconClass: 'icon-navy' }
 
@@ -28,18 +30,20 @@ export default function Process() {
         <header className="masthead">
           <p className="overline">An App Idea LLC · How we work</p>
           <h1>Process</h1>
-          <p className="date-line">Discovery → Design → Dev → Launch</p>
+          <p className="date-line">Discovery → Design → Dev → Launch → Handoff</p>
         </header>
       </PageHeader>
 
       <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
-            Four phases, one builder. Every phase ends with something tangible
+            Five phases, one builder. Every phase ends with something tangible
             you can hold up and react to, so you're never guessing where your
-            project stands.
+            project stands. The last one makes sure you can run it yourself.
           </p>
         </div>
+
+        <StoryChapter id="handoff" />
 
         <div className="section-header">
           <span className="section-num">Timeline</span>
@@ -106,6 +110,8 @@ export default function Process() {
             into the build, without having to micromanage to get it.
           </p>
         </VerdictBox>
+
+        <StoryNext id="handoff" />
       </main>
 
       <footer className="sources-section">

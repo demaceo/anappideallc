@@ -7,6 +7,7 @@ import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
+import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 
 export default function Services() {
   // Accordion: one service open at a time; first item open on load so the
@@ -23,18 +24,22 @@ export default function Services() {
         <header className="masthead">
           <p className="overline">An App Idea LLC · What I build</p>
           <h1>Services</h1>
-          <p className="date-line">Five ways I can help</p>
+          <p className="subtitle">Built for you. Handed to you.</p>
+          <p className="date-line">Six ways I can help</p>
         </header>
       </PageHeader>
 
       <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
-            Whether you need a six-week MVP or a polished, production-grade
-            interface, here's how I help founders ship. Not sure which one
-            fits? That's exactly what the first call is for.
+            A website that brings in customers, an app, or AI that takes the
+            busywork off your plate, plus a teaching package so you can run it
+            all yourself. Not sure which one fits? That's exactly what the free
+            first call is for.
           </p>
         </div>
+
+        <StoryChapter id="work" />
 
         <div className="section-header">
           <span className="section-num">Metrics</span>
@@ -132,6 +137,8 @@ export default function Services() {
             <Link to="/why-not-ai">The honest case for working with a person →</Link>
           </p>
         </VerdictBox>
+
+        <StoryNext id="work" />
       </main>
 
       <footer className="sources-section">

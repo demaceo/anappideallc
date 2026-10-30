@@ -12,6 +12,8 @@ import {
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
+import { StoryChapter } from '../components/StoryChapter/StoryChapter'
+import { STORY_CLOSING } from '../data/story'
 import { VoiceNote, type VoiceNoteData } from '../components/VoiceNote/VoiceNote'
 
 type Status = 'idle' | 'sending' | 'sent' | 'error'
@@ -282,8 +284,9 @@ export default function Contact() {
           <p className="overline">An App Idea LLC · Denver, Colorado</p>
           <h1>Let's <em>talk.</em></h1>
           <p className="subtitle">
-            Got an app or website idea? Walk through a few quick questions,
-            or just book a free call. I respond within 1–2 business days.
+            Got a business that needs a website, an app, or AI? Walk through a
+            few quick questions, or just book a free call. I respond within 1–2
+            business days.
           </p>
           <p className="date-line">{SITE.email}</p>
         </header>
@@ -297,6 +300,8 @@ export default function Contact() {
             or finished spec required.
           </p>
         </div>
+
+        <StoryChapter id="door" />
 
         <ConsultCTA
           eyebrow="Prefer to talk?"
@@ -658,6 +663,11 @@ export default function Contact() {
             international time zones without friction.
           </p>
         </VerdictBox>
+
+        <div className="pullquote story-closing">
+          <p>{STORY_CLOSING}</p>
+          <span className="attrib">{SITE.founder.name}, {SITE.name}</span>
+        </div>
       </main>
 
       <footer className="sources-section">
@@ -678,6 +688,10 @@ export default function Contact() {
             <li>
               <strong>Location</strong>
               {SITE.founder.location} · Mountain Time
+            </li>
+            <li>
+              <strong>Pricing</strong>
+              Sliding scale by business size and stage
             </li>
             <li>
               <strong>Response time</strong>
