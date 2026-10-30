@@ -32,7 +32,7 @@ export default function Services() {
       <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
-            Whether you need a six-week MVP or a polished, production-grade
+            Whether you need an MVP built in 7–13 weeks or a polished, production-grade
             interface, here's how I help founders ship. Not sure which one
             fits? That's exactly what the first call is for.
           </p>

@@ -2012,6 +2012,16 @@ main[data-project-theme] .project-cover-block::before {
 
 .contact-form-sub a:hover { color: var(--c-accent); }
 
+/* Contact-form honeypot (see Contact.tsx). Off-screen, not display:none,
+   because some form-filling bots skip inputs that aren't rendered. */
+.form-trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 /* What happens after "Send" — a numbered list because the order is the point. */
 .contact-next-steps {
   margin: 0;

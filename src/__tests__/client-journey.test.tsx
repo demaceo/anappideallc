@@ -126,7 +126,11 @@ describe('Contact wizard', () => {
     fireEvent.click(screen.getByRole('button', { name: /send message/i }))
 
     const status = await screen.findByRole('status')
-    expect(JSON.parse(fetchMock.mock.calls[0][1].body).budget).toBe('not sure yet')
+    const sent = JSON.parse(fetchMock.mock.calls[0][1].body)
+    expect(sent.budget).toBe('not sure yet')
+    // Bot-screening fields ride along: an empty honeypot and the time open.
+    expect(sent.website).toBe('')
+    expect(typeof sent.elapsedMs).toBe('number')
     expect(within(status).getByRole('link', { name: /book the call now/i })).toHaveAttribute(
       'href',
       SITE.booking.consultationUrl,
@@ -135,5 +139,34 @@ describe('Contact wizard', () => {
     await waitFor(() =>
       expect(within(status).getByText(/confirmation is on its way to sam@example\.com/i)).toBeInTheDocument(),
     )
+  })
+
+  it('explains a rate-limit response instead of blaming the server', async () => {
+    // The Vercel Firewall answers 429 before the function runs, with no JSON.
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('Too Many Requests', { status: 429 })))
+    renderRoute('/contact')
+    fireEvent.click(screen.getByRole('button', { name: /a mobile app/i }))
+    while (screen.queryByLabelText(/your idea/i) === null) {
+      fireEvent.click(screen.getByRole('button', { name: /continue/i }))
+    }
+    fireEvent.change(screen.getByLabelText(/your idea/i), { target: { value: 'An idea' } })
+    fireEvent.click(screen.getByRole('button', { name: /continue/i }))
+    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Sam' } })
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'sam@example.com' } })
+    fireEvent.click(screen.getByRole('button', { name: /send message/i }))
+
+    const alert = await screen.findByRole('alert')
+    expect(alert).toHaveTextContent(/give it a minute/i)
+    expect(within(alert).getByRole('link', { name: /email me directly/i })).toHaveAttribute(
+      'href',
+      'mailto:hello@anappidea.llc',
+    )
+  })
+
+  it('keeps the honeypot out of reach of real visitors', () => {
+    renderRoute('/contact')
+    const trap = document.getElementById('cf-website') as HTMLInputElement
+    expect(trap.tabIndex).toBe(-1)
+    expect(trap.closest('[aria-hidden="true"]')).not.toBeNull()
   })
 })

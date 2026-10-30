@@ -131,6 +131,13 @@ function blobToBase64(blob: Blob): Promise<string> {
 export default function Contact() {
   const [data, setData] = useState<FormData>(INITIAL)
   const [voice, setVoice] = useState<VoiceNoteData | null>(null)
+  // Bot screening (see api/contact.ts): when the form opened, and a honeypot
+  // field real visitors never see. Both are read only at submit.
+  const openedAt = useRef(0)
+  useEffect(() => {
+    openedAt.current = Date.now()
+  }, [])
+  const trapRef = useRef<HTMLInputElement>(null)
   const [stepIdx, setStepIdx] = useState(0)
   const [status, setStatus] = useState<Status>('idle')
   // Whether the API managed to email the visitor a confirmation. The success
@@ -274,12 +281,20 @@ export default function Contact() {
           description: data.description,
           budget: data.budget,
           audio,
+          website: trapRef.current?.value ?? '',
+          elapsedMs: Date.now() - openedAt.current,
         }),
       })
       if (res.ok) {
         const body = (await res.json().catch(() => null)) as { confirmationSent?: boolean } | null
         setConfirmationSent(body?.confirmationSent === true)
         setStatus('sent')
+      } else if (res.status === 429) {
+        // The Vercel Firewall rate-limit rule answers before the function
+        // runs, so there's no JSON body to read — say what happened instead of
+        // blaming the server.
+        setErrorMsg('That’s a few messages in a short time. Give it a minute and try again.')
+        setStatus('error')
       } else {
         const body = (await res.json().catch(() => null)) as { error?: string } | null
         setErrorMsg(body?.error ?? 'Something broke on our end, not yours. Give it another try in a moment.')
@@ -365,6 +380,21 @@ export default function Contact() {
           </div>
         ) : (
           <form className="contact-form wizard" onSubmit={handleSubmit} noValidate>
+            {/* Honeypot. Off-screen rather than display:none (some bots skip
+                hidden inputs), out of the tab order, and hidden from assistive
+                tech so no real visitor ever reaches it. */}
+            <div className="form-trap" aria-hidden="true">
+              <label htmlFor="cf-website">Leave this field empty</label>
+              <input
+                id="cf-website"
+                ref={trapRef}
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                defaultValue=""
+              />
+            </div>
             <div className="wizard-progress">
               <span className="wizard-step-count">
                 Step {String(stepIdx + 1).padStart(2, '0')} / {String(steps.length).padStart(2, '0')}

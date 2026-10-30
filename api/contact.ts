@@ -11,6 +11,9 @@ const FROM_EMAIL = process.env.FROM_EMAIL ?? 'hello@anappidea.llc'
 // an extensionless import into src/ is a runtime resolution risk.
 const BOOKING_URL = 'https://calendly.com/demaceo-milehighinterface/30min'
 
+// Real visitors walk a 6–7 step wizard; nobody finishes it in under this.
+const MIN_FILL_MS = 3000
+
 // Reject voice notes larger than this once base64-decoded (~6 MB) so a single
 // request can't blow past the platform body limit or the email size cap.
 const MAX_AUDIO_BYTES = 6 * 1024 * 1024
@@ -53,6 +56,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const body = (req.body ?? {}) as Record<string, unknown>
+
+  // Bot screening, before any validation so a bot learns nothing from error
+  // messages. Both checks answer with a normal success and send nothing, so a
+  // bot has no signal to adapt to. They only stop bots that fill the form in a
+  // browser; scripted POSTs are the job of the Vercel Firewall rate-limit rule
+  // on this path (see docs/client-journey-audit-2026-10.md).
+  //  - `website` is a honeypot: visually hidden in the form, so only software
+  //    that fills every field sets it.
+  //  - `elapsedMs` is how long the form was open before submit.
+  const trap = typeof body.website === 'string' ? body.website : ''
+  const elapsedMs = typeof body.elapsedMs === 'number' ? body.elapsedMs : null
+  if (trap.trim() || (elapsedMs !== null && elapsedMs < MIN_FILL_MS)) {
+    console.warn('[contact] dropped likely bot', trap.trim() ? 'honeypot' : `elapsed=${elapsedMs}ms`)
+    return res.json({ ok: true, confirmationSent: false })
+  }
   const name = typeof body.name === 'string' ? body.name : ''
   const email = typeof body.email === 'string' ? body.email : ''
   const phone = typeof body.phone === 'string' ? body.phone : ''
@@ -183,7 +201,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Best-effort confirmation to the visitor. The inquiry already reached the
   // inbox, so a failure here is logged and reported, never surfaced as an error.
-  const confirmationSent = hasEmail ? await sendConfirmation(email) : false
+  // Only for submissions that came through the current form (which reports
+  // `elapsedMs`): a request without it is either a page cached from before this
+  // field existed — whose inquiry still arrives, so no lead is lost — or a
+  // direct POST, which must not be able to make this domain mail arbitrary
+  // addresses.
+  const confirmationSent = hasEmail && elapsedMs !== null ? await sendConfirmation(email) : false
 
   return res.json({ ok: true, confirmationSent })
 }

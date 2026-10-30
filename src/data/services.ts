@@ -42,7 +42,9 @@ export const services: Service[] = [
       'User feedback collection system',
       'Growth and scaling recommendations',
     ],
-    metric: { label: 'Time to Launch', value: '6–8 weeks' },
+    // Matches the Process page: Discovery 1–2 + Design 2–3 + Development 4–8
+    // weeks. Launch adds another 1–2, so this is time to build, not to launch.
+    metric: { label: 'Time to build', value: '7–13 weeks' },
   },
   {
     id: 'ui-engineering',
