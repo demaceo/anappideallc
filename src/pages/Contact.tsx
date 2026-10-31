@@ -62,7 +62,7 @@ const PROJECT_TYPES = [
   { value: 'website', label: 'A website', desc: 'Marketing site, store, portfolio, or web app', Icon: IconMonitor },
   { value: 'app', label: 'A mobile app', desc: 'iPhone and/or Android', Icon: IconSmartphone },
   { value: 'both', label: 'Both', desc: 'An app with a companion website', Icon: IconLayers },
-  { value: 'unsure', label: "I'm not sure yet", desc: "That's completely fine. We'll figure it out together.", Icon: IconHelpCircle },
+  { value: 'unsure', label: "I'm not sure yet", desc: "Totally fine. That's what the call is for.", Icon: IconHelpCircle },
 ] as const
 
 const PLATFORMS = [
@@ -72,9 +72,10 @@ const PLATFORMS = [
 ] as const
 
 const CATEGORIES = [
-  'E-commerce / retail', 'Marketplace', 'Social / community', 'Productivity / SaaS',
-  'Health & fitness', 'Education', 'Finance / fintech', 'Food & restaurant',
-  'Travel & local', 'Media / content', 'Booking / services', 'Something else',
+  'Salon & beauty', 'Food & drink', 'Retail & online store', 'Health & wellness',
+  'Coaching & consulting', 'Home & trade services', 'Real estate & property',
+  'Nonprofit & community', 'Creative & media', 'Education & tutoring',
+  'Events & booking', 'Something else',
 ]
 
 const IMPORTANCE_OPTS = [
@@ -96,23 +97,23 @@ const PROMPTS = [
   {
     icon: IconEdit,
     iconClass: 'icon-gold',
-    eyebrow: 'The idea',
-    title: 'What it does and who it\'s for',
-    body: 'One to three sentences. What problem does it solve? Who\'s the primary user? What\'s the one thing it needs to do well?',
+    eyebrow: 'The need',
+    title: 'What it should do and who it\'s for',
+    body: 'One to three sentences. What\'s not working today? Who are your customers? What\'s the one thing it has to do well?',
   },
   {
     icon: IconSearch,
     iconClass: 'icon-blue',
     eyebrow: 'Where you are',
-    title: 'Stage, timeline, and any existing work',
-    body: 'Sketches, wireframes, specs, or existing code: include whatever you have. A rough target date helps too, even if it\'s loose. None of it is required.',
+    title: 'What you have today',
+    body: 'A website, a social page, a booking app, or nothing yet: all fine. A rough target date helps too, even if it\'s loose. None of it is required.',
   },
   {
     icon: IconSend,
     iconClass: 'icon-green',
     eyebrow: 'The fit',
     title: 'Budget ballpark, if you have one',
-    body: 'A rough range helps scope the engagement. If you don\'t have a number yet, that\'s a normal place to start; just say so and we\'ll figure it out together.',
+    body: 'A rough range helps scope the engagement. If you don\'t have a number yet, that\'s a normal place to start; just say so. Pricing is a sliding scale by your business\'s size and stage.',
   },
 ] as const
 
@@ -239,7 +240,7 @@ export default function Contact() {
       return
     }
     if (emailEntered && !emailValid) {
-      setErrorMsg('That email doesn’t look quite right — mind double-checking?')
+      setErrorMsg('That email looks off. Mind checking it?')
       return
     }
     if (!emailEntered && !phoneEntered) {
@@ -247,7 +248,7 @@ export default function Contact() {
       return
     }
     if (!hasIdea) {
-      setErrorMsg('Add a sentence about your idea (or a quick voice note) so I know what we’re talking about.')
+      setErrorMsg('Add a sentence about what you need, or a quick voice note, so I know where to start.')
       setStepIdx(steps.indexOf('description'))
       return
     }
@@ -300,11 +301,11 @@ export default function Contact() {
         setStatus('error')
       } else {
         const body = (await res.json().catch(() => null)) as { error?: string } | null
-        setErrorMsg(body?.error ?? 'Something broke on our end, not yours. Give it another try in a moment.')
+        setErrorMsg(body?.error ?? 'Something broke on my end, not yours. Try again in a moment.')
         setStatus('error')
       }
     } catch {
-      setErrorMsg('Couldn’t reach the server. Check your connection and try again.')
+      setErrorMsg('Couldn’t send. Check your connection and try again.')
       setStatus('error')
     }
   }
@@ -318,8 +319,8 @@ export default function Contact() {
           <p className="overline">An App Idea LLC · Denver, Colorado</p>
           <h1>Let's <em>talk.</em></h1>
           <p className="subtitle">
-            Got a business that needs a website, an app, or AI? Walk through a
-            few quick questions, or just book a free call. I respond within 1–2
+            Running a business that needs a website, an app, or AI? Answer a
+            few quick questions, or book a free call. I reply within 1–2
             business days.
           </p>
           <p className="date-line">{SITE.email}</p>
@@ -329,9 +330,8 @@ export default function Contact() {
       <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
-            Early-stage conversations are welcome. The goal of the first
-            exchange is to figure out whether we're a good fit. No deck
-            or finished spec required.
+            Come as you are. Half an idea is plenty. The first conversation
+            is just to see if we're a good fit.
           </p>
         </div>
 
@@ -346,7 +346,7 @@ export default function Contact() {
           showFormLink={false}
           eyebrow="Prefer to talk?"
           title={SITE.booking.label}
-          blurb="Skip the form and grab a free 30-minute call. Bring as much or as little as you've got."
+          blurb="Skip the form. Thirty minutes, free. Bring as much or as little as you've got."
         />
 
         {status === 'sent' ? (
@@ -362,8 +362,8 @@ export default function Contact() {
                 days{voice ? ', voice note and all' : ''}.
               </li>
               <li>
-                If it looks like a fit, we set up a free 30-minute call to
-                talk it through.
+                Next, we set up a free 30-minute call to talk it
+                through.
               </li>
               <li>
                 You leave that call with a clear next step, whether or not
@@ -383,7 +383,7 @@ export default function Contact() {
                 rel="noopener noreferrer"
                 data-analytics="book-consultation-after-form"
               >
-                Book the call now →
+                Book your free call now →
               </a>
             </p>
           </div>
@@ -428,9 +428,9 @@ export default function Contact() {
 
             {step === 'type' && (
               <div className="wizard-step">
-                <span className="contact-form-eyebrow">Tell me about your idea</span>
-                <p className="wizard-question">What are you looking to build?</p>
-                <p className="wizard-help">Skip anything you like; "not sure" is always a fine answer. At the end I'll just need your name, a way to reach you, and a line about the idea.</p>
+                <span className="contact-form-eyebrow">Tell me about your business</span>
+                <p className="wizard-question">What do you need?</p>
+                <p className="wizard-help">Skip anything you like; "not sure" is always a fine answer. At the end I'll just need your name, a way to reach you, and a line about what you need.</p>
                 <div className="choice-grid">
                   {PROJECT_TYPES.map(({ value, label, desc, Icon }) => (
                     <button
@@ -475,7 +475,7 @@ export default function Contact() {
             {step === 'category' && (
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">The space it's in</span>
-                <p className="wizard-question">What category does it fall into?</p>
+                <p className="wizard-question">What kind of business is it?</p>
                 <p className="wizard-help">Pick as many as fit, a rough match is plenty.</p>
                 <div className="chip-grid">
                   {CATEGORIES.map((c) => (
@@ -494,7 +494,7 @@ export default function Contact() {
                   <input
                     className="form-input wizard-inline-input"
                     type="text"
-                    placeholder="What kind of project is it?"
+                    placeholder="What kind of business is it?"
                     value={data.categoryOther}
                     onChange={(e) => set('categoryOther', e.target.value)}
                   />
@@ -556,7 +556,7 @@ export default function Contact() {
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">Who it's for</span>
                 <p className="wizard-question">Who's the target audience?</p>
-                <p className="wizard-help">A sentence is plenty: "busy parents," "small landlords," "high-school students." Skip it if you're not sure.</p>
+                <p className="wizard-help">A sentence is plenty: "neighbors within 10 miles," "new moms," "small landlords." Skip it if you're not sure.</p>
                 <div className="form-group">
                   <label className="form-label" htmlFor="cf-audience">
                     <span className="form-label-icon"><IconUsers size={13} /></span> Target audience
@@ -576,14 +576,14 @@ export default function Contact() {
             {step === 'description' && (
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">In your words</span>
-                <p className="wizard-question">Tell me about it.</p>
-                <p className="wizard-help">A few sentences is great. What does it do, and what made you want to build it? You can also leave a voice note below instead.</p>
+                <p className="wizard-question">Tell me what you need.</p>
+                <p className="wizard-help">A few sentences is great. What should it do for your business, and what’s not working today? A voice note works too.</p>
                 <div className="form-group">
-                  <label className="form-label" htmlFor="cf-description">Your idea</label>
+                  <label className="form-label" htmlFor="cf-description">In your words</label>
                   <textarea
                     id="cf-description"
                     className="form-textarea"
-                    placeholder="What does it do, who's it for, and where are you in the process?"
+                    placeholder="e.g. “I want clients to book online instead of texting me.”"
                     value={data.description}
                     onChange={(e) => set('description', e.target.value)}
                   />
@@ -603,7 +603,7 @@ export default function Contact() {
                     id="cf-budget"
                     className="form-input"
                     type="text"
-                    placeholder="A rough range, or “not sure yet”"
+                    placeholder="A rough range, or “not sure yet.” Pricing is a sliding scale."
                     value={data.budget}
                     onChange={(e) => set('budget', e.target.value)}
                   />
@@ -615,7 +615,7 @@ export default function Contact() {
               <div className="wizard-step">
                 <span className="contact-form-eyebrow">Last step</span>
                 <p className="wizard-question">Where can I reach you?</p>
-                <p className="wizard-help">Leave an email or a phone number — whichever you'd rather I use. Add both, or another handle, if you like.</p>
+                <p className="wizard-help">Leave an email or a phone number, whichever you'd rather I use. Add both, or another handle, if you like.</p>
                 <div className="form-row">
                   <div className="form-group">
                     <label className="form-label" htmlFor="cf-name">Name</label>
@@ -689,9 +689,9 @@ export default function Contact() {
                   </div>
                 </div>
                 <p className="wizard-summary-note">
-                  Name, a way to reach you, and a line about the idea are all
-                  I need. Nervous you left something out? Don't be; we'll fill
-                  in the rest on the call.
+                  That's all I need: your name, a way to reach you, and a line
+                  about what you need. Anything else, we'll cover on the
+                  call.
                 </p>
               </div>
             )}
@@ -704,12 +704,18 @@ export default function Contact() {
                 </button>
               ) : <span />}
 
+              {/* Distinct keys so React swaps in a new element at the last
+                  step. Reusing the Continue <button> and flipping its type to
+                  submit mid-click let the click's default action submit the
+                  form: visitors landed on the last step to a "please add your
+                  name" error, or sent the form if those fields were filled. */}
               {!isLast ? (
-                <button type="button" className="wizard-next" onClick={next}>
+                <button key="next" type="button" className="wizard-next" onClick={next}>
                   Continue <IconArrowRight size={14} />
                 </button>
               ) : (
                 <button
+                  key="submit"
                   type="submit"
                   className="form-submit-btn"
                   disabled={status === 'sending'}
@@ -763,8 +769,8 @@ export default function Contact() {
         <VerdictBox variant="note">
           <p>
             {SITE.founder.location} · Mountain Time (US/Denver).
-            I work with founders remotely and have built across US, UK, and
-            international time zones without friction.
+            I work with business owners anywhere, remotely, and keep calls
+            at hours that suit you.
           </p>
         </VerdictBox>
 
@@ -787,7 +793,7 @@ export default function Contact() {
             </li>
             <li>
               <strong>Book a call</strong>
-              Free first consultation
+              Free 30-minute call
             </li>
             <li>
               <strong>Location</strong>

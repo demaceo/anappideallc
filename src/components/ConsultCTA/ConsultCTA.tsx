@@ -19,7 +19,7 @@ interface ConsultCTAProps {
 // Process, Why not AI — and heads Contact, so the next step is never further
 // than the end of the page.
 export function ConsultCTA({
-  eyebrow = 'Free first call',
+  eyebrow = 'No cost, no pressure',
   title = SITE.booking.label,
   blurb = SITE.booking.blurb,
   showFormLink = true,
@@ -35,7 +35,7 @@ export function ConsultCTA({
         <p className="consult-cta-blurb">{blurb}</p>
         {showFormLink && (
           <p className="consult-cta-alt">
-            Prefer to write? <Link to="/contact">Use the guided form →</Link>
+            Prefer to write? <Link to="/contact">Send me a message →</Link>
           </p>
         )}
       </div>
@@ -46,7 +46,7 @@ export function ConsultCTA({
         rel="noopener noreferrer"
         data-analytics="book-consultation"
       >
-        Book a time
+        Book a free call
         <IconArrowRight size={15} />
       </a>
     </div>

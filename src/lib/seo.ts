@@ -40,7 +40,7 @@ export const META: Record<string, { title: string; description: string; path: st
   '/contact': {
     title: `Hire a Mobile App Developer | ${SITE.name}, Denver, CO`,
     description:
-      'Need a website, app, or AI for your small business? Free first consultation, sliding-scale pricing, and a reply within 1–2 business days. Everyone welcome.',
+      'Need a website, app, or AI for your small business? Free 30-minute call, sliding-scale pricing, and a reply within 1–2 business days. Everyone welcome.',
     path: '/contact',
   },
   '/why-not-ai': {

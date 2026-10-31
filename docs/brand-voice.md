@@ -189,6 +189,24 @@ If 1–7 are yes, it's on-voice.
 
 ---
 
+## Calls to action: one name per thing
+
+The same action keeps the same words on every page, so a visitor never
+wonders whether two buttons do different things.
+
+| Thing | Call it | Button / link | Don't say |
+| --- | --- | --- | --- |
+| The Calendly booking | a free 30-minute call | **Book a free call** | consultation, a time, session, demo |
+| The Contact page form | a message | **Send me a message →** | guided form, inquiry, submit |
+| The form's send button | | **Send message** | Submit |
+
+Form copy speaks to someone **running a business** ("What do you need?",
+"What kind of business is it?"), not to an app founder pitching an idea.
+Error messages say what happened and how to fix it, in the first person
+("Something broke on my end, not yours"), never a raw server string.
+
+---
+
 ## Tagline & anchors (for reference)
 
 - **Tagline:** *Got an app idea? Let's build it.* — the warmth and the

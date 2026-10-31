@@ -199,8 +199,8 @@ export default function Home() {
             <p>
               Prefer to write? Got an app or website idea, or a project that needs
               a co-builder? Send a few sentences to{' '}
-              <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or use the{' '}
-              <Link to="/contact">guided form</Link>.
+              <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or{' '}
+              <Link to="/contact">send me a message here</Link>.
               I read everything and respond within 1–2 business days. Pricing
               works on a sliding scale based on your business's size and stage.
             </p>

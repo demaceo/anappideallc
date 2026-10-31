@@ -42,7 +42,10 @@ describe('Home — brutalist redesign', () => {
 
   it('keeps the booking CTA wired to Calendly with analytics + rel intact', () => {
     renderRoute('/')
-    const book = screen.getByRole('link', { name: /book a time/i })
+    // The hero and the closing CTA share the label; check the closing one.
+    const book = screen
+      .getAllByRole('link', { name: /book a free call/i })
+      .find((a) => a.getAttribute('data-analytics') === 'book-consultation')
     expect(book).toHaveAttribute('href', 'https://calendly.com/demaceo-milehighinterface/30min')
     expect(book).toHaveAttribute('data-analytics', 'book-consultation')
     expect(book).toHaveAttribute('target', '_blank')

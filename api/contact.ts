@@ -94,7 +94,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const audio = (body.audio ?? null) as AudioPayload | null
 
   if (!name.trim()) {
-    return res.status(400).json({ error: 'Name is required' })
+    return res.status(400).json({ error: 'Please add your name.' })
   }
 
   // Email or phone is enough — a visitor can reach out by whichever they prefer.
@@ -102,15 +102,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const hasEmail = email.trim() !== ''
   const hasPhone = phone.trim() !== ''
   if (hasEmail && !emailRegex.test(email)) {
-    return res.status(400).json({ error: 'Invalid email address' })
+    return res.status(400).json({ error: 'That email looks off. Mind checking it?' })
   }
   if (!hasEmail && !hasPhone) {
-    return res.status(400).json({ error: 'An email or phone number is required' })
+    return res.status(400).json({ error: 'Leave an email or a phone number so I have a way to reach you.' })
   }
 
   const hasAudio = !!audio?.base64
   if (!description.trim() && !hasAudio) {
-    return res.status(400).json({ error: 'Tell me a little about your idea, or leave a voice note' })
+    return res.status(400).json({ error: 'Add a sentence about what you need, or a quick voice note, so I know where to start.' })
   }
 
   // Build the summary rows from whatever the visitor chose to share.
@@ -159,7 +159,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (hasAudio && audio?.base64) {
     const buffer = Buffer.from(audio.base64, 'base64')
     if (buffer.byteLength > MAX_AUDIO_BYTES) {
-      return res.status(413).json({ error: 'Voice note is too large' })
+      return res.status(413).json({ error: 'That voice note is too large to send. Try a shorter one, or type it out.' })
     }
     const ext = audio.mimeType?.includes('mp4')
       ? 'm4a'
@@ -192,11 +192,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     })
     if (error) {
       console.error('[contact] send rejected', error.name, error.message)
-      return res.status(502).json({ error: 'Failed to send message' })
+      return res.status(502).json({ error: 'Something broke on my end, not yours. Try again in a moment.' })
     }
   } catch (err) {
     console.error('[contact] send error', err)
-    return res.status(500).json({ error: 'Failed to send message' })
+    return res.status(500).json({ error: 'Something broke on my end, not yours. Try again in a moment.' })
   }
 
   // Best-effort confirmation to the visitor. The inquiry already reached the
@@ -221,9 +221,9 @@ async function sendConfirmation(to: string): Promise<boolean> {
     '',
     'Your message arrived. Here is what happens next:',
     '1. I read every message myself and reply within 1–2 business days.',
-    '2. If it looks like a fit, we set up a free 30-minute call.',
+    '2. Next, we set up a free 30-minute call to talk it through.',
     '',
-    `Want to skip the wait? Book the call now: ${BOOKING_URL}`,
+    `Want to skip the wait? Book your free call: ${BOOKING_URL}`,
     '',
     'Demaceo, An App Idea LLC',
     '',
@@ -235,16 +235,16 @@ async function sendConfirmation(to: string): Promise<boolean> {
       from: `An App Idea <${FROM_EMAIL}>`,
       to,
       replyTo: TO_EMAIL,
-      subject: 'Got your message — An App Idea',
+      subject: 'Got your message · An App Idea',
       text,
       html: `
         <p style="margin:0 0 12px">Thanks for reaching out to An App Idea.</p>
         <p style="margin:0 0 8px">Your message arrived. Here is what happens next:</p>
         <ol style="margin:0 0 16px;padding-left:20px">
           <li>I read every message myself and reply within 1–2 business days.</li>
-          <li>If it looks like a fit, we set up a free 30-minute call.</li>
+          <li>Next, we set up a free 30-minute call to talk it through.</li>
         </ol>
-        <p style="margin:0 0 16px">Want to skip the wait? <a href="${BOOKING_URL}">Book the call now</a>.</p>
+        <p style="margin:0 0 16px">Want to skip the wait? <a href="${BOOKING_URL}">Book your free call</a>.</p>
         <p style="margin:0 0 16px">Demaceo, An App Idea LLC</p>
         <p style="margin:0;color:#6b6355;font-size:12px">If you didn't contact An App Idea, you can ignore this email.</p>
       `,
