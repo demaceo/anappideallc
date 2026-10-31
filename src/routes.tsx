@@ -1,32 +1,27 @@
+import type { ComponentType } from 'react'
 import type { RouteObject } from 'react-router'
 import App from './App'
 import Home from './pages/Home'
-import About from './pages/About'
-import Work from './pages/Work'
-import Services from './pages/Services'
-import Process from './pages/Process'
-import Contact from './pages/Contact'
-import WhyNotAI from './pages/WhyNotAI'
-import Support from './pages/Support'
-import PaybackSupport from './pages/PaybackSupport'
-import ProjectDetail from './pages/ProjectDetail'
-import LegalIndex from './pages/legal/LegalIndex'
-import LegalApp from './pages/legal/LegalApp'
-import DrayageProPrivacy from './pages/legal/DrayageProPrivacy'
-import DrayageProTerms from './pages/legal/DrayageProTerms'
-import PinpointPrivacy from './pages/legal/PinpointPrivacy'
-import PinpointTerms from './pages/legal/PinpointTerms'
-import PaybackPrivacy from './pages/legal/PaybackPrivacy'
-import PaybackTerms from './pages/legal/PaybackTerms'
-import PaybackDataDeletion from './pages/legal/PaybackDataDeletion'
-import YapPrivacy from './pages/legal/YapPrivacy'
-import YapTerms from './pages/legal/YapTerms'
-import ZooriPrivacy from './pages/legal/ZooriPrivacy'
-import ZooriTerms from './pages/legal/ZooriTerms'
-import FengshuiPrivacy from './pages/legal/FengshuiPrivacy'
-import FengshuiTerms from './pages/legal/FengshuiTerms'
-import StlmntPrivacy from './pages/legal/StlmntPrivacy'
-import StlmntTerms from './pages/legal/StlmntTerms'
+
+// Every page except Home loads on demand: Vite turns each dynamic import into
+// its own chunk, so a visitor downloads only the page they're on (the legal
+// pages alone were close to half the old single bundle). Home stays in the
+// main bundle as the most-visited page.
+//
+// `module` is the page's source path. The prerender step uses it to find the
+// page's chunk in Vite's manifest and preload it in that page's HTML. Vite
+// needs the import() path written literally, so the path appears twice; a
+// test loads each route both ways to keep them in step.
+export interface PageHandle {
+  module: string
+}
+
+function page(module: string, load: () => Promise<{ default: ComponentType }>) {
+  return {
+    lazy: async () => ({ Component: (await load()).default }),
+    handle: { module } satisfies PageHandle,
+  }
+}
 
 export const routes: RouteObject[] = [
   {
@@ -34,32 +29,32 @@ export const routes: RouteObject[] = [
     Component: App,
     children: [
       { index: true, Component: Home },
-      { path: 'about', Component: About },
-      { path: 'work', Component: Work },
-      { path: 'work/:slug', Component: ProjectDetail },
-      { path: 'services', Component: Services },
-      { path: 'process', Component: Process },
-      { path: 'why-not-ai', Component: WhyNotAI },
-      { path: 'support', Component: Support },
-      { path: 'support/payback', Component: PaybackSupport },
-      { path: 'contact', Component: Contact },
-      { path: 'legal', Component: LegalIndex },
-      { path: 'legal/:app', Component: LegalApp },
-      { path: 'legal/drayagepro/privacy', Component: DrayageProPrivacy },
-      { path: 'legal/drayagepro/terms', Component: DrayageProTerms },
-      { path: 'legal/pinpoint/privacy', Component: PinpointPrivacy },
-      { path: 'legal/pinpoint/terms', Component: PinpointTerms },
-      { path: 'legal/payback/privacy', Component: PaybackPrivacy },
-      { path: 'legal/payback/terms', Component: PaybackTerms },
-      { path: 'legal/payback/data-deletion', Component: PaybackDataDeletion },
-      { path: 'legal/yap/privacy', Component: YapPrivacy },
-      { path: 'legal/yap/terms', Component: YapTerms },
-      { path: 'legal/zoori/privacy', Component: ZooriPrivacy },
-      { path: 'legal/zoori/terms', Component: ZooriTerms },
-      { path: 'legal/fengshui/privacy', Component: FengshuiPrivacy },
-      { path: 'legal/fengshui/terms', Component: FengshuiTerms },
-      { path: 'legal/stlmnt/privacy', Component: StlmntPrivacy },
-      { path: 'legal/stlmnt/terms', Component: StlmntTerms },
+      { path: 'about', ...page('src/pages/About.tsx', () => import('./pages/About')) },
+      { path: 'work', ...page('src/pages/Work.tsx', () => import('./pages/Work')) },
+      { path: 'work/:slug', ...page('src/pages/ProjectDetail.tsx', () => import('./pages/ProjectDetail')) },
+      { path: 'services', ...page('src/pages/Services.tsx', () => import('./pages/Services')) },
+      { path: 'process', ...page('src/pages/Process.tsx', () => import('./pages/Process')) },
+      { path: 'why-not-ai', ...page('src/pages/WhyNotAI.tsx', () => import('./pages/WhyNotAI')) },
+      { path: 'support', ...page('src/pages/Support.tsx', () => import('./pages/Support')) },
+      { path: 'support/payback', ...page('src/pages/PaybackSupport.tsx', () => import('./pages/PaybackSupport')) },
+      { path: 'contact', ...page('src/pages/Contact.tsx', () => import('./pages/Contact')) },
+      { path: 'legal', ...page('src/pages/legal/LegalIndex.tsx', () => import('./pages/legal/LegalIndex')) },
+      { path: 'legal/:app', ...page('src/pages/legal/LegalApp.tsx', () => import('./pages/legal/LegalApp')) },
+      { path: 'legal/drayagepro/privacy', ...page('src/pages/legal/DrayageProPrivacy.tsx', () => import('./pages/legal/DrayageProPrivacy')) },
+      { path: 'legal/drayagepro/terms', ...page('src/pages/legal/DrayageProTerms.tsx', () => import('./pages/legal/DrayageProTerms')) },
+      { path: 'legal/pinpoint/privacy', ...page('src/pages/legal/PinpointPrivacy.tsx', () => import('./pages/legal/PinpointPrivacy')) },
+      { path: 'legal/pinpoint/terms', ...page('src/pages/legal/PinpointTerms.tsx', () => import('./pages/legal/PinpointTerms')) },
+      { path: 'legal/payback/privacy', ...page('src/pages/legal/PaybackPrivacy.tsx', () => import('./pages/legal/PaybackPrivacy')) },
+      { path: 'legal/payback/terms', ...page('src/pages/legal/PaybackTerms.tsx', () => import('./pages/legal/PaybackTerms')) },
+      { path: 'legal/payback/data-deletion', ...page('src/pages/legal/PaybackDataDeletion.tsx', () => import('./pages/legal/PaybackDataDeletion')) },
+      { path: 'legal/yap/privacy', ...page('src/pages/legal/YapPrivacy.tsx', () => import('./pages/legal/YapPrivacy')) },
+      { path: 'legal/yap/terms', ...page('src/pages/legal/YapTerms.tsx', () => import('./pages/legal/YapTerms')) },
+      { path: 'legal/zoori/privacy', ...page('src/pages/legal/ZooriPrivacy.tsx', () => import('./pages/legal/ZooriPrivacy')) },
+      { path: 'legal/zoori/terms', ...page('src/pages/legal/ZooriTerms.tsx', () => import('./pages/legal/ZooriTerms')) },
+      { path: 'legal/fengshui/privacy', ...page('src/pages/legal/FengshuiPrivacy.tsx', () => import('./pages/legal/FengshuiPrivacy')) },
+      { path: 'legal/fengshui/terms', ...page('src/pages/legal/FengshuiTerms.tsx', () => import('./pages/legal/FengshuiTerms')) },
+      { path: 'legal/stlmnt/privacy', ...page('src/pages/legal/StlmntPrivacy.tsx', () => import('./pages/legal/StlmntPrivacy')) },
+      { path: 'legal/stlmnt/terms', ...page('src/pages/legal/StlmntTerms.tsx', () => import('./pages/legal/StlmntTerms')) },
     ],
   },
 ]

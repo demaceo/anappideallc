@@ -12,6 +12,7 @@ import { createServer } from 'vite'
 import { fileURLToPath } from 'node:url'
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
+import { matchRoutes } from 'react-router'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
@@ -32,11 +33,33 @@ async function main() {
   })
 
   const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
-  const { PRERENDER_PATHS } = await vite.ssrLoadModule('/src/routes.tsx')
+  const { PRERENDER_PATHS, routes } = await vite.ssrLoadModule('/src/routes.tsx')
   const { buildStructuredData, META } = await vite.ssrLoadModule('/src/lib/seo.ts')
   const { SITE, TWITTER_HANDLE } = await vite.ssrLoadModule('/src/data/site.ts')
 
   const template = readFileSync(path.join(root, 'dist/index.html'), 'utf-8')
+
+  // Pages load on demand (route `lazy` in src/routes.tsx), so each page's
+  // chunk would otherwise only be requested after the main bundle runs.
+  // Preload it from the page's own HTML instead: each lazy route names its
+  // source file in handle.module, and Vite's manifest maps that to the built
+  // chunk and the shared chunks it imports. Files the template already loads
+  // are skipped.
+  const manifest = JSON.parse(readFileSync(path.join(root, 'dist/.vite/manifest.json'), 'utf-8'))
+  function chunkFiles(key, seen = new Set()) {
+    const entry = manifest[key]
+    if (!entry || seen.has(key)) return []
+    seen.add(key)
+    return [entry.file, ...(entry.imports ?? []).flatMap((k) => chunkFiles(k, seen))]
+  }
+  function preloadTags(url) {
+    const modules = (matchRoutes(routes, url) ?? []).map((m) => m.route.handle?.module).filter(Boolean)
+    const files = [...new Set(modules.flatMap((m) => chunkFiles(m)))]
+    if (modules.length && !files.length) throw new Error(`No built chunk for ${modules.join(', ')} (${url})`)
+    return files
+      .filter((file) => !template.includes(file))
+      .map((file) => `<link rel="modulepreload" crossorigin href="/${file}" />`)
+  }
 
   for (const url of PRERENDER_PATHS) {
     const meta = META[url] ?? META['/']
@@ -82,6 +105,7 @@ async function main() {
       `<meta name="twitter:image" content="${ogImage}" />`,
       `<meta name="twitter:image:alt" content="${escHtml(meta.title)}" />`,
       `<script type="application/ld+json">${buildStructuredData(url)}</script>`,
+      ...preloadTags(url),
     ].join('\n  ')
 
     // Clean out any static template canonical/og/json-ld tags so prerendered
