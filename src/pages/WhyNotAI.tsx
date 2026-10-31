@@ -105,6 +105,7 @@ export default function WhyNotAI() {
           <div className="section-rule" />
         </div>
 
+        <div className="grid-2">
         {REALITIES.map((r) => {
           const Icon = r.icon
           return (
@@ -120,6 +121,7 @@ export default function WhyNotAI() {
             </div>
           )
         })}
+        </div>
 
         <div className="chapter-divider">
           <span className="ornament">✦ ✦ ✦</span>

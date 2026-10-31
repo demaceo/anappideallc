@@ -1,6 +1,6 @@
 // Oversized Bebas Neue watermark word that sits behind a section's content and
 // parallaxes as the page scrolls. Purely decorative, so it's hidden from the
-// accessibility tree. `data-ghost` is the hook that useBrutalistScroll reads to
+// accessibility tree. `data-ghost` is the hook that useScrollScenes reads to
 // attach the scroll-scrubbed parallax tween (GSAP); with JS off or reduced
 // motion, it simply renders as a static watermark.
 interface GhostWordProps {

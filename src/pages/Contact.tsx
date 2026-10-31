@@ -732,6 +732,7 @@ export default function Contact() {
           <div className="section-rule" />
         </div>
 
+        <div className="grid-3">
         {PROMPTS.map((p) => {
           const PromptIcon = p.icon
           return (
@@ -747,6 +748,7 @@ export default function Contact() {
             </div>
           )
         })}
+        </div>
 
         <div className="section-header">
           <span className="section-num">Location</span>

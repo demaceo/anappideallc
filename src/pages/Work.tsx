@@ -138,10 +138,15 @@ export default function Work() {
           <div className="section-rule" />
         </div>
 
+        <div className="grid-2">
         {orderedStudies.map((c) => {
           const ProjectLogo = PROJECT_LOGOS[c.slug] ?? LogoPinpoint
           return (
-            <Link key={c.slug} to={`/work/${c.slug}`} className="feature-item feature-item--linked">
+            <Link
+              key={c.slug}
+              to={`/work/${c.slug}`}
+              className={`feature-item feature-item--linked${PROOF_RANK.has(c.slug) ? ' feature-item--mission' : ''}`}
+            >
               <div
                 className={`feature-icon app-mark${c.icon ? ' app-mark--photo' : ''}`}
                 style={c.icon ? undefined : { background: PROJECT_COLORS[c.slug] }}
@@ -158,12 +163,8 @@ export default function Work() {
                 </span>
                 <h3 className="feature-title">{c.title}</h3>
                 <p>{c.summary}</p>
-                <span className="bubble-subtitle">Outcomes</span>
-                <ul>
-                  {c.outcomes.map((o) => (
-                    <li key={o}>{o}</li>
-                  ))}
-                </ul>
+                {/* Outcomes and stack live on each case study page; the tile
+                    stays a scannable summary so the grid doesn't sprawl. */}
                 <div className="stat-row">
                   {c.stats.map((s) => (
                     <span key={s.label} className="stat-pill">
@@ -171,12 +172,12 @@ export default function Work() {
                     </span>
                   ))}
                 </div>
-                <span className="mono-meta">Stack: {c.stack.join(' · ')}</span>
                 <span className="feature-cta">View case study</span>
               </div>
             </Link>
           )
         })}
+        </div>
 
         <NextStep
           heading="Got something like these in mind?"

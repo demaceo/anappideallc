@@ -4,6 +4,43 @@
    Zero border-radius, zero shadows: hairlines and inversion
    carry all structure and depth.
    ═══════════════════════════════════════════════════════════ */
+/* ═══ Metric-matched fallback faces ═══
+   The brand fonts load from Google Fonts with display=swap, so text first
+   paints in a system font and then reflows when the real font arrives. On the
+   denser grid layouts that reflow showed up as layout shift (Lighthouse CLS
+   0.30 on /work). These faces resize the common system fallbacks (Arial /
+   Courier New, or their metric-compatible Liberation equivalents) to the
+   brand fonts' measured widths and line metrics, so the swap no longer moves
+   anything. Values were computed with fontTools from the Google Fonts latin
+   files (Unbounded 900 vs Arial Bold on uppercase text, Space Mono 400 vs
+   Courier New, Bebas Neue vs Arial Bold); recompute if a font changes. */
+@font-face {
+  font-family: 'Unbounded Fallback';
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'), local('LiberationSans-Bold');
+  font-weight: 100 900;
+  size-adjust: 129.27%;
+  ascent-override: 76.97%;
+  descent-override: 18.95%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Space Mono Fallback';
+  src: local('Courier New'), local('CourierNewPSMT'), local('Liberation Mono'), local('LiberationMono');
+  font-weight: 100 900;
+  size-adjust: 101.98%;
+  ascent-override: 109.82%;
+  descent-override: 35.4%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Bebas Neue Fallback';
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'), local('LiberationSans-Bold');
+  size-adjust: 58.02%;
+  ascent-override: 155.11%;
+  descent-override: 51.7%;
+  line-gap-override: 0%;
+}
+
 :root {
   /* Color — OKLCH */
   --c-bg: oklch(96% 0.005 90);        /* warm bone: page background         */
@@ -48,10 +85,10 @@
   /* Typography — full swap to the Brutalist Scroll Page pen's families.
      Unbounded (display, heavy) · Space Mono (body + mono/labels) ·
      Bebas Neue (giant ghost watermarks + stamp/badge labels). */
-  --ff-display: 'Unbounded', ui-sans-serif, system-ui, sans-serif;
-  --ff-body: 'Space Mono', ui-monospace, monospace;
-  --ff-mono: 'Space Mono', ui-monospace, monospace;
-  --ff-stamp: 'Bebas Neue', 'Unbounded', sans-serif;
+  --ff-display: 'Unbounded', 'Unbounded Fallback', ui-sans-serif, system-ui, sans-serif;
+  --ff-body: 'Space Mono', 'Space Mono Fallback', ui-monospace, monospace;
+  --ff-mono: 'Space Mono', 'Space Mono Fallback', ui-monospace, monospace;
+  --ff-stamp: 'Bebas Neue', 'Bebas Neue Fallback', 'Unbounded', sans-serif;
 
   /* ═══ Spacing — a 4px grid, not a ladder ═══
      Every padding / margin / gap is a multiple of 0.25rem (4px). The tokens
@@ -84,6 +121,20 @@
   --space-10: 2.5rem;    /* 40px */
   --space-11: 3rem;      /* 48px */
   --space-12: 4rem;      /* 64px */
+
+  /* ═══ Layout ═══
+     The page shell was an 880px column, which left ~280px of bare margin each
+     side at 1440px. Wide layouts use the shell; running prose stays at a
+     readable measure inside it. Masthead spacing lives here because both the
+     base rules and the scroll-collapse keyframes' `from` state must match. */
+  --shell: 1200px;
+  --measure: 62ch;
+  --masthead-pad-top: clamp(1.5rem, 4vw, 2.5rem);
+  --masthead-pad-bottom: clamp(1.25rem, 3vw, 2rem);
+  --dateline-gap: var(--space-4);
+  /* Clearance for sticky content under the collapsed sticky header (measured
+     at 123px on Home, 79px elsewhere). */
+  --sticky-offset: 9rem;
 
   /* ═══ Type — six fixed steps and seven fluid ones ═══
      Fixed sizes covered 88 declarations across 13 values, ten of them crowded

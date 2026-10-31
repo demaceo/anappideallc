@@ -50,14 +50,14 @@ h1, h2, h3 {
 }
 
 .container {
-  max-width: 880px;
+  max-width: var(--shell);
   margin: 0 auto;
   padding: 0 clamp(1rem, 4vw, 2rem);
 }
 
 /* ─── Scroll-driven keyframes (Chrome 115+, Firefox 114+, Safari 18+) ─── */
 @keyframes masthead-collapse {
-  from { padding-top: clamp(2.25rem, 6vw, 4rem); padding-bottom: clamp(1.75rem, 4vw, 3rem); }
+  from { padding-top: var(--masthead-pad-top); padding-bottom: var(--masthead-pad-bottom); }
   to   { padding-top: var(--space-3);                   padding-bottom: var(--space-2);                    }
 }
 @keyframes overline-collapse {
@@ -73,7 +73,7 @@ h1, h2, h3 {
   to   { max-height: 0;     opacity: 0; margin-top: 0;       }
 }
 @keyframes dateline-collapse {
-  from { max-height: 4rem;  opacity: 1; margin-top: var(--space-7); }
+  from { max-height: 4rem;  opacity: 1; margin-top: var(--dateline-gap); }
   to   { max-height: 0;     opacity: 0; margin-top: 0;       }
 }
 @keyframes back-home-track {
@@ -104,7 +104,7 @@ h1, h2, h3 {
 .masthead {
   background: var(--c-bg);
   color: var(--c-fg);
-  padding: clamp(2.25rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem) clamp(1.75rem, 4vw, 3rem);
+  padding: var(--masthead-pad-top) clamp(1rem, 4vw, 2rem) var(--masthead-pad-bottom);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -151,7 +151,7 @@ h1, h2, h3 {
   font-family: var(--ff-body);
   font-size: var(--text-lg);
   color: var(--c-fg-soft);
-  max-width: 580px;
+  max-width: 720px;
   margin: var(--space-3) auto 0;
   line-height: 1.4;
   overflow: hidden;
@@ -207,7 +207,7 @@ h1, h2, h3 {
   color: var(--c-fg-soft);
   overflow: hidden;
   /* Mirrors the `from` state of @keyframes dateline-collapse — see .overline. */
-  margin-top: var(--space-7);
+  margin-top: var(--dateline-gap);
 }
 
 /* ─── SECTION 5: Navigation / legend bar ─── */
@@ -501,7 +501,7 @@ h1, h2, h3 {
 
 /* ─── SECTION 6: Intro block ─── */
 .intro-block {
-  padding: 2.75rem 0 var(--space-9);
+  padding: var(--space-8) 0 var(--space-7);
   border-bottom: var(--bw) solid var(--c-line);
 }
 
@@ -509,7 +509,7 @@ h1, h2, h3 {
   font-family: var(--ff-body);
   font-size: var(--text-fluid-2);
   color: var(--c-fg);
-  max-width: 45ch;
+  max-width: var(--measure);
   line-height: 1.35;
 }
 
@@ -518,9 +518,9 @@ h1, h2, h3 {
   display: flex;
   align-items: baseline;
   gap: var(--space-4);
-  padding: 2.75rem 0 var(--space-5);
+  padding: var(--space-8) 0 var(--space-4);
   border-bottom: var(--bw) solid var(--c-line);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-5);
 }
 
 .section-num {
@@ -703,7 +703,7 @@ cite:hover { background: var(--c-accent); }
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  padding: var(--space-9) 0 0;
+  padding: var(--space-6) 0 0;
 }
 
 .chapter-divider::before,
@@ -1013,7 +1013,7 @@ cite:hover { background: var(--c-accent); }
   display: grid;
   grid-template-columns: 52px 1fr;
   gap: 0 var(--space-6);
-  padding: var(--space-8) 0;
+  padding: var(--space-6) 0;
   border-bottom: var(--bw) solid var(--c-line);
   align-items: start;
 }
@@ -1126,7 +1126,7 @@ cite:hover { background: var(--c-accent); }
   display: grid;
   grid-template-columns: 52px 1fr;
   gap: 0 var(--space-6);
-  padding: var(--space-8) 0;
+  padding: var(--space-6) 0;
   border-bottom: var(--bw) solid var(--c-line);
   align-items: start;
   text-decoration: none;
@@ -2841,7 +2841,7 @@ main a:hover {
 }
 .section + .section { border-top: none; }           /* no doubled 8px seam */
 .section > .container { position: relative; z-index: 2; }
-.section-band { padding: clamp(3rem, 8vw, 6rem) 0; }
+.section-band { padding: clamp(2.5rem, 5vw, 4rem) 0; }
 
 .section--yellow   { background: var(--c-yellow);   color: var(--c-ink); }
 .section--lime     { background: var(--c-lime);     color: var(--c-ink); }
@@ -3063,12 +3063,47 @@ main a:hover {
    ink on chartreuse both clear AA comfortably; no opacity on the copy. */
 .story-chapter {
   position: relative;
-  margin: var(--space-9) 0;
+  margin: var(--space-7) 0;
   padding: var(--space-7) var(--space-7) var(--space-6);
   background: var(--c-bg);
   color: var(--c-fg);
-  border: var(--bw-brutal) solid var(--c-ink);
+  /* The visible border is the SVG frame below (so it can draw itself in);
+     this transparent border just reserves its width. */
+  border: var(--bw-brutal) solid transparent;
   box-shadow: 8px 8px 0 var(--c-ink);
+}
+
+/* Sits centered on the border box edge: the box is offset out by half the
+   stroke, and the rect's stroke (centered on its edge) covers exactly the
+   reserved border width. */
+.story-chapter-frame {
+  position: absolute;
+  inset: calc(var(--bw-brutal) / -2);
+  width: calc(100% + var(--bw-brutal));
+  height: calc(100% + var(--bw-brutal));
+  overflow: visible;
+  pointer-events: none;
+}
+
+.story-chapter-frame rect {
+  fill: none;
+  stroke: var(--c-ink);
+  stroke-width: var(--bw-brutal);
+}
+
+/* Wide screens: heading on the left, story on the right, evidence and any
+   extra content (the proof list) across the full width. Inside a .split the
+   card shares the row with a scene, so it stays single-column. */
+@media (min-width: 1024px) {
+  :not(.split) > .story-chapter {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: var(--space-10);
+    align-items: start;
+  }
+  :not(.split) > .story-chapter > :not(.story-chapter-head, .story-chapter-text, .story-chapter-frame) {
+    grid-column: 1 / -1;
+  }
 }
 
 .story-chapter-label {
@@ -3259,3 +3294,85 @@ main a:hover {
   }
   .story-next-link { align-self: stretch; justify-content: center; flex: 1 1 100%; }
 }
+
+/* ─── Layout v2: shell grids ───
+   The page shell is wide (--shell); these place content across it instead of
+   stacking everything in one narrow column. All collapse to one column on
+   phones. */
+.prose { max-width: var(--measure); }
+
+.grid-2,
+.grid-3 {
+  display: grid;
+  gap: var(--space-5);
+  margin: var(--space-2) 0 var(--space-8);
+}
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+@media (max-width: 1023.98px) {
+  .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 767.98px) {
+  .grid-2,
+  .grid-3 { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Feature rows become cards when they sit in a grid. */
+:is(.grid-2, .grid-3) > :is(.feature-item, .feature-item--linked) {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-6);
+  border: var(--bw-thick) solid var(--c-line);
+  background: var(--c-bg);
+}
+
+/* Story chapter beside its signature scene. The scene stays sticky while the
+   chapter scrolls past, and the scene's timeline plays across that stretch. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: var(--space-8);
+  align-items: start;
+  margin: var(--space-7) 0;
+}
+.split > .story-chapter { margin: 0; }
+.split > .scene {
+  position: sticky;
+  top: var(--sticky-offset);
+}
+@media (max-width: 1023.98px) {
+  .split { grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
+  .split > .scene {
+    position: static;
+    order: -1;
+    width: min(100%, 26rem);
+    justify-self: center;
+  }
+}
+
+/* ─── Signature scenes ───
+   Ink linework on a bone panel, chartreuse for the one accent per scene.
+   Decorative only (aria-hidden); the markup is the finished picture. */
+.scene {
+  aspect-ratio: 1;
+  width: 100%;
+  background: var(--c-bg);
+  border: var(--bw-brutal) solid var(--c-ink);
+  box-shadow: 8px 8px 0 var(--c-ink);
+}
+.scene svg { display: block; width: 100%; height: 100%; }
+.scene-line { stroke: var(--c-ink); stroke-width: 3; }
+.scene-line--heavy { stroke-width: 5; }
+.scene-dot { fill: var(--c-ink); }
+.scene-grid circle { fill: var(--c-ink); opacity: 0.35; }
+.scene-fill { fill: var(--c-accent); stroke: var(--c-ink); stroke-width: 3; }
+.scene-accent { fill: var(--c-accent); stroke: var(--c-ink); stroke-width: 5; }
+.scene-hole { fill: var(--c-bg); stroke: var(--c-ink); stroke-width: 3; }
+
+/* Work: the five mission apps lead the grid with a chartreuse top edge. */
+.feature-item--mission { box-shadow: inset 0 8px 0 var(--c-accent); }
+
+/* Linked tiles in a grid: the row-style negative inline margin would push a
+   card outside its grid cell. */
+:is(.grid-2, .grid-3) > .feature-item--linked { margin-inline: 0; }
