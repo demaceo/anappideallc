@@ -68,6 +68,13 @@ that differs between server and browser (time, random values, `window`,
 media queries) out of render and in effects. A mismatch logs an error in the
 console and React falls back to re-rendering the page.
 
+Page chunks have hashed names, so a tab left open across a redeploy can ask
+for one that no longer exists. The root error boundary
+(`src/components/RouteError`) then loads the requested page fresh, once, from
+the new deployment; if the first chunk fails before hydration, `main.tsx`
+does the same and otherwise leaves the prerendered page as-is. The same
+boundary shows "Page not found" for unknown URLs.
+
 ## Project structure
 
 ```

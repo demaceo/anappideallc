@@ -1,7 +1,7 @@
 import { render, screen, within, fireEvent, waitFor } from '@testing-library/react'
 import { RouterProvider, createMemoryRouter } from 'react-router'
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { routes } from '../routes'
+import { appRoutes as routes } from './helpers/app-routes'
 import { SITE } from '../data/site'
 
 function renderRoute(path: string) {

@@ -1,8 +1,7 @@
-import { createBrowserRouter } from 'react-router'
-import { routes } from './routes'
+import { createBrowserRouter, type RouteObject } from 'react-router'
 
-// A factory, not a module-level router: main.tsx resolves the current page's
-// lazy route first (resolveLazyRoutes), then creates the router.
-export function createAppRouter() {
+// main.tsx passes a route tree with the current page's lazy route already
+// loaded (resolveLazyRoutes), so the router can hydrate without a fallback.
+export function createAppRouter(routes: RouteObject[]) {
   return createBrowserRouter(routes)
 }

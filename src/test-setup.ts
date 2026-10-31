@@ -28,10 +28,3 @@ class NoopObserver {
 }
 globalThis.IntersectionObserver ??= NoopObserver as unknown as typeof IntersectionObserver
 globalThis.ResizeObserver ??= NoopObserver as unknown as typeof ResizeObserver
-
-// Pages load on demand in the app (route `lazy` in src/routes.tsx). Load them
-// all once up front so route-rendering tests can render and navigate
-// synchronously; the lazy behaviour itself is covered in lazy-routes.test.ts.
-import { routes, PRERENDER_PATHS } from './routes'
-import { resolveLazyRoutes } from './lib/resolveLazyRoutes'
-await Promise.all(PRERENDER_PATHS.map((path) => resolveLazyRoutes(routes, path)))

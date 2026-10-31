@@ -37,7 +37,9 @@ describe('reduced motion never loads GSAP', () => {
     vi.resetModules()
   })
 
-  it('mounts the whole app without importing gsap', async () => {
+  // Loads every page's chunk, not just Home: pages are lazy, so a page that
+  // imported gsap at the top would otherwise slip past this test.
+  it('mounts the app and loads every page without importing gsap', async () => {
     const loaded = vi.fn()
     vi.doMock('gsap', () => {
       loaded()
@@ -53,7 +55,9 @@ describe('reduced motion never loads GSAP', () => {
     const { render } = await import('@testing-library/react')
     const { RouterProvider, createMemoryRouter } = await import('react-router')
     const { routes } = await import('../routes')
-    render(<RouterProvider router={createMemoryRouter(routes, { initialEntries: ['/'] })} />)
+    const { resolveAllLazyRoutes } = await import('../lib/resolveLazyRoutes')
+    const allPages = await resolveAllLazyRoutes(routes)
+    render(<RouterProvider router={createMemoryRouter(allPages, { initialEntries: ['/'] })} />)
     await new Promise((r) => setTimeout(r, 50))
     expect(loaded).not.toHaveBeenCalled()
     // resetModules() makes this reload the whole app's module graph cold,

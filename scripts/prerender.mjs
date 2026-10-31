@@ -44,8 +44,9 @@ async function main() {
   // Preload it from the page's own HTML instead: each lazy route names its
   // source file in handle.module, and Vite's manifest maps that to the built
   // chunk and the shared chunks it imports. Files the template already loads
-  // are skipped.
+  // (its own <script src> / <link href> URLs, matched exactly) are skipped.
   const manifest = JSON.parse(readFileSync(path.join(root, 'dist/.vite/manifest.json'), 'utf-8'))
+  const templateAssets = new Set([...template.matchAll(/\s(?:src|href)="\/([^"]+)"/g)].map((m) => m[1]))
   function chunkFiles(key, seen = new Set()) {
     const entry = manifest[key]
     if (!entry || seen.has(key)) return []
@@ -57,7 +58,7 @@ async function main() {
     const files = [...new Set(modules.flatMap((m) => chunkFiles(m)))]
     if (modules.length && !files.length) throw new Error(`No built chunk for ${modules.join(', ')} (${url})`)
     return files
-      .filter((file) => !template.includes(file))
+      .filter((file) => !templateAssets.has(file))
       .map((file) => `<link rel="modulepreload" crossorigin href="/${file}" />`)
   }
 

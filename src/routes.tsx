@@ -2,60 +2,68 @@ import type { ComponentType } from 'react'
 import type { RouteObject } from 'react-router'
 import App from './App'
 import Home from './pages/Home'
+import { RouteError } from './components/RouteError/RouteError'
 
-// Every page except Home loads on demand: Vite turns each dynamic import into
-// its own chunk, so a visitor downloads only the page they're on (the legal
-// pages alone were close to half the old single bundle). Home stays in the
-// main bundle as the most-visited page.
-//
-// `module` is the page's source path. The prerender step uses it to find the
-// page's chunk in Vite's manifest and preload it in that page's HTML. Vite
-// needs the import() path written literally, so the path appears twice; a
-// test loads each route both ways to keep them in step.
+// Every page except Home loads on demand: Vite turns each module matched here
+// into its own chunk, so a visitor downloads only the page they're on (the
+// legal pages alone were close to half the old single bundle). Home stays in
+// the main bundle as the most-visited page.
+const pageModules = import.meta.glob<{ default: ComponentType }>(['./pages/**/*.tsx', '!./pages/Home.tsx'])
+
+// `module` is the page's source path, which is also its key in Vite's build
+// manifest: the prerender step uses it to preload the page's chunk from that
+// page's HTML.
 export interface PageHandle {
   module: string
 }
 
-function page(module: string, load: () => Promise<{ default: ComponentType }>) {
+function page(file: string) {
+  const load = pageModules[file]
+  if (!load) throw new Error(`routes.tsx: no page module at ${file}`)
   return {
     lazy: async () => ({ Component: (await load()).default }),
-    handle: { module } satisfies PageHandle,
+    handle: { module: `src/${file.slice(2)}` } satisfies PageHandle,
   }
 }
+
+// URL path → page module, written once each.
+const PAGES: [path: string, file: string][] = [
+  ['about', './pages/About.tsx'],
+  ['work', './pages/Work.tsx'],
+  ['work/:slug', './pages/ProjectDetail.tsx'],
+  ['services', './pages/Services.tsx'],
+  ['process', './pages/Process.tsx'],
+  ['why-not-ai', './pages/WhyNotAI.tsx'],
+  ['support', './pages/Support.tsx'],
+  ['support/payback', './pages/PaybackSupport.tsx'],
+  ['contact', './pages/Contact.tsx'],
+  ['legal', './pages/legal/LegalIndex.tsx'],
+  ['legal/:app', './pages/legal/LegalApp.tsx'],
+  ['legal/drayagepro/privacy', './pages/legal/DrayageProPrivacy.tsx'],
+  ['legal/drayagepro/terms', './pages/legal/DrayageProTerms.tsx'],
+  ['legal/pinpoint/privacy', './pages/legal/PinpointPrivacy.tsx'],
+  ['legal/pinpoint/terms', './pages/legal/PinpointTerms.tsx'],
+  ['legal/payback/privacy', './pages/legal/PaybackPrivacy.tsx'],
+  ['legal/payback/terms', './pages/legal/PaybackTerms.tsx'],
+  ['legal/payback/data-deletion', './pages/legal/PaybackDataDeletion.tsx'],
+  ['legal/yap/privacy', './pages/legal/YapPrivacy.tsx'],
+  ['legal/yap/terms', './pages/legal/YapTerms.tsx'],
+  ['legal/zoori/privacy', './pages/legal/ZooriPrivacy.tsx'],
+  ['legal/zoori/terms', './pages/legal/ZooriTerms.tsx'],
+  ['legal/fengshui/privacy', './pages/legal/FengshuiPrivacy.tsx'],
+  ['legal/fengshui/terms', './pages/legal/FengshuiTerms.tsx'],
+  ['legal/stlmnt/privacy', './pages/legal/StlmntPrivacy.tsx'],
+  ['legal/stlmnt/terms', './pages/legal/StlmntTerms.tsx'],
+]
 
 export const routes: RouteObject[] = [
   {
     path: '/',
     Component: App,
-    children: [
-      { index: true, Component: Home },
-      { path: 'about', ...page('src/pages/About.tsx', () => import('./pages/About')) },
-      { path: 'work', ...page('src/pages/Work.tsx', () => import('./pages/Work')) },
-      { path: 'work/:slug', ...page('src/pages/ProjectDetail.tsx', () => import('./pages/ProjectDetail')) },
-      { path: 'services', ...page('src/pages/Services.tsx', () => import('./pages/Services')) },
-      { path: 'process', ...page('src/pages/Process.tsx', () => import('./pages/Process')) },
-      { path: 'why-not-ai', ...page('src/pages/WhyNotAI.tsx', () => import('./pages/WhyNotAI')) },
-      { path: 'support', ...page('src/pages/Support.tsx', () => import('./pages/Support')) },
-      { path: 'support/payback', ...page('src/pages/PaybackSupport.tsx', () => import('./pages/PaybackSupport')) },
-      { path: 'contact', ...page('src/pages/Contact.tsx', () => import('./pages/Contact')) },
-      { path: 'legal', ...page('src/pages/legal/LegalIndex.tsx', () => import('./pages/legal/LegalIndex')) },
-      { path: 'legal/:app', ...page('src/pages/legal/LegalApp.tsx', () => import('./pages/legal/LegalApp')) },
-      { path: 'legal/drayagepro/privacy', ...page('src/pages/legal/DrayageProPrivacy.tsx', () => import('./pages/legal/DrayageProPrivacy')) },
-      { path: 'legal/drayagepro/terms', ...page('src/pages/legal/DrayageProTerms.tsx', () => import('./pages/legal/DrayageProTerms')) },
-      { path: 'legal/pinpoint/privacy', ...page('src/pages/legal/PinpointPrivacy.tsx', () => import('./pages/legal/PinpointPrivacy')) },
-      { path: 'legal/pinpoint/terms', ...page('src/pages/legal/PinpointTerms.tsx', () => import('./pages/legal/PinpointTerms')) },
-      { path: 'legal/payback/privacy', ...page('src/pages/legal/PaybackPrivacy.tsx', () => import('./pages/legal/PaybackPrivacy')) },
-      { path: 'legal/payback/terms', ...page('src/pages/legal/PaybackTerms.tsx', () => import('./pages/legal/PaybackTerms')) },
-      { path: 'legal/payback/data-deletion', ...page('src/pages/legal/PaybackDataDeletion.tsx', () => import('./pages/legal/PaybackDataDeletion')) },
-      { path: 'legal/yap/privacy', ...page('src/pages/legal/YapPrivacy.tsx', () => import('./pages/legal/YapPrivacy')) },
-      { path: 'legal/yap/terms', ...page('src/pages/legal/YapTerms.tsx', () => import('./pages/legal/YapTerms')) },
-      { path: 'legal/zoori/privacy', ...page('src/pages/legal/ZooriPrivacy.tsx', () => import('./pages/legal/ZooriPrivacy')) },
-      { path: 'legal/zoori/terms', ...page('src/pages/legal/ZooriTerms.tsx', () => import('./pages/legal/ZooriTerms')) },
-      { path: 'legal/fengshui/privacy', ...page('src/pages/legal/FengshuiPrivacy.tsx', () => import('./pages/legal/FengshuiPrivacy')) },
-      { path: 'legal/fengshui/terms', ...page('src/pages/legal/FengshuiTerms.tsx', () => import('./pages/legal/FengshuiTerms')) },
-      { path: 'legal/stlmnt/privacy', ...page('src/pages/legal/StlmntPrivacy.tsx', () => import('./pages/legal/StlmntPrivacy')) },
-      { path: 'legal/stlmnt/terms', ...page('src/pages/legal/StlmntTerms.tsx', () => import('./pages/legal/StlmntTerms')) },
-    ],
+    // Catches a page chunk that fails to load (e.g. a tab left open across a
+    // redeploy) and unknown URLs. See RouteError.
+    ErrorBoundary: RouteError,
+    children: [{ index: true, Component: Home }, ...PAGES.map(([path, file]) => ({ path, ...page(file) }))],
   },
 ]
 
