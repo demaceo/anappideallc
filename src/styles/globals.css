@@ -3369,6 +3369,17 @@ main a:hover {
 .scene-fill { fill: var(--c-accent); stroke: var(--c-ink); stroke-width: 3; }
 .scene-accent { fill: var(--c-accent); stroke: var(--c-ink); stroke-width: 5; }
 .scene-hole { fill: var(--c-bg); stroke: var(--c-ink); stroke-width: 3; }
+.scene-tile { fill: var(--c-bg); stroke: var(--c-ink); stroke-width: 3; }
+.scene-tile--heavy { stroke-width: 5; }
+.scene-tile--ink { fill: var(--c-ink); }
+.scene-light { fill: var(--c-accent); }
+.scene-label {
+  fill: var(--c-ink);
+  font-family: var(--ff-display);
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+}
 
 /* Work: the five mission apps lead the grid with a chartreuse top edge. */
 .feature-item--mission { box-shadow: inset 0 8px 0 var(--c-accent); }

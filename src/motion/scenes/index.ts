@@ -19,4 +19,10 @@ export type SceneSetup = (api: SceneApi) => void | (() => void)
 // Scene timelines are code-split: a page only downloads the ones it renders.
 export const SCENES: Record<string, () => Promise<{ default: SceneSetup }>> = {
   unfold: () => import('./unfold'),
+  accumulation: () => import('./accumulation'),
+  thread: () => import('./thread'),
+  split: () => import('./split'),
+  timeline: () => import('./timeline'),
+  network: () => import('./network'),
+  door: () => import('./door'),
 }

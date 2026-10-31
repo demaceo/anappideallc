@@ -1,4 +1,4 @@
-import { Scene } from '../Scene/Scene'
+import { Scene, SceneGrid } from '../Scene/Scene'
 import { UNFOLD } from '../../motion/scenes/unfold-paths'
 
 // Home, chapter 1: "Built for you. Handed to you."
@@ -11,13 +11,7 @@ export function UnfoldScene() {
     <Scene name="unfold" className="scene--unfold">
       <svg viewBox="0 0 400 400" fill="none" strokeLinecap="square" strokeLinejoin="miter">
         {/* Blueprint dot grid behind everything. */}
-        <g className="scene-grid" data-uf="grid">
-          {Array.from({ length: 9 }, (_, r) =>
-            Array.from({ length: 9 }, (_, c) => (
-              <circle key={`${r}-${c}`} cx={40 + c * 40} cy={40 + r * 40} r="1.6" />
-            )),
-          )}
-        </g>
+        <SceneGrid data-uf="grid" />
         {/* Cube's inner edges: only visible during the opening of the timeline. */}
         <path data-uf="cube-inner" className="scene-line" d="M90 130 L200 190 L310 130 M200 190 L200 320" opacity="0" />
         {/* The one shape that morphs cube → phone → browser. */}

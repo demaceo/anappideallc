@@ -1,9 +1,11 @@
 import type { SceneSetup } from './index'
 import { UNFOLD } from './unfold-paths'
+import { sceneTimeline } from './helpers'
 
 // Cube → phone → browser → key. Scrubbed to scroll; see UnfoldScene.tsx for
 // the finished-state markup this timeline animates toward.
-const unfold: SceneSetup = ({ gsap, el, desktop }) => {
+const unfold: SceneSetup = (api) => {
+  const { gsap, el } = api
   const $ = (name: string) => el.querySelectorAll<SVGElement>(`[data-uf="${name}"]`)
   const shape = $('shape')
   const cubeInner = $('cube-inner')
@@ -17,16 +19,7 @@ const unfold: SceneSetup = ({ gsap, el, desktop }) => {
   gsap.set($('key'), { opacity: 0, x: -140 })
   gsap.set($('grid'), { opacity: 0.25 })
 
-  const tl = gsap.timeline({
-    defaults: { ease: 'power2.inOut' },
-    scrollTrigger: desktop
-      ? // Desktop: sticky beside the chapter; finish while still pinned (the
-        // ~460px scene releases when the split's bottom nears 66% of the viewport).
-        { trigger: el.closest('.split') ?? el, start: 'top 75%', end: 'bottom 72%', scrub: 0.8 }
-      : // Compact: finish with the scene's bottom at 65% of the screen, so all
-        // of it is still below the collapsed header when it ends.
-        { trigger: el, start: 'top 85%', end: 'bottom 65%', scrub: 0.8 },
-  })
+  const tl = sceneTimeline(api)
 
   tl.fromTo(cubeInner, { opacity: 1, drawSVG: '0%' }, { drawSVG: '100%', duration: 1 })
     .to(cubeInner, { opacity: 0, duration: 0.5 }, '+=0.2')

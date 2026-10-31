@@ -7,6 +7,7 @@ import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
+import { SplitScene } from '../components/scenes/SplitScene'
 import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 import { PricingNote } from '../components/PricingNote/PricingNote'
 import { NextStep } from '../components/NextStep/NextStep'
@@ -41,7 +42,10 @@ export default function Services() {
           </p>
         </div>
 
-        <StoryChapter id="work" />
+        <div className="split">
+          <StoryChapter id="work" />
+          <SplitScene />
+        </div>
 
         <PricingNote />
 

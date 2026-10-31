@@ -8,6 +8,7 @@ import { META } from '../lib/seo'
 import { IconCpu, IconLock, IconKey, IconShieldCheck } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
+import { AccumulationScene } from '../components/scenes/AccumulationScene'
 import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 import { STORY_CLOSING } from '../data/story'
 import { NextStep } from '../components/NextStep/NextStep'
@@ -52,7 +53,10 @@ export default function About() {
           </p>
         </div>
 
-        <StoryChapter id="story" />
+        <div className="split">
+          <StoryChapter id="story" />
+          <AccumulationScene />
+        </div>
 
         <div className="section-header">
           <span className="section-num">Differentiators</span>

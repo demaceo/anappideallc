@@ -6,6 +6,7 @@ import { PROJECT_COLORS } from '../data/project-colors'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+import { ThreadScene } from '../components/scenes/ThreadScene'
 import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 import { STORY_PROOF } from '../data/story'
 import { NextStep } from '../components/NextStep/NextStep'
@@ -91,22 +92,25 @@ export default function Work() {
           </p>
         </div>
 
-        <StoryChapter id="proof">
-          <ul className="story-proof">
-            {STORY_PROOF.map(({ slug, line }) => {
-              const study = studyBySlug.get(slug)
-              if (!study) return null
-              return (
-                <li key={slug}>
-                  <Link to={`/work/${slug}`}>
-                    <strong>{study.title}</strong>
-                    <span>{line}</span>
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
-        </StoryChapter>
+        <div className="split">
+          <StoryChapter id="proof">
+            <ul className="story-proof">
+              {STORY_PROOF.map(({ slug, line }) => {
+                const study = studyBySlug.get(slug)
+                if (!study) return null
+                return (
+                  <li key={slug}>
+                    <Link to={`/work/${slug}`}>
+                      <strong>{study.title}</strong>
+                      <span>{line}</span>
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </StoryChapter>
+          <ThreadScene />
+        </div>
 
         <div className="section-header">
           <span className="section-num">Scale</span>

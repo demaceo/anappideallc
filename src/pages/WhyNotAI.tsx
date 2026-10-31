@@ -5,6 +5,7 @@ import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
+import { NetworkScene } from '../components/scenes/NetworkScene'
 import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 import { NextStep } from '../components/NextStep/NextStep'
 import {
@@ -87,7 +88,10 @@ export default function WhyNotAI() {
           </p>
         </div>
 
-        <StoryChapter id="ai" />
+        <div className="split">
+          <StoryChapter id="ai" />
+          <NetworkScene />
+        </div>
 
         <div className="pullquote">
           <p>
