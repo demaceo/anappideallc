@@ -20,8 +20,9 @@ const unfold: SceneSetup = ({ gsap, el, desktop }) => {
   const tl = gsap.timeline({
     defaults: { ease: 'power2.inOut' },
     scrollTrigger: desktop
-      ? // Desktop: the scene is sticky beside the chapter; play across it.
-        { trigger: el.closest('.split') ?? el, start: 'top 75%', end: 'bottom 55%', scrub: 0.8 }
+      ? // Desktop: sticky beside the chapter; finish while still pinned (the
+        // ~460px scene releases when the split's bottom nears 66% of the viewport).
+        { trigger: el.closest('.split') ?? el, start: 'top 75%', end: 'bottom 72%', scrub: 0.8 }
       : { trigger: el, start: 'top 85%', end: 'bottom 30%', scrub: 0.8 },
   })
 
