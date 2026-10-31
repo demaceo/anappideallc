@@ -19,15 +19,15 @@ function renderRoute(path: string) {
  */
 describe('Every decision page closes with a next step', () => {
   it.each(['/about', '/work', '/services', '/process', '/why-not-ai', '/work/stlmnt-settlement-tracker'])(
-    'offers booking and the guided form at the end of %s',
+    'offers booking and the message form at the end of %s',
     (path) => {
       const { unmount } = renderRoute(path)
       const section = screen.getByRole('region', { name: /next step/i })
-      expect(within(section).getByRole('link', { name: /book a time/i })).toHaveAttribute(
+      expect(within(section).getByRole('link', { name: /book a free call/i })).toHaveAttribute(
         'href',
         SITE.booking.consultationUrl,
       )
-      expect(within(section).getByRole('link', { name: /guided form/i })).toHaveAttribute(
+      expect(within(section).getByRole('link', { name: /send me a message/i })).toHaveAttribute(
         'href',
         '/contact',
       )
@@ -44,7 +44,7 @@ describe('Every decision page closes with a next step', () => {
 
   it('does not offer the form link on the page that is the form', () => {
     renderRoute('/contact')
-    expect(screen.queryByRole('link', { name: /guided form/i })).toBeNull()
+    expect(screen.queryByRole('link', { name: /send me a message/i })).toBeNull()
   })
 })
 
@@ -84,6 +84,22 @@ describe('Contact wizard', () => {
     return document.querySelector('.wizard-step-count')?.textContent
   }
 
+  // Continue and Send sit in the same slot. When React reused the Continue
+  // element and flipped it to type=submit mid-click, the browser's default
+  // action submitted the form as the last step opened. jsdom doesn't replay
+  // that default action, so assert the cause: Send is a fresh element.
+  it('swaps in a new element for Send rather than reusing Continue', () => {
+    renderRoute('/contact')
+    fireEvent.click(screen.getByRole('button', { name: /a website/i }))
+    let cont = screen.getByRole('button', { name: /continue/i })
+    while (screen.queryByRole('button', { name: /continue/i })) {
+      cont = screen.getByRole('button', { name: /continue/i })
+      fireEvent.click(cont)
+    }
+    expect(screen.getByRole('button', { name: /send message/i })).not.toBe(cont)
+    expect(cont.getAttribute('type')).toBe('button')
+  })
+
   it('skips the search-visibility step for an app-only project', () => {
     renderRoute('/contact')
     fireEvent.click(screen.getByRole('button', { name: /a mobile app/i }))
@@ -115,10 +131,10 @@ describe('Contact wizard', () => {
 
     renderRoute('/contact')
     fireEvent.click(screen.getByRole('button', { name: /a mobile app/i }))
-    while (screen.queryByLabelText(/your idea/i) === null) {
+    while (screen.queryByLabelText(/in your words/i) === null) {
       fireEvent.click(screen.getByRole('button', { name: /continue/i }))
     }
-    fireEvent.change(screen.getByLabelText(/your idea/i), { target: { value: 'An app for dog walkers' } })
+    fireEvent.change(screen.getByLabelText(/in your words/i), { target: { value: 'An app for dog walkers' } })
     fireEvent.change(screen.getByLabelText(/budget ballpark/i), { target: { value: 'not sure yet' } })
     fireEvent.click(screen.getByRole('button', { name: /continue/i }))
     fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Sam' } })
@@ -131,7 +147,7 @@ describe('Contact wizard', () => {
     // Bot-screening fields ride along: an empty honeypot and the time open.
     expect(sent.website).toBe('')
     expect(typeof sent.elapsedMs).toBe('number')
-    expect(within(status).getByRole('link', { name: /book the call now/i })).toHaveAttribute(
+    expect(within(status).getByRole('link', { name: /book your free call now/i })).toHaveAttribute(
       'href',
       SITE.booking.consultationUrl,
     )
@@ -146,10 +162,10 @@ describe('Contact wizard', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('Too Many Requests', { status: 429 })))
     renderRoute('/contact')
     fireEvent.click(screen.getByRole('button', { name: /a mobile app/i }))
-    while (screen.queryByLabelText(/your idea/i) === null) {
+    while (screen.queryByLabelText(/in your words/i) === null) {
       fireEvent.click(screen.getByRole('button', { name: /continue/i }))
     }
-    fireEvent.change(screen.getByLabelText(/your idea/i), { target: { value: 'An idea' } })
+    fireEvent.change(screen.getByLabelText(/in your words/i), { target: { value: 'An idea' } })
     fireEvent.click(screen.getByRole('button', { name: /continue/i }))
     fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Sam' } })
     fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'sam@example.com' } })

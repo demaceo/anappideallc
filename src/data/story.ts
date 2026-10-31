@@ -58,7 +58,7 @@ export const STORY: StoryChapter[] = [
     body: [
       "People ask what made me start this. There wasn't a single moment. It's an accumulation of experiences, personal and historical, about who gets resources and who gets left to figure it out.",
       "The gap isn't drive. Black and Hispanic owners apply for financing, pick up new tools, and build anyway. What's missing is the backing: the capital, and the people in your corner who can build the site and explain how it works.",
-      "So that's what I do. I build it, I teach you to run it, and I don't disappear. Everyone's welcome here. I built this studio with Black and brown business owners in mind, and I'm not shy about saying so.",
+      "So that's what I do. I build it, I teach you to run it, and I don't disappear. I built this studio with Black and brown business owners in mind, and I'm not shy about saying so.",
     ],
     // The founder's own words go here (one or two true sentences about
     // something they saw or lived). Rendered after the first paragraph.
@@ -70,7 +70,7 @@ export const STORY: StoryChapter[] = [
     id: 'proof',
     path: '/work',
     title: 'The proof',
-    heading: "Every app here gets people what's already theirs",
+    heading: 'Each app here gets people closer to what should already be theirs',
     body: [
       'Think about the last time you had to fight for something you were owed: a refund, a callback, a straight answer from someone in charge.',
       "Everything I've built runs on that feeling. Money people are owed. A voice with their representatives. Control of their own data. A fair deal as a tenant. A small business that can be found and booked. That's what I want for yours.",
@@ -84,7 +84,7 @@ export const STORY: StoryChapter[] = [
     heading: 'Built for you. Handed to you.',
     body: [
       'Picture a Monday where the website just works, bookings come in on their own, and you know what your numbers mean without asking anyone.',
-      "Every engagement has two halves. First I build it: the website, the app, the AI layer. Then the Own It package teaches you to run it, so the second job gets smaller instead of bigger. Pricing works on a sliding scale based on your business's size and stage.",
+      "Every engagement has two halves. First I build it: the website, the app, the AI tools. Then the Own It package teaches you to run it, so the second job gets smaller instead of bigger. Pricing works on a sliding scale based on your business's size and stage.",
     ],
     bridge: 'How the handoff works',
   },
@@ -118,7 +118,7 @@ export const STORY: StoryChapter[] = [
     heading: "Your business is the job. Let's take the second one off your plate.",
     body: [
       'Remember that Tuesday night tutorial? This is where it ends.',
-      "The first consultation is free, and pricing works on a sliding scale based on your business's size and stage. No spec, no deck, no pressure. Everyone's welcome. And if you're a Black or brown business owner who's been told to figure the tech out alone, this studio was built for you.",
+      "The first consultation is free, and pricing works on a sliding scale based on your business's size and stage. Bring what you've got. Everyone's welcome. And if you're a Black or brown business owner who's been told to figure the tech out alone, this studio was built for you.",
     ],
   },
 ]

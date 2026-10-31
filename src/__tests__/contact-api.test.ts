@@ -48,7 +48,7 @@ describe('POST /api/contact', () => {
     send.mockResolvedValueOnce(rejected)
     const res = await call(VALID)
     expect(res.statusCode).toBe(502)
-    expect(res.body).toEqual({ error: 'Failed to send message' })
+    expect(res.body).toEqual({ error: 'Something broke on my end, not yours. Try again in a moment.' })
     // No confirmation goes out for an inquiry that never arrived.
     expect(send).toHaveBeenCalledTimes(1)
   })

@@ -50,7 +50,7 @@ export const SITE = {
     // Also hard-coded as BOOKING_URL in api/contact.ts (the confirmation
     // email) — change both together.
     consultationUrl: 'https://calendly.com/demaceo-milehighinterface/30min',
-    label: 'Book a free consultation',
+    label: 'A free 30-minute call',
     blurb: 'A free 30-minute call to talk through your idea. No pressure, no spec required.',
   },
   // Cost signal shown on Services and Contact so visitors can self-qualify
