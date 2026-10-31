@@ -13,6 +13,7 @@ import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 import { PricingNote } from '../components/PricingNote/PricingNote'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
+import { DoorScene } from '../components/scenes/DoorScene'
 import { StoryChapter } from '../components/StoryChapter/StoryChapter'
 import { STORY_CLOSING } from '../data/story'
 import { VoiceNote, type VoiceNoteData } from '../components/VoiceNote/VoiceNote'
@@ -334,7 +335,10 @@ export default function Contact() {
           </p>
         </div>
 
-        <StoryChapter id="door" />
+        <div className="split">
+          <StoryChapter id="door" />
+          <DoorScene />
+        </div>
 
         <PricingNote />
 

@@ -6,6 +6,7 @@ import { META } from '../lib/seo'
 import { IconSearch, IconEdit, IconTerminal, IconSend, IconKey } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
+import { TimelineScene } from '../components/scenes/TimelineScene'
 import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 import { NextStep } from '../components/NextStep/NextStep'
 
@@ -44,7 +45,10 @@ export default function Process() {
           </p>
         </div>
 
-        <StoryChapter id="handoff" />
+        <div className="split">
+          <StoryChapter id="handoff" />
+          <TimelineScene />
+        </div>
 
         <div className="section-header">
           <span className="section-num">Timeline</span>

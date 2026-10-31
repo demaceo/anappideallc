@@ -6,6 +6,13 @@ import { motionAllowed } from '../motion/useScrollScenes'
 import { SCENES } from '../motion/scenes'
 import { UNFOLD } from '../motion/scenes/unfold-paths'
 import { UnfoldScene } from '../components/scenes/UnfoldScene'
+import { AccumulationScene } from '../components/scenes/AccumulationScene'
+import { ThreadScene } from '../components/scenes/ThreadScene'
+import { SplitScene } from '../components/scenes/SplitScene'
+import { TimelineScene } from '../components/scenes/TimelineScene'
+import { NetworkScene } from '../components/scenes/NetworkScene'
+import { DoorScene } from '../components/scenes/DoorScene'
+import { ACCUMULATION, DOOR, TIMELINE_SHAPES, networkSpoke } from '../motion/scenes/geometry'
 
 function fakeWindow(reduce: boolean, io = true) {
   return {
@@ -67,10 +74,33 @@ describe('reduced motion never loads GSAP', () => {
   }, 30_000)
 })
 
+// Each scene's finished-state marker: something only the END of its
+// timeline shows, so a scene accidentally rendered in its opening state fails.
+const SCENE_CASES = [
+  { name: 'unfold', Comp: UnfoldScene, marker: `d="${UNFOLD.browser}"` },
+  { name: 'accumulation', Comp: AccumulationScene, marker: `points="${ACCUMULATION[0].points}"` },
+  { name: 'thread', Comp: ThreadScene, marker: 'data-p="frame"' },
+  { name: 'split', Comp: SplitScene, marker: 'transform="translate(22 22)"' },
+  { name: 'timeline', Comp: TimelineScene, marker: `d="${TIMELINE_SHAPES[1]}"` },
+  { name: 'network', Comp: NetworkScene, marker: `d="${networkSpoke(0)}"` },
+  { name: 'door', Comp: DoorScene, marker: `d="${DOOR.open}"` },
+] as const
+
 describe('scenes', () => {
-  it('registers a timeline for every scene name used in markup', () => {
-    expect(SCENES.unfold).toBeTypeOf('function')
+  it('has exactly one component per registered timeline', () => {
+    expect(SCENE_CASES.map((c) => c.name).sort()).toEqual(Object.keys(SCENES).sort())
   })
+
+  for (const { name, Comp, marker } of SCENE_CASES) {
+    it(`server-renders ${name} decorative and in its finished state`, () => {
+      const html = renderToString(<Comp />)
+      expect(html).toContain(`data-scene="${name}"`)
+      expect(html).toContain('aria-hidden="true"')
+      expect(html).toContain(marker)
+      // Under the per-scene SVG budget.
+      expect(html.length).toBeLessThan(15_000)
+    })
+  }
 
   // The markup is the finished picture, so prerendered and no-JS pages show
   // the complete scene rather than an empty box.

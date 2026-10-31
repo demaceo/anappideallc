@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import type { RefObject } from 'react'
 import { SCENES } from './scenes'
+import { headerCollapseEnd } from './header'
 
 // Site-wide scroll motion (GSAP), scoped to the element in `scopeRef` and
 // re-run whenever `key` changes (the route), so every page gets it from one
@@ -172,8 +173,7 @@ export function useScrollScenes(scopeRef: RefObject<HTMLElement | null>, key: st
         // every trigger fired that much late. Re-measure whenever scroll
         // crosses the end of that range, in either direction, so positions
         // always match the header state the visitor is actually seeing.
-        const range = getComputedStyle(document.documentElement).getPropertyValue('--collapse-range')
-        const collapseEnd = parseFloat(range.trim().split(/\s+/).pop() ?? '') || 200
+        const collapseEnd = headerCollapseEnd()
         let collapsed = window.scrollY > collapseEnd
         let frame = 0
         const onScroll = () => {
