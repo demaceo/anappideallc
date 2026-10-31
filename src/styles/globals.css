@@ -3387,3 +3387,10 @@ main a:hover {
 /* Linked tiles in a grid: the row-style negative inline margin would push a
    card outside its grid cell. */
 :is(.grid-2, .grid-3) > .feature-item--linked { margin-inline: 0; }
+
+/* Root error boundary (src/components/RouteError). */
+.route-error { padding-block: var(--space-12); }
+.route-error h1 { font-size: var(--text-fluid-6); margin-bottom: var(--space-5); }
+.route-error-body { font-family: var(--ff-body); max-width: var(--measure); line-height: 1.6; margin-bottom: var(--space-5); }
+.route-error-actions { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; margin-bottom: var(--space-6); }
+.route-error-actions .hero-cta { margin-top: 0; cursor: pointer; }

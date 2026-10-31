@@ -1,7 +1,8 @@
 import { render, screen, within } from '@testing-library/react'
 import { RouterProvider, createMemoryRouter } from 'react-router'
 import { describe, it, expect } from 'vitest'
-import { routes, PRERENDER_PATHS } from '../routes'
+import { PRERENDER_PATHS } from '../routes'
+import { appRoutes as routes } from './helpers/app-routes'
 import { STORY, STORY_PROOF, STORY_CLOSING, EVIDENCE } from '../data/story'
 import { caseStudies } from '../data/case-studies'
 
