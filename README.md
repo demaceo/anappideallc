@@ -1,8 +1,12 @@
 # An App Idea LLC
 
-The marketing site for **An App Idea LLC** — a Denver dev studio building
-AI-native, privacy-first mobile apps and web products. _Got an app idea? Let's
-build it._
+The marketing site for **An App Idea LLC** — a Denver studio building
+websites, mobile apps, and AI for small businesses, with Black and brown
+business owners in mind, then teaching owners to run what we build. _Got an app
+idea? Let's build it._
+
+The founder story is told one chapter per page; the copy lives in
+[`src/data/story.ts`](src/data/story.ts).
 
 🔗 **Live:** [www.anappidea.llc](https://www.anappidea.llc)
 

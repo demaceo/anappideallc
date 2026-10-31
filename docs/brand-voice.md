@@ -192,9 +192,52 @@ If 1–7 are yes, it's on-voice.
 ## Tagline & anchors (for reference)
 
 - **Tagline:** *Got an app idea? Let's build it.* — the warmth and the
-  invitation in five words. The brand name lives inside the welcome.
-- **Positioning lead:** AI-native mobile · privacy-first · built end-to-end by
-  one person, with a soft spot for products that empower people and build
-  community.
+  invitation in five words. The brand name lives inside the welcome. Kept as
+  the brand tagline (metadata, slogan); the Home headline now leads with the
+  mission line below.
+- **Positioning lead:** Websites, mobile apps, and AI for small businesses,
+  built with Black and brown business owners in mind · built end-to-end by one
+  person · then handed over with the know-how to run it.
 - **Posture in one breath:** *Glad you're here. Here's the honest version.
   Let's build it together.*
+
+---
+
+## The mission and the story
+
+The site tells the founder story one chapter per page, in nav order (Home →
+About → Work → Services → Process → Why not AI → Contact). The copy lives in
+`src/data/story.ts`; edit it there, never inline in a page.
+
+- **The through-line:** *the second job*, running the tech on top of running
+  the business. Chapter 1 names it, each chapter takes a piece of it off the
+  owner's plate, chapter 7 closes on it. Every chapter opens on a short
+  second-person scene and ends with a `bridge` teaser into the next.
+- **The belief:** the drive is there; the backing isn't. Black and brown
+  communities in the U.S. have been underfunded and under-resourced for
+  generations, and tech is where the gap shows.
+- **The promise:** *Built for you. Handed to you.* I build it, then teach you
+  to run it (the Own It package): updating the site, reading analytics,
+  checking site health, using AI safely.
+- **The proof:** STLMNT, Pinpoint, Payback, RentHarbor, Unmasked Coaching. Each
+  gets people access to something that should already be theirs.
+- **Lines to reuse:** *Your business is the job. The tech shouldn't be a second
+  one.* · *Built for you. Handed to you.* · *If not me, then who?* (closing
+  line only: About and Contact).
+
+**Guardrails for mission copy**
+
+- **Focus, never exclusion.** Say who the studio was built for; never say who
+  it won't serve. "Everyone's welcome" stays on Contact.
+- **Pricing is need-based.** The sliding scale is by business size and stage,
+  never by race or ethnicity. Don't write copy that implies otherwise.
+- **Capitalization:** "Black" is capitalized; "brown" is lowercase.
+- **Don't invent biography.** The origin is "an accumulation of experiences,
+  personal and historical." Add personal moments only when the founder
+  supplies them.
+- **Mission-first, not memoir.** Lead with the belief; use specifics as proof.
+- **Every number is cited.** Stats live in `EVIDENCE` in `src/data/story.ts`
+  with source, URL, and date, checked against the primary source. Use the
+  source's own wording (the Fed says "Hispanic-owned"), and don't claim what
+  the data doesn't show: Black and Hispanic owners adopt AI at the same rate as
+  white owners, so never say they're "behind" or "the last to get it."

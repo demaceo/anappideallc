@@ -10,13 +10,13 @@ export const META: Record<string, { title: string; description: string; path: st
   '/': {
     title: 'An App Idea LLC | Demaceo Vincent Howard | Software & App Development',
     description:
-      'An App Idea LLC (formerly Mile High Interface), founded by Demaceo Vincent Howard, builds custom mobile and web applications.',
+      'An App Idea LLC (formerly Mile High Interface), founded by Demaceo Vincent Howard: websites, apps, and AI for small businesses, built with Black and brown owners in mind.',
     path: '/',
   },
   '/about': {
     title: `About: Demaceo Vincent, App Developer | ${SITE.name}`,
     description:
-      'Demaceo Vincent builds AI-native mobile apps with privacy designed in: real-time AI on top, encrypted local-first data underneath. Founder-led, Denver. One builder, no handoffs.',
+      'Why An App Idea exists: Demaceo Vincent builds websites, apps, and AI for small businesses, with Black and brown owners in mind, and teaches them to run it. Denver.',
     path: '/about',
   },
   '/work': {
@@ -26,21 +26,21 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/work',
   },
   '/services': {
-    title: `Services: AI Integration, Mobile App & MVP Development | ${SITE.name}`,
+    title: `Services: Business Websites, AI Integration & Apps | ${SITE.name}`,
     description:
-      'AI integration for existing websites and stores, MVP validation, product & UI engineering, business websites, and data visualization. Add AI chat, search, and automation to what you already run, no rebuild.',
+      'Business websites, the Own It teaching package, AI integration, MVPs, UI engineering, and data visualization. Sliding-scale pricing and a free first consultation.',
     path: '/services',
   },
   '/process': {
     title: `Development Process: Discovery to Launch | ${SITE.name}`,
     description:
-      '4-phase development process: Discovery (1–2 wks), Design (2–3 wks), Development (4–8 wks), Launch. Every phase ends with a tangible deliverable. Built for founders who want full visibility.',
+      '5-phase process: Discovery, Design, Development, Launch, then Handoff & Teaching so you can update your site, read your analytics, and run it yourself.',
     path: '/process',
   },
   '/contact': {
     title: `Hire a Mobile App Developer | ${SITE.name}, Denver, CO`,
     description:
-      'Ready to build your mobile app or website? Contact Demaceo Vincent at An App Idea LLC. Early-stage conversations welcome. MVPs built in 7–13 weeks. Reply within 1–2 business days.',
+      'Need a website, app, or AI for your small business? Free first consultation, sliding-scale pricing, and a reply within 1–2 business days. Everyone welcome.',
     path: '/contact',
   },
   '/why-not-ai': {
@@ -313,6 +313,10 @@ function buildBaseGraph(): object[] {
         { '@type': 'Country', name: 'United States' },
       ],
       knowsAbout: [
+        'Small business website development',
+        'Website management training',
+        'Web analytics training',
+        'AI adoption for small businesses',
         'AI-native mobile app development',
         'AI integration',
         'AI integration for existing platforms',

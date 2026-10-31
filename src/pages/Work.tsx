@@ -6,6 +6,8 @@ import { PROJECT_COLORS } from '../data/project-colors'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
+import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
+import { STORY_PROOF } from '../data/story'
 import { NextStep } from '../components/NextStep/NextStep'
 import {
   LogoStlmnt,
@@ -57,11 +59,14 @@ const STUDY_LABELS: Record<string, string> = {
   'portfolio': 'Portfolio',
 }
 
-// Client work first, then the studio's own products; original order within
-// each group. Array.prototype.sort is stable, so ties keep data order.
-const orderedStudies = [...caseStudies].sort(
-  (a, b) => Number(Boolean(b.client)) - Number(Boolean(a.client)),
-)
+// Order: the five mission apps first, in the order the proof chapter tells
+// them; then client work; then the studio's own products. Array.prototype.sort
+// is stable, so ties keep data order.
+const PROOF_RANK = new Map(STORY_PROOF.map((p, i) => [p.slug, i]))
+const rank = (c: (typeof caseStudies)[number]) =>
+  PROOF_RANK.get(c.slug) ?? STORY_PROOF.length + (c.client ? 0 : 1)
+const orderedStudies = [...caseStudies].sort((a, b) => rank(a) - rank(b))
+const studyBySlug = new Map(caseStudies.map((c) => [c.slug, c]))
 
 export default function Work() {
   return (
@@ -80,10 +85,28 @@ export default function Work() {
         <div className="intro-block">
           <p>
             Twelve products shipped end-to-end: mobile apps, logistics tools,
-            data platforms, and client sites. Interface, backend, auth, CI, and
-            deploy. Each one solves a real workflow rather than showcasing a trick.
+            data platforms, and small business sites. Interface, backend, auth,
+            CI, and deploy. Each one solves a real problem for real people
+            rather than showcasing a trick.
           </p>
         </div>
+
+        <StoryChapter id="proof">
+          <ul className="story-proof">
+            {STORY_PROOF.map(({ slug, line }) => {
+              const study = studyBySlug.get(slug)
+              if (!study) return null
+              return (
+                <li key={slug}>
+                  <Link to={`/work/${slug}`}>
+                    <strong>{study.title}</strong>
+                    <span>{line}</span>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </StoryChapter>
 
         <div className="section-header">
           <span className="section-num">Scale</span>
@@ -159,6 +182,8 @@ export default function Work() {
           heading="Got something like these in mind?"
           blurb="Tell me what you're building. A free 30-minute call, no spec required."
         />
+
+        <StoryNext id="proof" />
       </main>
 
       <footer className="sources-section">
@@ -168,7 +193,7 @@ export default function Work() {
             <div className="sources-header-rule" />
           </div>
           <ul className="source-list">
-            {caseStudies.map((c) => (
+            {orderedStudies.map((c) => (
               <li key={c.slug}>
                 <strong>{c.title} — {c.category}</strong>
                 {c.summary.slice(0, 80)}…

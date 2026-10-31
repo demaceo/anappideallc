@@ -5,6 +5,7 @@ import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
+import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 import { NextStep } from '../components/NextStep/NextStep'
 import {
   IconCompass2, IconEdit, IconLayers, IconShieldCheck, IconTerminal,
@@ -85,6 +86,8 @@ export default function WhyNotAI() {
             secure, and people trust it." That stretch is the actual job.
           </p>
         </div>
+
+        <StoryChapter id="ai" />
 
         <div className="pullquote">
           <p>
@@ -203,6 +206,8 @@ export default function WhyNotAI() {
           title="Bring your AI draft to a free call"
           blurb="Already started with AI? Even better. Bring what you have and we'll map the path from here to launched."
         />
+
+        <StoryNext id="ai" />
       </main>
 
       <footer className="sources-section">
@@ -223,6 +228,10 @@ export default function WhyNotAI() {
             <li>
               <strong>One accountable human</strong>
               {SITE.founder.name} owns it end to end.
+            </li>
+            <li>
+              <strong>Learn to use it</strong>
+              The Own It package teaches AI for your business, safely.
             </li>
             <li>
               <strong>Start free</strong>

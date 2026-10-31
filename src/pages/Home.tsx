@@ -6,21 +6,22 @@ import { SITE } from '../data/site'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
-import { IconZap, IconLayers, IconGlobe, IconBarChart, IconCpu } from '../components/icons'
+import { IconZap, IconLayers, IconGlobe, IconBarChart, IconCpu, IconKey } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
 import { Marquee } from '../components/Marquee/Marquee'
 import { Section } from '../components/Section/Section'
 import { useBrutalistScroll } from '../hooks/useBrutalistScroll'
+import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 
 const MARQUEE_ITEMS = [
-  'Apps',
   'Websites',
-  'AI-Native',
-  'Privacy-First',
+  'Apps',
+  'AI',
+  'Own It',
+  'Small Business',
   'Denver',
-  'Founders',
 ] as const
 
 // Keyed by service id rather than array position: a new entry in services.ts
@@ -30,6 +31,7 @@ const SERVICE_ICONS: Record<string, typeof IconZap> = {
   'mvp-development': IconZap,
   'ui-engineering': IconLayers,
   'business-websites': IconGlobe,
+  'own-it': IconKey,
   'data-visualization': IconBarChart,
   'ai-integration': IconCpu,
 }
@@ -37,6 +39,7 @@ const SERVICE_ICON_CLASSES: Record<string, string> = {
   'mvp-development': 'icon-green',
   'ui-engineering': 'icon-blue',
   'business-websites': 'icon-teal',
+  'own-it': 'icon-gold',
   'data-visualization': 'icon-orange',
   'ai-integration': 'icon-purple',
 }
@@ -51,9 +54,13 @@ export default function Home() {
 
       <PageHeader>
         <header className="masthead">
-          <p className="overline">AI-Native Mobile · Privacy-First · Denver, Colorado</p>
-          <h1>Got an app idea? <em>Let's build it.</em></h1>
-          <p className="subtitle">AI-native mobile apps with privacy built in, shipped end-to-end by one builder.</p>
+          <p className="overline">Websites · Apps · AI · Denver, Colorado</p>
+          <h1>Your business is the job. <em>The tech shouldn't be a second one.</em></h1>
+          <p className="subtitle">
+            Websites, mobile apps, and AI for small businesses, built with
+            Black and brown business owners in mind. I build it, then teach
+            you to run it.
+          </p>
           {/* The masthead filled roughly half the first screen with nothing
               actionable in it — the first interactive element was the corner
               FAB. This gives the strongest copy on the site somewhere to land.
@@ -77,13 +84,14 @@ export default function Home() {
         <Section color="bone" ghost="IDEA">
           <div className="intro-block">
             <p data-split>
-              Bring the idea, even a half-formed one. I build AI-native mobile
-              apps with privacy architected in, not bolted on, founder-led from
-              interface to encrypted vault to launch. And I'm a Black founder in
-              Denver building this so Colorado's Black-owned businesses aren't
-              the last ones to get what AI can do.
+              Bring the idea, even a half-formed one. I'm a Black founder in
+              Denver, and I build websites, apps, and AI tools for Black and
+              brown business owners who've had the drive all along and not the
+              backing. Then I hand you the keys and the know-how.
             </p>
           </div>
+
+          <StoryChapter id="belief" />
         </Section>
 
         <Section color="yellow" num="01" ghost="SHIP">
@@ -169,7 +177,8 @@ export default function Home() {
             <p>
               "Just prompt an AI and ship it" gets you a head start. And stops
               there. Wireframing, testing, security, App Store launch, and
-              maintenance each need a dedicated human.{' '}
+              maintenance each need a dedicated human. And when AI does belong
+              in your business, I'll show you how to use it safely.{' '}
               <Link to="/why-not-ai">Here's the honest case for working with a person →</Link>
             </p>
           </VerdictBox>
@@ -190,9 +199,12 @@ export default function Home() {
               a co-builder? Send a few sentences to{' '}
               <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or use the{' '}
               <Link to="/contact">guided form</Link>.
-              I read everything and respond within 1–2 business days.
+              I read everything and respond within 1–2 business days. Pricing
+              works on a sliding scale based on your business's size and stage.
             </p>
           </VerdictBox>
+
+          <StoryNext id="belief" />
         </Section>
       </main>
 
@@ -208,7 +220,7 @@ export default function Home() {
           <ul className="source-list">
             <li>
               <strong>{SITE.name}</strong>
-              Founder-led dev studio. {SITE.founder.location}.
+              Websites, apps, and AI for small businesses. {SITE.founder.location}.
             </li>
             <li>
               <strong>Founder</strong>
