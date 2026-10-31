@@ -47,16 +47,33 @@ pnpm lint       # eslint .
 `pnpm build` runs four steps in order:
 
 1. `tsc -b` — typecheck the project references.
-2. `vite build` — bundle the SPA (framework code is split into a cached
-   `react-vendor` chunk).
+2. `vite build` — bundle the SPA. Framework code is split into a cached
+   `react-vendor` chunk, and **every page except Home is its own chunk**
+   (route `lazy` in `src/routes.tsx`), so visitors download only the page
+   they're on. Writes `dist/.vite/manifest.json` for step 3.
 3. `node scripts/prerender.mjs` — render **each route in `PRERENDER_PATHS`**
    (`src/routes.tsx`) to its own static `index.html`, with route-specific
-   `<title>`, meta description, and JSON-LD baked in.
+   `<title>`, meta description, JSON-LD, and a `modulepreload` for that
+   page's chunk baked in.
 4. `node scripts/sitemap.mjs` — emit `dist/sitemap.xml` and `dist/robots.txt`.
 
 Because every route is prerendered, adding a page means wiring it up in
-`src/routes.tsx` (both the router and `PRERENDER_PATHS`) **and** adding its
-metadata in `src/lib/seo.ts`.
+`src/routes.tsx` (both the router, via the `page()` helper, and
+`PRERENDER_PATHS`) **and** adding its metadata in `src/lib/seo.ts`.
+
+The client **hydrates** the prerendered HTML (`hydrateRoot` in `src/main.tsx`)
+after loading the current page's chunk (`src/lib/resolveLazyRoutes.ts`), so
+the first client render must match the server render exactly: keep anything
+that differs between server and browser (time, random values, `window`,
+media queries) out of render and in effects. A mismatch logs an error in the
+console and React falls back to re-rendering the page.
+
+Page chunks have hashed names, so a tab left open across a redeploy can ask
+for one that no longer exists. The root error boundary
+(`src/components/RouteError`) then loads the requested page fresh, once, from
+the new deployment; if the first chunk fails before hydration, `main.tsx`
+does the same and otherwise leaves the prerendered page as-is. The same
+boundary shows "Page not found" for unknown URLs.
 
 ## Project structure
 

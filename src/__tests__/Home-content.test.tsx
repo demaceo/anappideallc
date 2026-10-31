@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { RouterProvider, createMemoryRouter } from 'react-router'
 import { describe, it, expect } from 'vitest'
-import { routes } from '../routes'
+import { appRoutes as routes } from './helpers/app-routes'
 
 // Guards the brutalist Home redesign: the restructure into loud <Section>
 // blocks + outline-word spans must not drop or alter any business copy, and

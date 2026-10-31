@@ -1,66 +1,69 @@
+import type { ComponentType } from 'react'
 import type { RouteObject } from 'react-router'
 import App from './App'
 import Home from './pages/Home'
-import About from './pages/About'
-import Work from './pages/Work'
-import Services from './pages/Services'
-import Process from './pages/Process'
-import Contact from './pages/Contact'
-import WhyNotAI from './pages/WhyNotAI'
-import Support from './pages/Support'
-import PaybackSupport from './pages/PaybackSupport'
-import ProjectDetail from './pages/ProjectDetail'
-import LegalIndex from './pages/legal/LegalIndex'
-import LegalApp from './pages/legal/LegalApp'
-import DrayageProPrivacy from './pages/legal/DrayageProPrivacy'
-import DrayageProTerms from './pages/legal/DrayageProTerms'
-import PinpointPrivacy from './pages/legal/PinpointPrivacy'
-import PinpointTerms from './pages/legal/PinpointTerms'
-import PaybackPrivacy from './pages/legal/PaybackPrivacy'
-import PaybackTerms from './pages/legal/PaybackTerms'
-import PaybackDataDeletion from './pages/legal/PaybackDataDeletion'
-import YapPrivacy from './pages/legal/YapPrivacy'
-import YapTerms from './pages/legal/YapTerms'
-import ZooriPrivacy from './pages/legal/ZooriPrivacy'
-import ZooriTerms from './pages/legal/ZooriTerms'
-import FengshuiPrivacy from './pages/legal/FengshuiPrivacy'
-import FengshuiTerms from './pages/legal/FengshuiTerms'
-import StlmntPrivacy from './pages/legal/StlmntPrivacy'
-import StlmntTerms from './pages/legal/StlmntTerms'
+import { RouteError } from './components/RouteError/RouteError'
+
+// Every page except Home loads on demand: Vite turns each module matched here
+// into its own chunk, so a visitor downloads only the page they're on (the
+// legal pages alone were close to half the old single bundle). Home stays in
+// the main bundle as the most-visited page.
+const pageModules = import.meta.glob<{ default: ComponentType }>(['./pages/**/*.tsx', '!./pages/Home.tsx'])
+
+// `module` is the page's source path, which is also its key in Vite's build
+// manifest: the prerender step uses it to preload the page's chunk from that
+// page's HTML.
+export interface PageHandle {
+  module: string
+}
+
+function page(file: string) {
+  const load = pageModules[file]
+  if (!load) throw new Error(`routes.tsx: no page module at ${file}`)
+  return {
+    lazy: async () => ({ Component: (await load()).default }),
+    handle: { module: `src/${file.slice(2)}` } satisfies PageHandle,
+  }
+}
+
+// URL path → page module, written once each.
+const PAGES: [path: string, file: string][] = [
+  ['about', './pages/About.tsx'],
+  ['work', './pages/Work.tsx'],
+  ['work/:slug', './pages/ProjectDetail.tsx'],
+  ['services', './pages/Services.tsx'],
+  ['process', './pages/Process.tsx'],
+  ['why-not-ai', './pages/WhyNotAI.tsx'],
+  ['support', './pages/Support.tsx'],
+  ['support/payback', './pages/PaybackSupport.tsx'],
+  ['contact', './pages/Contact.tsx'],
+  ['legal', './pages/legal/LegalIndex.tsx'],
+  ['legal/:app', './pages/legal/LegalApp.tsx'],
+  ['legal/drayagepro/privacy', './pages/legal/DrayageProPrivacy.tsx'],
+  ['legal/drayagepro/terms', './pages/legal/DrayageProTerms.tsx'],
+  ['legal/pinpoint/privacy', './pages/legal/PinpointPrivacy.tsx'],
+  ['legal/pinpoint/terms', './pages/legal/PinpointTerms.tsx'],
+  ['legal/payback/privacy', './pages/legal/PaybackPrivacy.tsx'],
+  ['legal/payback/terms', './pages/legal/PaybackTerms.tsx'],
+  ['legal/payback/data-deletion', './pages/legal/PaybackDataDeletion.tsx'],
+  ['legal/yap/privacy', './pages/legal/YapPrivacy.tsx'],
+  ['legal/yap/terms', './pages/legal/YapTerms.tsx'],
+  ['legal/zoori/privacy', './pages/legal/ZooriPrivacy.tsx'],
+  ['legal/zoori/terms', './pages/legal/ZooriTerms.tsx'],
+  ['legal/fengshui/privacy', './pages/legal/FengshuiPrivacy.tsx'],
+  ['legal/fengshui/terms', './pages/legal/FengshuiTerms.tsx'],
+  ['legal/stlmnt/privacy', './pages/legal/StlmntPrivacy.tsx'],
+  ['legal/stlmnt/terms', './pages/legal/StlmntTerms.tsx'],
+]
 
 export const routes: RouteObject[] = [
   {
     path: '/',
     Component: App,
-    children: [
-      { index: true, Component: Home },
-      { path: 'about', Component: About },
-      { path: 'work', Component: Work },
-      { path: 'work/:slug', Component: ProjectDetail },
-      { path: 'services', Component: Services },
-      { path: 'process', Component: Process },
-      { path: 'why-not-ai', Component: WhyNotAI },
-      { path: 'support', Component: Support },
-      { path: 'support/payback', Component: PaybackSupport },
-      { path: 'contact', Component: Contact },
-      { path: 'legal', Component: LegalIndex },
-      { path: 'legal/:app', Component: LegalApp },
-      { path: 'legal/drayagepro/privacy', Component: DrayageProPrivacy },
-      { path: 'legal/drayagepro/terms', Component: DrayageProTerms },
-      { path: 'legal/pinpoint/privacy', Component: PinpointPrivacy },
-      { path: 'legal/pinpoint/terms', Component: PinpointTerms },
-      { path: 'legal/payback/privacy', Component: PaybackPrivacy },
-      { path: 'legal/payback/terms', Component: PaybackTerms },
-      { path: 'legal/payback/data-deletion', Component: PaybackDataDeletion },
-      { path: 'legal/yap/privacy', Component: YapPrivacy },
-      { path: 'legal/yap/terms', Component: YapTerms },
-      { path: 'legal/zoori/privacy', Component: ZooriPrivacy },
-      { path: 'legal/zoori/terms', Component: ZooriTerms },
-      { path: 'legal/fengshui/privacy', Component: FengshuiPrivacy },
-      { path: 'legal/fengshui/terms', Component: FengshuiTerms },
-      { path: 'legal/stlmnt/privacy', Component: StlmntPrivacy },
-      { path: 'legal/stlmnt/terms', Component: StlmntTerms },
-    ],
+    // Catches a page chunk that fails to load (e.g. a tab left open across a
+    // redeploy) and unknown URLs. See RouteError.
+    ErrorBoundary: RouteError,
+    children: [{ index: true, Component: Home }, ...PAGES.map(([path, file]) => ({ path, ...page(file) }))],
   },
 ]
 

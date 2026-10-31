@@ -8,6 +8,9 @@ export default defineConfig({
     babel({ presets: [reactCompilerPreset()] }),
   ],
   build: {
+    // dist/.vite/manifest.json: scripts/prerender.mjs reads it to preload each
+    // page's lazy chunk from that page's HTML.
+    manifest: true,
     rolldownOptions: {
       output: {
         // Split the rarely-changing framework code into its own chunk so it
