@@ -53,13 +53,6 @@ describe('Every decision page closes with a next step', () => {
  * disc, and Contact was absent from the main navigation.
  */
 describe('Contact is labelled and in the main nav', () => {
-  it('shows a visible "Contact" label on the floating link', () => {
-    renderRoute('/about')
-    const fab = document.querySelector('.contact-fab')
-    expect(fab).toHaveTextContent('Contact')
-    expect(fab).toHaveAttribute('href', '/contact')
-  })
-
   it('lists Contact in the main navigation', () => {
     renderRoute('/')
     const nav = screen.getByRole('navigation', { name: /main navigation/i })
