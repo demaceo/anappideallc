@@ -97,9 +97,17 @@
 
 :root {
   /* Color — OKLCH */
-  --c-bg: oklch(96% 0.005 90);        /* warm bone: page background         */
+  --c-page: oklch(88% 0.008 250);     /* cool concrete: page background     */
+  --c-bg: oklch(96% 0.005 90);        /* warm bone: cards + text on ink     */
   --c-fg: oklch(15% 0 0);             /* near-black: text, dark surfaces    */
-  --c-fg-soft: oklch(15% 0 0 / 0.6);  /* muted foreground                   */
+  --c-fg-soft: oklch(15% 0 0 / 0.65); /* muted foreground                   */
+
+  /* The page ground and the bone card colour used to be one token. They split
+     when the plain pages moved to concrete (2026-11): --c-bg is also the text
+     colour on every ink surface (buttons, the ink band, the form panel), so it
+     stays bone, and cards keep it as a fill that reads lighter than the page.
+     --c-fg-soft went 0.60 -> 0.65 because muted text on concrete measured
+     4.61:1 at 0.60, too close to the 4.5:1 floor. */
   --c-line: oklch(15% 0 0);           /* hairline rules and borders         */
   --c-accent: oklch(88% 0.22 125);    /* acid chartreuse: the one accent    */
   --c-accent-2: oklch(70% 0.22 35);   /* red-orange: error states ONLY      */

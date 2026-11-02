@@ -343,7 +343,6 @@ export default function Contact() {
         <PricingNote />
 
         <ConsultCTA
-          showFormLink={false}
           eyebrow="Prefer to talk?"
           title={SITE.booking.label}
           blurb="Skip the form. Thirty minutes, free. Bring as much or as little as you've got."

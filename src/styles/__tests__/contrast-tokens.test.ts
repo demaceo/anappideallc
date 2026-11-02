@@ -79,6 +79,13 @@ describe('tokens.css — text colours clear WCAG AA (audit P2)', () => {
   const bone = token('c-bg').rgb
   const ink = token('c-fg').rgb
 
+  it('muted text clears AA on both the concrete page and bone cards', () => {
+    const soft = token('c-fg-soft')
+    for (const ground of [token('c-page').rgb, bone]) {
+      expect(ratio(over(soft.rgb, ground, soft.alpha), ground)).toBeGreaterThanOrEqual(AA_SMALL)
+    }
+  })
+
   it('form placeholders are readable on the dark form panel', () => {
     const ph = token('c-bg-placeholder')
     expect(ratio(over(ph.rgb, ink, ph.alpha), ink)).toBeGreaterThanOrEqual(AA_SMALL)
@@ -283,13 +290,18 @@ describe('one visual language (neon retirement)', () => {
   })
 
   it('gives the ported CTAs the ink/bone inversion', () => {
-    for (const sel of ['\\.consult-cta-btn', '\\.project-link-btn']) {
-      expect(GLOBALS).toMatch(new RegExp(`${sel}\\s*\\{[^}]*background:\\s*var\\(--c-fg\\)`))
+    expect(GLOBALS).toMatch(/\.project-link-btn\s*\{[^}]*background:\s*var\(--c-fg\)/)
+    // Chartreuse means "book a call": the booking buttons rest on the accent
+    // and invert to the ink slab on hover.
+    for (const sel of ['\\.booking-fab', '\\.hero-cta']) {
+      expect(GLOBALS).toMatch(new RegExp(`${sel}\\s*\\{[^}]*background:\\s*var\\(--c-accent\\)`))
+      expect(GLOBALS).toMatch(new RegExp(`${sel}:hover\\s*\\{[^}]*background:\\s*var\\(--c-fg\\)`))
     }
-    // The floating booking button is the one accent-filled CTA: the single
-    // persistent action on every page, inverting to the ink slab on hover.
-    expect(GLOBALS).toMatch(/\.booking-fab\s*\{[^}]*background:\s*var\(--c-accent\)/)
-    expect(GLOBALS).toMatch(/\.booking-fab:hover\s*\{[^}]*background:\s*var\(--c-fg\)/)
+    // Tier 1 is the chartreuse band itself, so its button is the ink slab.
+    expect(GLOBALS).toMatch(/\.consult-cta\s*\{[^}]*background:\s*var\(--c-accent\)/)
+    expect(GLOBALS).toMatch(/\.consult-cta-btn\s*\{[^}]*background:\s*var\(--c-ink\)/)
+    // Tier 2 is lavender, so it never reads as a booking action.
+    expect(GLOBALS).toMatch(/\.message-cta\s*\{[^}]*background:\s*var\(--c-lavender\)/)
     // On the ink form panel the inversion runs the other way.
     for (const sel of ['\\.svc-cta', '\\.wizard-next']) {
       expect(GLOBALS).toMatch(new RegExp(`${sel}\\s*\\{[^}]*background:\\s*var\\(--c-bg\\)`))
