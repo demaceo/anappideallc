@@ -103,7 +103,7 @@ describe('founder story on each page', () => {
 
   it('lists the mission apps first on Work, in proof order', () => {
     const { container } = renderRoute('/work')
-    const cards = [...container.querySelectorAll('a.feature-item--linked')]
+    const cards = [...container.querySelectorAll('a.work-tile')]
     const leading = cards.slice(0, STORY_PROOF.length).map((a) => a.getAttribute('href'))
     expect(leading).toEqual(STORY_PROOF.map((p) => `/work/${p.slug}`))
   })

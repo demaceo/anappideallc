@@ -31,6 +31,9 @@ export interface CaseStudy {
   tags: string[]
   stack: string[]
   outcomes: string[]
+  // Three short beats of the build, shown as numbered steps above the
+  // Approach paragraph. Optional: without it the paragraph stands alone.
+  steps?: string[]
   stats: CaseStudyStat[]
   sections: CaseStudySection[]
   cover: {
@@ -69,6 +72,11 @@ export const caseStudies: CaseStudy[] = [
       'Built a curated catalog of verified, open settlements fed by ingestion workers (FTC feed, court-administrator scrapers, CourtListener) behind an admin review gate — nothing publishes until a human approves it.',
       'Shipped an autofill profile that envelope-encrypts sensitive fields (name, address, payment handles) with Cloud KMS, and never stores bank, SSN, or card numbers.',
       'Kept the user in control end to end: an eligibility self-check, copy-to-clipboard claim assist (never auto-submission), on-device receipts, local deadline reminders, and one-tap account and data deletion.',
+    ],
+    steps: [
+      'Ingest from FTC, administrators and CourtListener',
+      'Admin reviews before anything publishes',
+      'Claim data encrypted with Cloud KMS',
     ],
     stats: [
       { label: 'Timeline', value: 'Founder-led Expo build' },
@@ -119,6 +127,11 @@ export const caseStudies: CaseStudy[] = [
       'Rebuilt the product around four focused tabs — Reps, Pinboard, Posses, and a guided Outreach flow — under a custom "Editorial Ink" design system.',
       'Shipped a Postmark-backed outreach relay with DMARC-safe sending, per-user caps, content screening, live delivery status, and copy/call/web-form fallbacks when an office takes no email.',
       'Built a Firestore-backed issue Pinboard and group "Posses" with community-consensus resolution and moderation, with counters and safety logic owned by Firebase Cloud Functions.',
+    ],
+    steps: [
+      'Find officials by GPS or ZIP',
+      'Relay messages through Postmark, with caps',
+      'Firestore pinboard, Functions moderation',
     ],
     stats: [
       { label: 'Timeline', value: 'Solo build + Editorial Ink rebuild' },
@@ -174,6 +187,11 @@ export const caseStudies: CaseStudy[] = [
       'Normalized behavior into 135 categories across 10 pillars for consistent downstream analysis.',
       'Built resumable background processing plus a hardened AI proxy with OAuth verification, rate limits, timeout control, and API-key failover.',
     ],
+    steps: [
+      'Parse exports on the device',
+      'Store them in encrypted SQLite',
+      'Server sees only derived categories',
+    ],
     stats: [
       { label: 'Timeline', value: 'Background-resumable mobile app' },
       { label: 'Team', value: 'Founder-led privacy architecture' },
@@ -226,6 +244,11 @@ export const caseStudies: CaseStudy[] = [
       'Designed a three-role product — tenant, landlord, and admin — each with its own dashboards, capabilities, and color-themed interface, backed by Postgres Row Level Security policies.',
       'Delivered rent payments across Venmo, bank transfer, and check, a full maintenance-request lifecycle (categories, priority, assignment, costs, scheduling), and per-role in-app messaging on one Supabase backend.',
       'Added AI-generated community resource guides via a Gemini edge function with an admin approval workflow, plus a Workbox-powered PWA web build alongside the native iOS and Android apps.',
+    ],
+    steps: [
+      'Supabase auth with row-level security',
+      'Separate tenant, landlord and admin apps',
+      'AI resource guides, admin-approved',
     ],
     stats: [
       { label: 'Timeline', value: 'Multi-role SaaS build' },
@@ -282,6 +305,11 @@ export const caseStudies: CaseStudy[] = [
       'Built a 9-step pipeline from freehand Skia drawing to simplified geometry, room annotation, furnishing, and a furnished 3D preview.',
       'Created a 72-item furniture catalog across 11 categories plus a wall, floor, and ceiling annotation system for doors, windows, outlets, vents, and lighting.',
       'Added server-side Gemini analysis (an overall score plus chi-flow, element-balance, command-position, and harmony sub-scores) with animated layout optimization that offers 2–3 scored alternatives before the user applies changes.',
+    ],
+    steps: [
+      'Draw the room with Skia',
+      'Render it in 3D with Three.js',
+      'Gemini scores the layout server-side',
     ],
     stats: [
       { label: 'Timeline', value: '9-step guided workflow' },
@@ -393,6 +421,11 @@ export const caseStudies: CaseStudy[] = [
       'Built a terminal-style UI component system with a command palette, keyboard shortcuts, sparklines, heatmaps, and a function-key action bar.',
       'Added role-based auth, PDF invoice generation with sharing, and a margin-aware billing system with credit limit management.',
     ],
+    steps: [
+      'One codebase for TMS and WMS',
+      '21-component terminal UI on Skia',
+      'Keyboard shortcuts per platform',
+    ],
     stats: [
       { label: 'Timeline', value: 'Solo build for Hudson Insights' },
       { label: 'Team', value: 'Admin + Broker roles' },
@@ -441,6 +474,11 @@ export const caseStudies: CaseStudy[] = [
       'Built a three-sided platform — adopter, rescue organization, and admin — each with dedicated dashboards, workflows, moderation tools, and access controls backed by Firestore rules.',
       'Delivered gesture-driven swipe discovery plus an algorithmic For-You feed with A–D match scoring, a breed glossary with bookmark alerts, saved dogs, and swipe history.',
       'Added bilingual (en/es) support, real-time per-conversation messaging via Firestore listeners, 13 push-notification types, transactional email via Resend, and a RescueGroups.org listing sync.',
+    ],
+    steps: [
+      'Separate adopter, org and admin layouts',
+      'Swipe deck with A–D fit scoring',
+      'Bilingual content with i18next',
     ],
     stats: [
       { label: 'Timeline', value: 'Expo SDK 54, new arch' },
@@ -498,6 +536,11 @@ export const caseStudies: CaseStudy[] = [
       'Delivered ML-powered nowcasting models for early delinquency prediction alongside a FastAPI backend with role-based access for analysts and investors.',
       'Created an interactive React dashboard with exportable reports (CSV, Excel, PDF) for institutional stakeholders.',
     ],
+    steps: [
+      'Bronze: raw data ingestion',
+      'Silver and gold: the index itself',
+      'FastAPI feeding React dashboards',
+    ],
     stats: [
       { label: 'Timeline', value: 'Production analytics system' },
       { label: 'Team', value: 'Analyst + Investor roles' },
@@ -546,6 +589,11 @@ export const caseStudies: CaseStudy[] = [
       'Built a coaching site with an animated Three.js silk-shader background (with a mobile-safe static fallback), Framer Motion section transitions, and a Calendly booking flow embedded in the contact section.',
       'Shipped full SEO — sitemap, robots.txt, Open Graph, and Person JSON-LD — alongside a custom cookie-consent banner and dedicated Privacy and Cookie Policy pages.',
       'Optimized delivery with route and component code-splitting, lazy loading, GA4 analytics, and an auto-playing, swipeable testimonials carousel.',
+    ],
+    steps: [
+      'React 19, Vite and Tailwind',
+      'Silk-shader background, motion-safe',
+      'Calendly booking right on the page',
     ],
     stats: [
       { label: 'Timeline', value: 'Solo client build' },
@@ -604,6 +652,11 @@ export const caseStudies: CaseStudy[] = [
       'Built service packages with an FAQ, a curated resource library (six recommended books plus reflection prompts), and the "3 Cs of Life" coaching framework.',
       'Used Cormorant Garamond and Raleway over a warm cream-and-forest palette for a premium editorial identity, with WCAG AAA text contrast (charcoal and forest on cream).',
     ],
+    steps: [
+      'Next.js 16 App Router',
+      'Optimized images and fonts',
+      'Forms with no backend to maintain',
+    ],
     stats: [
       { label: 'Timeline', value: 'No backend or CMS' },
       { label: 'Team', value: 'Solo client build' },
@@ -660,6 +713,11 @@ export const caseStudies: CaseStudy[] = [
       'Built an interactive portfolio with a Macintosh System 7-inspired UI — draggable windows, glass morphism panels, and a command-palette skill modal.',
       'Added an animated project gallery with modal presentations, a resume section with PDF export via html2canvas and jsPDF, and a contact form with EmailJS.',
       'Optimized for performance with feature-based architecture, Next.js 15 App Router image optimization, and lazy-loaded modal content.',
+    ],
+    steps: [
+      'Next.js 15 with CSS Modules',
+      'Framer Motion window drags',
+      'System 7 look in every layer',
     ],
     stats: [
       { label: 'Timeline', value: 'Next.js 15 App Router' },
