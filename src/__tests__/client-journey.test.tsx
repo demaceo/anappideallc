@@ -178,6 +178,17 @@ describe('Contact wizard', () => {
     )
   })
 
+  // Regression: the form was a black panel under the booking band and read as
+  // one more section to scroll past. It now leads the page as a titled form.
+  it('puts the message form on its own stage, ahead of the booking band', () => {
+    renderRoute('/contact')
+    const stage = screen.getByRole('region', { name: /send me a message/i })
+    expect(within(stage).getByRole('heading', { name: /send me a message/i })).toBeInTheDocument()
+    expect(within(stage).getByText(/start your message/i)).toBeInTheDocument()
+    const band = document.querySelector('.consult-cta') as HTMLElement
+    expect(stage.compareDocumentPosition(band) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
   it('keeps the honeypot out of reach of real visitors', () => {
     renderRoute('/contact')
     const trap = document.getElementById('cf-website') as HTMLInputElement
