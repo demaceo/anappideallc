@@ -342,11 +342,18 @@ export default function Contact() {
 
         <PricingNote />
 
-        <ConsultCTA
-          eyebrow="Prefer to talk?"
-          title={SITE.booking.label}
-          blurb="Skip the form. Thirty minutes, free. Bring as much or as little as you've got."
-        />
+        {/* The form leads: it is why most visitors come. The free call follows
+            as the alternative for anyone who would rather talk. */}
+        <section className="contact-stage" aria-label="Send me a message">
+        {status !== 'sent' && (
+          <header className="contact-stage-head">
+            <h2 className="contact-stage-title">Send me a message</h2>
+            <p className="contact-stage-sub">
+              Answer a few quick questions, and skip any you like. I reply
+              within 1–2 business days.
+            </p>
+          </header>
+        )}
 
         {status === 'sent' ? (
           // A visitor who just sent their idea is at their most committed, and
@@ -404,16 +411,19 @@ export default function Contact() {
               />
             </div>
             <div className="wizard-progress">
-              <span className="wizard-step-count">
-                Step {String(stepIdx + 1).padStart(2, '0')} / {String(steps.length).padStart(2, '0')}
-              </span>
-              <div className="wizard-ticks" aria-hidden="true">
-                {steps.map((s, i) => (
-                  <span
-                    key={s}
-                    className={`wizard-tick${i === stepIdx ? ' current' : ''}${i < stepIdx ? ' done' : ''}`}
-                  />
-                ))}
+              <span className="contact-card-label">Start your message</span>
+              <div className="wizard-progress-meta">
+                <span className="wizard-step-count">
+                  Step {String(stepIdx + 1).padStart(2, '0')} / {String(steps.length).padStart(2, '0')}
+                </span>
+                <div className="wizard-ticks" aria-hidden="true">
+                  {steps.map((s, i) => (
+                    <span
+                      key={s}
+                      className={`wizard-tick${i === stepIdx ? ' current' : ''}${i < stepIdx ? ' done' : ''}`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -734,6 +744,13 @@ export default function Contact() {
             )}
           </form>
         )}
+        </section>
+
+        <ConsultCTA
+          eyebrow="Prefer to talk?"
+          title={SITE.booking.label}
+          blurb="Rather talk it through? Thirty minutes, free. Bring as much or as little as you've got."
+        />
 
         <div className="section-header">
           <span className="section-num">What to include</span>
