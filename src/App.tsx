@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Outlet, useLocation } from 'react-router'
 import { RouteFocusReset } from './components/RouteFocusReset'
-import { ContactFAB } from './components/ContactFAB/ContactFAB'
+import { BookingFAB } from './components/BookingFAB/BookingFAB'
 import { CustomCursor } from './components/CustomCursor/CustomCursor'
 import { useScrollScenes } from './motion/useScrollScenes'
 
@@ -23,7 +23,7 @@ function AppShell() {
       <div ref={scopeRef} className="app-scope">
         <Outlet />
       </div>
-      <ContactFAB />
+      <BookingFAB />
       <CustomCursor />
     </>
   )

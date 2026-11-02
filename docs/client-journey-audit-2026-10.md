@@ -13,7 +13,7 @@
 | Finding | Change | Where |
 |---|---|---|
 | About, Work, Services, Process and every case study ended with no call to action | Shared closing section: book a call, or use the guided form | `src/components/NextStep/NextStep.tsx`, `ConsultCTA` (`showFormLink`) |
-| Contact missing from the main nav; on mobile the only route was an unlabelled paper-plane disc over body text | Contact added to `SiteNav`; below 480px the floating button docks as a labelled full-width bar | `SiteNav.tsx`, `ContactFAB.tsx`, `.contact-fab` in `globals.css` |
+| Contact missing from the main nav; on mobile the only route was an unlabelled paper-plane disc over body text | Contact added to `SiteNav`. The floating button became **Book a free call** (2026-11): chartreuse, opens Calendly's popup, loads Calendly only on click, falls back to a new tab; below 480px it docks as a labelled full-width bar | `SiteNav.tsx`, `BookingFAB.tsx`, `src/lib/calendly.ts`, `.booking-fab` in `globals.css` |
 | Wizard asked every founder to rate "SEO" and "GEO" | Plain-language labels; step shown only when a website is in scope (step count holds at 6 except for "Both") | `src/pages/Contact.tsx` |
 | Contact page said a budget range helps, but the form had nowhere to put one | Optional free-text budget field, included in the inquiry email | `Contact.tsx`, `api/contact.ts` |
 | Success view was a dead end | Lists what happens next and links straight to booking | `Contact.tsx` |

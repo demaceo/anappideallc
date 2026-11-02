@@ -145,7 +145,7 @@ describe('globals.css — requested weights exist in the family (audit P2)', () 
 
   it('still applies emphasis where those rules intended it', () => {
     for (const sel of [
-      '\\.contact-fab-label',
+      '\\.booking-fab-label',
       '\\.source-list li strong',
       '\\.stat-pill strong',
       '\\.project-stat-value',
@@ -283,9 +283,13 @@ describe('one visual language (neon retirement)', () => {
   })
 
   it('gives the ported CTAs the ink/bone inversion', () => {
-    for (const sel of ['\\.consult-cta-btn', '\\.project-link-btn', '\\.contact-fab']) {
+    for (const sel of ['\\.consult-cta-btn', '\\.project-link-btn']) {
       expect(GLOBALS).toMatch(new RegExp(`${sel}\\s*\\{[^}]*background:\\s*var\\(--c-fg\\)`))
     }
+    // The floating booking button is the one accent-filled CTA: the single
+    // persistent action on every page, inverting to the ink slab on hover.
+    expect(GLOBALS).toMatch(/\.booking-fab\s*\{[^}]*background:\s*var\(--c-accent\)/)
+    expect(GLOBALS).toMatch(/\.booking-fab:hover\s*\{[^}]*background:\s*var\(--c-fg\)/)
     // On the ink form panel the inversion runs the other way.
     for (const sel of ['\\.svc-cta', '\\.wizard-next']) {
       expect(GLOBALS).toMatch(new RegExp(`${sel}\\s*\\{[^}]*background:\\s*var\\(--c-bg\\)`))

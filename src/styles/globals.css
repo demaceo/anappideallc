@@ -394,11 +394,16 @@ h1, h2, h3 {
   color: var(--c-bg);
 }
 
-/* ─── Contact FAB — fixed lower-right floating action button ─── */
+/* ─── Booking FAB — fixed lower-right floating action button ─── */
 /* The only button that floats over an arbitrary background, so it carries a
    bone border for separation instead of the glow it used to. A border is
-   structure, which this system allows; a shadow is not. */
-.contact-fab {
+   structure, which this system allows; a shadow is not.
+
+   Filled with the one accent rather than the ink slab every other button
+   uses: it is the single persistent action on every page, and chartreuse is
+   the only colour on the site that reads as "this one". Ink text on it is
+   ~15:1. Hover inverts to the ink slab, the reverse of the other buttons. */
+.booking-fab {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
@@ -407,17 +412,17 @@ h1, h2, h3 {
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-3) var(--space-5);
-  background: var(--c-fg);
-  color: var(--c-bg);
+  background: var(--c-accent);
+  color: var(--c-fg);
   border: var(--bw-thick) solid var(--c-bg);
   outline: var(--bw) solid var(--c-ink);
   text-decoration: none;
   transition: background 150ms, color 150ms;
 }
 
-.contact-fab:hover {
-  background: var(--c-accent);
-  color: var(--c-fg);
+.booking-fab:hover {
+  background: var(--c-fg);
+  color: var(--c-accent);
 }
 
 /* NOTE ON WEIGHTS: Space Mono ships 400 and 700 only. CSS font matching
@@ -431,7 +436,7 @@ h1, h2, h3 {
    The two `font-weight: 600` rules did render bold — 600 resolves UP to 700
    when 700 is available — but are normalised to 700 as well so the file states
    what it paints rather than what it would like. */
-.contact-fab-label {
+.booking-fab-label {
   font-family: var(--ff-mono);
   font-size: var(--text-sm);
   letter-spacing: 0.08em;
@@ -439,21 +444,21 @@ h1, h2, h3 {
   font-weight: 700;
 }
 
-.contact-fab-label::after {
+.booking-fab-label::after {
   content: ' →';
 }
 
 /* The FAB is fixed, so it paints over whatever is mid-scroll. At phone widths
    the text column runs nearly edge to edge, so a floating pill landed on body
    copy and clipped words mid-sentence; the icon-only disc that replaced it
-   still covered a 48px square of text, and a paper plane alone did not say
-   "contact" to a first-time visitor.
+   still covered a 48px square of text, and an icon alone did not say what it
+   did to a first-time visitor.
 
    Below 480px it docks as a full-width bar instead: always labelled, never
    over text, because body reserves matching padding at the end of the page
    and the bar sits below the reading column rather than on it. */
 @media (max-width: 480px) {
-  .contact-fab {
+  .booking-fab {
     left: 0;
     right: 0;
     bottom: 0;
@@ -467,8 +472,8 @@ h1, h2, h3 {
   }
 
   /* The square corner ticks read as artifacts on a full-width bar. */
-  .contact-fab::before,
-  .contact-fab::after { display: none; }
+  .booking-fab::before,
+  .booking-fab::after { display: none; }
 }
 
 /* ─── Marquee — black band, giant display type, infinite scroll ─── */
@@ -3028,7 +3033,7 @@ main a:hover {
   .svc-sublist li::before     { content: '↳ ' / ''; }
   .svc-sublabel::before       { content: '// ' / ''; }
   .svc-cta::after             { content: '→' / ''; }
-  .contact-fab-label::after   { content: ' →' / ''; }
+  .booking-fab-label::after   { content: ' →' / ''; }
 }
 
 /* ─── WCAG AA: muted mono labels ───
