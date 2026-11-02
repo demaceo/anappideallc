@@ -20,6 +20,7 @@
 | A rejected Resend send still returned `{ ok: true }` — the SDK resolves `{ error }` rather than throwing, and the handler only had try/catch | Checks `error`, answers 502 | `api/contact.ts`, `src/__tests__/contact-api.test.ts` |
 | Home promised an MVP in 6–8 weeks; the Process phases add up to 7–13 weeks to build (plus 1–2 to launch) | 7–13 weeks, labelled "discovery to finished build", everywhere a timeline appears (Home, Services, SEO copy and FAQ schema) | `Home.tsx`, `services.ts`, `Services.tsx`, `src/lib/seo.ts` |
 | Contact endpoint had no bot protection | Honeypot field + minimum time-to-submit, both dropped silently with a normal success; requests without the timing field still reach the inbox but get no confirmation email; a 429 from the firewall gets a plain-language message | `api/contact.ts`, `Contact.tsx` |
+| Booking page carried the retired brand ("Demaceo Howard" at `demaceo-milehighinterface`) | Calendly renamed to An App Idea at `calendly.com/anappidea/30min`; site and confirmation email updated | `src/data/site.ts`, `api/contact.ts` |
 | No acknowledgement to the visitor after sending | Fixed-copy confirmation email (no echo of form input — anyone can type any address, so echoing would make it a relay) | `api/contact.ts` |
 
 ## Waiting on real values
@@ -36,14 +37,11 @@ Both are wired and tested, and render nothing until filled in.
 
 ## Open
 
-- **Calendly brand mismatch.** The booking page is titled "30 Minute FREE
-  Consultation - Demaceo Howard" at the slug `demaceo-milehighinterface`, the
-  retired brand. Changing it is done in Calendly; afterwards update
-  `SITE.booking.consultationUrl` and `BOOKING_URL` in `api/contact.ts` together.
 - **Proof.** `src/data/testimonials.ts` is still empty, and four apps
   (STLMNT, Zoori, Feng Shui, RentHarbor) have no store or live link.
-- **Rate-limit rule (dashboard only).** The in-code checks only stop bots that
-  fill the form in a browser. Scripted POSTs need a Vercel Firewall rule:
+- **Rate-limit rule — published 2026-11.** The in-code checks only stop bots
+  that fill the form in a browser; scripted POSTs are covered by a Vercel
+  Firewall rule configured in the dashboard (not in this repo):
   project → Firewall → Configure → New Rule; *If* Request Path equals
   `/api/contact` and Method equals `POST`; *Then* Rate Limit, Fixed Window,
   60s window, 5 requests, keyed on IP, action Default (429). Available on all

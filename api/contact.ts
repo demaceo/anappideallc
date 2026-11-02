@@ -9,7 +9,7 @@ const FROM_EMAIL = process.env.FROM_EMAIL ?? 'hello@anappidea.llc'
 // Mirrors SITE.booking.consultationUrl in src/data/site.ts — keep the two in
 // step. Not imported: this function ships as its own ESM bundle on Vercel and
 // an extensionless import into src/ is a runtime resolution risk.
-const BOOKING_URL = 'https://calendly.com/demaceo-milehighinterface/30min'
+const BOOKING_URL = 'https://calendly.com/anappidea/30min'
 
 // Real visitors walk a 6–7 step wizard; nobody finishes it in under this.
 const MIN_FILL_MS = 3000
