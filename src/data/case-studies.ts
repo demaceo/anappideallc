@@ -183,7 +183,7 @@ export const caseStudies: CaseStudy[] = [
     tags: ['Privacy', 'Analytics', 'AI Proxy', 'Mobile'],
     stack: ['React Native', 'Expo SDK 54', 'TypeScript', 'expo-sqlite', 'SQLCipher', 'Express', 'PostgreSQL', 'Gemini 2.5 Pro', 'Prometheus', 'Grafana', 'Swift', 'Kotlin'],
     outcomes: [
-      'Shipped a consumer app to the App Store, through version 1.2, that turns Google Takeout and Meta exports plus on-device calendar, photo and contact signals into AI-written behavioral personas.',
+      'Shipped a consumer app to the App Store, through version 1.2, that turns Google Takeout and Meta exports plus on-device calendar, photo and contact signals into AI-written behavioral personas, organized into 135 behavioral categories across 10 pillars.',
       'Built an on-device vault: SQLite encrypted with SQLCipher (AES-256) under a 256-bit key held in the iOS Keychain or Android Keystore, with crash-safe transactions and a defined path if the key is ever lost.',
       'Put Gemini behind an Express proxy with token checks, rate limits, one shared request queue, a circuit breaker and a fallback model, monitored with Prometheus and Grafana.',
     ],
@@ -196,7 +196,7 @@ export const caseStudies: CaseStudy[] = [
       { label: 'Timeline', value: 'Nov 2025 – Oct 2026 · live' },
       { label: 'Team', value: 'Solo, founder-led' },
       { label: 'Platform', value: 'iOS · Android' },
-      { label: 'Impact', value: 'Encrypted vault · AI personas' },
+      { label: 'Impact', value: '135 categories · 10 pillars' },
     ],
     sections: [
       {
@@ -207,7 +207,7 @@ export const caseStudies: CaseStudy[] = [
       {
         title: 'Approach',
         content:
-          'Exports are parsed on the device, including bounded reads from huge ZIP archives, and stored in an encrypted vault. Signals from your own calendar, photos and contacts are reduced on the device to counts and time buckets before anything is sent. When you ask for an analysis, only what it needs goes to Gemini 2.5 Pro through an Express proxy that checks your token, rate-limits, queues every call through one budget and falls back to Gemini 2.5 Flash. Your exports are never stored on our servers.',
+          'Exports are parsed on the device, including bounded reads from huge ZIP archives, and stored in an encrypted vault. Signals from your own calendar, photos and contacts are reduced on the device to counts and time buckets before anything is sent. When you ask for an analysis, only what it needs goes to Gemini 2.5 Pro through an Express proxy that checks your token, rate-limits, queues every call through one budget and falls back to Gemini 2.5 Flash. Results are organized into 135 behavioral categories across 10 pillars. Your exports are never stored on our servers.',
       },
       {
         title: 'Outcome',
