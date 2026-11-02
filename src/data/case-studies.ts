@@ -118,52 +118,52 @@ export const caseStudies: CaseStudy[] = [
     title: 'The Pinpoint App',
     category: 'Civic tech',
     summary:
-      'A civic engagement app that helps constituents find their elected officials, contact them with guided outreach emails, and organize with neighbors around local issues — across iOS, Android, and web.',
+      'A civic engagement app: find your elected officials from where you are, follow how they and bills voted, record your own votes, see how often you agree, and write to them.',
     metaDescription:
-      'The Pinpoint App is a civic engagement platform: find your representatives, send guided outreach emails through a Postmark relay, and rally support around community issues with a Firestore-backed Pinboard and group chats.',
-    tags: ['Civic Tech', 'Mobile + Web', 'Outreach', 'Community'],
-    stack: ['React Native', 'Expo SDK 54', 'Expo Router', 'TypeScript', 'Firebase', 'Firestore', 'Cloud Functions', 'Express', 'Prisma', 'PostgreSQL', 'OpenStates', 'Postmark'],
+      'The Pinpoint App is a civic engagement app: GPS-to-district lookup over TIGER boundaries, bill histories synced from Congress.gov and OpenStates, your votes matched against your representatives, and an Express, Prisma and PostgreSQL backend.',
+    tags: ['Civic Tech', 'Mobile', 'Legislative Data', 'Privacy'],
+    stack: ['React Native', 'Expo SDK 54', 'Expo Router', 'TypeScript', 'TanStack Query', 'Zustand', 'Firebase Auth', 'Express', 'Prisma', 'PostgreSQL', 'Railway', 'Congress.gov', 'OpenStates', 'Postmark'],
     outcomes: [
-      'Rebuilt the product around four focused tabs — Reps, Pinboard, Posses, and a guided Outreach flow — under a custom "Editorial Ink" design system.',
-      'Shipped a Postmark-backed outreach relay with DMARC-safe sending, per-user caps, content screening, live delivery status, and copy/call/web-form fallbacks when an office takes no email.',
-      'Built a Firestore-backed issue Pinboard and group "Posses" with community-consensus resolution and moderation, with counters and safety logic owned by Firebase Cloud Functions.',
+      'Resolves a GPS location to congressional, state senate and state house districts with an in-memory point-in-polygon index over Census TIGER boundaries, normalizing the district keys that the data sources format differently.',
+      'Collapsed every roll call on a bill into one row showing an official’s position at each stage and a derived final outcome, where no outcome means "not settled yet" rather than "failed".',
+      'Kept agreement scores honest: abstentions and absences never count as disagreement, no rate shows until enough votes compare, and private notes are walled off from AI prompts and admin tools (enforced by a test that scans the code) and never written to the on-device cache.',
     ],
     steps: [
-      'Find officials by GPS or ZIP',
-      'Relay messages through Postmark, with caps',
-      'Firestore pinboard, Functions moderation',
+      'Your location to your districts',
+      'Bills and votes synced from Congress.gov and OpenStates',
+      'Your votes matched against your reps',
     ],
     stats: [
-      { label: 'Timeline', value: 'Solo build + Editorial Ink rebuild' },
-      { label: 'Team', value: 'Founder-led: app, backend, admin' },
-      { label: 'Platform', value: 'iOS · Android · Web' },
-      { label: 'Impact', value: 'Reps · Outreach · Pinboard · Posses' },
+      { label: 'Timeline', value: 'Feb–Oct 2026 · two redesigns' },
+      { label: 'Team', value: 'Founder-led: app, API, admin' },
+      { label: 'Platform', value: 'iOS · Android · web admin' },
+      { label: 'Impact', value: 'Reps · Bills · Votes · Outreach' },
     ],
     sections: [
       {
         title: 'Problem',
         content:
-          'Civic apps tend to dump raw government data on people or trap "contact your rep" behind a dead-end form. The Pinpoint App needed to carry a constituent from "who represents me?" all the way to a sent message and an organized group of neighbors — without burying them in screens.',
+          'Civic apps tend to dump raw government data on people or trap "contact your rep" behind a dead-end form. The Pinpoint App needed to answer "who represents me?" from where you stand, show what those people actually voted for, and let you compare it with what you would have done, without inventing data it does not have.',
       },
       {
         title: 'Approach',
         content:
-          'I rebuilt the app around four tabs — Reps, Pinboard, Posses, and You — plus a guided Outreach flow. Officials resolve from GPS or a typed ZIP through an OpenStates backend proxy; the Outreach composer relays a constituent message via Postmark with a DMARC-safe sender and the user as reply-to, enforcing daily caps, per-office cooldowns, and content screening, and falling back to copy/call/web-form when an office has no public email. The Pinboard and Posses run directly on Cloud Firestore, while a separate set of Firebase Cloud Functions owns the derived counters, consensus, and moderation.',
+          'The app talks to one Express, Prisma and PostgreSQL API on Railway, and scheduled sync jobs pull legislation from Congress.gov, OpenStates and other public sources into Postgres. Your location resolves to districts with a point-in-polygon index over Census TIGER boundaries, without PostGIS. Each bill is one row with every vote and a final outcome derived from its actions. Votes you cast are committed by the server, never optimistically. An AI Vote Assist is built in, off by default behind a kill switch and gated on consent per AI provider, and its output is validated so it cannot invent a position.',
       },
       {
         title: 'Outcome',
         content:
-          'The Pinpoint App now reads like a tool, not a data dump: you find your representatives, send a real message with live delivery status, raise a local issue, and organize a moderated group around it. The print-inspired Editorial Ink design system — paper, ink, and oxblood in light; charcoal, off-white, and brass in dark — ties the whole experience together across iOS, Android, and web.',
+          'The Pinpoint App went through two redesigns in 2026: a print-inspired Editorial Ink rebuild in June, then a September redesign around four focused pillars that retired the earlier Pinboard and group-chat features. What remains reads like a tool: find your representatives, see their record, record your own votes, and write to them through a Postmark relay.',
       },
     ],
     cover: {
-      eyebrow: 'Civic engagement platform',
-      headline: 'Find your reps, send a real message, and organize neighbors around the issues that matter.',
-      chips: ['Editorial Ink design system', 'Firestore + Cloud Functions', 'Postmark outreach relay', 'OpenStates proxy'],
+      eyebrow: 'Civic engagement',
+      headline: 'Find your reps, see how they voted, and check it against how you would have.',
+      chips: ['Editorial Ink design system', 'Express + Prisma + Postgres', 'TIGER district boundaries', 'Congress.gov + OpenStates'],
       metrics: [
-        { label: 'Outreach', value: 'Postmark relay' },
-        { label: 'Community', value: 'Pinboard + Posses' },
-        { label: 'Delivery', value: 'Live status' },
+        { label: 'Lookup', value: 'GPS to districts' },
+        { label: 'Bills', value: 'One row per bill' },
+        { label: 'Match', value: 'You vs your reps' },
       ],
     },
     icon: '/app-icons/pinpoint.png',
@@ -177,26 +177,26 @@ export const caseStudies: CaseStudy[] = [
     title: 'Payback',
     category: 'Privacy-first analytics',
     summary:
-      'A privacy-first consumer intelligence app that extracts signals on-device, stores them in an encrypted vault, and uses a guarded AI backend only for derived analysis.',
+      'A privacy-first app, live on the App Store, that turns your Google and Meta data exports and on-device signals into an AI-written picture of your habits, without storing your data on our servers.',
     metaDescription:
-      'Payback is a privacy-first consumer intelligence platform with on-device data extraction, encrypted local storage, and a hardened AI proxy.',
+      'Payback is a live privacy-first app: Google Takeout and Meta exports parsed on the device, an AES-256 SQLCipher vault, and a guarded Gemini 2.5 Pro proxy that never stores your exports on a server.',
     tags: ['Privacy', 'Analytics', 'AI Proxy', 'Mobile'],
-    stack: ['React Native', 'Expo', 'TypeScript', 'expo-sqlite', 'AES-256-GCM', 'Node.js', 'PostgreSQL', 'Gemini 2.5 Pro'],
+    stack: ['React Native', 'Expo SDK 54', 'TypeScript', 'expo-sqlite', 'SQLCipher', 'Express', 'PostgreSQL', 'Gemini 2.5 Pro', 'Prometheus', 'Grafana', 'Swift', 'Kotlin'],
     outcomes: [
-      'Kept raw Google Takeout and Meta export data on-device using AES-256-GCM encrypted SQLite.',
-      'Normalized behavior into 135 categories across 10 pillars for consistent downstream analysis.',
-      'Built resumable background processing plus a hardened AI proxy with OAuth verification, rate limits, timeout control, and API-key failover.',
+      'Shipped a consumer app to the App Store, through version 1.2, that turns Google Takeout and Meta exports plus on-device calendar, photo and contact signals into AI-written behavioral personas.',
+      'Built an on-device vault: SQLite encrypted with SQLCipher (AES-256) under a 256-bit key held in the iOS Keychain or Android Keystore, with crash-safe transactions and a defined path if the key is ever lost.',
+      'Put Gemini behind an Express proxy with token checks, rate limits, one shared request queue, a circuit breaker and a fallback model, monitored with Prometheus and Grafana.',
     ],
     steps: [
-      'Parse exports on the device',
-      'Store them in encrypted SQLite',
-      'Server sees only derived categories',
+      'Parse the exports on the device',
+      'Keep them in an encrypted vault',
+      'Send AI only what the analysis needs',
     ],
     stats: [
-      { label: 'Timeline', value: 'Background-resumable mobile app' },
-      { label: 'Team', value: 'Founder-led privacy architecture' },
+      { label: 'Timeline', value: 'Nov 2025 – Oct 2026 · live' },
+      { label: 'Team', value: 'Solo, founder-led' },
       { label: 'Platform', value: 'iOS · Android' },
-      { label: 'Impact', value: '135 categories · 10 pillars' },
+      { label: 'Impact', value: 'Encrypted vault · AI personas' },
     ],
     sections: [
       {
@@ -207,22 +207,22 @@ export const caseStudies: CaseStudy[] = [
       {
         title: 'Approach',
         content:
-          'I moved extraction, normalization, and checkpointed long-running work onto the device with ZIP parsing, media agents, resumable background jobs, and encrypted SQLite storage. The backend is intentionally narrow: it verifies Google OAuth tokens, rate-limits aggressively, supports dual-key Gemini failover, and only handles derived category sets instead of raw exports.',
+          'Exports are parsed on the device, including bounded reads from huge ZIP archives, and stored in an encrypted vault. Signals from your own calendar, photos and contacts are reduced on the device to counts and time buckets before anything is sent. When you ask for an analysis, only what it needs goes to Gemini 2.5 Pro through an Express proxy that checks your token, rate-limits, queues every call through one budget and falls back to Gemini 2.5 Flash. Your exports are never stored on our servers.',
       },
       {
         title: 'Outcome',
         content:
-          'Payback turns Google and Meta exports into 135 behavioral categories across 10 pillars while keeping raw source data local. The interface, documentation, and backend all reinforce the same product promise: insight without surrendering the underlying archive.',
+          'Payback is live on the App Store. Over 500 test files with enforced coverage thresholds, tests that check color contrast in light and dark mode, and over-the-air updates guarded against stranding installed builds all back the same promise: insight without handing over the archive.',
       },
     ],
     cover: {
       eyebrow: 'Privacy-first intelligence',
-      headline: 'On-device extraction, encrypted storage, and a tightly scoped AI proxy.',
-      chips: ['Encrypted SQLite', 'BGTaskScheduler', 'WorkManager', 'Gemini 2.5 Pro'],
+      headline: 'On-device parsing, an encrypted vault, and an AI proxy that never keeps your data.',
+      chips: ['SQLCipher vault', 'Keychain / Keystore keys', 'Gemini 2.5 Pro proxy', 'Prometheus + Grafana'],
       metrics: [
-        { label: 'Signal map', value: '135 categories' },
-        { label: 'Pillars', value: '10 models' },
-        { label: 'AI proxy', value: 'Failover + limits' },
+        { label: 'Vault', value: 'AES-256 SQLCipher' },
+        { label: 'Status', value: 'Live, v1.2' },
+        { label: 'Tests', value: '560+ test files' },
       ],
     },
     featured: true,
@@ -235,52 +235,52 @@ export const caseStudies: CaseStudy[] = [
     title: 'RentHarbor',
     category: 'PropTech',
     summary:
-      'A multi-role property management platform for tenants, landlords, and admins — rent payments, maintenance workflows, in-app messaging, and AI-generated community resource guides, with database-enforced access via Supabase Row Level Security and a PWA web build.',
+      'A property management prototype for tenants, landlords and admins: maintenance requests, messaging, Venmo rent payments and AI-suggested community resources that an admin approves before tenants see them.',
     metaDescription:
-      'RentHarbor is an Expo + Supabase property management platform with role-based access (tenant, landlord, admin), rent payments, maintenance workflows, AI community resource guides, and a Workbox PWA web build.',
-    tags: ['PropTech', 'Multi-role', 'Supabase RLS', 'PWA'],
-    stack: ['React Native', 'Expo SDK 54', 'Supabase', 'PostgreSQL', 'Row Level Security', 'Edge Functions', 'Gemini 2.5 Flash', 'react-native-maps', 'Workbox PWA'],
+      'RentHarbor is an Expo and Supabase property management prototype with tenant, landlord and admin roles, maintenance and messaging, Venmo payments, and Gemini community resources behind an admin approval step.',
+    tags: ['PropTech', 'Multi-role', 'Supabase', 'Prototype'],
+    stack: ['React Native', 'Expo SDK 54', 'Expo Router', 'TypeScript', 'Supabase', 'PostgreSQL', 'Edge Functions', 'Gemini 2.5 Flash', 'Three.js', 'Workbox PWA'],
     outcomes: [
-      'Designed a three-role product — tenant, landlord, and admin — each with its own dashboards, capabilities, and color-themed interface, backed by Postgres Row Level Security policies.',
-      'Delivered rent payments across Venmo, bank transfer, and check, a full maintenance-request lifecycle (categories, priority, assignment, costs, scheduling), and per-role in-app messaging on one Supabase backend.',
-      'Added AI-generated community resource guides via a Gemini edge function with an admin approval workflow, plus a Workbox-powered PWA web build alongside the native iOS and Android apps.',
+      'Built three role-specific apps (tenant, landlord, admin) on one data layer that runs against Supabase or against built-in demo data, so the app and its tests work without a live backend.',
+      'Replaced a 2,300-line card-payment integration with Venmo deep links behind a payment-provider interface, so rent is paid in Venmo and the app never handles money.',
+      'Moved Gemini into a Supabase Edge Function so the API key never ships in the app, constrained its output to 8 resource categories, and routed every suggestion through an admin approval step.',
     ],
     steps: [
-      'Supabase auth with row-level security',
-      'Separate tenant, landlord and admin apps',
-      'AI resource guides, admin-approved',
+      'One data layer: Supabase or demo data',
+      'Gemini runs in a Supabase Edge Function',
+      'An admin approves before tenants see it',
     ],
     stats: [
-      { label: 'Timeline', value: 'Multi-role SaaS build' },
+      { label: 'Timeline', value: 'Aug 2025 – Jul 2026 · prototype' },
       { label: 'Team', value: 'Tenant · Landlord · Admin' },
       { label: 'Platform', value: 'iOS · Android · Web PWA' },
-      { label: 'Impact', value: 'Payments · Maintenance · AI resources' },
+      { label: 'Impact', value: 'Maintenance · Messaging · AI resources' },
     ],
     sections: [
       {
         title: 'Problem',
         content:
-          'Property management software is often either admin-heavy and outdated or lightweight enough that the role model breaks down under real use. RentHarbor needed one system that respected tenant, landlord, and admin boundaries without flattening the experience.',
+          'Property management software is often either admin-heavy and outdated or lightweight enough that the role model breaks down under real use. RentHarbor set out to give tenants, landlords and admins one system with clear boundaries between them.',
       },
       {
         title: 'Approach',
         content:
-          'I built the platform on Supabase Auth, PostgreSQL, Row Level Security, and Edge Functions, with Expo Router driving role-specific tenant, landlord, and admin layouts. Each role gets its own themed interface — blue for tenants, green for landlords, red for admins — and a Gemini-backed edge function generates localized community-resource guides that admins approve before they reach tenants.',
+          'Expo Router drives separate tenant, landlord and admin layouts, each with its own theme: blue for tenants, green for landlords, red for admins. A single data service runs against Supabase or against demo data. A Gemini Edge Function suggests community resources for each property in 8 fixed categories, landlords edit the drafts, and tenants only ever see sets an admin has approved. Rent payments open Venmo with the amount and note filled in.',
       },
       {
         title: 'Outcome',
         content:
-          'RentHarbor supports rent payment, maintenance, messaging, and curated community resources from one role-aware backbone. Database-enforced RLS keeps the role model honest as features are added, and a Workbox PWA build extends the same product to the web.',
+          'RentHarbor is a working prototype: the three role apps, maintenance requests, messaging, Venmo payments and the AI resource workflow all run, with sign-in on demo accounts for now. A Workbox PWA build brings the same app to the web.',
       },
     ],
     cover: {
       eyebrow: 'Role-aware property ops',
-      headline: 'A tenant, landlord, and admin system with payments, maintenance, and AI community guides.',
-      chips: ['Supabase RLS', 'Edge Functions', 'Gemini resources', 'PWA build'],
+      headline: 'One app for tenants, landlords and admins, with AI community guides an admin approves first.',
+      chips: ['Supabase + Edge Functions', 'Venmo deep links', 'Gemini resources', 'PWA build'],
       metrics: [
-        { label: 'Roles', value: '3 themed roles' },
-        { label: 'Payments', value: 'Venmo · ACH · Check' },
-        { label: 'Web', value: 'PWA build' },
+        { label: 'Roles', value: '3 themed apps' },
+        { label: 'Payments', value: 'Venmo link-out' },
+        { label: 'AI output', value: 'Admin-approved' },
       ],
     },
     icon: '/app-icons/rentharbor.png',
@@ -300,16 +300,16 @@ export const caseStudies: CaseStudy[] = [
     metaDescription:
       'Feng Shui is a spatial AI app with a 9-step drawing-to-3D pipeline, a 72-item furniture catalog, server-side Gemini room analysis, and animated layout optimization.',
     tags: ['Spatial AI', '3D', 'Mobile', 'Design Systems'],
-    stack: ['React Native', 'Expo SDK 54', 'Skia', 'Three.js', 'expo-gl', 'Gemini 2.0 Flash', 'Firebase Cloud Functions', 'Reanimated 4', 'Zustand + Zundo', 'simplify-js'],
+    stack: ['React Native', 'Expo SDK 54', 'Skia', 'Three.js', 'expo-gl', 'Gemini 2.0 Flash', 'Firebase Cloud Functions', 'Firestore', 'Reanimated 4', 'Zustand + Zundo', 'simplify-js'],
     outcomes: [
       'Built a 9-step pipeline from freehand Skia drawing to simplified geometry, room annotation, furnishing, and a furnished 3D preview.',
       'Created a 72-item furniture catalog across 11 categories plus a wall, floor, and ceiling annotation system for doors, windows, outlets, vents, and lighting.',
-      'Added server-side Gemini analysis (an overall score plus chi-flow, element-balance, command-position, and harmony sub-scores) with animated layout optimization that offers 2–3 scored alternatives before the user applies changes.',
+      'Added server-side Gemini analysis (an overall score plus chi-flow, element-balance, command-position, and harmony sub-scores) and a geometry solver that checks every AI-proposed rearrangement against the walls, door paths, and other furniture before offering 2–3 scored alternatives.',
     ],
     steps: [
-      'Draw the room with Skia',
-      'Render it in 3D with Three.js',
-      'Gemini scores the layout server-side',
+      'Draw the room; the app cleans up the corners',
+      'Gemini proposes a better layout',
+      'A solver rejects moves that don’t fit',
     ],
     stats: [
       { label: 'Timeline', value: '9-step guided workflow' },
@@ -326,18 +326,18 @@ export const caseStudies: CaseStudy[] = [
       {
         title: 'Approach',
         content:
-          'I designed a 9-step flow — draw, refine, transform, annotate, furnish, preview, analyze, results, and optimize — wrapped in a vintage sumi-e ink-wash design system. Skia handles the freehand drawing surface, Three.js renders the space, and a Firebase Cloud Function calls Gemini server-side (the API key never ships to the client), returning structured evaluations across bagua zones, element balance, chi flow, command position, and a harmony score with ranked recommendations.',
+          'I designed a 9-step flow — draw, refine, transform, annotate, furnish, preview, analyze, results, and optimize — wrapped in a vintage sumi-e ink-wash design system. Skia handles the freehand drawing surface, Three.js renders the space, and a Firebase Cloud Function calls Gemini server-side (the API key never ships to the client), returning structured evaluations across bagua zones, element balance, chi flow, command position, and a harmony score with ranked recommendations. Gemini’s suggested rearrangements then pass through a deterministic solver that keeps every piece inside the room, clear of door paths and of other furniture, and leaves locked pieces where they are. Rooms save to Firestore under per-user security rules, with anonymous sign-in that can be upgraded to Google or Apple and hourly per-user limits on AI calls.',
       },
       {
         title: 'Outcome',
         content:
-          'The result is a spatial AI product with real depth: users annotate walls and fixtures, place from a 72-item catalog, preview recommendations in motion, and choose between scored layout alternatives instead of guessing at a text-only suggestion — with a Room Studio beta adding inline 2D/3D editing and undo/redo.',
+          'The result is a spatial AI product with real depth: users annotate walls and fixtures, place from a 72-item catalog, preview recommendations in motion, and choose between scored layout alternatives instead of guessing at a text-only suggestion. A Room Studio editor, with 11 undoable edit commands and geometry checks that reject self-intersecting walls, is built behind a feature flag for a staged rollout.',
       },
     ],
     cover: {
       eyebrow: 'Room analysis and optimization',
       headline: 'From hand-drawn floor plan to furnished 3D model and AI layout guidance.',
-      chips: ['Skia drawing', 'Three.js scene', 'Gemini Cloud Functions', 'Sumi-e design system'],
+      chips: ['Skia drawing', 'Three.js scene', 'Gemini + geometry solver', 'Sumi-e design system'],
       metrics: [
         { label: 'Workflow', value: '9 steps' },
         { label: 'Catalog', value: '72 items' },
@@ -362,14 +362,19 @@ export const caseStudies: CaseStudy[] = [
     metaDescription:
       'The Yap App is a real-time conversation-translation app with turn-based and hands-free Live Mode translation, a camera Sign Scanner, ElevenLabs voice cloning, and 37 supported languages.',
     tags: ['Translation', 'Realtime Audio', 'Voice AI', 'Mobile'],
-    stack: ['React Native', 'Expo', 'Expo Router', 'Firebase', 'Firestore', 'Cloud Functions', 'Gemini 2.5', 'Groq (Llama 3.3 70B)', 'Deepgram Nova-3', 'ElevenLabs', 'RevenueCat'],
+    stack: ['React Native', 'Expo SDK 55', 'Expo Router', 'Firebase', 'Firestore', 'Cloud Functions', 'Gemini Live', 'Groq (Llama 3.3 70B)', 'Deepgram Nova-3', 'ElevenLabs', 'RevenueCat'],
     outcomes: [
       'Built turn-based conversation translation plus a hands-free Live Mode that streams speech-to-text, translation, and voice in real time and routes output to earbuds.',
-      'Shipped a camera Sign Scanner (vision OCR), personal voice cloning, and remote conversations you start by QR code or deep link — with a short-lived nearby broadcast for connecting in person.',
+      'Shipped a camera Sign Scanner (vision OCR), personal voice cloning with consent capture and guaranteed deletion of voice samples, and remote conversations you start by QR code or deep link — with a short-lived nearby broadcast for connecting in person.',
       'Routed every AI provider behind Firebase Cloud Functions so no model API keys ship in the app, and supported 37 languages including classical, Indigenous, and constructed tongues.',
     ],
+    steps: [
+      'Deepgram transcribes the recording',
+      'Groq translates it as it streams',
+      'ElevenLabs speaks it back',
+    ],
     stats: [
-      { label: 'Timeline', value: 'Realtime audio pipeline' },
+      { label: 'Timeline', value: 'Feb–Sep 2026 · v1.0.3' },
       { label: 'Team', value: 'Founder-led: app + Cloud Functions' },
       { label: 'Platform', value: 'iOS · Android' },
       { label: 'Impact', value: '37 languages · live + scan' },
@@ -383,12 +388,12 @@ export const caseStudies: CaseStudy[] = [
       {
         title: 'Approach',
         content:
-          "I built two translation paths: a turn-based flow powered by Gemini for transcription and translation, and a hands-free Live Mode that streams Deepgram Nova-3 speech-to-text into Groq's Llama 3.3 70B for translation and ElevenLabs for spoken output, with reconnect and backoff when a stream drops. A Gemini-vision Sign Scanner translates printed text from the camera, ElevenLabs powers optional voice cloning, and every provider call runs server-side in Firebase Cloud Functions behind short-lived minted tokens. Contacts connect by QR code or deep link, with a short-lived nearby broadcast for meeting in person.",
+          "Each recorded turn runs a streaming pipeline: Deepgram transcribes, Groq translates over a streaming connection, and ElevenLabs speaks the result as it arrives, with a Gemini path as an automatic fallback. Hands-free Live Mode runs on Gemini Live as a state machine that reconnects before the session's 15-minute cap, retries with backoff, and replays buffered audio so nothing said during a reconnect is lost. A camera Sign Scanner translates printed text, ElevenLabs powers optional voice cloning, and every provider is reached through short-lived tokens minted by Firebase Cloud Functions, so no vendor key ships in the app. Contacts connect by QR code or deep link, with a short-lived nearby broadcast for meeting in person.",
       },
       {
         title: 'Outcome',
         content:
-          'The Yap App handles real conversations: turn-by-turn on one device, hands-free Live Mode through earbuds, a camera Sign Scanner, and personal voice cloning — across 37 languages spanning everyday tongues, classical and Indigenous languages, and a few constructed ones. The Coastal Brand design system — deep teal anchored by warm earth tones — keeps the dense, real-time UI calm and legible.',
+          'The Yap App handles real conversations: turn-by-turn on one device, hands-free Live Mode through earbuds, a camera Sign Scanner, and personal voice cloning — across 37 languages spanning everyday tongues, classical and Indigenous languages, and a few constructed ones, with the app’s own interface in 15 languages, kept complete by a custom lint rule and a coverage test. The Coastal Brand design system — deep teal anchored by warm earth tones — keeps the dense, real-time UI calm and legible.',
       },
     ],
     cover: {
