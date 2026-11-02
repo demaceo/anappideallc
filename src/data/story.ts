@@ -16,7 +16,7 @@ export type StoryChapterId =
   | 'ai'
   | 'door'
 
-export type EvidenceId = 'small-teams' | 'venture' | 'approval' | 'ai-importance' | 'ai-cost'
+export type EvidenceId = 'tech-gap' | 'venture' | 'approval' | 'ai-importance' | 'ai-cost'
 
 export interface StoryChapter {
   id: StoryChapterId
@@ -47,7 +47,7 @@ export const STORY: StoryChapter[] = [
       "It's 10:40pm on a Tuesday. The shop closed hours ago, and you're on video 4 of a tutorial about DNS records. Tomorrow you open at 7:00am.",
       "That's the second job: the website, the booking system, the analytics, the AI everyone says you need. For Black and brown business owners, it usually lands with less money behind it and fewer people to call. The numbers say so.",
     ],
-    evidence: ['small-teams', 'venture'],
+    evidence: ['tech-gap', 'venture'],
     bridge: 'Why I started a studio about it',
   },
   {
@@ -154,19 +154,19 @@ const FED_SBCS_RACE_2026 =
   'https://www.fedsmallbusiness.org/-/media/project/clevelandfedtenant/fsbsite/reports/2026/2026-firms-in-focus-chartbooks/sbcs_chartbook2026_raceethnicity.pdf'
 
 export const EVIDENCE: Record<EvidenceId, Evidence> = {
-  // Backs "fewer people to call": most Black-owned firms are a handful of
-  // people, so the owner is usually the one doing the tech work. Replaced a
-  // 3%-of-employer-firms figure that measured representation, not resources.
-  // Source sentence: "About seven-in-ten Black-owned firms (71%) had between
-  // one and nine employees in 2022."
-  'small-teams': {
-    id: 'small-teams',
-    value: 71,
+  // Backs "fewer people to call": the smallest firms, where the owner tends
+  // to do the tech work themselves, are far less likely to feel ahead on it.
+  // Source: "Fourteen percent of non-employers, and 19% of businesses with
+  // 1-9 employees, reported an advantage. This was nearly double that for
+  // businesses with 50 or more employees (44%)."
+  'tech-gap': {
+    id: 'tech-gap',
+    value: 19,
     suffix: '%',
-    label: 'of Black-owned firms had between one and nine employees in 2022.',
-    source: 'Pew Research Center, from the Census Annual Business Survey',
-    url: 'https://www.pewresearch.org/short-reads/2025/02/12/a-look-at-black-owned-businesses-in-the-us/',
-    date: 'Feb 2025',
+    label: 'of businesses with 1–9 employees say they have a technology advantage over competitors, versus 44% of those with 50 or more.',
+    source: 'NFIB, Small Business and Technology 2025',
+    url: 'https://www.nfib.com/wp-content/uploads/2025/06/2025-NFIB-Technology-Survey-1.pdf',
+    date: 'Jun 2025',
   },
   venture: {
     id: 'venture',
