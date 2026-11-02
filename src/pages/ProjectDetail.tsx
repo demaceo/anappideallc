@@ -4,6 +4,8 @@ import { PROJECT_COLORS } from '../data/project-colors'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { NextStep } from '../components/NextStep/NextStep'
+import { Marquee } from '../components/Marquee/Marquee'
+import { readableOn, fillForSmallText } from '../lib/color'
 import {
   LogoStlmnt,
   LogoPinpoint,
@@ -54,8 +56,20 @@ export default function ProjectDetail() {
   // the Work index tile and this page's own hero mark. Structural chrome
   // (links, section numbers, focus rings) stays on the global monochrome +
   // acid system rather than inheriting per-project accents.
+  const sectionByTitle = (t: 'Problem' | 'Approach' | 'Outcome') =>
+    project.sections.find((x) => x.title === t)
+  const problem = sectionByTitle('Problem')
+  const approach = sectionByTitle('Approach')
+  const shipped = sectionByTitle('Outcome')
+
+  const swatch = project.theme?.accent ?? PROJECT_COLORS[project.slug] ?? color
   const themeStyle = {
-    '--project-swatch': project.theme?.accent ?? PROJECT_COLORS[project.slug],
+    '--project-swatch': swatch,
+    '--project-swatch-ink': readableOn(swatch),
+    // The cover chip carries small text, which two brand colours can't hold
+    // at 4.5:1 with either text colour; see fillForSmallText.
+    '--chip-fill': fillForSmallText(swatch).fill,
+    '--chip-fill-fg': fillForSmallText(swatch).ink,
     ...(project.theme?.gradient ? { '--project-gradient': project.theme.gradient } : {}),
   } as React.CSSProperties
 
@@ -155,31 +169,58 @@ export default function ProjectDetail() {
           ))}
         </div>
 
-        {/* Problem / Approach / Outcome sections */}
-        {project.sections.map((section) => (
-          <div key={section.title} className="project-section">
+        {/* Each part of the story gets its own shape, so the page has a
+            rhythm instead of six identical text sections: the challenge on
+            an ink band, the build as numbered steps, what shipped as a bone
+            card, outcomes on the project's own colour, the stack as a ticker. */}
+        {problem && (
+          <section className="cs-band cs-band--ink" aria-labelledby="cs-challenge">
+            <h2 id="cs-challenge" className="cs-eyebrow">The challenge</h2>
+            <p className="cs-band-lead">{problem.content}</p>
+          </section>
+        )}
+
+        {approach && (
+          <section className="project-section" aria-labelledby="cs-approach">
             <div className="section-header">
-              <span className="section-num">{section.title}</span>
-              <h2>{section.title === 'Problem' ? 'The challenge' : section.title === 'Approach' ? 'How we built it' : 'What shipped'}</h2>
+              <span className="section-num">Approach</span>
+              <h2 id="cs-approach">How I built it</h2>
               <div className="section-rule" />
             </div>
-            <p className="project-section-body">{section.content}</p>
-          </div>
-        ))}
+            {project.steps && project.steps.length > 0 && (
+              <ol className="cs-steps">
+                {project.steps.map((step, i) => (
+                  <li key={step}>
+                    <span className="cs-step-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            )}
+            <p className="project-section-body">{approach.content}</p>
+          </section>
+        )}
 
-        {/* Outcomes */}
-        <div className="project-section">
-          <div className="section-header">
-            <span className="section-num">Results</span>
-            <h2>Outcomes</h2>
-            <div className="section-rule" />
-          </div>
-          <ul className="project-outcomes">
-            {project.outcomes.map((o) => (
-              <li key={o}>{o}</li>
+        {shipped && (
+          <section className="cs-card" aria-labelledby="cs-shipped">
+            <span className="cs-eyebrow">Outcome</span>
+            <h2 id="cs-shipped">What shipped</h2>
+            <p className="project-section-body">{shipped.content}</p>
+          </section>
+        )}
+
+        <section className="cs-band cs-band--project" aria-labelledby="cs-outcomes">
+          <span className="cs-eyebrow">Results</span>
+          <h2 id="cs-outcomes">Outcomes</h2>
+          <ol className="cs-outcomes">
+            {project.outcomes.map((o, i) => (
+              <li key={o}>
+                <span className="cs-outcome-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <span>{o}</span>
+              </li>
             ))}
-          </ul>
-        </div>
+          </ol>
+        </section>
 
         {/* Under the hood — a refactored STLMNT admin visualization, on-theme */}
         {project.slug === 'stlmnt-settlement-tracker' && (
@@ -199,19 +240,16 @@ export default function ProjectDetail() {
           </div>
         )}
 
-        {/* Tech stack */}
-        <div className="project-section">
-          <div className="section-header">
-            <span className="section-num">Engineering</span>
-            <h2>Tech stack</h2>
-            <div className="section-rule" />
-          </div>
-          <div className="project-stack-grid">
-            {project.stack.map((tech) => (
-              <span key={tech} className="project-stack-pill">{tech}</span>
-            ))}
-          </div>
-        </div>
+        {/* Tech stack, as a ticker like Home's. */}
+        <section className="cs-stack" aria-labelledby="cs-stack">
+          <h2 id="cs-stack" className="sr-only">Tech stack</h2>
+          {/* The ticker is decorative (aria-hidden); this list carries the
+              same content for screen readers and crawlers. */}
+          <ul className="sr-only">
+            {project.stack.map((tech) => <li key={tech}>{tech}</li>)}
+          </ul>
+          <Marquee items={project.stack} />
+        </section>
 
         {/* Tags */}
         {project.tags.length > 0 && (

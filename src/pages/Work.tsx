@@ -3,6 +3,7 @@ import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { FooterNav } from '../components/FooterNav/FooterNav'
 import { caseStudies } from '../data/case-studies'
 import { PROJECT_COLORS } from '../data/project-colors'
+import { readableOn } from '../lib/color'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
@@ -142,46 +143,45 @@ export default function Work() {
           <div className="section-rule" />
         </div>
 
-        <div className="grid-2">
-        {orderedStudies.map((c) => {
-          const ProjectLogo = PROJECT_LOGOS[c.slug] ?? LogoPinpoint
-          return (
-            <Link
-              key={c.slug}
-              to={`/work/${c.slug}`}
-              className={`feature-item feature-item--linked${PROOF_RANK.has(c.slug) ? ' feature-item--mission' : ''}`}
-            >
-              <div
-                className={`feature-icon app-mark${c.icon ? ' app-mark--photo' : ''}`}
-                style={c.icon ? undefined : { background: PROJECT_COLORS[c.slug] }}
-              >
-                {c.icon ? (
-                  <img src={c.icon} alt="" className="app-mark-img" loading="lazy" />
-                ) : (
-                  <ProjectLogo size={22} color="white" strokeWidth={1.75} />
-                )}
-              </div>
-              <div className="feature-body">
-                <span className="feature-eyebrow">
-                  {c.client ? `Client work · ${c.client}` : STUDY_LABELS[c.slug] ?? c.category}
-                </span>
-                <h3 className="feature-title">{c.title}</h3>
-                <p>{c.summary}</p>
-                {/* Outcomes and stack live on each case study page; the tile
-                    stays a scannable summary so the grid doesn't sprawl. */}
-                <div className="stat-row">
-                  {c.stats.map((s) => (
-                    <span key={s.label} className="stat-pill">
-                      <strong>{s.label}:</strong> {s.value}
+        {/* One colour tile per project, filled with that app's own brand
+            colour so the list is as loud as Home. Only large bold type sits
+            on the colour (readableOn picks ink or bone); the summary sits on
+            a bone panel, because several brand colours fall just short of
+            4.5:1 for small text in either direction. */}
+        <ul className="work-tiles">
+          {orderedStudies.map((c) => {
+            const ProjectLogo = PROJECT_LOGOS[c.slug] ?? LogoPinpoint
+            const fill = PROJECT_COLORS[c.slug] ?? '#2980b9'
+            const ink = readableOn(fill)
+            return (
+              <li key={c.slug}>
+                <Link
+                  to={`/work/${c.slug}`}
+                  className={`work-tile${PROOF_RANK.has(c.slug) ? ' work-tile--mission' : ''}`}
+                  style={{ '--tile-fill': fill, '--tile-ink': ink } as React.CSSProperties}
+                >
+                  <span className="work-tile-head">
+                    <span className={`work-tile-mark${c.icon ? ' work-tile-mark--photo' : ''}`}>
+                      {c.icon ? (
+                        <img src={c.icon} alt="" loading="lazy" />
+                      ) : (
+                        <ProjectLogo size={22} color={ink} strokeWidth={1.75} />
+                      )}
                     </span>
-                  ))}
-                </div>
-                <span className="feature-cta">View case study</span>
-              </div>
-            </Link>
-          )
-        })}
-        </div>
+                    <span className="work-tile-eyebrow">
+                      {c.client ? `Client work · ${c.client}` : STUDY_LABELS[c.slug] ?? c.category}
+                    </span>
+                    <h3 className="work-tile-title">{c.title}</h3>
+                  </span>
+                  <span className="work-tile-body">
+                    <span className="work-tile-summary">{c.summary}</span>
+                    <span className="work-tile-cta">Case study <span aria-hidden="true">→</span></span>
+                  </span>
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
 
         <NextStep
           heading="Got something like these in mind?"
