@@ -28,7 +28,7 @@ export const META: Record<string, { title: string; description: string; path: st
   '/services': {
     title: `Services: Business Websites, AI Integration & Apps | ${SITE.name}`,
     description:
-      'Business websites, the Own It teaching package, AI integration, MVPs, UI engineering, and data visualization. Sliding-scale pricing and a free first consultation.',
+      'Business websites from $3,700, fixes to existing sites at $92/hour, the Own It teaching package, AI integration, MVPs, and data visualization. 40% sliding-scale discount and a free first consultation.',
     path: '/services',
   },
   '/process': {

@@ -5,7 +5,7 @@ import { SITE } from '../data/site'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
-import { IconZap, IconLayers, IconGlobe, IconBarChart, IconCpu, IconKey } from '../components/icons'
+import { IconZap, IconLayers, IconGlobe, IconBarChart, IconCpu, IconKey, IconLifeBuoy } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
@@ -33,6 +33,7 @@ const SERVICE_ICONS: Record<string, typeof IconZap> = {
   'ui-engineering': IconLayers,
   'business-websites': IconGlobe,
   'own-it': IconKey,
+  'site-fixes': IconLifeBuoy,
   'data-visualization': IconBarChart,
   'ai-integration': IconCpu,
 }
@@ -41,6 +42,7 @@ const SERVICE_ICON_CLASSES: Record<string, string> = {
   'ui-engineering': 'icon-blue',
   'business-websites': 'icon-teal',
   'own-it': 'icon-gold',
+  'site-fixes': 'icon-orange',
   'data-visualization': 'icon-orange',
   'ai-integration': 'icon-purple',
 }
@@ -155,6 +157,7 @@ export default function Home() {
                     </span>
                   )}
                   <h3 className="feature-title">{s.title}</h3>
+                  {s.price && <p className="feature-price">{s.price.label}</p>}
                   <p>{s.description}</p>
                 </div>
               </div>
