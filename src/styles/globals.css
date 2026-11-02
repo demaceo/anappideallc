@@ -56,9 +56,15 @@ h1, h2, h3 {
 }
 
 /* ─── Scroll-driven keyframes (Chrome 115+, Firefox 114+, Safari 18+) ─── */
+/* The whole masthead (title, subtitle, hero button, a case study's logo and
+   prev/next arrows) collapses to nothing, so the sticky header ends as just
+   the nav bar. It used to keep a one-line shrunken title, which spent a band
+   of every screen repeating what the visitor had already read. max-height
+   starts above any masthead's natural height; overflow: hidden on .masthead
+   clips the content as it closes. */
 @keyframes masthead-collapse {
-  from { padding-top: var(--masthead-pad-top); padding-bottom: var(--masthead-pad-bottom); }
-  to   { padding-top: var(--space-3);                   padding-bottom: var(--space-2);                    }
+  from { max-height: 40rem; padding-top: var(--masthead-pad-top); padding-bottom: var(--masthead-pad-bottom); border-bottom-width: var(--bw); opacity: 1; }
+  to   { max-height: 0;     padding-top: 0;                      padding-bottom: 0;                         border-bottom-width: 0;         opacity: 0; }
 }
 @keyframes overline-collapse {
   from { max-height: 3rem;  opacity: 1; margin-bottom: var(--space-5); }
@@ -66,7 +72,7 @@ h1, h2, h3 {
 }
 @keyframes h1-collapse {
   from { font-size: var(--text-fluid-7); margin-bottom: var(--space-3); }
-  to   { font-size: var(--text-fluid-2); margin-bottom: 0;    }
+  to   { font-size: var(--text-fluid-4); margin-bottom: 0;    }
 }
 @keyframes subtitle-collapse {
   from { max-height: 10rem; opacity: 1; margin-top: var(--space-3); }
@@ -76,12 +82,13 @@ h1, h2, h3 {
   from { max-height: 4rem;  opacity: 1; margin-top: var(--dateline-gap); }
   to   { max-height: 0;     opacity: 0; margin-top: 0;       }
 }
+/* With the masthead gone, the back-home button rides in the nav row. */
 @keyframes back-home-track {
-  from { top: 1.5rem;  }
-  to   { top: 0.55rem; }
+  from { top: 1.5rem; min-width: 44px; min-height: 44px; }
+  to   { top: 2px;     min-width: 34px; min-height: 34px; }
 }
 /* Slim the nav bar's vertical padding as the user scrolls so the sticky
-   header reduces toward just its title. Links stay visible (persona-tag-slim
+   header reduces to just the nav. Links stay visible (persona-tag-slim
    only trims their padding, never their content). */
 @keyframes personas-slim {
   from { padding-top: var(--space-3); padding-bottom: var(--space-4); }
@@ -96,8 +103,8 @@ h1, h2, h3 {
    overflow-x is set statically on .personas-bar so it's always scrollable —
    animating discrete properties like overflow is unreliable across browsers. */
 @keyframes personas-collapse {
-  from { padding-top: var(--space-3); padding-bottom: var(--space-4);   flex-wrap: wrap;   justify-content: center;     }
-  to   { padding-top: var(--space-2);  padding-bottom: var(--space-2); flex-wrap: nowrap; justify-content: flex-start; }
+  from { padding-top: var(--space-3); padding-bottom: var(--space-4);   flex-wrap: wrap;   justify-content: center;     padding-left: var(--space-4); }
+  to   { padding-top: var(--space-2);  padding-bottom: var(--space-2); flex-wrap: nowrap; justify-content: flex-start; padding-left: calc(var(--space-4) + 44px + var(--space-2)); }
 }
 
 /* ─── SECTION 4: Masthead / hero header ─── */

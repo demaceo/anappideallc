@@ -16,7 +16,7 @@ export type StoryChapterId =
   | 'ai'
   | 'door'
 
-export type EvidenceId = 'employers' | 'venture' | 'approval' | 'ai-importance' | 'ai-cost'
+export type EvidenceId = 'small-teams' | 'venture' | 'approval' | 'ai-importance' | 'ai-cost'
 
 export interface StoryChapter {
   id: StoryChapterId
@@ -44,10 +44,10 @@ export const STORY: StoryChapter[] = [
     title: 'The second job',
     heading: 'Nobody hands you the second job. You just end up with it.',
     body: [
-      "It's 10:40 on a Tuesday. The shop closed hours ago, and you're on video four of a tutorial about DNS records. Tomorrow you open at seven.",
+      "It's 10:40pm on a Tuesday. The shop closed hours ago, and you're on video 4 of a tutorial about DNS records. Tomorrow you open at 7:00am.",
       "That's the second job: the website, the booking system, the analytics, the AI everyone says you need. For Black and brown business owners, it usually lands with less money behind it and fewer people to call. The numbers say so.",
     ],
-    evidence: ['employers', 'venture'],
+    evidence: ['small-teams', 'venture'],
     bridge: 'Why I started a studio about it',
   },
   {
@@ -154,11 +154,16 @@ const FED_SBCS_RACE_2026 =
   'https://www.fedsmallbusiness.org/-/media/project/clevelandfedtenant/fsbsite/reports/2026/2026-firms-in-focus-chartbooks/sbcs_chartbook2026_raceethnicity.pdf'
 
 export const EVIDENCE: Record<EvidenceId, Evidence> = {
-  employers: {
-    id: 'employers',
-    value: 3,
+  // Backs "fewer people to call": most Black-owned firms are a handful of
+  // people, so the owner is usually the one doing the tech work. Replaced a
+  // 3%-of-employer-firms figure that measured representation, not resources.
+  // Source sentence: "About seven-in-ten Black-owned firms (71%) had between
+  // one and nine employees in 2022."
+  'small-teams': {
+    id: 'small-teams',
+    value: 71,
     suffix: '%',
-    label: 'of U.S. employer businesses were majority Black-owned in 2022, while about 14% of Americans are Black.',
+    label: 'of Black-owned firms had between one and nine employees in 2022.',
     source: 'Pew Research Center, from the Census Annual Business Survey',
     url: 'https://www.pewresearch.org/short-reads/2025/02/12/a-look-at-black-owned-businesses-in-the-us/',
     date: 'Feb 2025',
