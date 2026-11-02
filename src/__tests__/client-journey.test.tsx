@@ -65,12 +65,14 @@ describe('Contact is labelled and in the main nav', () => {
 })
 
 describe('Pricing note', () => {
-  it('stays hidden while no range is configured', () => {
-    // Guards against shipping an empty "$—" band. Update this test, not the
-    // component, once SITE.pricing.range is filled in.
-    expect(SITE.pricing.range).toBe('')
-    renderRoute('/services')
-    expect(document.querySelector('.verdict-box.note')).toBeNull()
+  it('shows the sliding-scale terms on Services and Contact', () => {
+    for (const path of ['/services', '/contact']) {
+      const { unmount } = renderRoute(path)
+      const note = document.querySelector('.verdict-box.note')
+      expect(note).toHaveTextContent(SITE.pricing.range)
+      expect(note).toHaveTextContent('$92/hour')
+      unmount()
+    }
   })
 })
 

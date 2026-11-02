@@ -12,6 +12,9 @@ export interface Service {
   useCases: string[]
   deliverables: string[]
   metric?: { label: string; value: string }
+  // Public starting price. Rates come from SITE.pricing; the sliding-scale
+  // discount (SITE.pricing.range) applies to fixed-price projects only.
+  price?: { label: string; note?: string }
 }
 
 export const services: Service[] = [
@@ -43,13 +46,41 @@ export const services: Service[] = [
       'Analytics dashboard configured',
     ],
     metric: { label: 'Page Load', value: '< 2s' },
+    price: { label: 'From $3,700', note: 'With the Own It teaching package: $4,400' },
+  },
+  {
+    id: 'site-fixes',
+    slug: 'site-fixes',
+    title: 'Fix & Improve Your Existing Site',
+    description:
+      "Someone else built your site, and now something's broken or customers keep getting stuck. I find the problem and fix it, or tighten up the pages that confuse people, without starting over.",
+    features: [
+      'Bug fixes on sites another developer built',
+      'Broken forms, booking, or checkout flows',
+      'Mobile layout and page-speed problems',
+      'UI and UX improvements to pages visitors get stuck on',
+      'A plain-language note on what was wrong and what changed',
+    ],
+    technologies: ['React', 'Next.js', 'TypeScript', 'HTML & CSS', 'Vercel'],
+    useCases: [
+      'A bug you noticed that needs fixing now',
+      "A site whose original developer isn't answering",
+      'Pages that look fine but lose customers',
+    ],
+    deliverables: [
+      'The fix, tested and deployed',
+      'A short write-up of the cause',
+      'Notes on anything else at risk',
+    ],
+    metric: { label: 'Rush turnaround', value: '1 business day' },
+    price: { label: '$92/hour', note: '2-hour minimum ($184). Needed within 1 business day: $138/hour.' },
   },
   {
     id: 'own-it',
     slug: 'own-it',
     title: 'Own It: Learn to Run Your Site',
     description:
-      "A separate teaching package for after the build. I teach you to manage your own website, read your analytics, check its performance, and put AI to work in your business, so you're never stuck waiting on someone else to change a price or read your traffic.",
+      "A separate teaching package for after the build. I teach you to manage your own website, read your analytics, check its performance, and put AI to work in your business, so you're never stuck waiting on someone else to change a price or read your traffic. I bring several years of experience teaching software engineering to a wide range of students, so the sessions start where you are.",
     features: [
       'Updating your own pages, photos, prices, and posts',
       'Reading your analytics: who visits, where they come from, and what they do',
@@ -71,6 +102,7 @@ export const services: Service[] = [
       'An AI playbook for your business',
     ],
     metric: { label: 'Goal', value: 'You run it' },
+    price: { label: 'From $750' },
   },
   {
     id: 'ai-integration',
@@ -101,6 +133,7 @@ export const services: Service[] = [
       'Monthly tuning, model updates, and a quarterly cost review',
     ],
     metric: { label: 'AI providers in production', value: '5+' },
+    price: { label: 'From $4,100' },
   },
   {
     id: 'mvp-development',
@@ -132,6 +165,7 @@ export const services: Service[] = [
     // Matches the Process page: Discovery 1–2 + Design 2–3 + Development 4–8
     // weeks. Launch adds another 1–2, so this is time to build, not to launch.
     metric: { label: 'Time to build', value: '7–13 weeks' },
+    price: { label: '$16,000–$36,000' },
   },
   {
     id: 'ui-engineering',
@@ -160,6 +194,7 @@ export const services: Service[] = [
       'Automated testing suite',
     ],
     metric: { label: 'Accessibility', value: 'WCAG AA' },
+    price: { label: '$92/hour' },
   },
   {
     id: 'data-visualization',
@@ -188,5 +223,6 @@ export const services: Service[] = [
       'Performance benchmarks',
     ],
     metric: { label: 'Data Points Handled', value: '10M+' },
+    price: { label: 'From $2,800' },
   },
 ]

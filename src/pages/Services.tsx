@@ -86,7 +86,10 @@ export default function Services() {
                   onClick={() => setOpenIndex(open ? null : i)}
                 >
                   <span className="svc-num">{String(i + 1).padStart(2, '0')}</span>
-                  <span className="svc-name">{s.title}</span>
+                  <span className="svc-name">
+                    {s.title}
+                    {s.price && <span className="svc-price">{s.price.label}</span>}
+                  </span>
                   <span className="svc-arrow" aria-hidden="true">+</span>
                 </button>
                 {/* `grid-template-rows: 0fr` + `overflow: hidden` collapses the
@@ -104,6 +107,12 @@ export default function Services() {
                     <div className="svc-panel-content">
                       <div>
                         <p className="svc-desc">{s.description}</p>
+                        {s.price && (
+                          <p className="svc-price-detail">
+                            <strong>{s.price.label}</strong>
+                            {s.price.note && ` · ${s.price.note}`}
+                          </p>
+                        )}
                         <span className="svc-sublabel">Features</span>
                         <ul className="svc-sublist">
                           {s.features.map((f) => (

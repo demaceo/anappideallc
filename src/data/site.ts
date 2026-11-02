@@ -57,9 +57,9 @@ export const SITE = {
   // before booking. Renders nothing while `range` is blank — fill in a real
   // range (e.g. 'MVPs typically run $X–$Y'); never ship a placeholder number.
   pricing: {
-    range: '',
+    range: 'Sliding scale: 40% off fixed-price projects for businesses in their first year or under $100k in annual revenue.',
     // Optional sentence after the range, e.g. how quotes are scoped.
-    note: '',
+    note: 'Hourly work is $92/hour and isn’t discounted.',
   },
 } as const
 

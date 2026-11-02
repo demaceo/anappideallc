@@ -3317,12 +3317,19 @@ main a:hover {
 .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
+/* A lone item in the last row stretches across it instead of sitting next to
+   empty cells (same idea as .stats-grid above), per column count. */
+.grid-3 > :last-child:nth-child(3n + 1) { grid-column: 1 / -1; }
+
 @media (max-width: 1023.98px) {
   .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-3 > :last-child:nth-child(3n + 1) { grid-column: auto; }
+  .grid-3 > :last-child:nth-child(2n + 1) { grid-column: 1 / -1; }
 }
 @media (max-width: 767.98px) {
   .grid-2,
   .grid-3 { grid-template-columns: minmax(0, 1fr); }
+  .grid-3 > :last-child:nth-child(2n + 1) { grid-column: auto; }
 }
 
 /* Feature rows become cards when they sit in a grid. */
@@ -3661,4 +3668,26 @@ main a:hover {
 
 @media (max-width: 720px) {
   .cs-steps { grid-template-columns: 1fr; }
+}
+
+/* ─── Prices on services ───
+   A block line under the service name (and under each Home card title), set
+   in the mono label voice so it reads as a fact, not a headline. */
+.svc-price,
+.feature-price {
+  display: block;
+  margin-top: var(--space-1);
+  font-family: var(--ff-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+.feature-price { margin: 0 0 var(--space-2); }
+
+.svc-price-detail {
+  margin: 0 0 var(--space-4);
+  font-family: var(--ff-mono);
+  font-size: var(--text-sm);
+  line-height: 1.5;
 }
