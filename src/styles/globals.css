@@ -13,7 +13,7 @@
 html { scroll-behavior: auto; }
 
 body {
-  background: var(--c-bg);
+  background: var(--c-page);
   color: var(--c-fg);
   font-family: var(--ff-body);
   font-size: var(--text-lg);
@@ -102,7 +102,7 @@ h1, h2, h3 {
 
 /* ─── SECTION 4: Masthead / hero header ─── */
 .masthead {
-  background: var(--c-bg);
+  background: var(--c-page);
   color: var(--c-fg);
   padding: var(--masthead-pad-top) clamp(1rem, 4vw, 2rem) var(--masthead-pad-bottom);
   text-align: center;
@@ -174,8 +174,11 @@ h1, h2, h3 {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--c-bg);
-  background: var(--c-fg);
+  /* Chartreuse at rest: across the site, chartreuse means "book a call"
+     (this, .consult-cta-btn and the floating .booking-fab). Every other
+     button stays ink and only turns chartreuse on hover. */
+  color: var(--c-fg);
+  background: var(--c-accent);
   border: var(--bw-thick) solid var(--c-fg);
   overflow: hidden;
   transition: background 150ms, color 150ms;
@@ -187,8 +190,8 @@ h1, h2, h3 {
 }
 
 .hero-cta:hover {
-  background: var(--c-accent);
-  color: var(--c-fg);
+  background: var(--c-fg);
+  color: var(--c-accent);
   border-color: var(--c-fg);
 }
 
@@ -212,7 +215,7 @@ h1, h2, h3 {
 
 /* ─── SECTION 5: Navigation / legend bar ─── */
 .personas-bar {
-  background: var(--c-bg);
+  background: var(--c-page);
   padding: var(--space-3) var(--space-8) var(--space-4);
   display: flex;
   flex-wrap: wrap;
@@ -2159,86 +2162,79 @@ main[data-project-theme] .project-cover-block::before {
 .form-status.error { color: var(--c-accent-2); }
 .form-status.error a { color: var(--c-accent-2); text-decoration: underline; }
 
-/* ─── Booking CTA ─── */
+/* ─── Call-to-action tiers ───
+   Three shapes, one per job, so a visitor can tell them apart before reading:
+     Tier 1  .consult-cta   book a call    full-width chartreuse band, loudest
+     Tier 2  .message-cta   write to me    lavender strip, quieter
+     Tier 3  .story-next    keep reading   a page turn: rules, no box
+   Chartreuse means "book a call" site-wide, so only Tier 1 and the booking
+   buttons (.hero-cta, .booking-fab) carry it. */
+
+/* Tier 1 — book a call. */
 .consult-cta {
-  display: flex;
-  align-items: center;
-  gap: var(--space-5);
-  margin: var(--space-7) 0 var(--space-2);
-  padding: var(--space-5) var(--space-6);
-  background: var(--c-bg);
-  border: var(--bw-thick) solid var(--c-line);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+  margin: var(--space-7) 0 var(--space-4);
+  padding: clamp(1.5rem, 4vw, 2.75rem) clamp(1.25rem, 4vw, 2.75rem);
+  background: var(--c-accent);
+  color: var(--c-ink);
+  border: var(--bw-brutal) solid var(--c-ink);
 }
 
-.consult-cta-icon {
-  width: 46px;
-  height: 46px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--c-fg);
-  border: var(--bw) solid var(--c-line);
-  background: var(--c-bg);
+/* Oversized "FREE" stamp behind the copy. Decorative, never read. */
+.consult-cta-stamp {
+  position: absolute;
+  right: -0.04em;
+  bottom: -0.2em;
+  z-index: -1;
+  font-family: var(--ff-stamp);
+  /* A multiple of the largest scale step rather than a bespoke clamp(). */
+  font-size: calc(var(--text-fluid-7) * 2.6);
+  line-height: 1;
+  text-transform: uppercase;
+  color: oklch(15% 0 0 / 0.09);
+  pointer-events: none;
+  user-select: none;
 }
-
-.consult-cta-body { flex: 1; min-width: 0; }
 
 .consult-cta-eyebrow {
   font-family: var(--ff-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.5;
-  display: block;
-  margin-bottom: var(--space-1);
+  font-weight: 700;
 }
 
 .consult-cta-title {
   font-family: var(--ff-display);
-  font-size: var(--text-fluid-2);
+  font-size: var(--text-fluid-5);
   text-transform: uppercase;
   letter-spacing: -0.02em;
-  color: var(--c-fg);
-  line-height: 1.1;
-  margin: 0 0 var(--space-1);
+  line-height: 1;
+  max-width: 16ch;
+  text-wrap: balance;
+  margin: 0;
 }
 
 .consult-cta-blurb {
   font-family: var(--ff-body);
   font-size: var(--text-base);
   line-height: 1.5;
-  color: var(--c-fg-soft);
+  max-width: 52ch;
   margin: 0;
 }
 
-/* The written alternative to booking. Secondary by size and placement, but a
-   real underlined link so it reads as an action rather than a caption. */
-.consult-cta-alt {
-  font-family: var(--ff-mono);
-  font-size: var(--text-sm);
-  color: var(--c-fg-soft);
-  margin: var(--space-3) 0 0;
-}
-
-.consult-cta-alt a {
-  color: var(--c-fg);
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-  /* WCAG 2.5.8: a standalone link needs a 24px target. */
-  display: inline-block;
-  min-height: 24px;
-}
-
-/* v1 Neon Pulse — the single primary conversion CTA. */
+/* Ink on the chartreuse band. The band itself is the chartreuse signal, so
+   the button inverts the usual booking-button colours to stay visible. */
 .consult-cta-btn {
-  flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+  margin-top: var(--space-2);
   font-family: var(--ff-mono);
   font-size: var(--text-sm);
   letter-spacing: 0.08em;
@@ -2247,26 +2243,64 @@ main[data-project-theme] .project-cover-block::before {
   padding: var(--space-3) var(--space-5);
   min-height: 44px;
   font-weight: 700;
-  /* Sits on the bone card of .consult-cta, so it takes the same shape as
-     .hero-cta: ink slab, inversion to the one accent on hover. */
-  border: var(--bw-thick) solid var(--c-fg);
-  color: var(--c-bg);
-  background: var(--c-fg);
+  border: var(--bw-thick) solid var(--c-ink);
+  color: var(--c-accent);
+  background: var(--c-ink);
   transition: background 150ms, color 150ms;
 }
 
 .consult-cta-btn:hover {
-  background: var(--c-accent);
-  color: var(--c-fg);
+  background: var(--c-bg);
+  color: var(--c-ink);
 }
 
+/* Tier 2 — write to me. */
+.message-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-6);
+  margin: 0 0 var(--space-4);
+  padding: var(--space-5) clamp(1.25rem, 4vw, 2rem);
+  background: var(--c-lavender);
+  color: var(--c-ink);
+  border: var(--bw-thick) solid var(--c-ink);
+}
+
+.message-cta-text { flex: 1 1 26rem; min-width: 0; }
+.message-cta-text p {
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: var(--text-base);
+  line-height: 1.55;
+}
+.message-cta-text a { color: var(--c-ink); text-decoration: underline; text-underline-offset: 0.2em; }
+
+.message-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-2) var(--space-5);
+  font-family: var(--ff-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--c-ink);
+  background: transparent;
+  border: var(--bw-thick) solid var(--c-ink);
+  transition: background 150ms, color 150ms;
+}
+
+.message-cta-btn::after { content: '→'; }
+.message-cta-btn:hover { background: var(--c-ink); color: var(--c-lavender); }
+
 @media (max-width: 600px) {
-  .consult-cta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-4);
-  }
-  .consult-cta-btn { align-self: stretch; justify-content: center; }
+  .consult-cta-btn,
+  .message-cta-btn { align-self: stretch; justify-content: center; width: 100%; }
 }
 
 /* ─── Contact wizard ─── */
@@ -2854,7 +2888,7 @@ main a:hover {
 .section--orange   { background: var(--c-orange);   color: var(--c-ink); }
 .section--pink     { background: var(--c-pink);     color: var(--c-ink); }
 .section--ink      { background: var(--c-ink);      color: var(--c-bg);  }
-.section--bone     { background: var(--c-bg);       color: var(--c-fg);  }
+.section--bone     { background: var(--c-page);     color: var(--c-fg);  }
 
 /* Per-section film grain — a low-z layer BENEATH the content (z:1 < container
    z:2), never a global top-most color-dodge overlay (which would wash the
@@ -3197,20 +3231,32 @@ main a:hover {
   text-transform: uppercase;
 }
 
+/* Tier 3 — keep reading. A page turn, not a button: big display type between
+   the two rules above, no fill, so it never competes with the booking band. */
 .story-next-link {
   display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
   min-height: 44px;
-  padding: var(--space-2) var(--space-5);
-  background: var(--c-ink);
-  color: var(--c-bg);
+  padding: var(--space-1) 0;
+  background: transparent;
+  color: inherit;
   font-family: var(--ff-display);
-  font-size: var(--text-fluid-1);
+  font-size: var(--text-fluid-4);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
   text-decoration: none;
 }
 
-.story-next-link:hover { background: var(--c-accent); color: var(--c-ink); }
+.story-next-link:hover .story-next-title,
+.story-next-link:focus-visible .story-next-title {
+  text-decoration: underline;
+  text-decoration-thickness: 4px;
+  text-underline-offset: 6px;
+}
+.story-next-arrow { transition: transform 200ms var(--ease); }
+.story-next-link:hover .story-next-arrow { transform: translateX(6px); }
 
 /* Scene-setting first line of each chapter reads a size up. */
 .story-chapter-opening {
@@ -3281,7 +3327,9 @@ main a:hover {
 .story-next-bridge {
   font-family: var(--ff-body);
   font-size: var(--text-sm);
-  opacity: 0.85;
+  text-transform: none;
+  letter-spacing: normal;
+  flex-basis: 100%;
 }
 .story-next-bridge::before { content: '· ' / ''; }
 
@@ -3297,7 +3345,7 @@ main a:hover {
     padding: var(--space-6) var(--space-5) var(--space-5);
     box-shadow: 5px 5px 0 var(--c-ink);
   }
-  .story-next-link { align-self: stretch; justify-content: center; flex: 1 1 100%; }
+  .story-next-link { flex: 1 1 100%; }
 }
 
 /* ─── Layout v2: shell grids ───

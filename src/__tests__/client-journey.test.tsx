@@ -31,6 +31,10 @@ describe('Every decision page closes with a next step', () => {
         'href',
         '/contact',
       )
+      // Two tiers by job: the chartreuse booking band, then the lavender
+      // "write to me" strip — never the same box.
+      expect(within(section).getByRole('link', { name: /book a free call/i }).closest('.consult-cta')).not.toBeNull()
+      expect(within(section).getByRole('link', { name: /send me a message/i }).closest('.message-cta')).not.toBeNull()
       unmount()
     },
   )

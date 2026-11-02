@@ -36,7 +36,7 @@ export function RouteError() {
             Reload the page
           </button>
         )}
-        <a className="story-next-link" href="/">Back to home</a>
+        <a className="story-next-link" href="/"><span className="story-next-title">Back to home</span></a>
       </p>
       <p className="route-error-body">
         Still stuck? Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.

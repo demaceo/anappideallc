@@ -9,6 +9,7 @@ import { IconZap, IconLayers, IconGlobe, IconBarChart, IconCpu, IconKey } from '
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
+import { MessageCTA } from '../components/MessageCTA/MessageCTA'
 import { Marquee } from '../components/Marquee/Marquee'
 import { Section } from '../components/Section/Section'
 import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
@@ -186,25 +187,23 @@ export default function Home() {
           </VerdictBox>
         </Section>
 
-        <Section color="lavender" num="04" ghost="TALK">
+        <Section color="bone" num="04" ghost="TALK">
           <div className="section-header">
             <span className="section-num">Contact</span>
             <h2>Start a <span className="outline-word">conversation</span></h2>
             <div className="section-rule" />
           </div>
 
-          <ConsultCTA showFormLink={false} />
+          <ConsultCTA />
 
-          <VerdictBox variant="contact">
+          <MessageCTA>
             <p>
-              Prefer to write? Got an app or website idea, or a project that needs
-              a co-builder? Send a few sentences to{' '}
-              <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or{' '}
-              <Link to="/contact">send me a message here</Link>.
-              I read everything and respond within 1–2 business days. Pricing
+              Prefer to write? Send a few sentences to{' '}
+              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>, or use the form.
+              I read everything and reply within 1–2 business days. Pricing
               works on a sliding scale based on your business's size and stage.
             </p>
-          </VerdictBox>
+          </MessageCTA>
 
           <StoryNext id="belief" />
         </Section>
