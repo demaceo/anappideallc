@@ -49,7 +49,7 @@ export const SITE = {
   booking: {
     // Also hard-coded as BOOKING_URL in api/contact.ts (the confirmation
     // email) — change both together.
-    consultationUrl: 'https://calendly.com/demaceo-milehighinterface/30min',
+    consultationUrl: 'https://calendly.com/anappidea/30min',
     label: 'A free 30-minute call',
     blurb: 'A free 30-minute call to talk through your idea. No pressure, no spec required.',
   },

@@ -46,7 +46,7 @@ describe('Home — brutalist redesign', () => {
     const book = screen
       .getAllByRole('link', { name: /book a free call/i })
       .find((a) => a.getAttribute('data-analytics') === 'book-consultation')
-    expect(book).toHaveAttribute('href', 'https://calendly.com/demaceo-milehighinterface/30min')
+    expect(book).toHaveAttribute('href', 'https://calendly.com/anappidea/30min')
     expect(book).toHaveAttribute('data-analytics', 'book-consultation')
     expect(book).toHaveAttribute('target', '_blank')
     expect(book).toHaveAttribute('rel', 'noopener noreferrer')
