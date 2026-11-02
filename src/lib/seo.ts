@@ -112,19 +112,19 @@ export const META: Record<string, { title: string; description: string; path: st
   '/work/pinpoint-civic-engagement': {
     title: `The Pinpoint App — Civic Engagement Platform | ${SITE.name}`,
     description:
-      'How Demaceo Vincent built The Pinpoint App: a civic engagement app across iOS, Android, and web — find your representatives, send guided outreach emails through a Postmark relay, and organize neighbors on a Firestore-backed Pinboard and group chats.',
+      'How Demaceo Vincent built The Pinpoint App: a civic engagement app that finds your representatives from your location, shows how they and bills voted, and matches your votes against theirs, on an Express, Prisma and PostgreSQL backend.',
     path: '/work/pinpoint-civic-engagement',
   },
   '/work/payback-consumer-intelligence': {
     title: `Payback — Privacy-First Consumer Intelligence | ${SITE.name}`,
     description:
-      'Case study: Payback, a privacy-first consumer intelligence app with on-device AES-256 encrypted SQLite, 135 behavioral categories, and a hardened Gemini AI proxy.',
+      'Case study: Payback, a privacy-first app live on the App Store, with on-device parsing, an AES-256 SQLCipher vault, and a guarded Gemini AI proxy that never stores your exports on a server.',
     path: '/work/payback-consumer-intelligence',
   },
   '/work/rentharbor-property-management': {
     title: `RentHarbor — Property Management Platform | ${SITE.name}`,
     description:
-      'Case study: RentHarbor, a multi-role property management SaaS for landlords, tenants, and admins with Supabase RLS, realtime subscriptions, 3D previews, and a PWA build.',
+      'Case study: RentHarbor, a property management prototype for tenants, landlords, and admins with maintenance, messaging, Venmo payments, and admin-approved AI community resources on Expo and Supabase.',
     path: '/work/rentharbor-property-management',
   },
   '/work/feng-shui-room-analysis': {

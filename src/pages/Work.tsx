@@ -127,8 +127,8 @@ export default function Work() {
           </div>
           <div className="stat-box positive">
             <span className="stat-label-top">Longest solo build</span>
-            <span className="stat-num medium">12 months</span>
-            <span className="stat-desc">The Pinpoint App: civic platform</span>
+            <span className="stat-num medium">11 months</span>
+            <span className="stat-desc">Payback: live on the App Store</span>
           </div>
           <div className="stat-box neutral">
             <span className="stat-label-top">Languages supported</span>

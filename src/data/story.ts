@@ -130,7 +130,7 @@ export const STORY_CLOSING = 'If not me, then who?'
 // them. Work.tsx also lists these case studies first.
 export const STORY_PROOF: { slug: string; line: string }[] = [
   { slug: 'stlmnt-settlement-tracker', line: 'Settlement money people are owed, claimed without handing over their data.' },
-  { slug: 'pinpoint-civic-engagement', line: 'A direct line to your representatives, and neighbors to organize with.' },
+  { slug: 'pinpoint-civic-engagement', line: 'Who represents you, how they voted, and how often they voted your way.' },
   { slug: 'payback-consumer-intelligence', line: 'Your personal data stays on your phone, and the insights stay yours.' },
   { slug: 'rentharbor-property-management', line: 'A fair, clear system for tenants and landlords, with community resources built in.' },
   { slug: 'unmasked-coaching', line: 'A small business site for a coaching practice centered on belonging: live booking, real SEO, and analytics from day one.' },
