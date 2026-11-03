@@ -14,9 +14,9 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/',
   },
   '/about': {
-    title: `About: Demaceo Vincent, App Developer | ${SITE.name}`,
+    title: `About: Demaceo Vincent Howard, App Developer | ${SITE.name}`,
     description:
-      'Why An App Idea exists: Demaceo Vincent builds websites, apps, and AI for small businesses, with Black and brown owners in mind, and teaches them to run it. Denver.',
+      'Why An App Idea exists: Demaceo Vincent Howard builds websites, apps, and AI for small businesses, with Black and brown owners in mind, and teaches them to run it. Denver.',
     path: '/about',
   },
   '/work': {
@@ -32,9 +32,9 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/services',
   },
   '/process': {
-    title: `Development Process: Discovery to Launch | ${SITE.name}`,
+    title: `How It Works: From First Call to Launch | ${SITE.name}`,
     description:
-      '5-phase process: Discovery, Design, Development, Launch, then Handoff & Teaching so you can update your site, read your analytics, and run it yourself.',
+      'Five plain steps from first call to launch. A website takes 3–5 weeks, an app 7–13. You see everything, own everything, and learn to run it yourself.',
     path: '/process',
   },
   '/contact': {
@@ -112,7 +112,7 @@ export const META: Record<string, { title: string; description: string; path: st
   '/work/pinpoint-civic-engagement': {
     title: `The Pinpoint App — Civic Engagement Platform | ${SITE.name}`,
     description:
-      'How Demaceo Vincent built The Pinpoint App: a civic engagement app that finds your representatives from your location, shows how they and bills voted, and matches your votes against theirs, on an Express, Prisma and PostgreSQL backend.',
+      'How Demaceo Vincent Howard built The Pinpoint App: a civic engagement app that finds your representatives from your location, shows how they and bills voted, and matches your votes against theirs, on an Express, Prisma and PostgreSQL backend.',
     path: '/work/pinpoint-civic-engagement',
   },
   '/work/payback-consumer-intelligence': {
@@ -172,7 +172,7 @@ export const META: Record<string, { title: string; description: string; path: st
   '/work/portfolio': {
     title: `Portfolio — demaceo.com | ${SITE.name}`,
     description:
-      "Case study: Demaceo Vincent's personal portfolio with a Macintosh System 7-inspired UI, draggable windows, animated project gallery, and PDF resume export — built with Next.js 15.",
+      "Case study: Demaceo Vincent Howard's personal portfolio with a Macintosh System 7-inspired UI, draggable windows, animated project gallery, and PDF resume export — built with Next.js 15.",
     path: '/work/portfolio',
   },
   '/legal/yap/privacy': {
@@ -405,7 +405,7 @@ function buildPageGraph(route: string): object[] {
               name: 'What does An App Idea LLC build?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'An App Idea LLC builds AI-native mobile apps (iOS and Android via React Native) with privacy-first architecture, plus web applications and MVPs. The studio leans toward products that empower people and build community, and is founder-led by Demaceo Vincent, based in Denver, CO.',
+                text: 'An App Idea LLC builds AI-native mobile apps (iOS and Android via React Native) with privacy-first architecture, plus web applications and MVPs. The studio leans toward products that empower people and build community, and is founder-led by Demaceo Vincent Howard, based in Denver, CO.',
               },
             },
             {
@@ -453,7 +453,7 @@ function buildPageGraph(route: string): object[] {
           name: SITE.founder.name,
           jobTitle: 'Founder & Software Developer',
           description:
-            'Demaceo Vincent is a solo software developer and founder of An App Idea LLC, a dev studio in Denver, Colorado. He builds mobile apps and web products end-to-end: interface, backend, auth, and deployment.',
+            'Demaceo Vincent Howard is a solo software developer and founder of An App Idea LLC, a dev studio in Denver, Colorado. He builds mobile apps and web products end-to-end: interface, backend, auth, and deployment.',
           worksFor: { '@id': `${SITE.url}/#organization` },
           address: {
             '@type': 'PostalAddress',
@@ -519,7 +519,7 @@ function buildPageGraph(route: string): object[] {
           '@id': `${url}/#portfolio`,
           name: 'Portfolio · Shipped Applications',
           description:
-            'Twelve products shipped end-to-end by An App Idea LLC founder Demaceo Vincent.',
+            'Twelve products shipped end-to-end by An App Idea LLC founder Demaceo Vincent Howard.',
           numberOfItems: caseStudies.length,
           itemListElement: caseStudies.map((c, i) => ({
             '@type': 'ListItem',
@@ -551,7 +551,7 @@ function buildPageGraph(route: string): object[] {
           '@type': 'HowTo',
           name: 'App & Web Development Process · An App Idea LLC',
           description:
-            'A 4-phase development process from Discovery to Launch. Each phase ends with a tangible deliverable.',
+            'A 5-step process from the first call to launch and handover. Each step ends with something you can see.',
           totalTime: 'P8W',
           step: processSteps.map((p, i) => ({
             '@type': 'HowToStep',

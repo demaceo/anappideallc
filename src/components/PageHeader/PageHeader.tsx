@@ -18,9 +18,11 @@ export function PageHeader({ children }: PageHeaderProps) {
         Skip to main content
       </a>
       {pathname !== '/' && (
-        <Link to="/" className="back-home" aria-label="Back to home">
-          ←
-        </Link>
+        <nav aria-label="Back to home">
+          <Link to="/" className="back-home" aria-label="Back to home">
+            ←
+          </Link>
+        </nav>
       )}
       {children}
       <SiteNav />

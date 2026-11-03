@@ -32,16 +32,16 @@ export default function Process() {
         <header className="masthead">
           <p className="overline">An App Idea LLC · How we work</p>
           <h1>Process</h1>
-          <p className="date-line">Discovery → Design → Dev → Launch → Handoff</p>
+          <p className="date-line">Talk it through → See it → Build it → Go live → Hand it over</p>
         </header>
       </PageHeader>
 
       <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
-            Five phases, one builder. Every phase ends with something tangible
-            you can hold up and react to, so you're never guessing where your
-            project stands. The last one makes sure you can run it yourself.
+            Five steps, one builder. Every step ends with something you can see
+            and react to, so you're never guessing where your project stands.
+            The last one makes sure you can run it yourself.
           </p>
         </div>
 
@@ -52,31 +52,31 @@ export default function Process() {
 
         <div className="section-header">
           <span className="section-num">Timeline</span>
-          <h2>Typical engagement</h2>
+          <h2>How long it takes</h2>
           <div className="section-rule" />
         </div>
 
         <div className="stats-grid">
-          <div className="stat-box neutral">
-            <span className="stat-label-top">Phase 1: Discovery</span>
-            <span className="stat-num medium">1–2 weeks</span>
-            <span className="stat-desc">Strategy · architecture · scope</span>
-          </div>
-          <div className="stat-box neutral">
-            <span className="stat-label-top">Phase 2: Design</span>
-            <span className="stat-num medium">2–3 weeks</span>
-            <span className="stat-desc">Prototypes · design system</span>
-          </div>
           <div className="stat-box positive">
-            <span className="stat-label-top">Phase 3: Development</span>
-            <span className="stat-num medium">4–8 weeks</span>
-            <span className="stat-desc">Sprint builds · testing</span>
+            <span className="stat-label-top">A business website</span>
+            <span className="stat-num medium">3–5 weeks</span>
+            <span className="stat-desc">From the first call to launch</span>
+          </div>
+          <div className="stat-box neutral">
+            <span className="stat-label-top">An app or custom build</span>
+            <span className="stat-num medium">7–13 weeks</span>
+            <span className="stat-desc">To build, plus 1–2 weeks to launch</span>
+          </div>
+          <div className="stat-box neutral">
+            <span className="stat-label-top">Fixing an existing site</span>
+            <span className="stat-num medium">1 business day</span>
+            <span className="stat-desc">Rush turnaround · $138/hour</span>
           </div>
         </div>
 
         <div className="section-header">
-          <span className="section-num">Phases</span>
-          <h2>How each phase works</h2>
+          <span className="section-num">Steps</span>
+          <h2>How each step works</h2>
           <div className="section-rule" />
         </div>
 
@@ -89,8 +89,12 @@ export default function Process() {
                 <ProcessIcon size={20} />
               </div>
               <div className="feature-body">
-                <span className="feature-eyebrow">Phase {p.step} · {p.timeline}</span>
+                <span className="feature-eyebrow">Step {p.step}</span>
                 <h3 className="feature-title">{p.title}</h3>
+                <p className="phase-times">
+                  <span>Website: {p.siteTimeline}</span>
+                  <span>App or custom build: {p.timeline}</span>
+                </p>
                 <p>{p.description}</p>
                 <span className="bubble-subtitle">Steps</span>
                 <ul>
@@ -112,15 +116,15 @@ export default function Process() {
 
         <VerdictBox variant="assessment">
           <p>
-            Every phase ends with something concrete, so you're never left
-            wondering what got done or what comes next. You get full visibility
-            into the build, without having to micromanage to get it.
+            Every step ends with something you can see, so you're never left
+            wondering what got done or what comes next. You see all of it,
+            without having to check in on me to find out.
           </p>
         </VerdictBox>
 
         <NextStep
-          heading="Phase zero is a free call"
-          blurb="Before Discovery starts, we talk it through: what you're building, who it's for, and whether we're a fit."
+          heading="Step zero is a free call"
+          blurb="Before Step 1 starts, we talk it through: what you need, who it's for, and whether we're a fit."
         />
 
         <StoryNext id="handoff" />
@@ -129,14 +133,14 @@ export default function Process() {
       <footer className="sources-section">
         <div className="container">
           <div className="sources-header">
-            <h3>Process phases</h3>
+            <h3>Process steps</h3>
             <div className="sources-header-rule" />
           </div>
           <ul className="source-list">
             {processSteps.map((p) => (
               <li key={p.step}>
-                <strong>Phase {p.step}: {p.title}</strong>
-                {p.timeline} · {p.deliverables.length} deliverables
+                <strong>Step {p.step}: {p.title}</strong>
+                Website: {p.siteTimeline} · App: {p.timeline}
               </li>
             ))}
           </ul>

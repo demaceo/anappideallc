@@ -20,6 +20,7 @@ export function BookingFAB() {
 
   const url = SITE.booking.consultationUrl
   return (
+    <aside aria-label="Book a free call">
     <a
       href={url}
       target="_blank"
@@ -35,5 +36,6 @@ export function BookingFAB() {
     >
       <span className="booking-fab-label">Book a free call</span>
     </a>
+    </aside>
   )
 }

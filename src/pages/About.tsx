@@ -12,16 +12,17 @@ import { AccumulationScene } from '../components/scenes/AccumulationScene'
 import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 import { STORY_CLOSING } from '../data/story'
 import { NextStep } from '../components/NextStep/NextStep'
+import { FounderPortrait } from '../components/FounderPortrait/FounderPortrait'
 
 // Keyed by differentiator title rather than array position: index-aligned
 // lookups silently mispair every later entry when the source array is
 // reordered, and render `undefined` as a component when it grows. Same reason
 // Home.tsx keys SERVICE_ICONS by id.
 const DIFF_META: Record<string, { Icon: typeof IconCpu; iconClass: string; eyebrow: string }> = {
-  'ai-native':     { Icon: IconCpu,         iconClass: 'icon-blue',  eyebrow: 'AI-Native'     },
-  'privacy-first': { Icon: IconLock,        iconClass: 'icon-navy',  eyebrow: 'Privacy-First' },
-  'ownership':     { Icon: IconKey,         iconClass: 'icon-gold',  eyebrow: 'Ownership'     },
-  'discipline':    { Icon: IconShieldCheck, iconClass: 'icon-green', eyebrow: 'Discipline'    },
+  'ownership':     { Icon: IconKey,         iconClass: 'icon-gold',  eyebrow: 'Just me'        },
+  'discipline':    { Icon: IconShieldCheck, iconClass: 'icon-green', eyebrow: 'Built to last'  },
+  'privacy-first': { Icon: IconLock,        iconClass: 'icon-navy',  eyebrow: 'Private'        },
+  'ai-native':     { Icon: IconCpu,         iconClass: 'icon-blue',  eyebrow: 'AI that works'  },
 }
 const DIFF_FALLBACK = { Icon: IconCpu, iconClass: 'icon-blue', eyebrow: 'Approach' }
 
@@ -44,13 +45,14 @@ export default function About() {
       </PageHeader>
 
       <main className="container" id="main-content" tabIndex={-1}>
-        <div className="intro-block">
+        <div className="intro-block intro-block--portrait">
           <p>
             {SITE.name} is a {SITE.founder.location} studio run by{' '}
             {SITE.founder.name}. I build websites, mobile apps, and AI tools for
             small businesses, and I teach owners to run them. Most of the people
             I build for are Black and brown business owners. That's on purpose.
           </p>
+          <FounderPortrait eager />
         </div>
 
         <div className="split">
@@ -94,17 +96,17 @@ export default function About() {
 
         <div className="pullquote">
           <p>
-            "Every build carries CI, secret scanning, monitoring, and a real
-            release process. It ships for real users, not a demo audience."
+            "Everything I build is tested, watched, and checked for security
+            before it goes live. It's made for real customers, not for a demo."
           </p>
-          <span className="attrib">{SITE.founder.name}, on shipping discipline</span>
+          <span className="attrib">{SITE.founder.name}, on how the work gets done</span>
         </div>
 
         <VerdictBox variant="assessment">
           <p>
-            You work directly with the person building your product. Interface
-            design, database architecture, auth, API security, and deployment
-            pipelines. All from the same builder. Nothing gets outsourced or
+            You work directly with the person building your product. The
+            design, the behind-the-scenes setup, the security, and getting it
+            online all come from the same builder. Nothing gets outsourced or
             glossed over, and the person who writes your code is the same one
             who answers your emails.{' '}
             <Link to="/why-not-ai">Why a human over AI? →</Link>
