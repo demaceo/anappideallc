@@ -148,6 +148,12 @@ export default function Contact() {
   // view only promises one when it actually went out.
   const [confirmationSent, setConfirmationSent] = useState(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  // The id of the field a validation message belongs to. A message with a field
+  // shows beside that field and moves focus there; without one (a failed send)
+  // it shows by the buttons. On a phone the old single message sat below the
+  // Send button, off-screen, so tapping Send with a missing name appeared to do
+  // nothing at all.
+  const [errorField, setErrorField] = useState<string | null>(null)
 
   // The platforms step only applies when there's an app in the mix, and the
   // search-visibility step only when there's a website in it (or the visitor
@@ -189,7 +195,22 @@ export default function Contact() {
     prevStep.current = stepIdx
   }, [stepIdx])
 
+  // Take the visitor to the field that needs attention. Declared after the
+  // step-change effect above so, when a missing answer also changes the step,
+  // this focus wins.
+  useEffect(() => {
+    if (errorField) document.getElementById(errorField)?.focus()
+  }, [errorField, stepIdx])
+
+  function fail(message: string, field: string) {
+    setErrorMsg(message)
+    setErrorField(field)
+  }
+
   function set<K extends keyof FormData>(key: K, value: FormData[K]) {
+    // Typing is the visitor fixing the problem, so the message can go.
+    setErrorMsg(null)
+    setErrorField(null)
     setData((prev) => ({ ...prev, [key]: value }))
   }
 
@@ -213,10 +234,12 @@ export default function Contact() {
 
   function next() {
     setErrorMsg(null)
+    setErrorField(null)
     if (!isLast) setStepIdx((i) => i + 1)
   }
   function back() {
     setErrorMsg(null)
+    setErrorField(null)
     if (stepIdx > 0) setStepIdx((i) => i - 1)
   }
 
@@ -236,24 +259,25 @@ export default function Contact() {
     // with a specific reason — never a silent disabled button or a generic error.
     // Email or phone is enough — whichever the visitor prefers.
     if (!data.name.trim()) {
-      setErrorMsg('Please add your name so I know who I’m talking to.')
+      fail('Please add your name so I know who I’m talking to.', 'cf-name')
       return
     }
     if (emailEntered && !emailValid) {
-      setErrorMsg('That email looks off. Mind checking it?')
+      fail('That email looks off. Mind checking it?', 'cf-email')
       return
     }
     if (!emailEntered && !phoneEntered) {
-      setErrorMsg('Leave an email or a phone number so I have a way to reach you.')
+      fail('Leave an email or a phone number so I have a way to reach you.', 'cf-email')
       return
     }
     if (!hasIdea) {
-      setErrorMsg('Add a sentence about what you need, or a quick voice note, so I know where to start.')
+      fail('Add a sentence about what you need, or a quick voice note, so I know where to start.', 'cf-description')
       setStepIdx(steps.indexOf('description'))
       return
     }
 
     setErrorMsg(null)
+    setErrorField(null)
     setStatus('sending')
     try {
       const audio = voice
@@ -309,6 +333,21 @@ export default function Contact() {
       setStatus('error')
     }
   }
+
+  // Ties an input to its message for assistive tech, only while it has one.
+  const fieldA11y = (id: string) =>
+    errorField === id
+      ? { 'aria-invalid': true as const, 'aria-describedby': `${id}-error` }
+      : {}
+  // The message itself, right under the field it is about (so it is on screen
+  // when focus lands there). A render function rather than a nested component,
+  // so the alert is not remounted, and re-announced, on every render.
+  const fieldError = (id: string) =>
+    errorField === id && errorMsg ? (
+      <p id={`${id}-error`} className="form-field-error" role="alert">
+        {errorMsg}
+      </p>
+    ) : null
 
   return (
     <>
@@ -595,7 +634,9 @@ export default function Contact() {
                     placeholder="e.g. “I want clients to book online instead of texting me.”"
                     value={data.description}
                     onChange={(e) => set('description', e.target.value)}
+                    {...fieldA11y('cf-description')}
                   />
+                  {fieldError('cf-description')}
                 </div>
                 <div className="form-group">
                   <span className="form-label">Or talk it through (optional)</span>
@@ -637,7 +678,9 @@ export default function Contact() {
                       required
                       value={data.name}
                       onChange={(e) => set('name', e.target.value)}
+                      {...fieldA11y('cf-name')}
                     />
+                    {fieldError('cf-name')}
                   </div>
                   <div className="form-group">
                     <label className="form-label" htmlFor="cf-email">Email</label>
@@ -649,7 +692,9 @@ export default function Contact() {
                       placeholder="you@example.com"
                       value={data.email}
                       onChange={(e) => set('email', e.target.value)}
+                      {...fieldA11y('cf-email')}
                     />
+                    {fieldError('cf-email')}
                   </div>
                 </div>
                 <div className="form-row">
@@ -734,7 +779,14 @@ export default function Contact() {
               )}
             </div>
 
-            {errorMsg && (
+            <p className="contact-privacy">
+              What you type here is emailed to me so I can reply. I don't sell
+              it, share it with advertisers, or add you to a mailing list. To
+              have it deleted, email{' '}
+              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+            </p>
+
+            {errorMsg && !errorField && (
               <p className="form-status error" role="alert">
                 {errorMsg}{' '}
                 {status === 'error' && (
@@ -750,6 +802,8 @@ export default function Contact() {
           eyebrow="Prefer to talk?"
           title={SITE.booking.label}
           blurb="Rather talk it through? Thirty minutes, free. Bring as much or as little as you've got."
+          steps={SITE.booking.callSteps}
+          note={SITE.booking.callNote}
         />
 
         <div className="section-header">

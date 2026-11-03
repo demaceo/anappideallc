@@ -16,6 +16,14 @@ export const SITE = {
     // Personal profiles for the founder — attached to the Person node in
     // JSON-LD (not the organization), since they identify the individual.
     github: 'https://github.com/demaceo',
+    // Real portrait, resized to two widths (public/founder). Shown beside the
+    // intro on Home and About: the site says "I'm a Black founder" and a face
+    // is the proof a visitor looks for first.
+    photo: {
+      src400: '/founder/demaceo-howard-400.webp',
+      src800: '/founder/demaceo-howard-800.webp',
+      alt: 'Demaceo Vincent Howard, founder of An App Idea LLC',
+    },
   },
   // Public profiles for this business. These power two things:
   //   1. The JSON-LD `sameAs` entity links — Google uses these to tie this
@@ -52,6 +60,34 @@ export const SITE = {
     consultationUrl: 'https://calendly.com/anappidea/30min',
     label: 'A free 30-minute call',
     blurb: 'A free 30-minute call to talk through your idea. No pressure, no spec required.',
+    // What happens on the call. Answers the "what am I signing up for?" worry
+    // before someone books; shown on Home and Contact.
+    callSteps: [
+      'You tell me about your business and what is not working.',
+      'I tell you honestly whether I am the right fit, and what it would cost.',
+      'You leave with a clear next step, even if it is not with me.',
+    ],
+    callNote: 'Nothing to prepare. Half an idea is plenty.',
+  },
+  // How money and ownership work. One source for the Services page, so the
+  // wording an owner reads is the wording that governs a quote.
+  terms: {
+    payment: {
+      title: 'How you pay',
+      body: 'Fixed-price projects are 50% to start and 50% when it launches. You get the full price in writing before you pay anything.',
+    },
+    ownership: {
+      title: 'What you own',
+      body: 'Everything. Your domain, your hosting account, and your site\'s code and content are in your name from day one. If we ever stop working together, you keep it all.',
+    },
+    running: {
+      title: 'What it costs to keep running',
+      body: 'Hosting is paid straight to the provider, not to me: usually about $20 a month, plus around $15 to $20 a year for your domain. I confirm the exact numbers in your quote. There is no required monthly fee to me.',
+    },
+    afterLaunch: {
+      title: 'After it launches',
+      body: '30 days of free bug fixes. If something does not work the way we agreed, I fix it at no charge. After that, fixes are $92/hour with a 2-hour minimum.',
+    },
   },
   // Cost signal shown on Services and Contact so visitors can self-qualify
   // before booking. Renders nothing while `range` is blank — fill in a real

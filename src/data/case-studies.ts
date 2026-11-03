@@ -792,27 +792,27 @@ export interface Differentiator {
 // rather than top-line claims, since every good solo dev makes them.
 export const differentiators: Differentiator[] = [
   {
-    id: 'ai-native',
-    title: 'AI-native mobile, integrated for real',
-    description:
-      'Most "AI-powered" apps wrap a single API call in a modal. I ship the harder version: streaming audio translation, on-device intelligence pipelines, multi-provider failover, and real-time voice output, across Gemini, Groq, Deepgram, and ElevenLabs, in production.',
-  },
-  {
-    id: 'privacy-first',
-    title: 'Privacy-first architecture, evidenced not claimed',
-    description:
-      'AES-256-GCM encryption on-device, local-first storage with an encrypted vault, GDPR/CCPA compliance as defaults, and AI proxies hardened with OAuth verification and rate limits. The kind of data handling that matters in health, fintech, and anything personal.',
-  },
-  {
     id: 'ownership',
-    title: 'One builder, interface to deploy',
+    title: 'One person, start to finish',
     description:
-      'You work directly with the person designing the screens, modeling the data, securing the API, and shipping the build. No handoffs between design, dev, and ops, and nothing glossed over in between.',
+      'You work directly with me. The person who designs it, builds it, and secures it is the same one who answers your emails. Nothing gets handed to a stranger, and nothing gets glossed over.',
   },
   {
     id: 'discipline',
-    title: 'Shipped for real users, not a demo',
+    title: 'Built to last, not just to launch',
     description:
-      'Every build carries CI, secret scanning, monitoring, and a real release process. Twelve products across civic, logistics, translation, PropTech, spatial AI, and consumer rights have run that gauntlet, so I know what breaks at each layer.',
+      "Everything I build is tested, monitored, and checked for security before it goes live. I've shipped twelve products to real users, in everything from civic tools to logistics, so I know what breaks and when.",
+  },
+  {
+    id: 'privacy-first',
+    title: "Your customers' information stays private",
+    description:
+      "Customer information is encrypted and protected by default, with careful limits on what any AI tool can see. It's the same care I put into apps that handle health, money, and personal data.",
+  },
+  {
+    id: 'ai-native',
+    title: 'AI that does real work',
+    description:
+      'Most "AI-powered" tools are a chat box added on top. I build AI that handles real tasks, like translating speech as people talk, and keeps working if one provider goes down.',
   },
 ]

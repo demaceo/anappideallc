@@ -5,7 +5,7 @@ import { SITE } from '../data/site'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
-import { IconZap, IconLayers, IconGlobe, IconBarChart, IconCpu, IconKey, IconLifeBuoy } from '../components/icons'
+import { IconZap, IconLayers, IconGlobe, IconCpu, IconKey, IconLifeBuoy } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
@@ -15,6 +15,8 @@ import { Section } from '../components/Section/Section'
 import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 import { UnfoldScene } from '../components/scenes/UnfoldScene'
 import { Counter } from '../components/Counter/Counter'
+import { FounderPortrait } from '../components/FounderPortrait/FounderPortrait'
+import { PricingNote } from '../components/PricingNote/PricingNote'
 
 const MARQUEE_ITEMS = [
   'Websites',
@@ -29,22 +31,18 @@ const MARQUEE_ITEMS = [
 // used to render `undefined` as a component here and crash the page. Unknown
 // ids fall back, same pattern as SLUG_TO_LOGO in ProjectDetail.
 const SERVICE_ICONS: Record<string, typeof IconZap> = {
-  'mvp-development': IconZap,
-  'ui-engineering': IconLayers,
   'business-websites': IconGlobe,
-  'own-it': IconKey,
   'site-fixes': IconLifeBuoy,
-  'data-visualization': IconBarChart,
+  'own-it': IconKey,
   'ai-integration': IconCpu,
+  'custom-builds': IconLayers,
 }
 const SERVICE_ICON_CLASSES: Record<string, string> = {
-  'mvp-development': 'icon-green',
-  'ui-engineering': 'icon-blue',
   'business-websites': 'icon-teal',
-  'own-it': 'icon-gold',
   'site-fixes': 'icon-orange',
-  'data-visualization': 'icon-orange',
+  'own-it': 'icon-gold',
   'ai-integration': 'icon-purple',
+  'custom-builds': 'icon-green',
 }
 
 export default function Home() {
@@ -82,13 +80,14 @@ export default function Home() {
 
       <main id="main-content" tabIndex={-1}>
         <Section color="bone" ghost="IDEA">
-          <div className="intro-block">
+          <div className="intro-block intro-block--portrait">
             <p>
               Bring the idea, even a half-formed one. I'm a Black founder in
               Denver, and I build websites, apps, and AI tools for Black and
               brown business owners who've had the drive all along and not the
               backing. Then I hand you the keys and the know-how.
             </p>
+            <FounderPortrait />
           </div>
 
           <div className="split">
@@ -111,9 +110,9 @@ export default function Home() {
               <span className="stat-desc">iOS · Android · Web · AI-integrated</span>
             </div>
             <div className="stat-box positive" data-tilt>
-              <span className="stat-label-top">MVP timeline</span>
-              <span className="stat-num medium">7–13 weeks</span>
-              <span className="stat-desc">Discovery to finished build</span>
+              <span className="stat-label-top">A business website</span>
+              <span className="stat-num medium">3–5 weeks</span>
+              <span className="stat-desc">First call to launch</span>
             </div>
             <div className="stat-box neutral" data-tilt>
               <span className="stat-label-top">AI-integrated builds</span>
@@ -126,10 +125,9 @@ export default function Home() {
         <Section color="ink">
           <div className="pullquote">
             <p>
-              "Most 'AI-powered' apps are a single API call in a modal. I build
-              the real version, with streaming audio, on-device pipelines, and
-              multi-provider failover, and keep your users' data where it
-              belongs."
+              "Most 'AI-powered' tools are a chat box added on top. I build AI
+              that does real work for your business, and I keep your
+              customers' information where it belongs."
             </p>
             <span className="attrib">{SITE.founder.name}, {SITE.name}</span>
           </div>
@@ -164,6 +162,12 @@ export default function Home() {
             )
           })}
           </div>
+
+          <p className="services-more">
+            <Link to="/services">
+              See what's included, and how payment and ownership work →
+            </Link>
+          </p>
         </Section>
 
         <div className="container">
@@ -197,16 +201,17 @@ export default function Home() {
             <div className="section-rule" />
           </div>
 
-          <ConsultCTA />
+          <ConsultCTA steps={SITE.booking.callSteps} note={SITE.booking.callNote} />
 
           <MessageCTA>
             <p>
               Prefer to write? Send a few sentences to{' '}
               <a href={`mailto:${SITE.email}`}>{SITE.email}</a>, or use the form.
-              I read everything and reply within 1–2 business days. Pricing
-              works on a sliding scale based on your business's size and stage.
+              I read everything and reply within 1–2 business days.
             </p>
           </MessageCTA>
+
+          <PricingNote />
 
           <StoryNext id="belief" />
         </Section>

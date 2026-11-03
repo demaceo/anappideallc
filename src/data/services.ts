@@ -1,6 +1,11 @@
 // Services offered by An App Idea LLC.
-// Ported from the old MHI repo (lib/data/services.ts) — Tailwind gradients
-// and Lucide icon imports stripped to keep the bundle lean.
+//
+// Four plain offers an owner can pick from, then one for bigger builds. The
+// list used to read like a startup menu (MVPs, UI engineering, data
+// visualization) next to the offers most owners come for, and "Six ways"
+// meant nothing to someone who needed a website. Wording here is the wording
+// shown on Home, Services and in the structured data, so write it for the
+// owner, not for another developer.
 
 export interface Service {
   id: string
@@ -15,23 +20,24 @@ export interface Service {
   // Public starting price. Rates come from SITE.pricing; the sliding-scale
   // discount (SITE.pricing.range) applies to fixed-price projects only.
   price?: { label: string; note?: string }
+  // Marks the offer shown after a "Building something bigger?" divider, so the
+  // four offers most owners come for are not mixed in with custom builds.
+  group?: 'bigger'
 }
 
 export const services: Service[] = [
   {
     id: 'business-websites',
     slug: 'business-websites',
-    title: 'Business Website Development',
+    title: 'A Website for Your Business',
     description:
-      "Professional websites that establish credibility, convert visitors, and grow with your business. Then I make sure you know how to run yours.",
+      'A site that shows up when people search for what you do, works on a phone, and lets customers book, call, or message you. Ready in 3 to 5 weeks. You own it, and I teach you to run it.',
     features: [
-      'SEO-optimized architecture and content strategy',
-      'Headless CMS integration',
-      'Contact forms and lead capture',
-      'Email marketing integration',
-      'Analytics and conversion tracking',
-      'Sub-2-second page loads',
-      'Mobile-first responsive design',
+      'Looks right and loads fast on any phone',
+      'Customers can book, call, or message you',
+      'Shows up when people search for what you do',
+      'You can change your own prices, photos, and hours',
+      'A simple report on who visits and where they come from',
     ],
     technologies: ['Next.js', 'Sanity CMS', 'Contentful', 'Vercel', 'Plausible', 'Schema.org', 'Resend'],
     useCases: [
@@ -40,25 +46,25 @@ export const services: Service[] = [
       'Owners who want a site they can actually update themselves',
     ],
     deliverables: [
-      'Deployed production website',
-      'CMS training and documentation',
-      'SEO configuration and sitemap',
-      'Analytics dashboard configured',
+      'Your live website, in your own accounts',
+      'Training so you can update it yourself',
+      'Your site set up to be found on Google',
+      'Visitor reports ready to read',
     ],
-    metric: { label: 'Page Load', value: '< 2s' },
+    metric: { label: 'Ready in', value: '3–5 weeks' },
     price: { label: 'From $3,700', note: 'With the Own It teaching package: $4,400' },
   },
   {
     id: 'site-fixes',
     slug: 'site-fixes',
-    title: 'Fix & Improve Your Existing Site',
+    title: 'Fix My Existing Site',
     description:
       "Someone else built your site, and now something's broken or customers keep getting stuck. I find the problem and fix it, or tighten up the pages that confuse people, without starting over.",
     features: [
-      'Bug fixes on sites another developer built',
-      'Broken forms, booking, or checkout flows',
-      'Mobile layout and page-speed problems',
-      'UI and UX improvements to pages visitors get stuck on',
+      'Bugs on a site another developer built',
+      'Broken forms, booking, or checkout',
+      'Pages that look wrong on a phone or load slowly',
+      'Pages where visitors get stuck, made clearer',
       'A plain-language note on what was wrong and what changed',
     ],
     technologies: ['React', 'Next.js', 'TypeScript', 'HTML & CSS', 'Vercel'],
@@ -68,9 +74,9 @@ export const services: Service[] = [
       'Pages that look fine but lose customers',
     ],
     deliverables: [
-      'The fix, tested and deployed',
+      'The fix, tested and live',
       'A short write-up of the cause',
-      'Notes on anything else at risk',
+      'Notes on anything else that could break',
     ],
     metric: { label: 'Rush turnaround', value: '1 business day' },
     price: { label: '$92/hour', note: '2-hour minimum ($184). Needed within 1 business day: $138/hour.' },
@@ -83,10 +89,10 @@ export const services: Service[] = [
       "A separate teaching package for after the build. I teach you to manage your own website, read your analytics, check its performance, and put AI to work in your business, so you're never stuck waiting on someone else to change a price or read your traffic. I bring several years of experience teaching software engineering to a wide range of students, so the sessions start where you are.",
     features: [
       'Updating your own pages, photos, prices, and posts',
-      'Reading your analytics: who visits, where they come from, and what they do',
-      'Checking site health: speed, uptime, and search visibility',
+      'Reading your visitor numbers: who comes, from where, and what they do',
+      'Checking your site is fast, online, and easy to find',
       'Spotting when something breaks and knowing what to do next',
-      'Using AI tools in your daily work without exposing customer data',
+      'Using AI tools in your daily work without exposing customer information',
       'One-on-one sessions at your pace, in plain language',
     ],
     technologies: ['Plausible', 'Google Analytics', 'Google Search Console', 'PageSpeed Insights', 'Your CMS', 'Claude · ChatGPT · Gemini'],
@@ -98,7 +104,7 @@ export const services: Service[] = [
     deliverables: [
       'One-on-one teaching sessions',
       'Written guides for your exact setup',
-      'A monthly analytics and site-health checklist',
+      'A monthly checklist for your numbers and site health',
       'An AI playbook for your business',
     ],
     metric: { label: 'Goal', value: 'You run it' },
@@ -107,17 +113,16 @@ export const services: Service[] = [
   {
     id: 'ai-integration',
     slug: 'ai-integration',
-    title: 'AI Integration for Existing Platforms',
+    title: 'AI for Your Business',
     description:
-      "Your website, store, or booking system already works. I add the AI layer on top and keep it running: chat, search, personalization, and the busywork automated, without the cost and risk landing on you.",
+      'Your website, store, or booking system already works. I add AI to it, like answering common questions, replying to routine messages, and sending booking reminders, and I keep it running. It sits on top of what you already have, so there is no rebuild.',
     features: [
-      'AI chat grounded in your actual content, not a generic bot',
-      'Semantic search that understands what customers mean',
-      'Personalized recommendations from what customers actually do',
-      'Automated follow-up: booking reminders, email drafts, routine replies',
-      'Fits onto what you already run: no migration, no rebuild',
-      'Server-side proxy, so your keys and customer data never reach the browser',
-      'Rate limiting, cost caps, and a fallback when a provider goes down',
+      'A chat helper that answers from your own information, not generic replies',
+      'Search that understands what your customers mean',
+      'Booking reminders and routine replies sent for you',
+      'Fits onto what you already run',
+      "Your customers' information stays protected",
+      'Spending limits, so costs never surprise you',
     ],
     technologies: ['Gemini', 'Groq', 'ElevenLabs', 'Deepgram', 'Firebase', 'Vercel'],
     useCases: [
@@ -126,103 +131,46 @@ export const services: Service[] = [
       'Owners who want AI without handing customer data to a third party',
     ],
     deliverables: [
-      'Chat, search, personalization, and automation live on your platform',
-      'Hardened server-side AI proxy with key management and rate limits',
-      'Usage and cost dashboard',
-      'Handover doc plus a walkthrough call',
-      'Monthly tuning, model updates, and a quarterly cost review',
+      'AI features live on your site or system',
+      'A dashboard showing what it does and what it costs',
+      'A walkthrough call so you know how it works',
+      'Monthly tuning and updates, and a quarterly cost review',
     ],
-    metric: { label: 'AI providers in production', value: '5+' },
+    metric: { label: 'Rebuild needed', value: 'None' },
     price: { label: 'From $4,100' },
   },
   {
-    id: 'mvp-development',
-    slug: 'mvp-development',
-    title: 'MVP Development & Validation',
+    id: 'custom-builds',
+    slug: 'custom-builds',
+    group: 'bigger',
+    title: 'Apps & Custom Software',
     description:
-      'Rapidly validate product ideas with functional prototypes that attract users and secure funding.',
+      'Got an idea for an app, a customer portal, or a dashboard of your numbers? I build it from start to finish: design, code, and launch. We begin with the smallest working version that shows people want it, so you do not spend big before you know.',
     features: [
-      'Rapid prototyping with production-grade code',
-      'Auth, authorization, and account management',
-      'Database design and API development',
-      'Payment integration (Stripe, PayPal)',
-      'User analytics and behavior tracking',
-      'Iterative weekly sprints with demos',
-      'Scalability planning baked into the architecture',
+      'An app for iPhone, Android, or the web',
+      'Customer sign-in, accounts, and payments',
+      'Dashboards that turn your numbers into charts you can read',
+      'Easy to use and accessible to everyone (WCAG AA)',
+      'A progress demo every week, so nothing is a surprise',
     ],
-    technologies: ['Next.js', 'Supabase', 'Prisma', 'PostgreSQL', 'Stripe', 'NextAuth', 'Vercel', 'Sentry'],
+    technologies: ['Next.js', 'React', 'TypeScript', 'Supabase', 'PostgreSQL', 'Stripe', 'D3.js', 'Recharts', 'Vercel'],
     useCases: [
-      'Founders testing product-market fit',
+      'Founders testing whether an idea has customers',
       'Teams pitching to investors with a working demo',
-      'Established businesses exploring new product lines',
+      'Established businesses exploring a new product line',
     ],
     deliverables: [
-      'Functional MVP application deployed to production',
-      'Authentication, payments, and core feature set',
-      'User feedback collection system',
-      'Growth and scaling recommendations',
+      'A working app or dashboard, live',
+      'Everything customers need to sign in and pay',
+      'A plan for growing it',
+      'Plain-language documentation',
     ],
     // Matches the Process page: Discovery 1–2 + Design 2–3 + Development 4–8
     // weeks. Launch adds another 1–2, so this is time to build, not to launch.
     metric: { label: 'Time to build', value: '7–13 weeks' },
-    price: { label: '$16,000–$36,000' },
-  },
-  {
-    id: 'ui-engineering',
-    slug: 'ui-engineering',
-    title: 'Product & UI Engineering',
-    description:
-      'Turn ideas into production-ready interfaces with scalable architectures and modern frameworks.',
-    features: [
-      'Component-driven architecture with design systems',
-      'Performance optimization and Core Web Vitals tuning',
-      'Accessibility compliance (WCAG 2.1 AA)',
-      'Cross-browser compatibility',
-      'State management and data flow design',
-      'Animation and micro-interaction craft',
-    ],
-    technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Radix UI', 'Zustand', 'React Query'],
-    useCases: [
-      'SaaS platforms with complex UI states',
-      'Editorial and content management interfaces',
-      'Customer portals with personalized dashboards',
-    ],
-    deliverables: [
-      'Production-ready component library',
-      'Design system documentation',
-      'Performance audit and optimizations',
-      'Automated testing suite',
-    ],
-    metric: { label: 'Accessibility', value: 'WCAG AA' },
-    price: { label: '$92/hour' },
-  },
-  {
-    id: 'data-visualization',
-    slug: 'data-visualization',
-    title: 'Data Visualization & Analytics',
-    description:
-      'Turn complex datasets into compelling visual stories that drive insights and enable data-driven decisions.',
-    features: [
-      'Custom interactive charts and dashboards',
-      'Real-time data streaming',
-      'Multi-dimensional data exploration',
-      'Export to PDF, PNG, and CSV',
-      'Color-blind-friendly palettes',
-      'Drill-down and filtering interactions',
-    ],
-    technologies: ['D3.js', 'Recharts', 'Apache ECharts', 'Plotly', 'WebGL', 'Canvas API', 'WebSockets'],
-    useCases: [
-      'Business intelligence dashboards',
-      'Financial reporting and market analysis',
-      'IoT sensor monitoring',
-    ],
-    deliverables: [
-      'Interactive dashboard application',
-      'Custom visualization component library',
-      'Data pipeline integration docs',
-      'Performance benchmarks',
-    ],
-    metric: { label: 'Data Points Handled', value: '10M+' },
-    price: { label: 'From $2,800' },
+    price: {
+      label: 'From $2,800',
+      note: 'Dashboards from $2,800. Apps typically $16,000–$36,000. Interface work by the hour: $92/hour.',
+    },
   },
 ]

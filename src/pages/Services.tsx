@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Link } from 'react-router'
 import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { FooterNav } from '../components/FooterNav/FooterNav'
@@ -11,6 +11,7 @@ import { SplitScene } from '../components/scenes/SplitScene'
 import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 import { PricingNote } from '../components/PricingNote/PricingNote'
 import { NextStep } from '../components/NextStep/NextStep'
+import { PaymentTerms } from '../components/PaymentTerms/PaymentTerms'
 
 export default function Services() {
   // Accordion: one service open at a time; first item open on load so the
@@ -28,17 +29,18 @@ export default function Services() {
           <p className="overline">An App Idea LLC · What I build</p>
           <h1>Services</h1>
           <p className="subtitle">Built for you. Handed to you.</p>
-          <p className="date-line">Six ways I can help</p>
+          <p className="date-line">Four ways to start, plus bigger builds</p>
         </header>
       </PageHeader>
 
       <main className="container" id="main-content" tabIndex={-1}>
         <div className="intro-block">
           <p>
-            A website that brings in customers, an app, or AI that takes the
-            busywork off your plate, plus a teaching package so you can run it
-            all yourself. Not sure which one fits? That's exactly what the free
-            first call is for.
+            Pick the one that sounds like your problem: a website that brings
+            in customers, a fix for the one you have, lessons so you can run it
+            yourself, or AI that takes busywork off your plate. Building an app
+            or something custom? That's the last one. Not sure which fits?
+            That's exactly what the free first call is for.
           </p>
         </div>
 
@@ -48,6 +50,8 @@ export default function Services() {
         </div>
 
         <PricingNote />
+
+        <PaymentTerms />
 
         <div className="section-header">
           <span className="section-num">Metrics</span>
@@ -77,7 +81,11 @@ export default function Services() {
           {services.map((s, i) => {
             const open = openIndex === i
             return (
-              <li key={s.id} className={`svc-item${open ? ' svc-item--open' : ''}`}>
+              <Fragment key={s.id}>
+              {s.group === 'bigger' && services[i - 1]?.group !== 'bigger' && (
+                <li className="svc-group" aria-hidden="true">Building something bigger?</li>
+              )}
+              <li className={`svc-item${open ? ' svc-item--open' : ''}`}>
                 <button
                   type="button"
                   className="svc-trigger"
@@ -119,9 +127,13 @@ export default function Services() {
                             <li key={f}>{f}</li>
                           ))}
                         </ul>
+                        {s.metric && (
+                          <span className="svc-meta">
+                            {s.metric.label}: {s.metric.value}
+                          </span>
+                        )}
                         <span className="svc-meta">
-                          Stack: {s.technologies.join(' · ')}
-                          {s.metric && ` — ${s.metric.label}: ${s.metric.value}`}
+                          Built with: {s.technologies.join(' · ')}
                         </span>
                       </div>
                       <div>
@@ -139,6 +151,7 @@ export default function Services() {
                   </div>
                 </div>
               </li>
+              </Fragment>
             )
           })}
         </ul>
