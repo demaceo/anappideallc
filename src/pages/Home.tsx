@@ -5,12 +5,10 @@ import { SITE } from '../data/site'
 import { services } from '../data/services'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
-import { IconZap, IconLayers, IconGlobe, IconCpu, IconKey, IconLifeBuoy } from '../components/icons'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { VerdictBox } from '../components/VerdictBox/VerdictBox'
 import { ConsultCTA } from '../components/ConsultCTA/ConsultCTA'
 import { MessageCTA } from '../components/MessageCTA/MessageCTA'
-import { Marquee } from '../components/Marquee/Marquee'
 import { Section } from '../components/Section/Section'
 import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter'
 import { UnfoldScene } from '../components/scenes/UnfoldScene'
@@ -18,32 +16,10 @@ import { Counter } from '../components/Counter/Counter'
 import { FounderPortrait } from '../components/FounderPortrait/FounderPortrait'
 import { PricingNote } from '../components/PricingNote/PricingNote'
 
-const MARQUEE_ITEMS = [
-  'Websites',
-  'Apps',
-  'AI',
-  'Own It',
-  'Small Business',
-  'Denver',
-] as const
-
-// Keyed by service id rather than array position: a new entry in services.ts
-// used to render `undefined` as a component here and crash the page. Unknown
-// ids fall back, same pattern as SLUG_TO_LOGO in ProjectDetail.
-const SERVICE_ICONS: Record<string, typeof IconZap> = {
-  'business-websites': IconGlobe,
-  'site-fixes': IconLifeBuoy,
-  'own-it': IconKey,
-  'ai-integration': IconCpu,
-  'custom-builds': IconLayers,
-}
-const SERVICE_ICON_CLASSES: Record<string, string> = {
-  'business-websites': 'icon-teal',
-  'site-fixes': 'icon-orange',
-  'own-it': 'icon-gold',
-  'ai-integration': 'icon-purple',
-  'custom-builds': 'icon-green',
-}
+// The four offers most owners come for, then the bigger-build offer under its
+// own divider, as on the Services page.
+const OFFERS = services.filter((s) => s.group !== 'bigger')
+const BIGGER = services.find((s) => s.group === 'bigger')
 
 export default function Home() {
   return (
@@ -51,43 +27,44 @@ export default function Home() {
       <RouteHead {...META['/']} />
 
       <PageHeader>
-        <header className="masthead">
-          <p className="overline">Websites · Apps · AI · Denver, Colorado</p>
-          <h1>Your business is the job. <em>The tech shouldn't be a second one.</em></h1>
-          <p className="subtitle">
-            Websites, mobile apps, and AI for small businesses, built with
-            Black and brown business owners in mind. I build it, then teach
-            you to run it.
-          </p>
-          {/* The masthead filled roughly half the first screen with nothing
-              actionable in it — the first interactive element was the corner
-              FAB. This gives the strongest copy on the site somewhere to land.
-              It collapses with the rest of the masthead on scroll. */}
-          <a
-            className="hero-cta"
-            href={SITE.booking.consultationUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-analytics="hero-book-consultation"
-          >
-            Book a free call
-          </a>
-          <p className="date-line">{SITE.email} · {SITE.domain}</p>
+        <header className="masthead masthead--hero">
+          <div className="hero-copy">
+            <p className="overline">Websites · Apps · AI · Denver, Colorado</p>
+            <h1>Your business is the job. The tech shouldn't be a second one.</h1>
+            <p className="subtitle">
+              Websites, mobile apps, and AI for small businesses, built with
+              Black and brown business owners in mind. I build it, then teach
+              you to run it.
+            </p>
+            <div className="hero-actions">
+              <a
+                className="hero-cta"
+                href={SITE.booking.consultationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-analytics="hero-book-consultation"
+              >
+                Book a free call
+              </a>
+              <Link className="hero-secondary" to="/contact">
+                Send me a message →
+              </Link>
+            </div>
+            <p className="hero-scale">{SITE.pricing.heroLine}</p>
+          </div>
+          <FounderPortrait eager hero />
         </header>
       </PageHeader>
 
-      <Marquee items={MARQUEE_ITEMS} />
-
       <main id="main-content" tabIndex={-1}>
-        <Section color="bone" ghost="IDEA">
-          <div className="intro-block intro-block--portrait">
+        <Section color="page">
+          <div className="intro-block">
             <p>
               Bring the idea, even a half-formed one. I'm a Black founder in
               Denver, and I build websites, apps, and AI tools for Black and
               brown business owners who've had the drive all along and not the
               backing. Then I hand you the keys and the know-how.
             </p>
-            <FounderPortrait />
           </div>
 
           <div className="split">
@@ -96,10 +73,10 @@ export default function Home() {
           </div>
         </Section>
 
-        <Section color="yellow" num="01" ghost="SHIP">
+        <Section color="white">
           <div className="section-header">
             <span className="section-num">At a Glance</span>
-            <h2>What <span className="outline-word">ships</span> here</h2>
+            <h2>What <span className="accent-word">ships</span> here</h2>
             <div className="section-rule" />
           </div>
 
@@ -133,35 +110,42 @@ export default function Home() {
           </div>
         </Section>
 
-        <Section color="lime" num="02" ghost="BUILD">
+        <Section color="page">
           <div className="section-header">
             <span className="section-num">Services</span>
-            <h2>What I <span className="outline-word">build</span></h2>
+            <h2>Four ways to <span className="accent-word">start</span></h2>
             <div className="section-rule" />
           </div>
+          <p className="offers-lede">Not sure which? That's what the free call is for.</p>
 
-          <div className="grid-3">
-          {services.map((s) => {
-            const ServiceIcon = SERVICE_ICONS[s.id] ?? IconZap
-            return (
-              <div key={s.id} className="feature-item" data-tilt>
-                <div className={`feature-icon ${SERVICE_ICON_CLASSES[s.id] ?? 'icon-green'}`}>
-                  <ServiceIcon size={20} />
+          <ol className="offer-list">
+            {OFFERS.map((s, i) => (
+              <li key={s.id} className="offer">
+                <span className="offer-num" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <div className="offer-head">
+                  <h3 className="offer-title">{s.title}</h3>
+                  {s.tagline && <span className="offer-meta">{s.tagline}</span>}
                 </div>
-                <div className="feature-body">
-                  {s.metric && (
-                    <span className="feature-eyebrow">
-                      {s.metric.label} · {s.metric.value}
-                    </span>
-                  )}
-                  <h3 className="feature-title">{s.title}</h3>
-                  {s.price && <p className="feature-price">{s.price.label}</p>}
-                  <p>{s.description}</p>
-                </div>
-              </div>
-            )
-          })}
-          </div>
+                <p className="offer-body">{s.description}</p>
+                {s.price && <span className="offer-price">{s.price.label}</span>}
+              </li>
+            ))}
+          </ol>
+
+          {BIGGER && (
+            <div className="offer-bigger">
+              <span className="offer-bigger-label">Building something bigger?</span>
+              <strong className="offer-bigger-title">{BIGGER.title}</strong>
+              {BIGGER.price && (
+                <span className="offer-bigger-price">
+                  {BIGGER.price.label}
+                  {BIGGER.metric && ` · ${BIGGER.metric.value}`}
+                </span>
+              )}
+            </div>
+          )}
 
           <p className="services-more">
             <Link to="/services">
@@ -170,16 +154,10 @@ export default function Home() {
           </p>
         </Section>
 
-        <div className="container">
-          <div className="chapter-divider">
-            <span className="ornament">✦ ✦ ✦</span>
-          </div>
-        </div>
-
-        <Section color="orange" num="03" ghost="HUMAN">
+        <Section color="white">
           <div className="section-header">
             <span className="section-num">Human vs AI</span>
-            <h2>Why a <span className="outline-word">builder</span>, not just a bot</h2>
+            <h2>Why a <span className="accent-word">builder</span>, not just a bot</h2>
             <div className="section-rule" />
           </div>
 
@@ -194,10 +172,10 @@ export default function Home() {
           </VerdictBox>
         </Section>
 
-        <Section color="bone" num="04" ghost="TALK">
+        <Section color="page">
           <div className="section-header">
             <span className="section-num">Contact</span>
-            <h2>Start a <span className="outline-word">conversation</span></h2>
+            <h2>Start a <span className="accent-word">conversation</span></h2>
             <div className="section-rule" />
           </div>
 

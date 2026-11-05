@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest'
 import { appRoutes as routes } from './helpers/app-routes'
 import { caseStudies } from '../data/case-studies'
 import { PROJECT_COLORS } from '../data/project-colors'
-import { readableOn } from '../lib/color'
+import { contrast, fillForSmallText } from '../lib/color'
 
 function renderRoute(path: string) {
   return render(
@@ -13,14 +13,17 @@ function renderRoute(path: string) {
 }
 
 describe('/work — project colour tiles', () => {
-  it('renders one tile per case study, each in its own brand colour', () => {
+  it('renders one tile per case study, each in its own brand colour, readable as small text', () => {
     const { container } = renderRoute('/work')
     const tiles = [...container.querySelectorAll<HTMLAnchorElement>('a.work-tile')]
     expect(tiles).toHaveLength(caseStudies.length)
     for (const tile of tiles) {
       const slug = tile.getAttribute('href')!.replace('/work/', '')
-      expect(tile.style.getPropertyValue('--tile-fill')).toBe(PROJECT_COLORS[slug])
-      expect(tile.style.getPropertyValue('--tile-ink')).toBe(readableOn(PROJECT_COLORS[slug]))
+      // The brand colour, nudged only as far as the title needs for 4.5:1.
+      const { fill, ink } = fillForSmallText(PROJECT_COLORS[slug])
+      expect(tile.style.getPropertyValue('--tile-fill')).toBe(fill)
+      expect(tile.style.getPropertyValue('--tile-ink')).toBe(ink)
+      expect(contrast(fill, ink)).toBeGreaterThanOrEqual(4.5)
     }
   })
 

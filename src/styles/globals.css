@@ -2,11 +2,11 @@
 @import './tokens.css';
 
 /* ═══════════════════════════════════════════════════════════
-   Layout Studio — Design System
-   Neo-brutalist / Swiss editorial. Warm bone, near-black ink,
-   one acid-chartreuse accent. Hairline rules structure every
-   section; depth comes from flat color inversion, never from
-   shadows or rounding. Poster display type, mono metadata.
+   An App Idea — the "hybrid" design system (2026-11)
+   The refined-brutalist look (hairline rules, mono metadata,
+   Unbounded display type, one deep accent, generous space)
+   with warm content: the founder's face, visible prices, soft
+   corners on what a visitor touches. No hard shadows, no glow.
    ═══════════════════════════════════════════════════════════ */
 
 /* ─── SECTION 3: Global page setup ─── */
@@ -42,11 +42,12 @@ button:focus-visible {
   box-shadow: 0 0 0 2px var(--c-bg);
 }
 
+/* Sentence case at a medium weight: the all-caps 900 slab read as a shout,
+   and at 500 Unbounded keeps its character while letting the copy lead. */
 h1, h2, h3 {
   font-family: var(--ff-display);
-  font-weight: 900;              /* Unbounded heavy */
-  text-transform: uppercase;
-  letter-spacing: -0.01em;       /* Unbounded runs wide; loosen the negative tracking */
+  font-weight: 500;
+  letter-spacing: -0.03em;
 }
 
 .container {
@@ -111,8 +112,10 @@ h1, h2, h3 {
 .masthead {
   background: var(--c-page);
   color: var(--c-fg);
-  padding: var(--masthead-pad-top) clamp(1rem, 4vw, 2rem) var(--masthead-pad-bottom);
-  text-align: center;
+  /* Left-aligned like an editorial page, inside the same width as the content
+     below it: the side padding grows to centre a --shell-wide column. */
+  padding: var(--masthead-pad-top) max(clamp(1rem, 4vw, 2rem), calc((100% - var(--shell)) / 2 + 2rem)) var(--masthead-pad-bottom);
+  text-align: left;
   position: relative;
   overflow: hidden;
   border-bottom: var(--bw) solid var(--c-line);
@@ -141,25 +144,22 @@ h1, h2, h3 {
 
 .masthead h1 {
   font-size: var(--text-fluid-7);
-  line-height: 0.92;
-  letter-spacing: -0.02em;
+  line-height: 1.03;
+  letter-spacing: -0.035em;
+  max-width: 22ch;
   margin-bottom: var(--space-3);
 }
 
-.masthead h1 em {
-  font-style: normal;
-  background: var(--c-yellow);
-  color: var(--c-ink);
-  padding: 0 0.1em;
-  display: inline-block;
-}
+/* The emphasised half of a headline used to sit on a yellow highlighter
+   block. The hybrid lets the sentence carry itself. */
+.masthead h1 em { font-style: normal; }
 
 .subtitle {
   font-family: var(--ff-body);
-  font-size: var(--text-lg);
+  font-size: var(--text-fluid-2);
   color: var(--c-fg-soft);
-  max-width: 720px;
-  margin: var(--space-3) auto 0;
+  max-width: 560px;
+  margin: var(--space-3) 0 0;
   line-height: 1.4;
   overflow: hidden;
 }
@@ -181,12 +181,12 @@ h1, h2, h3 {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
-  /* Chartreuse at rest: across the site, chartreuse means "book a call"
-     (this, .consult-cta-btn and the floating .booking-fab). Every other
-     button stays ink and only turns chartreuse on hover. */
-  color: var(--c-fg);
+  /* The accent at rest: across the site, the forest green means "book a call"
+     (this, the booking card and the floating .booking-fab). */
+  color: var(--c-bg);
   background: var(--c-accent);
-  border: var(--bw-thick) solid var(--c-fg);
+  border: 0;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   transition: background 150ms, color 150ms;
 }
@@ -198,8 +198,7 @@ h1, h2, h3 {
 
 .hero-cta:hover {
   background: var(--c-fg);
-  color: var(--c-accent);
-  border-color: var(--c-fg);
+  color: var(--c-bg);
 }
 
 .hero-cta:hover::after { transform: translateX(3px); }
@@ -257,18 +256,17 @@ h1, h2, h3 {
 }
 
 .persona-tag:hover {
-  background: var(--c-fg);
-  color: var(--c-bg);
+  box-shadow: inset 0 -2px 0 var(--c-fg);
 }
 
 /* Current route. NavLink also sets aria-current="page"; this is its visible
    counterpart, using the same ink/bone inversion as hover so the bar keeps one
    vocabulary, plus an accent underline so active and hover stay distinguishable
    when the pointer is over the active tab. */
-.persona-tag--active {
-  background: var(--c-fg);
-  color: var(--c-bg);
-  box-shadow: inset 0 -3px 0 var(--c-accent);
+.persona-tag--active,
+.persona-tag--active:hover {
+  color: var(--c-accent);
+  box-shadow: inset 0 -2px 0 var(--c-accent);
 }
 
 .persona-tag--active .persona-tag-mark { opacity: 0.8; }
@@ -405,14 +403,9 @@ h1, h2, h3 {
 }
 
 /* ─── Booking FAB — fixed lower-right floating action button ─── */
-/* The only button that floats over an arbitrary background, so it carries a
-   bone border for separation instead of the glow it used to. A border is
-   structure, which this system allows; a shadow is not.
-
-   Filled with the one accent rather than the ink slab every other button
-   uses: it is the single persistent action on every page, and chartreuse is
-   the only colour on the site that reads as "this one". Ink text on it is
-   ~15:1. Hover inverts to the ink slab, the reverse of the other buttons. */
+/* The single persistent action on every page, filled with the one accent:
+   white on forest is 9.2:1. It floats over arbitrary content, so it is a
+   solid, rounded block rather than an outline. Hover turns it to the ink slab. */
 .booking-fab {
   position: fixed;
   bottom: 2rem;
@@ -423,16 +416,16 @@ h1, h2, h3 {
   gap: var(--space-2);
   padding: var(--space-3) var(--space-5);
   background: var(--c-accent);
-  color: var(--c-fg);
-  border: var(--bw-thick) solid var(--c-bg);
-  outline: var(--bw) solid var(--c-ink);
+  color: var(--c-bg);
+  border: 0;
+  border-radius: var(--radius-sm);
   text-decoration: none;
   transition: background 150ms, color 150ms;
 }
 
 .booking-fab:hover {
   background: var(--c-fg);
-  color: var(--c-accent);
+  color: var(--c-bg);
 }
 
 /* NOTE ON WEIGHTS: Space Mono ships 400 and 700 only. CSS font matching
@@ -476,9 +469,7 @@ h1, h2, h3 {
     padding: var(--space-3) var(--space-4)
       calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
     min-height: 48px;
-    border: 0;
-    border-top: var(--bw-thick) solid var(--c-bg);
-    outline: 0;
+    border-radius: 0;
   }
 
   /* The square corner ticks read as artifacts on a full-width bar. */
@@ -508,7 +499,7 @@ h1, h2, h3 {
 }
 
 .marquee-track span { padding-inline: 0.5em; }
-.marquee-track .dot { color: var(--c-cyan); }
+.marquee-track .dot { color: var(--c-accent-bright); }
 
 @keyframes marquee {
   to { transform: translateX(-100%); }
@@ -540,23 +531,192 @@ h1, h2, h3 {
   .intro-block--portrait .founder-portrait { max-width: 220px; }
 }
 
-.founder-portrait {
-  margin: 0;
-  background: var(--c-bg);
-  border: var(--bw-brutal) solid var(--c-ink);
-  box-shadow: 8px 8px 0 var(--c-lavender);
+.founder-portrait { margin: 0; }
+.founder-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
 }
-.founder-portrait img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
 .founder-portrait figcaption {
-  display: grid;
-  gap: 2px;
-  padding: var(--space-2) var(--space-3);
-  border-top: var(--bw-brutal) solid var(--c-ink);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: var(--bw) solid var(--c-line);
   font-family: var(--ff-mono);
   font-size: var(--text-xs);
   letter-spacing: 0.04em;
 }
 .founder-portrait figcaption span { color: var(--c-fg-soft); }
+
+/* ─── Home hero: copy on the left, the founder's portrait on the right ───
+   Phones stack the copy and show the portrait as a small avatar row under the
+   buttons, so the masthead (which collapses on the first scroll) stays short. */
+.masthead--hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  gap: var(--space-8) var(--space-12);
+  align-items: end;
+}
+.hero-copy { min-width: 0; }
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-6);
+}
+.hero-secondary {
+  margin-top: var(--space-5);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--ff-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-fg);
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+.hero-secondary:hover { color: var(--c-accent); }
+.hero-scale {
+  margin: var(--space-4) 0 0;
+  padding-top: var(--space-3);
+  border-top: var(--bw) solid var(--c-line-soft);
+  max-width: 560px;
+  font-family: var(--ff-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  color: var(--c-fg-soft);
+}
+@media (max-width: 899.98px) {
+  .masthead--hero { grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
+  .hero-secondary { margin-top: var(--space-3); }
+  .founder-portrait--hero {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .founder-portrait--hero img {
+    width: 64px;
+    border-radius: var(--radius-sm);
+  }
+  .founder-portrait--hero figcaption {
+    flex-direction: column;
+    padding: 0;
+    border: 0;
+  }
+}
+
+/* ─── Money terms: label on a hairline, the answer under it ─── */
+.terms-list {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  column-gap: var(--space-8);
+  border-top: var(--bw) solid var(--c-line);
+}
+.terms-item { padding: var(--space-6) 0; border-bottom: var(--bw) solid var(--c-line-soft); }
+.terms-item dt {
+  margin-bottom: var(--space-2);
+  font-family: var(--ff-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+.terms-item dd {
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  color: var(--c-fg-soft);
+}
+.terms-item dd p { margin: 0; }
+.terms-title {
+  margin: 0 0 var(--space-1);
+  font-family: var(--ff-display);
+  font-weight: 500;
+  font-size: var(--text-md);
+  color: var(--c-fg);
+}
+
+/* ─── Home offers: an editorial list, not a card grid ───
+   Number, title with a green meta line, what it is, and the starting price on
+   the right. Hairlines between rows; the price drops under the copy on phones. */
+.offers-lede {
+  margin: 0 0 var(--space-6);
+  font-family: var(--ff-body);
+  font-size: var(--text-md);
+  color: var(--c-fg-soft);
+}
+.offer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: var(--bw) solid var(--c-line);
+}
+.offer {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr) minmax(0, 1.4fr) 7rem;
+  gap: var(--space-2) var(--space-6);
+  align-items: baseline;
+  padding: var(--space-6) 0;
+  border-bottom: var(--bw) solid var(--c-line-soft);
+}
+.offer-num {
+  font-family: var(--ff-mono);
+  font-size: var(--text-sm);
+  color: var(--c-fg-soft);
+}
+.offer-head { display: grid; gap: var(--space-1); }
+.offer-title {
+  margin: 0;
+  font-size: var(--text-fluid-3);
+  line-height: 1.15;
+}
+.offer-meta,
+.offer-bigger-label {
+  font-family: var(--ff-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+.offer-body {
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  color: var(--c-fg-soft);
+}
+.offer-price {
+  text-align: right;
+  font-family: var(--ff-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+@media (max-width: 899.98px) {
+  .offer { grid-template-columns: 2.5rem minmax(0, 1fr); }
+  .offer-body,
+  .offer-price { grid-column: 2; text-align: left; }
+}
+.offer-bigger {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-6) 0;
+  border-bottom: var(--bw) solid var(--c-line-soft);
+}
+.offer-bigger-title { font-family: var(--ff-display); font-weight: 500; font-size: var(--text-md); }
+.offer-bigger-price { font-family: var(--ff-mono); font-size: var(--text-sm); color: var(--c-fg-soft); }
 
 /* Services: the divider before the "bigger builds" offer. */
 .svc-group {
@@ -633,6 +793,8 @@ h1, h2, h3 {
   gap: var(--bw);
   background: var(--c-line);
   border: var(--bw) solid var(--c-line);
+  border-radius: var(--radius);
+  overflow: hidden;
   margin: var(--space-2) 0 var(--space-10);
 }
 
@@ -701,7 +863,6 @@ h1, h2, h3 {
   font-family: var(--ff-display);
   line-height: 0.9;
   letter-spacing: -0.03em;
-  text-transform: uppercase;
   margin-bottom: var(--space-2);
   display: block;
 }
@@ -735,20 +896,21 @@ cite {
   cursor: default;
 }
 
-cite:hover { background: var(--c-accent); }
+cite:hover { background: var(--c-accent-soft); }
 
 /* ─── SECTION 11: Pullquote — black slab ─── */
 .pullquote {
   margin: var(--space-8) 0;
-  padding: var(--space-6) var(--space-6) var(--space-6);
+  padding: var(--space-8);
   background: var(--c-fg);
   color: var(--c-bg);
+  border-radius: var(--radius);
 }
 
 .pullquote p {
   font-family: var(--ff-body);
   font-size: var(--text-fluid-2);
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.4;
   color: var(--c-bg);
 }
@@ -759,7 +921,7 @@ cite:hover { background: var(--c-accent); }
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--c-accent);
+  color: var(--c-accent-bright);
   margin-top: var(--space-3);
 }
 
@@ -795,9 +957,17 @@ cite:hover { background: var(--c-accent); }
 .verdict-box {
   margin: var(--space-7) 0 var(--space-2);
   padding: var(--space-4) var(--space-6) var(--space-5);
-  border: var(--bw-thick) solid var(--c-line);
+  border: var(--bw) solid var(--c-line-soft);
+  border-radius: var(--radius);
   background: var(--c-bg);
   position: relative;
+}
+
+/* Notes (the sliding-scale terms) sit on the accent tint, as in the hybrid
+   mockup: a quiet "good news" ground rather than another white box. */
+.verdict-box.note {
+  background: var(--c-accent-soft);
+  border-color: transparent;
 }
 
 /* The label text now comes from VerdictBox.tsx rather than CSS `content` —
@@ -833,8 +1003,7 @@ cite:hover { background: var(--c-accent); }
 }
 
 .verdict-box a:hover {
-  background: var(--c-accent);
-  text-decoration: none;
+  color: var(--c-accent);
 }
 
 /* ─── SECTION 14: Sources / reference footer — black band ─── */
@@ -862,13 +1031,12 @@ cite:hover { background: var(--c-accent); }
   font-size: clamp(2.2rem, 11vw, 7rem);
   line-height: 0.82;
   letter-spacing: -0.05em;
-  text-transform: uppercase;
   text-align: center;
   margin: 0 0 var(--space-4);
   color: var(--c-bg);
 }
 
-.footer-giant span { color: var(--c-accent); }
+.footer-giant span { color: var(--c-accent-bright); }
 
 .sources-header {
   display: flex;
@@ -913,7 +1081,7 @@ cite:hover { background: var(--c-accent); }
   transition: border-color 150ms;
 }
 
-.source-list li:hover { border-left-color: var(--c-accent); }
+.source-list li:hover { border-left-color: var(--c-accent-bright); }
 
 .source-list li strong {
   color: var(--c-bg);
@@ -957,7 +1125,7 @@ cite:hover { background: var(--c-accent); }
   color: var(--c-bg);
   text-decoration: underline;
   text-decoration-thickness: var(--bw-thick);
-  text-decoration-color: var(--c-accent);
+  text-decoration-color: var(--c-accent-bright);
 }
 
 /* Footer links live on the ink slab, so the global `main a` bone/acid
@@ -970,7 +1138,7 @@ cite:hover { background: var(--c-accent); }
   text-underline-offset: 2px;
 }
 
-.source-list a:hover { text-decoration-color: var(--c-accent); }
+.source-list a:hover { text-decoration-color: var(--c-accent-bright); }
 
 /* ─── Footer social links ─── */
 .social-links-row {
@@ -1006,6 +1174,7 @@ cite:hover { background: var(--c-accent); }
   height: 2.75rem;
   color: var(--c-bg);
   border: var(--bw) solid var(--c-bg-faint);
+  border-radius: var(--radius-sm);
   background: transparent;
   transition: color 150ms, border-color 150ms, background 150ms;
 }
@@ -1013,8 +1182,8 @@ cite:hover { background: var(--c-accent); }
 .social-link:hover,
 .social-link:focus-visible {
   color: var(--c-fg);
-  border-color: var(--c-accent);
-  background: var(--c-accent);
+  border-color: var(--c-accent-bright);
+  background: var(--c-accent-bright);
 }
 
 .social-link svg { display: block; }
@@ -1036,7 +1205,6 @@ cite:hover { background: var(--c-accent); }
   font-family: var(--ff-display);
   font-size: var(--text-lg);
   line-height: 1.2;
-  text-transform: uppercase;
   letter-spacing: -0.02em;
   color: var(--c-fg);
   margin: 0 0 var(--space-2);
@@ -1107,6 +1275,7 @@ cite:hover { background: var(--c-accent); }
   justify-content: center;
   flex-shrink: 0;
   border: var(--bw) solid var(--c-line);
+  border-radius: var(--radius-sm);
   color: var(--c-fg);
   background: var(--c-bg);
 }
@@ -1154,7 +1323,6 @@ cite:hover { background: var(--c-accent); }
   font-size: var(--text-fluid-3);
   line-height: 1;
   letter-spacing: -0.03em;
-  text-transform: uppercase;
   color: inherit;
   margin: 0 0 var(--space-3);
 }
@@ -1211,8 +1379,7 @@ cite:hover { background: var(--c-accent); }
 }
 
 .feature-item--linked:hover {
-  background: var(--c-fg);
-  color: var(--c-bg);
+  border-color: var(--c-accent);
 }
 
 @media (max-width: 580px) {
@@ -1234,7 +1401,7 @@ cite:hover { background: var(--c-accent); }
 
 .feature-cta::after { content: ' ↗'; }
 
-.feature-item--linked:hover .feature-cta { color: var(--c-accent); }
+.feature-item--linked:hover .feature-cta { color: var(--c-accent); text-decoration: underline; }
 
 /* ─── Policy index — compact per-app legal list (Support page) ─── */
 .policy-list {
@@ -1254,7 +1421,6 @@ cite:hover { background: var(--c-accent); }
 .policy-app {
   font-family: var(--ff-display);
   font-size: var(--text-lg);
-  text-transform: uppercase;
   letter-spacing: -0.02em;
   color: var(--c-fg);
   line-height: 1.3;
@@ -1378,7 +1544,6 @@ cite:hover { background: var(--c-accent); }
 .project-cover-headline {
   font-family: var(--ff-display);
   font-size: var(--text-fluid-5);
-  text-transform: uppercase;
   letter-spacing: -0.03em;
   color: var(--c-fg);
   line-height: 1.05;
@@ -1400,12 +1565,13 @@ cite:hover { background: var(--c-accent); }
   color: var(--c-fg);
   background: var(--c-bg);
   border: var(--bw) solid var(--c-line);
+  border-radius: var(--radius-pill);
   padding: var(--space-1) var(--space-3);
 }
 
 .project-chip:first-child {
   background: var(--chip-fill, var(--c-accent));
-  color: var(--chip-fill-fg, var(--c-fg));
+  color: var(--chip-fill-fg, var(--c-bg));
   border-color: var(--chip-fill, var(--c-line));
 }
 
@@ -1452,7 +1618,6 @@ cite:hover { background: var(--c-accent); }
   display: block;
   font-family: var(--ff-display);
   font-size: var(--text-fluid-5);
-  text-transform: uppercase;
   letter-spacing: -0.03em;
   color: var(--c-fg);
   line-height: 0.95;
@@ -1510,7 +1675,6 @@ cite:hover { background: var(--c-accent); }
   font-family: var(--ff-mono);
   font-size: var(--text-md);
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--c-fg);
   line-height: 1.45;
@@ -1570,7 +1734,8 @@ cite:hover { background: var(--c-accent); }
   text-transform: uppercase;
   padding: var(--space-3) var(--space-5);
   min-height: 44px;
-  border: var(--bw-thick) solid var(--c-fg);
+  border: var(--bw) solid var(--c-fg);
+  border-radius: var(--radius-sm);
   color: var(--c-bg);
   text-decoration: none;
   background: var(--c-fg);
@@ -1579,7 +1744,8 @@ cite:hover { background: var(--c-accent); }
 
 .project-link-btn:hover {
   background: var(--c-accent);
-  color: var(--c-fg);
+  border-color: var(--c-accent);
+  color: var(--c-bg);
 }
 
 .project-link-btn.secondary {
@@ -1765,9 +1931,11 @@ main[data-project-theme] .project-cover-block::before {
 
 .svc-item:last-child { border-bottom: 0; }
 
+/* The open offer lifts onto a white card rather than inverting to ink: the
+   hybrid keeps dark slabs out of the reading flow. */
 .svc-item--open {
-  background: var(--c-fg);
-  color: var(--c-bg);
+  background: var(--c-bg);
+  border-radius: var(--radius);
 }
 
 .svc-item--open .svc-num { color: var(--c-accent); opacity: 1; }
@@ -1789,8 +1957,7 @@ main[data-project-theme] .project-cover-block::before {
 }
 
 .svc-item:not(.svc-item--open) .svc-trigger:hover {
-  background: var(--c-fg);
-  color: var(--c-bg);
+  background: var(--c-bg);
 }
 
 .svc-item:not(.svc-item--open) .svc-trigger:hover .svc-num {
@@ -1808,10 +1975,10 @@ main[data-project-theme] .project-cover-block::before {
 
 .svc-name {
   font-family: var(--ff-display);
-  font-size: var(--text-fluid-6);
-  line-height: 0.95;
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
+  font-size: var(--text-fluid-5);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
   min-width: 0;
 }
 
@@ -1838,7 +2005,7 @@ main[data-project-theme] .project-cover-block::before {
 
 .svc-panel-content {
   padding: 1rem clamp(0.75rem, 2vw, 1.25rem) 2rem;
-  border-top: var(--bw) solid var(--c-bg);
+  border-top: var(--bw) solid var(--c-line-soft);
   display: grid;
   gap: var(--space-6);
 }
@@ -1914,7 +2081,7 @@ main[data-project-theme] .project-cover-block::before {
   .svc-panel-content .svc-cta { margin-top: auto; align-self: flex-end; }
 }
 
-/* v6 Conic Flow — animated cyan→magenta gradient rim (needs @property --angle). */
+/* "Start here" inside an open offer: the accent button. */
 .svc-cta {
   position: relative;
   isolation: isolate;
@@ -1926,11 +2093,10 @@ main[data-project-theme] .project-cover-block::before {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: var(--space-3) var(--space-5);
-  /* On the ink panel of an open accordion, so the inversion runs the other
-     way: bone fill, ink text. */
-  border: var(--bw-thick) solid var(--c-bg);
-  background: var(--c-bg);
-  color: var(--c-fg);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--c-accent);
+  color: var(--c-bg);
   font-weight: 700;
   min-height: 44px;
   text-decoration: none;
@@ -1941,9 +2107,8 @@ main[data-project-theme] .project-cover-block::before {
 }
 
 .svc-cta:hover {
-  background: var(--c-accent);
-  border-color: var(--c-accent);
-  color: var(--c-fg);
+  background: var(--c-fg);
+  color: var(--c-bg);
 }
 
 .svc-cta::after { content: '→'; }
@@ -1971,7 +2136,6 @@ main[data-project-theme] .project-cover-block::before {
 .contact-hero-email {
   font-family: var(--ff-display);
   font-size: var(--text-fluid-4);
-  text-transform: uppercase;
   color: var(--c-bg);
   text-decoration: none;
   letter-spacing: -0.02em;
@@ -1992,17 +2156,18 @@ main[data-project-theme] .project-cover-block::before {
   margin-top: var(--space-1);
 }
 
-/* ─── Contact form — a paper form on a dark stage ───
-   The stage is the black band; the form is a bone card with a hard lavender
-   shadow (lavender is the "write to me" colour, as in the message strip). The
+/* ─── Contact form — a form card on a white band ───
+   The stage is a white band; the form is an off-white card with a 1px ink
+   border and a hairline title bar, so it reads as a thing to fill in. The
    form's rules were written for ink-on-bone-reversed, so the card swaps the
    tokens locally instead of restating every rule: --c-bg reads as the text
    colour and --c-fg as the surface throughout the form. */
 .contact-stage {
-  --paper: var(--c-bg);
+  --paper: var(--c-page);
   --ink: var(--c-fg);
-  background: var(--c-fg);
-  color: var(--paper);
+  background: var(--c-bg);
+  color: var(--ink);
+  border-block: var(--bw) solid var(--c-line-soft);
   margin: var(--space-7) 0 var(--space-4);
   padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 3rem) clamp(2rem, 5vw, 3.5rem);
   display: grid;
@@ -2014,15 +2179,15 @@ main[data-project-theme] .project-cover-block::before {
   margin: 0;
   font-size: var(--text-fluid-6);
   line-height: 1;
-  letter-spacing: -0.02em;
-  color: var(--paper);
+  letter-spacing: -0.03em;
+  color: var(--ink);
 }
 .contact-stage-sub {
   margin: 0;
   font-family: var(--ff-body);
   font-size: var(--text-md);
   line-height: 1.5;
-  color: color-mix(in oklch, var(--paper) 78%, transparent);
+  color: var(--c-fg-soft);
 }
 
 .contact-form {
@@ -2034,36 +2199,26 @@ main[data-project-theme] .project-cover-block::before {
   --c-bg-soft: color-mix(in oklch, var(--ink) 62%, transparent);
   --c-bg-faint: color-mix(in oklch, var(--ink) 18%, transparent);
   --c-bg-placeholder: color-mix(in oklch, var(--ink) 62%, transparent);
-  /* Selected states, sweeps and rings use lavender here, not the booking
-     chartreuse, which has no contrast on paper. */
-  --c-accent: var(--c-lavender);
   background: var(--c-fg);
+  border: var(--bw) solid var(--ink);
+  border-radius: var(--radius);
   color: var(--c-bg);
   width: 100%;
   max-width: 52rem;
   margin: 0 auto;
   padding: var(--form-pad-top) var(--form-pad-x) 2.25rem;
-  box-shadow: 8px 8px 0 var(--c-lavender);
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
 }
 
-@media (max-width: 560px) {
-  .contact-form { box-shadow: 5px 5px 0 var(--c-lavender); }
-}
-
-/* Header bar: names the form and shows progress, like a window's title bar.
-   Ink again, so it restores the original (unswapped) colours inside. */
+/* Header bar: names the form and shows progress, like a window's title bar,
+   set off from the questions by a hairline. */
 .contact-form .wizard-progress {
-  --c-bg: var(--paper);
-  --c-bg-soft: color-mix(in oklch, var(--paper) 60%, transparent);
-  --c-bg-faint: color-mix(in oklch, var(--paper) 18%, transparent);
   flex-wrap: wrap;
   margin: calc(-1 * var(--form-pad-top)) calc(-1 * var(--form-pad-x)) 0;
   padding: var(--space-3) var(--form-pad-x);
-  background: var(--ink);
-  color: var(--paper);
+  border-bottom: var(--bw) solid var(--c-line-soft);
 }
 .contact-card-label {
   font-family: var(--ff-mono);
@@ -2071,7 +2226,7 @@ main[data-project-theme] .project-cover-block::before {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--c-lavender);
+  color: var(--c-accent);
 }
 .contact-card-label::before { content: '\25B8\00a0' / ''; }
 .wizard-progress-meta { display: flex; align-items: center; gap: var(--space-4); }
@@ -2100,15 +2255,24 @@ main[data-project-theme] .project-cover-block::before {
 .contact-privacy a { color: var(--c-bg); text-decoration: underline; text-underline-offset: 0.2em; }
 
 .services-more { margin: var(--space-6) 0 0; font-family: var(--ff-mono); font-size: var(--text-sm); font-weight: 700; letter-spacing: 0.04em; }
-.services-more a { color: var(--c-ink); text-underline-offset: 0.25em; }
+.services-more a { color: var(--c-accent); text-underline-offset: 0.25em; }
 
 /* In-card fixes where a colour was chosen for the old ink surface. */
 .contact-form :is(.form-input, .form-textarea) { background: oklch(100% 0 0); }
 .contact-form :is(.form-input, .form-textarea):focus { outline-color: var(--ink); }
-.contact-form :is(.choice-card.selected, .chip.selected, .rating-opt.selected, .vn-play:hover),
+/* Picked answers: a soft green tint with a green edge, ink text. */
+.contact-form :is(.choice-card.selected, .chip.selected, .rating-opt.selected) {
+  background: var(--c-accent-soft);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--c-accent);
+}
+/* Green hover sweeps carry paper text. */
+.contact-form .vn-play:hover,
 .contact-form .wizard-next:hover,
-.contact-form .form-submit-btn:hover:not(:disabled) { color: var(--ink); }
-.contact-form :is(.voice-note-saved, .rating-label-icon, .form-label-icon) { color: var(--ink); }
+.contact-form .form-submit-btn:hover:not(:disabled) { color: var(--paper); }
+.contact-form :is(.form-input, .form-textarea, .choice-card, .chip, .rating-opt, .wizard-back, .wizard-next, .form-submit-btn, .vn-player) { border-radius: var(--radius-sm); }
+.contact-form :is(.rating-label-icon, .form-label-icon) { color: var(--ink); }
+.contact-form .voice-note-saved { color: var(--c-accent); }
 .contact-form .form-status.error,
 .contact-form .form-status.error a { color: var(--form-error); }
 /* Their ink-tinted colour is already muted; the shared opacity patch would
@@ -2127,8 +2291,7 @@ main[data-project-theme] .project-cover-block::before {
 .contact-form-title {
   font-family: var(--ff-display);
   font-size: var(--text-fluid-3);
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   color: var(--c-bg);
   line-height: 1;
   margin: 0;
@@ -2314,8 +2477,8 @@ main[data-project-theme] .project-cover-block::before {
   margin: var(--space-7) 0 var(--space-4);
   padding: clamp(1.5rem, 4vw, 2.75rem) clamp(1.25rem, 4vw, 2.75rem);
   background: var(--c-accent);
-  color: var(--c-ink);
-  border: var(--bw-brutal) solid var(--c-ink);
+  color: var(--c-bg);
+  border-radius: var(--radius);
 }
 
 /* Oversized "FREE" stamp behind the copy. Decorative only, so it is generated
@@ -2327,12 +2490,12 @@ main[data-project-theme] .project-cover-block::before {
   right: -0.04em;
   bottom: -0.2em;
   z-index: -1;
-  font-family: var(--ff-stamp);
+  font-family: var(--ff-display);
   /* A multiple of the largest scale step rather than a bespoke clamp(). */
   font-size: calc(var(--text-fluid-7) * 2.6);
   line-height: 1;
   text-transform: uppercase;
-  color: oklch(15% 0 0 / 0.09);
+  color: oklch(100% 0 0 / 0.05);
   pointer-events: none;
   user-select: none;
 }
@@ -2348,9 +2511,8 @@ main[data-project-theme] .project-cover-block::before {
 .consult-cta-title {
   font-family: var(--ff-display);
   font-size: var(--text-fluid-5);
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  line-height: 1;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
   max-width: 16ch;
   text-wrap: balance;
   margin: 0;
@@ -2364,7 +2526,7 @@ main[data-project-theme] .project-cover-block::before {
   margin: 0;
 }
 
-/* Ink on the chartreuse band. The band itself is the chartreuse signal, so
+/* White on the forest band. The band itself is the green booking signal, so
    the button inverts the usual booking-button colours to stay visible. */
 .consult-cta-btn {
   display: inline-flex;
@@ -2379,15 +2541,16 @@ main[data-project-theme] .project-cover-block::before {
   padding: var(--space-3) var(--space-5);
   min-height: 44px;
   font-weight: 700;
-  border: var(--bw-thick) solid var(--c-ink);
+  border: 0;
+  border-radius: var(--radius-sm);
   color: var(--c-accent);
-  background: var(--c-ink);
+  background: var(--c-bg);
   transition: background 150ms, color 150ms;
 }
 
 .consult-cta-btn:hover {
-  background: var(--c-bg);
-  color: var(--c-ink);
+  background: var(--c-fg);
+  color: var(--c-bg);
 }
 
 /* Desktop: headline on the left, blurb and button stacked on the right, so the
@@ -2446,9 +2609,10 @@ main[data-project-theme] .project-cover-block::before {
   gap: var(--space-4) var(--space-6);
   margin: 0 0 var(--space-4);
   padding: var(--space-5) clamp(1.25rem, 4vw, 2rem);
-  background: var(--c-lavender);
-  color: var(--c-ink);
-  border: var(--bw-thick) solid var(--c-ink);
+  background: var(--c-bg);
+  color: var(--c-fg);
+  border: var(--bw) solid var(--c-line-soft);
+  border-radius: var(--radius);
 }
 
 .message-cta-text { flex: 1 1 26rem; min-width: 0; }
@@ -2458,7 +2622,7 @@ main[data-project-theme] .project-cover-block::before {
   font-size: var(--text-base);
   line-height: 1.55;
 }
-.message-cta-text a { color: var(--c-ink); text-decoration: underline; text-underline-offset: 0.2em; }
+.message-cta-text a { color: var(--c-fg); text-decoration: underline; text-underline-offset: 0.2em; }
 
 .message-cta-btn {
   display: inline-flex;
@@ -2472,14 +2636,15 @@ main[data-project-theme] .project-cover-block::before {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--c-ink);
+  color: var(--c-fg);
   background: transparent;
-  border: var(--bw-thick) solid var(--c-ink);
+  border: var(--bw) solid var(--c-fg);
+  border-radius: var(--radius-sm);
   transition: background 150ms, color 150ms;
 }
 
 .message-cta-btn::after { content: '→'; }
-.message-cta-btn:hover { background: var(--c-ink); color: var(--c-lavender); }
+.message-cta-btn:hover { background: var(--c-fg); color: var(--c-bg); }
 
 @media (max-width: 600px) {
   .consult-cta-btn,
@@ -2526,7 +2691,6 @@ main[data-project-theme] .project-cover-block::before {
 .wizard-question {
   font-family: var(--ff-display);
   font-size: var(--text-fluid-3);
-  text-transform: uppercase;
   letter-spacing: -0.02em;
   color: var(--c-bg);
   line-height: 1.05;
@@ -3052,133 +3216,27 @@ main a:hover {
    draws every thick border + outline so it reads jet-black on any hue.
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ─── Full-bleed loud section blocks ───
+/* ─── Full-bleed section bands ───
    .section escapes the 880px column; its inner .container keeps the measure.
-   Thick ink borders top + bottom draw the visible brutalist grid. */
+   Bands alternate white and warm off-white, divided by a soft hairline; one
+   ink band carries the pull quote. */
 .section {
   position: relative;
   width: 100%;
-  border-block: var(--bw-brutal) solid var(--c-ink);
-  overflow: clip;
+  border-top: var(--bw) solid var(--c-line-soft);
 }
-.section + .section { border-top: none; }           /* no doubled 8px seam */
-.section > .container { position: relative; z-index: 2; }
-.section-band { padding: clamp(2.5rem, 5vw, 4rem) 0; }
+.section > .container { position: relative; }
+.section-band { padding: var(--space-12) 0; }
+@media (max-width: 640px) { .section-band { padding: var(--space-10) 0; } }
 
-.section--yellow   { background: var(--c-yellow);   color: var(--c-ink); }
-.section--lime     { background: var(--c-lime);     color: var(--c-ink); }
-.section--lavender { background: var(--c-lavender); color: var(--c-ink); }
-.section--orange   { background: var(--c-orange);   color: var(--c-ink); }
-.section--pink     { background: var(--c-pink);     color: var(--c-ink); }
-.section--ink      { background: var(--c-ink);      color: var(--c-bg);  }
-.section--bone     { background: var(--c-page);     color: var(--c-fg);  }
+.section--white { background: var(--c-bg);   color: var(--c-fg); }
+.section--page  { background: var(--c-page); color: var(--c-fg); }
+.section--ink   { background: var(--c-fg);   color: var(--c-bg); border-top-color: var(--c-fg); }
 
-/* Per-section film grain — a low-z layer BENEATH the content (z:1 < container
-   z:2), never a global top-most color-dodge overlay (which would wash the
-   whole page and crush text contrast). Keeps grain off the text entirely. */
-.section::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: var(--grain-opacity);
-  mix-blend-mode: var(--grain-blend);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
-}
-.section--bone::after { opacity: calc(var(--grain-opacity) * 0.5); }
-
-/* Inside loud blocks: thicken the stat grid's hairlines to brutalist weight
-   (boxes stay bone so the numerals keep their contrast), thicken the header
-   rule, and drop the chapter-number stamp in the top-right corner. */
-.section .stats-grid {
-  gap: var(--bw-brutal);
-  background: var(--c-ink);
-  border: var(--bw-brutal) solid var(--c-ink);
-}
-.section .section-header { border-bottom-width: var(--bw-brutal); }
-.section-stamp {
-  position: absolute;
-  top: clamp(0.9rem, 3vw, 1.75rem);
-  right: clamp(0.9rem, 4vw, 2rem);
-  z-index: 3;
-}
-
-/* ─── Outline / ghost-watermark / stamp type ─── */
-.outline-word {
-  /* Transparent FILL only — the stroke keeps the inherited color (currentColor
-     = the section's ink), so the outline is actually visible. Setting
-     `color: transparent` here would make currentColor transparent too and the
-     stroke would vanish. Degrades gracefully: without -webkit-text-stroke
-     support the word renders as solid inherited color, never invisible. */
-  -webkit-text-fill-color: transparent;
-  /* Stroke width must track the type size. A fixed 3px on Unbounded 900 held
-     up at the desktop h2 (~40px) but merged adjacent letterforms into an
-     unreadable blob at the mobile h2 (~24px) — and the outlined half is the
-     KEYWORD of every section heading, so the least legible word was the most
-     important one. `max()` keeps a visible minimum on small type while letting
-     the stroke grow with `clamp()`-scaled headings. */
-  -webkit-text-stroke: max(1.5px, 0.045em) currentColor;
-  /* Counteract the heading's negative tracking: hollow letterforms need more
-     air between them than solid ones, or the strokes touch and read as one
-     shape. Positive tracking is scoped to the outlined word only. */
-  letter-spacing: 0.04em;
-  /* The trailing letter-space would otherwise push the following word away. */
-  margin-right: -0.04em;
-}
-
-/* Below the tablet breakpoint the heading is small enough that even a scaled
-   stroke crowds; fall back to a solid fill so the keyword stays readable.
-   The word keeps its emphasis through weight and the section's ink color. */
-@media (max-width: 640px) {
-  .outline-word {
-    -webkit-text-fill-color: currentColor;
-    -webkit-text-stroke: 0;
-    letter-spacing: normal;
-    margin-right: 0;
-  }
-}
-.ghost-word {
-  position: absolute;
-  z-index: 0;
-  top: -0.06em;
-  left: -0.03em;
-  font-family: var(--ff-stamp);
-  font-size: clamp(6rem, 22vw, 16rem);
-  line-height: 0.8;
-  text-transform: uppercase;
-  white-space: nowrap;
-  -webkit-text-stroke: 2px rgba(10, 10, 10, 0.08);
-  color: transparent;
-  pointer-events: none;
-  user-select: none;
-}
-.section--ink .ghost-word { -webkit-text-stroke-color: rgba(245, 244, 239, 0.07); }
-.stamp {
-  display: inline-block;
-  font-family: var(--ff-stamp);
-  font-size: var(--text-fluid-4);
-  letter-spacing: 0.14em;
-  padding: 0.05em 0.5em;
-  border: var(--bw-brutal) solid var(--c-ink);
-  background: var(--c-ink);
-  color: var(--c-yellow);
-  transform: rotate(-3deg);
-}
-
-/* ─── Brutalist reduced-motion / contrast / forced-colors guards ─── */
-@media (prefers-reduced-motion: reduce) {
-  /* The CTAs no longer carry infinite hover animations — .consult-cta-btn's
-     neonPulse and .svc-cta's neonRotateAngle went with the neon system — so
-     there is nothing left here to stop but the grain. The remaining button
-     motion is a one-shot fill on hover, which the global transition-duration
-     override below already flattens. */
-  .section::after { animation: none; }
-}
-@media (prefers-contrast: more), (forced-colors: active) {
-  .section::after { display: none; }   /* grain destroys contrast */
-}
+/* One word of a section heading in the accent, the way the hybrid board sets
+   the second half of the closing quote. Solid fill, so it reads at any size. */
+.accent-word { color: var(--c-accent); }
+.section--ink .accent-word { color: var(--c-accent-bright); }
 
 /* The cyberpunk neon button system lived here: a .neon-btn base, @keyframes
    neonPulse and neonRotateAngle, and a #0a0f1c slab body carried by all seven
@@ -3197,9 +3255,9 @@ main a:hover {
   left: 0;
   width: 18px;
   height: 18px;
-  border: 2px solid var(--c-cyan);
+  border: 2px solid var(--c-accent);
   border-radius: 50%;
-  background: rgba(0, 186, 226, 0.15);
+  background: color-mix(in oklch, var(--c-accent) 15%, transparent);
   pointer-events: none;
   z-index: 10000;
   opacity: 0;
@@ -3291,7 +3349,7 @@ main a:hover {
   /* The visible border is the SVG frame below (so it can draw itself in);
      this transparent border just reserves its width. */
   border: var(--bw-brutal) solid transparent;
-  box-shadow: 8px 8px 0 var(--c-ink);
+  border-radius: var(--radius);
 }
 
 /* Sits centered on the border box edge: the box is offset out by half the
@@ -3310,6 +3368,7 @@ main a:hover {
   fill: none;
   stroke: var(--c-ink);
   stroke-width: var(--bw-brutal);
+  rx: var(--radius);
 }
 
 /* Wide screens: heading on the left, story on the right, evidence and any
@@ -3331,9 +3390,9 @@ main a:hover {
   display: inline-block;
   margin-bottom: var(--space-5);
   padding: var(--space-1) var(--space-3);
-  background: var(--c-accent);
-  color: var(--c-ink);
-  border: var(--bw-thick) solid var(--c-ink);
+  background: var(--c-accent-soft);
+  color: var(--c-accent);
+  border-radius: var(--radius-pill);
   font-family: var(--ff-mono);
   font-size: var(--text-sm);
   letter-spacing: 0.05em;
@@ -3430,7 +3489,6 @@ main a:hover {
   color: inherit;
   font-family: var(--ff-display);
   font-size: var(--text-fluid-4);
-  text-transform: uppercase;
   letter-spacing: -0.02em;
   line-height: 1.05;
   text-decoration: none;
@@ -3475,13 +3533,14 @@ main a:hover {
   padding: var(--space-5);
   background: var(--c-ink);
   color: var(--c-bg);
+  border-radius: var(--radius);
 }
 
 .evidence-value {
   font-family: var(--ff-display);
   font-size: var(--text-fluid-7);
   line-height: 0.9;
-  color: var(--c-accent);
+  color: var(--c-accent-bright);
   font-variant-numeric: tabular-nums;
 }
 
@@ -3543,7 +3602,6 @@ main a:hover {
 @media (max-width: 640px) {
   .story-chapter {
     padding: var(--space-6) var(--space-5) var(--space-5);
-    box-shadow: 5px 5px 0 var(--c-ink);
   }
   .story-next-link { flex-basis: 100%; }
 }
@@ -3587,7 +3645,8 @@ main a:hover {
   align-content: start;
   gap: var(--space-3);
   padding: var(--space-6);
-  border: var(--bw-thick) solid var(--c-line);
+  border: var(--bw) solid var(--c-line-soft);
+  border-radius: var(--radius);
   background: var(--c-bg);
 }
 
@@ -3643,25 +3702,26 @@ main a:hover {
   aspect-ratio: 1;
   width: 100%;
   background: var(--c-bg);
-  border: var(--bw-brutal) solid var(--c-ink);
-  box-shadow: 8px 8px 0 var(--c-ink);
+  border: var(--bw) solid var(--c-line-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 .scene svg { display: block; width: 100%; height: 100%; }
-.scene-line { stroke: var(--c-ink); stroke-width: 3; }
-.scene-line--heavy { stroke-width: 5; }
+.scene-line { stroke: var(--c-ink); stroke-width: 2; }
+.scene-line--heavy { stroke-width: 3; }
 .scene-dot { fill: var(--c-ink); }
 .scene-grid circle { fill: var(--c-ink); opacity: 0.35; }
-.scene-fill { fill: var(--c-accent); stroke: var(--c-ink); stroke-width: 3; }
-.scene-accent { fill: var(--c-accent); stroke: var(--c-ink); stroke-width: 5; }
-.scene-hole { fill: var(--c-bg); stroke: var(--c-ink); stroke-width: 3; }
-.scene-tile { fill: var(--c-bg); stroke: var(--c-ink); stroke-width: 3; }
-.scene-tile--heavy { stroke-width: 5; }
+.scene-fill { fill: var(--c-accent-soft); stroke: var(--c-ink); stroke-width: 2; }
+.scene-accent { fill: var(--c-accent); stroke: var(--c-ink); stroke-width: 3; }
+.scene-hole { fill: var(--c-bg); stroke: var(--c-ink); stroke-width: 2; }
+.scene-tile { fill: var(--c-bg); stroke: var(--c-ink); stroke-width: 2; }
+.scene-tile--heavy { stroke-width: 3; }
 .scene-tile--ink { fill: var(--c-ink); }
 .scene-light { fill: var(--c-accent); }
 .scene-label {
   fill: var(--c-ink);
   font-family: var(--ff-display);
-  font-weight: 900;
+  font-weight: 500;
   font-size: 22px;
   letter-spacing: 0.02em;
 }
@@ -3699,17 +3759,19 @@ main a:hover {
   flex: 1;
   display: flex;
   flex-direction: column;
-  border: var(--bw-thick) solid var(--c-ink);
+  border: var(--bw) solid var(--c-line-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
   background: var(--c-bg);
   color: var(--c-fg);
   text-decoration: none;
-  transition: transform 150ms var(--ease), box-shadow 150ms var(--ease);
+  transition: transform 150ms var(--ease), border-color 150ms var(--ease);
 }
 
 .work-tile:hover,
 .work-tile:focus-visible {
-  transform: translate(-3px, -3px);
-  box-shadow: 6px 6px 0 var(--c-ink);
+  transform: translateY(-2px);
+  border-color: var(--c-fg);
 }
 
 .work-tile-head {
@@ -3724,10 +3786,10 @@ main a:hover {
   padding: var(--space-4);
   background: var(--tile-fill);
   color: var(--tile-ink);
-  border-bottom: var(--bw-thick) solid var(--c-ink);
+  border-bottom: var(--bw) solid var(--c-line-soft);
 }
 
-/* The five mission apps lead the list; the chartreuse edge marks them. */
+/* The five mission apps lead the list; a forest edge marks them. */
 .work-tile--mission .work-tile-head { box-shadow: inset 0 8px 0 var(--c-accent); padding-top: calc(var(--space-4) + 8px); }
 
 .work-tile-mark {
@@ -3750,6 +3812,7 @@ main a:hover {
   background: var(--c-bg);
   color: var(--c-fg);
   border: var(--bw) solid var(--c-ink);
+  border-radius: var(--radius-sm);
 }
 
 .work-tile-eyebrow {
@@ -3768,7 +3831,6 @@ main a:hover {
   margin: 0;
   font-family: var(--ff-display);
   font-size: var(--text-fluid-5);
-  text-transform: uppercase;
   letter-spacing: -0.02em;
   line-height: 1;
   color: inherit;
@@ -3843,12 +3905,13 @@ main a:hover {
 .cs-band {
   margin: var(--space-9) 0;
   padding: clamp(1.5rem, 4vw, 2.75rem);
-  border: var(--bw-brutal) solid var(--c-ink);
+  border: var(--bw) solid var(--c-line-soft);
+  border-radius: var(--radius);
 }
 
 /* The challenge: ink band, the problem in larger type. */
-.cs-band--ink { background: var(--c-ink); color: var(--c-bg); }
-.cs-band--ink .cs-eyebrow { color: var(--c-accent); }
+.cs-band--ink { background: var(--c-ink); color: var(--c-bg); border-color: var(--c-ink); }
+.cs-band--ink .cs-eyebrow { color: var(--c-accent-bright); }
 .cs-band-lead {
   margin: 0;
   max-width: 62ch;
@@ -3875,14 +3938,15 @@ main a:hover {
   min-width: 0;
   padding: var(--space-4);
   background: var(--c-bg);
-  border: var(--bw-thick) solid var(--c-ink);
+  border: var(--bw) solid var(--c-line-soft);
+  border-radius: var(--radius);
   font-family: var(--ff-mono);
   font-size: var(--text-sm);
   font-weight: 700;
   line-height: 1.4;
 }
 .cs-step-num {
-  font-family: var(--ff-stamp);
+  font-family: var(--ff-display);
   font-size: var(--text-fluid-7);
   line-height: 0.85;
   color: var(--c-ink);
@@ -3893,15 +3957,14 @@ main a:hover {
   margin: var(--space-9) 0;
   padding: clamp(1.25rem, 3.5vw, 2.25rem);
   background: var(--c-bg);
-  border: var(--bw-thick) solid var(--c-ink);
-  box-shadow: 8px 8px 0 var(--c-ink);
+  border: var(--bw) solid var(--c-fg);
+  border-radius: var(--radius);
 }
 .cs-card h2 {
   margin: 0 0 var(--space-3);
   font-family: var(--ff-display);
   font-size: var(--text-fluid-6);
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 /* Outcomes: the project's own colour. Only the large heading sits on the
@@ -3912,9 +3975,8 @@ main a:hover {
   margin: 0 0 var(--space-5);
   font-family: var(--ff-display);
   font-size: var(--text-fluid-7);
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  line-height: 0.95;
+  letter-spacing: -0.03em;
+  line-height: 1;
   color: inherit;
 }
 .cs-outcomes {
@@ -3932,13 +3994,13 @@ main a:hover {
   padding: var(--space-4);
   background: var(--c-bg);
   color: var(--c-fg);
-  border: var(--bw-thick) solid var(--c-ink);
+  border-radius: var(--radius);
   font-family: var(--ff-body);
   font-size: var(--text-base);
   line-height: 1.55;
 }
 .cs-outcome-num {
-  font-family: var(--ff-stamp);
+  font-family: var(--ff-display);
   font-size: var(--text-fluid-6);
   line-height: 0.9;
   color: var(--c-ink);

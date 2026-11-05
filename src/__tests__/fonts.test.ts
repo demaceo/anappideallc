@@ -24,7 +24,7 @@ describe('self-hosted fonts', () => {
 
   it('declares every brand family the font tokens use', () => {
     const css = read('src/styles/tokens.css')
-    for (const family of ['Unbounded', 'Space Mono', 'Bebas Neue']) {
+    for (const family of ['Unbounded', 'Inter', 'Space Mono']) {
       expect(css).toMatch(new RegExp(`font-family: '${family}';\\s*src: url\\('/fonts/`))
     }
   })

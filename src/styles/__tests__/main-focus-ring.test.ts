@@ -100,22 +100,19 @@ describe('globals.css — scroll-driven collapse is @supports-guarded (audit P0)
 /**
  * Regression — 2026-08 audit P1 (outlined keyword illegible).
  *
- * `.outline-word` used a fixed `-webkit-text-stroke: 3px` while the heading
- * scales with clamp(). At the mobile h2 (~24px) the 3px stroke plus Unbounded
- * 900's negative tracking merged adjacent letterforms into one shape — and the
- * outlined half is the KEYWORD of every section heading. The stroke must stay
- * em-relative so it tracks the type size.
+ * The keyword of each Home section heading used to be a hollow outline
+ * (`-webkit-text-stroke`), which merged into one shape at phone sizes. The
+ * hybrid sets it as a solid accent colour instead; keep it solid, since the
+ * keyword is the most important word in the heading.
  */
-describe('globals.css — .outline-word stroke scales with type (audit P1)', () => {
-  it('uses an em-relative stroke, not a fixed pixel width', () => {
-    expect(GLOBALS_CSS).toMatch(/-webkit-text-stroke:\s*max\([^)]*em\)/)
-    expect(GLOBALS_CSS).not.toMatch(/-webkit-text-stroke:\s*3px\s+currentColor/)
+describe('globals.css — heading keyword is a solid fill (audit P1)', () => {
+  it('uses no hollow outline type', () => {
+    expect(GLOBALS_CSS).not.toMatch(/-webkit-text-stroke/)
+    expect(GLOBALS_CSS).not.toMatch(/-webkit-text-fill-color:\s*transparent/)
   })
 
-  it('falls back to a solid fill on small screens', () => {
-    expect(GLOBALS_CSS).toMatch(
-      /\.outline-word\s*\{[^}]*-webkit-text-fill-color:\s*currentColor/,
-    )
+  it('colours the keyword with the accent', () => {
+    expect(GLOBALS_CSS).toMatch(/\.accent-word\s*\{[^}]*color:\s*var\(--c-accent\)/)
   })
 })
 
