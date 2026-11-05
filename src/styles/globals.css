@@ -2518,6 +2518,8 @@ main[data-project-theme] .project-cover-block::before {
   margin: 0;
 }
 
+.consult-cta-title .nowrap { white-space: nowrap; }
+
 .consult-cta-blurb {
   font-family: var(--ff-body);
   font-size: var(--text-base);
