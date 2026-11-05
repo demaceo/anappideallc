@@ -102,7 +102,8 @@ describe('A real face and a clear call', () => {
     for (const step of SITE.booking.callSteps) {
       expect(within(steps).getByText(step)).toBeInTheDocument()
     }
-    expect(within(steps).getByText(SITE.booking.callNote)).toBeInTheDocument()
+    const card = steps.closest('.consult-cta') as HTMLElement
+    expect(within(card).getByText(SITE.booking.callNote)).toBeInTheDocument()
   })
 
   it('keeps the call steps off pages where the band is only a reminder', () => {

@@ -13,8 +13,8 @@ interface ConsultCTAProps {
   note?: string
 }
 
-// Tier 1 of three call-to-action shapes: book a call. A full-width chartreuse
-// band, the loudest thing on any page it appears on, so it appears once per
+// Tier 1 of three call-to-action shapes: book a call. A full-width forest-green
+// card, the loudest thing on any page it appears on, so it appears once per
 // page. Tier 2 (write to me) is MessageCTA; tier 3 (keep reading) is
 // StoryNext. Shape and colour tell a visitor which is which before they read.
 //
@@ -39,9 +39,9 @@ export function ConsultCTA({
               <li key={step}>{step}</li>
             ))}
           </ol>
-          {note && <p className="consult-cta-steps-note">{note}</p>}
         </div>
       )}
+      {steps && steps.length > 0 && note && <p className="consult-cta-steps-note">{note}</p>}
       <a
         className="consult-cta-btn"
         href={SITE.booking.consultationUrl}

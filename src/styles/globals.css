@@ -2572,9 +2572,10 @@ main[data-project-theme] .project-cover-block::before {
   .consult-cta-btn { grid-column: 2; grid-row: 3; margin-top: 0; }
 }
 
-/* "On the call" steps inside the band. Stacked under the blurb on phones; in
-   the right column, between the blurb and the button, on desktop. */
-.consult-cta-steps { display: grid; gap: var(--space-2); max-width: 52ch; }
+/* "On the call" steps. Phones: a numbered list under the blurb. Desktop
+   (below): three numbered columns across the full card between hairlines,
+   so the card fills its width evenly and the steps read as a sequence. */
+.consult-cta-steps { display: grid; gap: var(--space-3); min-width: 0; }
 .consult-cta-steps-label {
   margin: 0;
   font-family: var(--ff-mono);
@@ -2584,20 +2585,63 @@ main[data-project-theme] .project-cover-block::before {
   text-transform: uppercase;
 }
 .consult-cta-steps ol {
+  list-style: none;
+  counter-reset: call-step;
   margin: 0;
-  padding-left: 1.25em;
+  padding: 0;
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-3);
   font-family: var(--ff-body);
   font-size: var(--text-base);
   line-height: 1.45;
 }
+.consult-cta-steps li {
+  counter-increment: call-step;
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+}
+.consult-cta-steps li::before {
+  content: counter(call-step, decimal-leading-zero);
+  font-family: var(--ff-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  line-height: 1.7;
+  color: var(--c-accent-bright);
+}
 .consult-cta-steps-note { margin: 0; font-family: var(--ff-mono); font-size: var(--text-sm); }
 
+/* Phones have no empty corner for the watermark in the taller steps card;
+   at the bottom it would sit behind the full-width button. */
+@media (max-width: 879.98px) {
+  .consult-cta--steps::after { content: none; }
+}
+
 @media (min-width: 880px) {
-  .consult-cta--steps .consult-cta-title { grid-row: 2 / span 3; }
-  .consult-cta--steps .consult-cta-steps { grid-column: 2; grid-row: 3; }
-  .consult-cta--steps .consult-cta-btn { grid-row: 4; }
+  .consult-cta--steps {
+    grid-template-areas:
+      "eyebrow eyebrow"
+      "title   blurb"
+      "steps   steps"
+      "note    btn";
+    row-gap: var(--space-6);
+  }
+  .consult-cta--steps .consult-cta-eyebrow { grid-area: eyebrow; }
+  .consult-cta--steps .consult-cta-title { grid-area: title; grid-column: auto; grid-row: auto; }
+  .consult-cta--steps .consult-cta-blurb { grid-area: blurb; grid-column: auto; grid-row: auto; align-self: end; }
+  .consult-cta--steps .consult-cta-steps {
+    grid-area: steps;
+    padding: var(--space-6) 0;
+    border-block: var(--bw) solid oklch(100% 0 0 / 0.25);
+  }
+  .consult-cta--steps .consult-cta-steps ol {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-8);
+  }
+  .consult-cta--steps .consult-cta-steps li { grid-template-columns: minmax(0, 1fr); gap: var(--space-2); }
+  .consult-cta--steps .consult-cta-steps-note { grid-area: note; align-self: center; }
+  .consult-cta--steps .consult-cta-btn { grid-area: btn; grid-column: auto; grid-row: auto; justify-self: end; }
+  /* The watermark moves to the top-right corner, clear of the button. */
+  .consult-cta--steps::after { top: -0.18em; bottom: auto; font-size: calc(var(--text-fluid-7) * 1.6); }
 }
 
 /* Tier 2 — write to me. */
