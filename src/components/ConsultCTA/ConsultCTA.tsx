@@ -13,6 +13,15 @@ interface ConsultCTAProps {
   note?: string
 }
 
+// Keeps hyphenated words ("30-minute") whole, so a narrow column never breaks
+// the title after the hyphen. Unbounded has no non-breaking hyphen (U+2011),
+// so the word is wrapped in a no-wrap span instead of swapping the character.
+function keepHyphenatedWords(text: string) {
+  return text.split(/(\S+-\S+)/).map((part, i) =>
+    i % 2 ? <span key={i} className="nowrap">{part}</span> : part,
+  )
+}
+
 // Tier 1 of three call-to-action shapes: book a call. A full-width forest-green
 // card, the loudest thing on any page it appears on, so it appears once per
 // page. Tier 2 (write to me) is MessageCTA; tier 3 (keep reading) is
@@ -29,7 +38,7 @@ export function ConsultCTA({
   return (
     <div className={`consult-cta${steps?.length ? ' consult-cta--steps' : ''}`}>
       <span className="consult-cta-eyebrow">{eyebrow}</span>
-      <p className="consult-cta-title">{title}</p>
+      <p className="consult-cta-title">{keepHyphenatedWords(title)}</p>
       <p className="consult-cta-blurb">{blurb}</p>
       {steps && steps.length > 0 && (
         <div className="consult-cta-steps">
