@@ -3,7 +3,7 @@ import { SocialLinks } from '../components/SocialLinks/SocialLinks'
 import { FooterNav } from '../components/FooterNav/FooterNav'
 import { caseStudies } from '../data/case-studies'
 import { PROJECT_COLORS } from '../data/project-colors'
-import { readableOn } from '../lib/color'
+import { fillForSmallText } from '../lib/color'
 import { RouteHead } from '../components/SEO/RouteHead'
 import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
@@ -144,15 +144,13 @@ export default function Work() {
         </div>
 
         {/* One colour tile per project, filled with that app's own brand
-            colour so the list is as loud as Home. Only large bold type sits
-            on the colour (readableOn picks ink or bone); the summary sits on
-            a bone panel, because several brand colours fall just short of
-            4.5:1 for small text in either direction. */}
+            colour. The title is set at a medium weight, which does not count
+            as large text below 24px, so the fill is nudged (fillForSmallText)
+            until the title clears 4.5:1; the summary sits on a white panel. */}
         <ul className="work-tiles">
           {orderedStudies.map((c) => {
             const ProjectLogo = PROJECT_LOGOS[c.slug] ?? LogoPinpoint
-            const fill = PROJECT_COLORS[c.slug] ?? '#2980b9'
-            const ink = readableOn(fill)
+            const { fill, ink } = fillForSmallText(PROJECT_COLORS[c.slug] ?? '#2980b9')
             return (
               <li key={c.slug}>
                 <Link

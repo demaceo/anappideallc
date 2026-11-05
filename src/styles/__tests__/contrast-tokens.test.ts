@@ -145,9 +145,13 @@ describe('tokens.css — text colours clear WCAG AA (audit P2)', () => {
 describe('globals.css — requested weights exist in the family (audit P2)', () => {
   it('never asks for a weight Space Mono does not ship', () => {
     // 500 resolves to 400 and 600 resolves to 700 — both are silent lies about
-    // what will render. Only 400 and 700 are honest here.
-    expect(GLOBALS).not.toMatch(/font-weight:\s*500/)
-    expect(GLOBALS).not.toMatch(/font-weight:\s*600/)
+    // what will render. Only 400 and 700 are honest in a Space Mono rule.
+    // Unbounded and Inter are variable fonts, so 500 is real for them.
+    const mono = [...GLOBALS.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .filter(([, , body]) => /font-family:\s*var\(--ff-mono\)/.test(body))
+      .filter(([, , body]) => /font-weight:\s*(500|600)/.test(body))
+      .map(([, sel]) => sel.trim())
+    expect(mono).toEqual([])
   })
 
   it('still applies emphasis where those rules intended it', () => {
@@ -232,10 +236,11 @@ describe('globals.css — spacing sits on the 4px grid (scales adoption)', () =>
  * width in between.
  */
 describe('globals.css — type comes from the scale (scales adoption)', () => {
-  // The two deliberate showpieces that are not scale members.
-  const BESPOKE = 2
+  // The one deliberate showpiece that is not a scale member: the footer
+  // wordmark. (The ghost watermark, the other one, went with the hybrid.)
+  const BESPOKE = 1
 
-  it('declares no bespoke clamp() outside the two showpieces', () => {
+  it('declares no bespoke clamp() outside the showpiece', () => {
     const clamps = GLOBALS.match(/font-size:\s*clamp\(/g) ?? []
     expect(clamps).toHaveLength(BESPOKE)
   })
@@ -289,22 +294,22 @@ describe('one visual language (neon retirement)', () => {
     expect(GLOBALS).not.toMatch(/text-shadow:\s*0 0/)
   })
 
-  it('gives the ported CTAs the ink/bone inversion', () => {
+  it('keeps forest green for booking and ink for everything else', () => {
     expect(GLOBALS).toMatch(/\.project-link-btn\s*\{[^}]*background:\s*var\(--c-fg\)/)
-    // Chartreuse means "book a call": the booking buttons rest on the accent
-    // and invert to the ink slab on hover.
-    for (const sel of ['\\.booking-fab', '\\.hero-cta']) {
+    // Forest green means "book a call": the booking buttons rest on the accent
+    // with white text and turn ink on hover.
+    for (const sel of ['\\.booking-fab', '\\.hero-cta', '\\.svc-cta']) {
       expect(GLOBALS).toMatch(new RegExp(`${sel}\\s*\\{[^}]*background:\\s*var\\(--c-accent\\)`))
+      expect(GLOBALS).toMatch(new RegExp(`${sel}\\s*\\{[^}]*[^-]color:\\s*var\\(--c-bg\\)`))
       expect(GLOBALS).toMatch(new RegExp(`${sel}:hover\\s*\\{[^}]*background:\\s*var\\(--c-fg\\)`))
     }
-    // Tier 1 is the chartreuse band itself, so its button is the ink slab.
+    // Tier 1 is the green booking card itself, so its button is white.
     expect(GLOBALS).toMatch(/\.consult-cta\s*\{[^}]*background:\s*var\(--c-accent\)/)
-    expect(GLOBALS).toMatch(/\.consult-cta-btn\s*\{[^}]*background:\s*var\(--c-ink\)/)
-    // Tier 2 is lavender, so it never reads as a booking action.
-    expect(GLOBALS).toMatch(/\.message-cta\s*\{[^}]*background:\s*var\(--c-lavender\)/)
-    // On the ink form panel the inversion runs the other way.
-    for (const sel of ['\\.svc-cta', '\\.wizard-next']) {
-      expect(GLOBALS).toMatch(new RegExp(`${sel}\\s*\\{[^}]*background:\\s*var\\(--c-bg\\)`))
-    }
+    expect(GLOBALS).toMatch(/\.consult-cta-btn\s*\{[^}]*color:\s*var\(--c-accent\);\s*background:\s*var\(--c-bg\)/)
+    // Tier 2 is a white hairline card, so it never reads as a booking action.
+    expect(GLOBALS).toMatch(/\.message-cta\s*\{[^}]*background:\s*var\(--c-bg\)/)
+    expect(GLOBALS).not.toMatch(/\.message-cta\s*\{[^}]*var\(--c-accent\)/)
+    // Inside the swapped form card, --c-bg is the ink: Continue is an ink button.
+    expect(GLOBALS).toMatch(/\.wizard-next\s*\{[^}]*background:\s*var\(--c-bg\)/)
   })
 })

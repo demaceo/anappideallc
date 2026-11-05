@@ -17,6 +17,8 @@ export interface Service {
   useCases: string[]
   deliverables: string[]
   metric?: { label: string; value: string }
+  // One short line under the title in the Home offer list.
+  tagline?: string
   // Public starting price. Rates come from SITE.pricing; the sliding-scale
   // discount (SITE.pricing.range) applies to fixed-price projects only.
   price?: { label: string; note?: string }
@@ -52,6 +54,7 @@ export const services: Service[] = [
       'Visitor reports ready to read',
     ],
     metric: { label: 'Ready in', value: '3–5 weeks' },
+    tagline: 'Ready in 3–5 weeks',
     price: { label: 'From $3,700', note: 'With the Own It teaching package: $4,400' },
   },
   {
@@ -79,6 +82,7 @@ export const services: Service[] = [
       'Notes on anything else that could break',
     ],
     metric: { label: 'Rush turnaround', value: '1 business day' },
+    tagline: 'Rush: 1 business day',
     price: { label: '$92/hour', note: '2-hour minimum ($184). Needed within 1 business day: $138/hour.' },
   },
   {
@@ -108,6 +112,7 @@ export const services: Service[] = [
       'An AI playbook for your business',
     ],
     metric: { label: 'Goal', value: 'You run it' },
+    tagline: 'At your pace',
     price: { label: 'From $750' },
   },
   {
@@ -137,6 +142,7 @@ export const services: Service[] = [
       'Monthly tuning and updates, and a quarterly cost review',
     ],
     metric: { label: 'Rebuild needed', value: 'None' },
+    tagline: 'No rebuild needed',
     price: { label: 'From $4,100' },
   },
   {

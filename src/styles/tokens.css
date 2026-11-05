@@ -1,8 +1,9 @@
 /* ═══════════════════════════════════════════════════════════
-   Design tokens — "Layout Studio" neo-brutalist system
-   Warm bone, near-black ink, one acid-chartreuse accent.
-   Zero border-radius, zero shadows: hairlines and inversion
-   carry all structure and depth.
+   Design tokens — the "hybrid" system (2026-11)
+   The refined-brutalist look with warm content: a warm off-white
+   page, white cards, near-black ink, one deep forest accent.
+   Hairlines carry structure; no hard shadows; soft corners on
+   the things you touch (buttons, cards, the form).
    ═══════════════════════════════════════════════════════════ */
 /* ═══ Brand fonts, self-hosted ═══
    Served from /fonts (latin subset, the same files Google Fonts served) so no
@@ -14,6 +15,17 @@
   src: url('/fonts/unbounded-latin-variable.woff2') format('woff2');
   font-style: normal;
   font-weight: 400 900;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Inter carries body text since the 2026-11 restyle: Space Mono stays for
+   labels and captions, where a monospace reads as a deliberate detail rather
+   than as paragraphs of typewriter. Variable, so one file covers 100–900. */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-latin-variable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
   font-display: swap;
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
@@ -49,14 +61,6 @@
   font-display: swap;
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-@font-face {
-  font-family: 'Bebas Neue';
-  src: url('/fonts/bebas-neue-latin-400.woff2') format('woff2');
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
 
 /* ═══ Metric-matched fallback faces ═══
    The brand fonts load with display=swap, so text first
@@ -65,16 +69,30 @@
    0.30 on /work). These faces resize the common system fallbacks (Arial /
    Courier New, or their metric-compatible Liberation equivalents) to the
    brand fonts' measured widths and line metrics, so the swap no longer moves
-   anything. Values were computed with fontTools from the Google Fonts latin
-   files (Unbounded 900 vs Arial Bold on uppercase text, Space Mono 400 vs
-   Courier New, Bebas Neue vs Arial Bold); recompute if a font changes. */
+   anything. Values were computed with fontTools as the ratio of total advance
+   width over the site's own prerendered text (400 headings for Unbounded 500
+   vs Arial Bold, 695 paragraphs for Inter 400 vs Arial; Space Mono vs Courier
+   New is monospaced, so exact). ascent/descent = the brand font's typo metrics
+   divided by size-adjust. An average cannot match every line: single strings
+   still land 1–2% either side, so a line right at the wrap point can rewrap
+   on swap. Both brand fonts are preloaded, so most visits never paint the
+   fallback. Recompute if a font, weight or the copy's case changes. */
 @font-face {
   font-family: 'Unbounded Fallback';
   src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'), local('LiberationSans-Bold');
   font-weight: 100 900;
-  size-adjust: 129.27%;
-  ascent-override: 76.97%;
-  descent-override: 18.95%;
+  size-adjust: 128.3%;
+  ascent-override: 77.55%;
+  descent-override: 19.1%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('LiberationSans');
+  font-weight: 100 900;
+  size-adjust: 106.47%;
+  ascent-override: 90.99%;
+  descent-override: 22.66%;
   line-gap-override: 0%;
 }
 @font-face {
@@ -86,21 +104,13 @@
   descent-override: 35.4%;
   line-gap-override: 0%;
 }
-@font-face {
-  font-family: 'Bebas Neue Fallback';
-  src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'), local('LiberationSans-Bold');
-  size-adjust: 58.02%;
-  ascent-override: 155.11%;
-  descent-override: 51.7%;
-  line-gap-override: 0%;
-}
 
 :root {
   /* Color — OKLCH */
-  --c-page: oklch(88% 0.008 250);     /* cool concrete: page background     */
-  --c-bg: oklch(96% 0.005 90);        /* warm bone: cards + text on ink     */
-  --c-fg: oklch(15% 0 0);             /* near-black: text, dark surfaces    */
-  --c-fg-soft: oklch(15% 0 0 / 0.65); /* muted foreground                   */
+  --c-page: oklch(97.2% 0.006 85);    /* warm off-white: page background    */
+  --c-bg: oklch(99.6% 0.002 90);      /* white: cards + text on ink/accent  */
+  --c-fg: oklch(17% 0.004 100);       /* near-black: text, dark surfaces    */
+  --c-fg-soft: oklch(17% 0.004 100 / 0.72); /* muted foreground             */
 
   /* The page ground and the bone card colour used to be one token. They split
      when the plain pages moved to concrete (2026-11): --c-bg is also the text
@@ -108,8 +118,20 @@
      stays bone, and cards keep it as a fill that reads lighter than the page.
      --c-fg-soft went 0.60 -> 0.65 because muted text on concrete measured
      4.61:1 at 0.60, too close to the 4.5:1 floor. */
-  --c-line: oklch(15% 0 0);           /* hairline rules and borders         */
-  --c-accent: oklch(88% 0.22 125);    /* acid chartreuse: the one accent    */
+  --c-line: oklch(17% 0.004 100);     /* strong hairlines and rules         */
+  --c-line-soft: oklch(84% 0.012 85); /* quiet dividers between list rows   */
+
+  /* One accent, three jobs. Chartreuse could be a fill under ink text AND
+     coloured text on ink; a deep green can't do both, so the roles split:
+       --c-accent        fills (buttons, the booking card) with --c-bg text,
+                         and green text/lines on light grounds (8.6–9.2:1)
+       --c-accent-soft   tinted grounds under ink text (selected options,
+                         the sliding-scale note)
+       --c-accent-bright the accent on ink surfaces (pull quotes, case-study
+                         bands, the footer mark), 12:1 on --c-fg */
+  --c-accent: oklch(39% 0.065 158);         /* deep forest                 */
+  --c-accent-soft: oklch(94.5% 0.02 158);   /* forest tint                 */
+  --c-accent-bright: oklch(84% 0.085 155);  /* light green for dark grounds */
   --c-accent-2: oklch(70% 0.22 35);   /* red-orange: error states ONLY      */
 
   /* Swatch family — icon-category & stat-box semantic accents. Derived from
@@ -136,21 +158,19 @@
      3:1 floor) and keep their original values. */
 
   /* Inverse-surface soft tones (bone over black) */
-  --c-bg-soft: oklch(96% 0.005 90 / 0.6);
-  --c-bg-faint: oklch(96% 0.005 90 / 0.18);
+  --c-bg-soft: oklch(99.6% 0.002 90 / 0.6);
+  --c-bg-faint: oklch(99.6% 0.002 90 / 0.18);
   /* Form placeholders previously reused --c-bg-faint and measured 1.60:1 on
      the dark form panel (the typed value is 17.6:1). --c-bg-faint stays at
      0.18 because the hairlines and rules it also feeds are non-text; this is
      a separate token at the alpha the AA floor actually needs (5.69:1). */
-  --c-bg-placeholder: oklch(96% 0.005 90 / 0.55);
+  --c-bg-placeholder: oklch(99.6% 0.002 90 / 0.55);
 
-  /* Typography — full swap to the Brutalist Scroll Page pen's families.
-     Unbounded (display, heavy) · Space Mono (body + mono/labels) ·
-     Bebas Neue (giant ghost watermarks + stamp/badge labels). */
+  /* Typography — Unbounded (display headings, sentence case) · Inter (body
+     copy) · Space Mono (uppercase labels, eyebrows, buttons). */
   --ff-display: 'Unbounded', 'Unbounded Fallback', ui-sans-serif, system-ui, sans-serif;
-  --ff-body: 'Space Mono', 'Space Mono Fallback', ui-monospace, monospace;
+  --ff-body: 'Inter', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
   --ff-mono: 'Space Mono', 'Space Mono Fallback', ui-monospace, monospace;
-  --ff-stamp: 'Bebas Neue', 'Bebas Neue Fallback', 'Unbounded', sans-serif;
 
   /* ═══ Spacing — a 4px grid, not a ladder ═══
      Every padding / margin / gap is a multiple of 0.25rem (4px). The tokens
@@ -230,27 +250,18 @@
   --bw: 1px;
   --bw-thick: 2px;
 
-  /* ═══ Brutalist "loud light" system — adapted from the CodePenz
-     "Brutalist Scroll Page". ADDITIVE + opt-in: --c-bg (warm bone) stays the
-     page canvas and --c-fg stays the default ink, so any page that never
-     applies a .section--<color> block keeps rendering exactly as before.
-     Loud colors are pulled in only by loud section blocks and neon buttons;
-     --c-ink (#0a0a0a) draws every 4–6px border and outline-text so it reads
-     jet-black on any hue. ═══ */
-  --c-yellow: #ffe500;
-  --c-pink: #ff2d78;
-  --c-lavender: #9d95ff;
-  --c-orange: #ff8709;
-  --c-lime: #abff84;
-  --c-cyan: #00bae2;
-  --c-ink: #0a0a0a;
+  /* Ink for structural lines and outlines; the same near-black as text. */
+  --c-ink: var(--c-fg);
 
-  /* Thick brutalist borders (--bw/--bw-thick above stay for legacy components) */
-  --bw-brutal: 4px;
+  /* Structural borders. Were 4px brutalist slabs; the hybrid draws structure
+     with hairlines, so every former slab is now a single 1px line. */
+  --bw-brutal: 1px;
 
-  /* Film grain overlay (riso/print texture) */
-  --grain-opacity: 0.24;
-  --grain-blend: color-dodge;
+  /* Soft corners on what a visitor touches or reads as one object: buttons
+     and inputs get the small radius, cards and panels the large one. */
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-pill: 999px;
 
   /* The neon button palette (--neon-btn-bg #0a0f1c, cyan, magenta, green, txt)
      lived here. It was retired along with the third visual language it

@@ -10,7 +10,7 @@ taken from each font file's own name table.
 | --- | --- | --- |
 | `unbounded-latin-variable.woff2` | Unbounded (variable, 400–900) | Copyright 2022 The Unbounded Project Authors (https://github.com/googlefonts/unbounded) |
 | `space-mono-latin-{400,700}{,-italic}.woff2` | Space Mono | Copyright 2016 The Space Mono Project Authors (https://github.com/googlefonts/spacemono) |
-| `bebas-neue-latin-400.woff2` | Bebas Neue | Copyright 2019 The Bebas Neue Project Authors (https://github.com/dharmatype/Bebas-Neue) |
+| `inter-latin-variable.woff2` | Inter (variable, 100–900; via @fontsource-variable/inter 5.3.0) | Copyright 2016 The Inter Project Authors (https://github.com/rsms/inter) |
 
 `BricolageGrotesque-Variable.ttf` predates these and is not currently used by
 the site.

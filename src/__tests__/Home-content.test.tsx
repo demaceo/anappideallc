@@ -3,8 +3,8 @@ import { RouterProvider, createMemoryRouter } from 'react-router'
 import { describe, it, expect } from 'vitest'
 import { appRoutes as routes } from './helpers/app-routes'
 
-// Guards the brutalist Home redesign: the restructure into loud <Section>
-// blocks + outline-word spans must not drop or alter any business copy, and
+// Guards the Home redesign: the restructure into <Section> bands and
+// accent-word spans must not drop or alter any business copy, and
 // the new GSAP/cursor effects must not throw when the full app mounts under
 // happy-dom (see src/test-setup.ts stubs).
 function renderRoute(path: string) {
@@ -12,11 +12,11 @@ function renderRoute(path: string) {
   return render(<RouterProvider router={router} />)
 }
 
-describe('Home — brutalist redesign', () => {
+describe('Home — hybrid redesign', () => {
   it('mounts without throwing and preserves the core messaging', () => {
     renderRoute('/')
 
-    // Mission H1 — accessible name stays intact despite the <em> highlight.
+    // Mission H1 — accessible name stays intact.
     expect(
       screen.getByRole('heading', {
         level: 1,
@@ -29,12 +29,12 @@ describe('Home — brutalist redesign', () => {
       screen.getByText(/built with black and brown business owners in mind/i),
     ).toBeInTheDocument()
 
-    // Section headings survive the outline-word <span> split (text unchanged).
-    // Substring matchers: an outline-word <span> adjacent to punctuation makes
+    // Section headings survive the accent-word <span> split (text unchanged).
+    // Substring matchers: an accent-word <span> adjacent to punctuation makes
     // the accessible name insert a space (e.g. "builder ,"), so match on the
     // punctuation-free portion — the visible text itself is unchanged.
     expect(screen.getByRole('heading', { name: /what ships here/i })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /what i build/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /four ways to start/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /why a builder/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /not just a bot/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /start a conversation/i })).toBeInTheDocument()

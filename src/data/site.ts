@@ -96,6 +96,9 @@ export const SITE = {
     range: 'Sliding scale: 40% off fixed-price projects for businesses in their first year or under $100k in annual revenue.',
     // Optional sentence after the range, e.g. how quotes are scoped.
     note: 'Hourly work is $92/hour and isn’t discounted.',
+    // One line under the Home hero buttons: the two facts that answer "can I
+    // afford to ask?" before anyone scrolls.
+    heroLine: 'Free 30-minute call · 40% off for businesses in their first year or under $100k in revenue',
   },
 } as const
 
