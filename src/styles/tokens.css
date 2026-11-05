@@ -69,26 +69,30 @@
    0.30 on /work). These faces resize the common system fallbacks (Arial /
    Courier New, or their metric-compatible Liberation equivalents) to the
    brand fonts' measured widths and line metrics, so the swap no longer moves
-   anything. Values were computed with fontTools from the Google Fonts latin
-   files (Unbounded 900 vs Arial Bold on uppercase text, Space Mono 400 vs
-   Courier New); recompute if a font changes. */
+   anything. Values were computed with fontTools as the ratio of total advance
+   width over the site's own prerendered text (400 headings for Unbounded 500
+   vs Arial Bold, 695 paragraphs for Inter 400 vs Arial; Space Mono vs Courier
+   New is monospaced, so exact). ascent/descent = the brand font's typo metrics
+   divided by size-adjust. An average cannot match every line: single strings
+   still land 1–2% either side, so a line right at the wrap point can rewrap
+   on swap. Both brand fonts are preloaded, so most visits never paint the
+   fallback. Recompute if a font, weight or the copy's case changes. */
 @font-face {
   font-family: 'Unbounded Fallback';
   src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'), local('LiberationSans-Bold');
   font-weight: 100 900;
-  size-adjust: 129.27%;
-  ascent-override: 76.97%;
-  descent-override: 18.95%;
+  size-adjust: 128.3%;
+  ascent-override: 77.55%;
+  descent-override: 19.1%;
   line-gap-override: 0%;
 }
-/* Inter vs Arial: the widely used next/font metrics for Inter. */
 @font-face {
   font-family: 'Inter Fallback';
   src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('LiberationSans');
   font-weight: 100 900;
-  size-adjust: 107.06%;
-  ascent-override: 90.49%;
-  descent-override: 22.56%;
+  size-adjust: 106.47%;
+  ascent-override: 90.99%;
+  descent-override: 22.66%;
   line-gap-override: 0%;
 }
 @font-face {
