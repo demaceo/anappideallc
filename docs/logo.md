@@ -12,8 +12,14 @@ braces are the build, and the UV glow is the "made visible" part of the story.
 | `public/apple-touch-icon.png` | iOS home screen | Full-bleed square (iOS rounds it) |
 | `public/icon-192.png`, `icon-512.png` | Web manifest | Rounded tile, soft glow |
 | `public/logo.png` | Schema.org `logo` (`src/lib/seo.ts`, `index.html`) | Same render as `icon-512.png` |
+| `public/brand/neon-bulb-violet-transparent.svg` / `.png` | Placing the mark on any background (slides, docs, social) | Mark only, UV violet, no glow. Reads on white and on ink. PNG is 900x1230 |
+| `public/brand/neon-bulb-gold-transparent.svg` / `.png` | One-color use (stamps, embroidery, engraving) | Mark only, flat gold. Muted on dark backgrounds: use violet there |
 
 `public/favicon_1.svg` is an unreferenced duplicate of `favicon.svg`.
+
+The `public/brand/` files share the same geometry as the favicon, cropped tight
+to the mark (`viewBox="20 10 60 82"`, stroke 4.5). They are served from the site,
+so they are linkable at `/brand/<file>`.
 
 ## Colors
 
