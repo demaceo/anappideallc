@@ -11,6 +11,11 @@ const GLOBALS_CSS = fs.readFileSync(
   'utf8',
 )
 
+const TOKENS_CSS = fs.readFileSync(
+  path.resolve(HERE, '../tokens.css'),
+  'utf8',
+)
+
 /**
  * Regression — Phase 5 audit Minor finding (inner-page focus outline).
  *
@@ -46,39 +51,58 @@ describe('globals.css — main focus outline (audit fix)', () => {
  * Chrome). Sticky positioning has no such failure mode, so none of that
  * machinery should come back. Do not reintroduce a scroll-scrubbed header.
  */
-describe('globals.css — sticky nav replaces the collapsing masthead', () => {
+describe('globals.css — sticky site bar replaces the collapsing masthead', () => {
   /** The declaration block of the first rule whose selector is exactly `selector`. */
-  function ruleBody(selector: string): string {
+  function ruleBody(selector: string, css = GLOBALS_CSS): string {
     const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    const match = GLOBALS_CSS.match(new RegExp(`(?:^|\\})\\s*${escaped}\\s*\\{([^}]*)\\}`, 'm'))
+    const match = css.match(new RegExp(`(?:^|\\})\\s*${escaped}\\s*\\{([^}]*)\\}`, 'm'))
     expect(match, `no rule for ${selector}`).not.toBeNull()
     return match![1]
   }
 
-  it('sticks the nav bar to the top of the viewport', () => {
-    const nav = ruleBody('.personas-bar')
-    expect(nav).toMatch(/position:\s*sticky/)
-    expect(nav).toMatch(/top:\s*0\s*;/)
+  it('sticks the site bar to the top of the viewport', () => {
+    const bar = ruleBody('.site-bar')
+    expect(bar).toMatch(/position:\s*sticky/)
+    expect(bar).toMatch(/top:\s*0\s*;/)
     // Opaque, or page content would show through the stuck bar.
-    expect(nav).toMatch(/background:\s*var\(--c-page\)/)
-    expect(nav).toMatch(/z-index:\s*\d+/)
+    expect(bar).toMatch(/background:\s*var\(--c-page\)/)
+    expect(bar).toMatch(/z-index:\s*\d+/)
   })
 
-  it('keeps anchor and focus targets clear of the stuck nav', () => {
+  it('makes the bar exactly --nav-h tall, the one source of the sticky clearance', () => {
+    expect(ruleBody('.site-bar')).toMatch(/height:\s*var\(--nav-h\)/)
+    // The clearance under the bar derives from it rather than restating it.
+    expect(ruleBody(':root', TOKENS_CSS)).toMatch(
+      /--sticky-offset:\s*calc\(var\(--nav-h\)\s*\+\s*var\(--sticky-gap\)\)/,
+    )
+    // JS reads these two as plain rem values; a calc() here would parse to NaN.
+    expect(ruleBody(':root', TOKENS_CSS)).toMatch(/--nav-h:\s*[\d.]+rem\s*;/)
+    expect(ruleBody(':root', TOKENS_CSS)).toMatch(/--sticky-gap:\s*[\d.]+rem\s*;/)
+  })
+
+  it('keeps anchor and focus targets clear of the stuck bar', () => {
     // Without this, the skip link's #main-content (and any control scrolled to
     // the viewport edge) lands underneath the opaque sticky bar.
     expect(ruleBody('html')).toMatch(/scroll-padding-top:\s*var\(--sticky-offset\)/)
   })
 
-  it('lets the masthead scroll away instead of sticking with the nav', () => {
+  it('lets the masthead scroll away instead of sticking with the bar', () => {
     expect(ruleBody('.page-header-wrap')).not.toMatch(/position:\s*sticky/)
   })
 
-  it('keeps the phone nav to one row so the stuck bar stays slim', () => {
-    const mobile = GLOBALS_CSS.match(/@media\s*\(max-width:\s*640px\)\s*\{\s*\/\*[\s\S]*?\.personas-bar\s*\{([^}]*)\}/)
-    expect(mobile).not.toBeNull()
-    expect(mobile![1]).toMatch(/flex-wrap:\s*nowrap/)
-    expect(mobile![1]).toMatch(/overflow-x:\s*auto/)
+  it('keeps the nav to one scrollable row at every width, so the bar height holds', () => {
+    const nav = ruleBody('.personas-bar')
+    expect(nav).toMatch(/flex-wrap:\s*nowrap/)
+    expect(nav).toMatch(/overflow-x:\s*auto/)
+    // Never sticky itself: the bar around it (which also holds the back button) is.
+    expect(nav).not.toMatch(/position:\s*sticky/)
+  })
+
+  it('overlays the back button on the bar so the tabs do not shift between pages', () => {
+    const back = ruleBody('.back-home')
+    expect(back).toMatch(/position:\s*absolute/)
+    expect(back).toMatch(/min-width:\s*44px/)
+    expect(back).toMatch(/min-height:\s*44px/)
   })
 
   it('has no scroll-driven animation left', () => {
