@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { RouterProvider, createMemoryRouter } from 'react-router'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { appRoutes as routes } from './helpers/app-routes'
@@ -227,6 +227,21 @@ describe('Contact quick form: ?service= pre-ticks from the Services page', () =>
     expect(screen.getByRole('checkbox', { name: /fix my existing site/i })).not.toBeChecked()
     // Unticking is theirs to keep: the link does not tick it again.
     expect(screen.getByRole('checkbox', { name: /own it/i })).toBeChecked()
+  })
+
+  it('adds the service from a newer ?service= link on top of what the visitor ticked', async () => {
+    // Following a link to the same page does not remount the form, so the new
+    // service must not be silently ignored once the visitor has ticked anything.
+    const router = createMemoryRouter(routes, { initialEntries: ['/contact'] })
+    render(<RouterProvider router={router} />)
+    fireEvent.click(servicesToggle())
+    fireEvent.click(screen.getByRole('checkbox', { name: /fix my existing site/i }))
+    await act(() => router.navigate('/contact?service=own-it'))
+    expect(screen.getByRole('checkbox', { name: /fix my existing site/i })).toBeChecked()
+    expect(screen.getByRole('checkbox', { name: /own it/i })).toBeChecked()
+    // ...and an untick after that is still theirs to keep.
+    fireEvent.click(screen.getByRole('checkbox', { name: /own it/i }))
+    expect(screen.getByRole('checkbox', { name: /own it/i })).not.toBeChecked()
   })
 
   it('links every "Start here" on the Services page to its own service', () => {

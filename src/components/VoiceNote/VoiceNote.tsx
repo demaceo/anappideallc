@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { IconMic, IconStop, IconTrash, IconCheck, IconPlay, IconPause } from '../icons'
 
 // Hard cap so the recording stays small enough to ride along in the JSON
@@ -43,14 +43,27 @@ function isRecordingSupported(): boolean {
   )
 }
 
-// Mini audio player for a recorded note. Kept as its own component and keyed by
-// the recording's object URL, so its playback state resets cleanly whenever the
-// recording changes — no reset effect needed.
-function RecordedPlayer({ url, fallbackDuration }: { url: string; fallbackDuration: number }) {
+// Mini audio player for a recorded note. It is unmounted whenever the note is
+// removed, so its playback state starts fresh for every recording.
+function RecordedPlayer({ blob, fallbackDuration }: { blob: Blob; fallbackDuration: number }) {
   const [playing, setPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  // The object URL is made and revoked in an effect, never during render: a
+  // render can run more than once (Strict Mode, discarded renders), and each
+  // extra URL would keep the recording's Blob in memory for good.
+  useEffect(() => {
+    const el = audioRef.current
+    if (!el) return
+    const url = URL.createObjectURL(blob)
+    el.src = url
+    return () => {
+      el.removeAttribute('src')
+      URL.revokeObjectURL(url)
+    }
+  }, [blob])
 
   function togglePlay() {
     const el = audioRef.current
@@ -77,7 +90,6 @@ function RecordedPlayer({ url, fallbackDuration }: { url: string; fallbackDurati
     <>
       <audio
         ref={audioRef}
-        src={url}
         onTimeUpdate={() => setCurrentTime(audioRef.current?.currentTime ?? 0)}
         onLoadedMetadata={() => setDuration(audioRef.current?.duration ?? 0)}
         onEnded={() => { setPlaying(false); setCurrentTime(0) }}
@@ -131,15 +143,6 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
   const streamRef = useRef<MediaStream | null>(null)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const startedRef = useRef(0)
-
-  // Object URL for the audio preview, derived from the current value and
-  // revoked on cleanup.
-  const previewUrl = useMemo(() => (value ? URL.createObjectURL(value.blob) : null), [value])
-  useEffect(() => {
-    return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl)
-    }
-  }, [previewUrl])
 
   // Tidy up the mic stream and timer if we unmount mid-recording.
   useEffect(() => {
@@ -274,9 +277,7 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
         </button>
       </div>
 
-      {attached && previewUrl && (
-        <RecordedPlayer key={previewUrl} url={previewUrl} fallbackDuration={value.durationSec} />
-      )}
+      {attached && <RecordedPlayer blob={value.blob} fallbackDuration={value.durationSec} />}
 
       {error && (
         <p className="voice-note-hint error" role="alert">

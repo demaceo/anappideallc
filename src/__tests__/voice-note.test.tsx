@@ -190,3 +190,17 @@ describe('VoiceNote: when it cannot record', () => {
     expect(getUserMedia).not.toHaveBeenCalled()
   })
 })
+
+describe('VoiceNote: preview audio', () => {
+  it('makes one object URL per note, and revokes it when the note is removed', async () => {
+    // It used to be made during render, where an extra render leaks one.
+    render(<Harness />)
+    await press(/stop recording/i)
+    await press(/remove voice note/i)
+    expect(URL.createObjectURL).toHaveBeenCalledTimes(1)
+    expect(document.querySelector('.vn-player')?.previousElementSibling).toHaveAttribute('src', 'blob:fake')
+    await press(/record a voice note/i)
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:fake')
+  })
+})
+

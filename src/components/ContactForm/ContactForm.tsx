@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import { useLocation } from 'react-router'
 import { SITE } from '../../data/site'
+import { inOrder } from '../../lib/ordered'
 import { services as SERVICES } from '../../data/services'
 import {
   buildDraftMessage,
@@ -34,10 +35,7 @@ const SERVICE_OPTIONS: ServiceOption[] = SERVICES.map((s) => ({
 const SERVICE_IDS = SERVICE_OPTIONS.map((o) => o.id)
 
 /** The known ids among `ids`, once each, in the studio's order. */
-const inServiceOrder = (ids: Iterable<string>) => {
-  const wanted = new Set(ids)
-  return SERVICE_IDS.filter((id) => wanted.has(id))
-}
+const inServiceOrder = (ids: Iterable<string>) => inOrder(SERVICE_IDS, ids)
 
 const noopSubscribe = () => () => {}
 
@@ -83,10 +81,10 @@ export function ContactForm() {
   // True once the message box was filled from the guided answers.
   const [usedGuide, setUsedGuide] = useState(false)
 
-  // Ticked services. null until the visitor touches the checklist, so that a
-  // `?service=` link (from the Services page) can pre-tick one without any
-  // effect or state fight: the ticks are `userServices ?? preselected`.
-  const [userServices, setUserServices] = useState<string[] | null>(null)
+  // Ticked services, and the query string they were ticked under. null until
+  // the visitor touches the checklist, so a `?service=` link (from the
+  // Services page) can pre-tick one without any effect or state fight.
+  const [picked, setPicked] = useState<{ ids: string[]; search: string } | null>(null)
   const { search } = useLocation()
   // The server (prerender) knows no query string, so the first client render
   // must not either: reading `search` directly would tick a service on the
@@ -98,7 +96,15 @@ export function ContactForm() {
     () => inServiceOrder(new URLSearchParams(clientSearch).getAll('service')),
     [clientSearch],
   )
-  const services = userServices ?? preselected
+  // Untouched: whatever the link pre-ticks. Touched: the visitor's ticks, plus
+  // anything a NEWER `?service=` link adds (following one to the same page
+  // does not remount the form, and must not be silently ignored).
+  const services =
+    picked === null
+      ? preselected
+      : picked.search === clientSearch
+        ? picked.ids
+        : inServiceOrder([...picked.ids, ...preselected])
 
   // Bot screening (see api/contact.ts): when the form opened, and a honeypot
   // field real visitors never see. Both are read only at submit.
@@ -200,7 +206,7 @@ export function ContactForm() {
 
   function changeServices(ids: string[]) {
     clearErrors()
-    setUserServices(ids)
+    setPicked({ ids, search: clientSearch })
   }
 
   function changeVoice(next: VoiceNoteData | null) {
@@ -256,7 +262,7 @@ export function ContactForm() {
       setDraftNote(merged.appended ? 'appended' : 'new')
       setUsedGuide(true)
       // Only ever adds to what they ticked; they can untick.
-      setUserServices(inServiceOrder([...services, ...servicesForProjectType(data.projectType)]))
+      setPicked({ ids: inServiceOrder([...services, ...servicesForProjectType(data.projectType)]), search: clientSearch })
     }
     clearErrors()
     pendingFocus.current = 'message'

@@ -2673,15 +2673,6 @@ main[data-project-theme] .project-cover-block::before {
   max-width: 60ch;
 }
 
-.wizard-summary-note {
-  font-family: var(--ff-mono);
-  font-size: var(--text-sm);
-  letter-spacing: 0.03em;
-  line-height: 1.6;
-  color: var(--c-bg-soft);
-  margin: var(--space-2) 0 0;
-}
-
 .wizard-inline-input { margin-top: var(--space-3); }
 
 /* Choice cards (single + multi select) */

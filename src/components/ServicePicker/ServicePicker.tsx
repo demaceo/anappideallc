@@ -1,4 +1,5 @@
 import { useId, useRef, useState } from 'react'
+import { inOrder } from '../../lib/ordered'
 
 export interface ServiceOption {
   id: string
@@ -58,7 +59,7 @@ export function ServicePicker({
     if (next.has(id)) next.delete(id)
     else next.add(id)
     // Always in the options' order, whatever order they were ticked in.
-    onChange(options.filter((o) => next.has(o.id)).map((o) => o.id))
+    onChange(inOrder(options.map((o) => o.id), next))
   }
 
   function closeAndRefocus() {
