@@ -11,7 +11,7 @@ interface RouteHeadProps {
 // at render time (works in SSG too).
 export function RouteHead({ path, title, description }: RouteHeadProps) {
   const canonical = `${SITE.url}${path === '/' ? '' : path}`
-  const ogImage = `${SITE.url}/og.png`
+  const ogImage = `${SITE.url}${SITE.ogImage}`
 
   return (
     <>
