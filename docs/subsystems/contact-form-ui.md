@@ -13,7 +13,7 @@ sources:
   - code: src/lib/contact-draft.ts
   - code: src/pages/Contact.tsx
   - code: src/pages/Services.tsx
-verified_at: 09a1945
+verified_at: 784f9e3
 ---
 
 # Contact form UI
@@ -42,7 +42,8 @@ send path. `QuickFields` is the default view; `GuidedSteps` is the questions
   underneath.
 - **Services** come from `services` in `src/data/services.ts`, the single source
   (`ContactForm.tsx` `SERVICE_OPTIONS`). The Services page "Start here" links to
-  `/contact?service=<id>`, which pre-ticks that service.
+  `/contact?service=<id>`, which pre-ticks that service. A newer link followed
+  to the same page adds its service on top of the visitor's ticks.
 - **Validation** runs in the order the fields appear: something to go on (message,
   voice note or a ticked service), then name, then email, then email-or-phone.
 - **Budget** is asked in the guided route only, by design, and travels **inside the
