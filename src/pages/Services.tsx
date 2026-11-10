@@ -143,7 +143,8 @@ export default function Services() {
                             <li key={d}>{d}</li>
                           ))}
                         </ul>
-                        <Link to="/contact" className="svc-cta">
+                        {/* Arrives with this service already ticked on the form. */}
+                        <Link to={`/contact?service=${s.id}`} className="svc-cta">
                           Start here
                         </Link>
                       </div>

@@ -8,7 +8,7 @@ interface MessageCTAProps {
 
 // Tier 2 of three call-to-action shapes: write to me. A lavender strip,
 // quieter than the chartreuse booking band it usually sits under, for
-// visitors who would rather write than talk. Links to the guided form.
+// visitors who would rather write than talk. Links to the contact form.
 export function MessageCTA({ children }: MessageCTAProps) {
   return (
     <div className="message-cta">

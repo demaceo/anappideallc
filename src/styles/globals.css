@@ -287,9 +287,12 @@ h1, h2, h3 {
    underneath it on narrow screens. */
 .back-home {
   position: absolute;
-  top: 50%;
+  /* Centred in the bar by arithmetic rather than `top: 50%` + translate: the
+     bar's interior is 63px (64 less the hairline), so 50% lands on a half
+     pixel and blurs the button's border. This gives 10px above and 10px below
+     (counting the hairline) on whole pixels. */
+  top: calc((var(--nav-h) - 44px) / 2);
   left: var(--back-left);
-  transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2178,7 +2181,7 @@ main[data-project-theme] .project-cover-block::before {
 .contact-form :is(.form-input, .form-textarea) { background: oklch(100% 0 0); }
 .contact-form :is(.form-input, .form-textarea):focus { outline-color: var(--ink); }
 /* Picked answers: a soft green tint with a green edge, ink text. */
-.contact-form :is(.choice-card.selected, .chip.selected, .rating-opt.selected) {
+.contact-form :is(.choice-card.selected, .chip.selected, .rating-opt.selected, .service-picker-row.selected) {
   background: var(--c-accent-soft);
   color: var(--ink);
   box-shadow: inset 0 0 0 1px var(--c-accent);
@@ -2191,7 +2194,8 @@ main[data-project-theme] .project-cover-block::before {
 .contact-form :is(.rating-label-icon, .form-label-icon) { color: var(--ink); }
 .contact-form .voice-note-saved { color: var(--c-accent); }
 .contact-form .form-status.error,
-.contact-form .form-status.error a { color: var(--form-error); }
+.contact-form .form-status.error a,
+.contact-form .voice-note-hint.error { color: var(--form-error); }
 /* Their ink-tinted colour is already muted; the shared opacity patch would
    dim it below 4.5:1 on paper. */
 .contact-form :is(.form-label-opt, .voice-note-max) { opacity: 1; }
@@ -2669,15 +2673,6 @@ main[data-project-theme] .project-cover-block::before {
   max-width: 60ch;
 }
 
-.wizard-summary-note {
-  font-family: var(--ff-mono);
-  font-size: var(--text-sm);
-  letter-spacing: 0.03em;
-  line-height: 1.6;
-  color: var(--c-bg-soft);
-  margin: var(--space-2) 0 0;
-}
-
 .wizard-inline-input { margin-top: var(--space-3); }
 
 /* Choice cards (single + multi select) */
@@ -2768,6 +2763,156 @@ main[data-project-theme] .project-cover-block::before {
   background: var(--c-accent);
   color: var(--c-fg);
   font-weight: 700;
+}
+
+/* Service picker: a button that opens a group of checkboxes, in the page flow.
+   Lives inside .contact-form, where --c-bg is the ink and --c-fg the paper. */
+.service-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.service-picker-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--ff-body);
+  font-size: var(--text-md);
+  line-height: 1.4;
+  text-align: left;
+  color: var(--c-bg);
+  background: oklch(100% 0 0);
+  border: var(--bw) solid var(--c-bg-soft);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 150ms;
+}
+.service-picker-toggle:hover { border-color: var(--c-bg); }
+.service-picker-value { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.service-picker-caret {
+  flex-shrink: 0;
+  font-family: var(--ff-mono);
+  font-size: var(--text-lg);
+  line-height: 1;
+  transition: transform 150ms var(--ease);
+}
+.service-picker-toggle[aria-expanded='true'] .service-picker-caret { transform: rotate(45deg); }
+
+/* No display rule here, so the [hidden] attribute works. */
+.service-picker-fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.service-picker-legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+  font-family: var(--ff-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-bg-soft);
+}
+.service-picker-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: var(--space-3);
+  border: var(--bw) solid var(--c-bg-faint);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 150ms;
+}
+.service-picker-row:hover { background: var(--c-bg-faint); }
+.service-picker-check {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: var(--space-1) 0 0;
+  accent-color: var(--c-accent);
+  cursor: pointer;
+}
+/* The global focus ring covers links and buttons only; a native checkbox
+   would otherwise show whatever the browser draws, or nothing. */
+.service-picker-check:focus-visible {
+  outline: var(--bw-thick) solid var(--c-bg);
+  outline-offset: 2px;
+}
+.service-picker-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.service-picker-title {
+  font-size: var(--text-md);
+  font-weight: 700;
+  line-height: 1.3;
+}
+.service-picker-meta {
+  font-family: var(--ff-mono);
+  font-size: var(--text-sm);
+  color: var(--c-bg-soft);
+}
+.service-picker-help {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--c-bg-soft);
+}
+
+/* The quick form (default) and the guided questions are two forms in one card.
+   The quick one stays mounted while the guided one runs, so a rule that sets
+   `display` would beat the UA's [hidden] and leave it on screen. */
+.contact-quick,
+.contact-guided {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.contact-quick[hidden] { display: none; }
+.contact-quick-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* "Not sure what to say?": a quiet link under the message box, not a second
+   call to action. A button for behaviour, dressed as a link. */
+.contact-guide-link {
+  align-self: flex-start;
+  min-height: 44px;
+  padding: var(--space-2) 0;
+  font-family: var(--ff-body);
+  font-size: var(--text-md);
+  color: var(--c-bg);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+}
+.contact-guide-link:hover { text-decoration-thickness: 2px; }
+
+/* Shown under the message box after the guided questions wrote into it. */
+.contact-draft-note {
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--c-accent-soft);
+  border-left: var(--bw-thick) solid var(--c-accent);
+  border-radius: var(--radius-sm);
 }
 
 /* SEO / GEO rating rows */
@@ -2916,33 +3061,78 @@ main[data-project-theme] .project-cover-block::before {
 .wizard-next:hover { color: var(--c-fg); }
 .wizard-next:hover::before { transform: translateX(0); }
 
-/* ─── Voice note recorder (lives inside the dark form) ─── */
-.voice-note { display: flex; flex-direction: column; gap: var(--space-2); }
+/* ─── Voice note recorder (lives inside the contact form card) ───
+   One row directly under the message box: a short offer on the left, one
+   button on the right that records, stops, or removes, so it never leaves the
+   keyboard's place. Inside .contact-form --c-bg is the ink and --c-fg the
+   paper, so the solid button is ink with a paper icon. */
+.voice-note { display: flex; flex-direction: column; gap: var(--space-3); }
 
-.voice-note-btn {
-  align-self: flex-start;
+.voice-note-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  border: var(--bw) solid var(--c-bg-faint);
+  border-radius: var(--radius-sm);
+}
+
+.voice-note-text {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--ff-body);
+  font-size: var(--text-md);
+  line-height: 1.4;
+  color: var(--c-bg);
+}
+
+.voice-note-action {
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  font-family: var(--ff-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: var(--space-3) var(--space-4);
-  border: var(--bw) solid var(--c-bg-soft);
-  background: transparent;
-  color: var(--c-bg);
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  color: var(--c-fg);
+  background: var(--c-bg);
+  border: var(--bw) solid var(--c-bg);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: border-color 150ms, background 150ms, color 150ms;
+  transition: background 150ms, color 150ms, border-color 150ms;
 }
-.voice-note-btn:hover { border-color: var(--c-bg); }
-.voice-note-btn.recording {
-  border-color: var(--c-accent-2);
+.voice-note-action:hover { background: var(--c-fg); color: var(--c-bg); }
+/* Recording: the one place the alert colour is used on purpose. */
+.voice-note-action.recording,
+.voice-note-action.recording:hover {
   background: var(--c-accent-2);
+  /* An ink edge: the orange-red alone is 2.88:1 against the card, under the
+     3:1 WCAG asks of a control's boundary. The stop icon is 6.1:1 on it. */
+  border-color: var(--c-bg);
   color: var(--c-bg);
+}
+/* A note is attached: the button now removes it, so it steps back. */
+.voice-note-action.attached { background: transparent; color: var(--c-bg); border-color: var(--c-bg-soft); }
+.voice-note-action.attached:hover { background: transparent; border-color: var(--c-bg); }
+/* Recording is not supported here: kept in place, visibly inert. */
+.voice-note-action.unavailable,
+.voice-note-action.unavailable:hover {
+  background: transparent;
+  color: var(--c-bg-soft);
+  border: var(--bw) dashed var(--c-bg-soft);
+  cursor: not-allowed;
 }
 
-.voice-note-live { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+.voice-note-live {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  font-family: var(--ff-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 
 .voice-note-pulse {
   width: 9px;
@@ -2957,14 +3147,13 @@ main[data-project-theme] .project-cover-block::before {
 }
 
 .voice-note-timer {
+  white-space: nowrap; /* wrap between "Recording" and the time, never inside it */
   font-family: var(--ff-mono);
   font-size: var(--text-sm);
   letter-spacing: 0.08em;
   color: var(--c-bg-soft);
 }
 .voice-note-max { opacity: 0.5; }
-
-.voice-note-done { display: flex; flex-direction: column; gap: var(--space-2); align-items: flex-start; }
 
 .voice-note-saved {
   display: inline-flex;
@@ -3029,22 +3218,6 @@ main[data-project-theme] .project-cover-block::before {
   color: var(--c-bg-soft);
   white-space: nowrap;
 }
-
-.voice-note-discard {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  font-family: var(--ff-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--c-bg-soft);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-.voice-note-discard:hover { color: var(--c-accent-2); }
 
 .voice-note-hint {
   font-family: var(--ff-body);
@@ -3261,6 +3434,7 @@ main a:hover {
   .svc-sublabel::before       { content: '// ' / ''; }
   .svc-cta::after             { content: '→' / ''; }
   .booking-fab-label::after   { content: ' →' / ''; }
+  .form-submit-btn::after     { content: '→' / ''; }
 }
 
 /* ─── WCAG AA: muted mono labels ───
