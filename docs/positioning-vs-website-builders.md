@@ -120,25 +120,22 @@ We offer:
 
 ---
 
-## 4. Offer ladder & pricing (DRAFT — verify pricing)
+## 4. Offer ladder & pricing (decided 2026-11-10)
 
 > **Status:** draft, pending the Denver-metro competitor comparison. Goal set by
 > the owner: **prices that similar services find hard to compete with.**
 
 | Tier | Who | What's in it | Price (draft) |
 | --- | --- | --- | --- |
-| **Start Right** | Brand-new or very tight budget | Set up their own builder site properly: 1 strategy session, setup, Google Business Profile | **$299–$499** flat _(proposed, see note)_ |
-| **Launch** | Established SMB | Custom fast site, booking/payments, local SEO foundation, analytics, training | **$699–$3,500**, split 50/25/25 |
+| **Start Right** | Brand-new or very tight budget | Set up their own builder site properly: 1 strategy session, setup, Google Business Profile | **$299–$499** flat |
+| **Launch One-Page** | Established SMB, tight budget | One custom page: services, booking link/payments, Google Business Profile, contact | **$699** flat |
+| **Launch** | Established SMB | Custom fast multi-page site, booking/payments, local SEO foundation, analytics, training | **$1,500–$3,500**, split 50/25/25 |
 | **Grow** (retainer) | Launch clients | Hosting, updates, security, monthly report, SEO, small changes | **$150–$400/mo** |
 | **Automate** | Ops-heavy SMBs | CRM, automations, integrations, internal tools | **from $1,500** per project |
 | **Product Sprint** | Funded founders | 1–2 weeks: scoped MVP plan, clickable prototype, budget | **$2,500–$4,000** flat |
 | **MVP Build** | Funded founders, after Sprint | Web, mobile or AI MVP with milestones and funder-ready reports | **$10k–$40k+**, milestone billing |
 
-> ⚠️ **Pricing note.** Launch now starts at $699, which falls below the old
-> Start Right price ($500–$900). Start Right has to sit clearly under Launch or
-> nobody picks it, so it is proposed at $299–$499. **Confirm before publishing.**
-> Also define what $699 buys (e.g., a one-page site with booking) so the low
-> end doesn't turn into a full custom build at a loss.
+> ⚠️ **Pricing note (decided).** Launch One-Page at $699 covers **one page only**. Any extra page or custom feature moves the project to Launch (from $1,500). Put this in writing in every quote.
 
 ### 4.1 Selling each tier: the "why", in the customer's words
 
@@ -148,7 +145,7 @@ answers the customer's question "why should I pay for this?"
 | Tier | Customer-facing pitch |
 | --- | --- |
 | **Start Right** | "Already want to use Wix or Squarespace? Do it right the first time. We set it up and get you on Google Maps in one session, so you don't lose a weekend to it. Upgrade later and your fee counts toward it." |
-| **Launch** | "A site built for *your* customers, not a template: online booking, payments, and showing up on Google, from $699. Pay in three parts and own everything: your domain, your logins, your code." |
+| **Launch** | "A site built for *your* customers, not a template: online booking, payments, and showing up on Google. One page from $699, full sites from $1,500. Pay in three parts and own everything: your domain, your logins, your code." |
 | **Grow** | "You run your business; we keep your site working. Updates, security, and a plain-English report every month showing calls and bookings from your site, for less than one missed customer." |
 | **Automate** | "Stop copying and pasting. We connect your booking, payments and messages so leads turn into appointments on their own. Most owners get hours back every week." |
 | **Product Sprint** | "Got funding and a deadline? In 1–2 weeks you'll have a scoped plan, a clickable prototype and a real budget, ready to show your funder, before you spend big on building." |
@@ -156,7 +153,7 @@ answers the customer's question "why should I pay for this?"
 
 ### 4.2 Internal pricing rules (not published)
 
-1. **Publish starting prices** ("Launch from $699"). Being open about cost builds trust with this audience.
+1. **Publish starting prices** ("One-page from $699, full sites from $1,500"). Being open about cost builds trust with this audience.
 2. **Founding clients:** the first 2–3 clients get about 30% off, in exchange for a case study and a testimonial.
 3. **Raise prices after every 3 delivered projects.**
 4. **Start Right limits:** at most 2 a month; fixed scope (one session, setup, Google Business Profile); no open-ended revisions; the fee is credited toward Launch if they upgrade within 6 months; never the headline offer, used to answer the "I'll just use Wix" objection.
@@ -291,9 +288,9 @@ true · CAN-SPAM-compliant email, and no cold SMS without consent.
 ## 10. Decisions only you can make
 
 - [x] Price ranges for each tier: drafted in §4 (Launch $699–$3,500, set by the owner)
-- [ ] Confirm Start Right at $299–$499, and define what the $699 Launch includes
+- [x] Start Right confirmed at $299–$499; $699 is a one-page site only
 - [x] Competitor comparison done (§4.4)
-- [ ] Decide: keep a Launch floor of $699 (one-page only), or raise it to about $1,500 as §4.4 recommends
+- [x] Launch: $699 one-page; multi-page sites from $1,500
 - [x] Lead vertical for the first 30 days: beauty, barbers and wellness
 - [x] Market: Denver metro in person; funded founders remote
 - [x] Offer Start Right: yes, with the limits in §4.2
