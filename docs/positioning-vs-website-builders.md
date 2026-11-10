@@ -170,6 +170,33 @@ answers the customer's question "why should I pay for this?"
 
 ---
 
+### 4.4 Competitor pricing check (Denver metro + national, checked 2026-11-10)
+
+Prices published on each vendor's own page; "from" prices are marketing floors.
+
+| Competitor | Where | Published price |
+| --- | --- | --- |
+| [The Affordable Web Guy](https://theaffordablewebguy.com/prices/) | Denver metro | Site from $2,999 (includes 12 months of hosting) |
+| [Mothershed Design Co.](https://www.mothersheddesign.com/website-packages) | Near Denver | Sites $3,500+ / $6,500+ / $9,500+; [maintenance](https://www.mothersheddesign.com/website-maintenance-packages) $2,500–$6,000/yr |
+| [Hooten Design](https://www.hootendesign.com/web-design-cost-denver) | Lafayette | $5K–10K starter, up to $75K+ |
+| [Your Web Studios](https://www.yourwebstudios.com/blog/web-design-agency-denver) | Denver | "From $149" to "$4,599+" |
+| [Colorado Web Impressions](https://coloradowebimpressions.com/pricing) | Colorado Springs | $1,850 / $2,750 / $5,950; SEO $950+/mo; $250/hr |
+| [Anchor Web Digital](https://www.anchorwebdigital.com/locations/denver-co) | National | $499 / $699 / $899, or from $49/mo |
+| [GoDaddy design service](https://www.godaddy.com/garage/how-much-should-i-charge-to-build-a-website/) | National | $499+ |
+| [Squarespace](https://www.squarespace.com/pricing) / [Wix](https://www.wix.com/plans) | DIY | about $17–$40/mo for typical plans |
+
+**Verdict by tier**
+
+- **Start Right:** at the national done-for-you price, and no Denver studio sells this service. Recommend **$499** rather than $299, which sits close to Fiverr prices.
+- **Launch:** $699 is far below every local studio (whose floors run $1,850–$5,000) and equal to Anchor's budget site, which has no booking, local SEO or training. **Recommendation: a floor of about $1,500 with the middle around $2,500.** That still undercuts the cheapest Denver studios by $500–$1,000. If $699 stays, limit it to a one-page site with booking.
+- **Grow:** at or slightly below market. Include SEO only at the $300–$400 level.
+- **Automate:** no local prices published. "From $1,500" is about 6 hours at local hourly rates, so scope it tightly.
+- **Product Sprint:** no comparable published prices. Funded founders are less price-sensitive, so lean toward $4,000.
+- **MVP:** about at market. There is little published local data.
+
+> ⚠️ Gaps: no published Denver freelancer price lists, and no local prices for
+> integrations, discovery sprints, MVPs or niche (beauty or barber) packages. Recheck these prices every quarter.
+
 ## 5. Handling "technical strength varies"
 
 Match the delivery method to the job, and be open with clients about it:
@@ -265,7 +292,8 @@ true · CAN-SPAM-compliant email, and no cold SMS without consent.
 
 - [x] Price ranges for each tier: drafted in §4 (Launch $699–$3,500, set by the owner)
 - [ ] Confirm Start Right at $299–$499, and define what the $699 Launch includes
-- [ ] Final check of prices against the Denver-metro competitor comparison
+- [x] Competitor comparison done (§4.4)
+- [ ] Decide: keep a Launch floor of $699 (one-page only), or raise it to about $1,500 as §4.4 recommends
 - [x] Lead vertical for the first 30 days: beauty, barbers and wellness
 - [x] Market: Denver metro in person; funded founders remote
 - [x] Offer Start Right: yes, with the limits in §4.2
