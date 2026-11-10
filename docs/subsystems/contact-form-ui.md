@@ -45,7 +45,12 @@ send path. `QuickFields` is the default view; `GuidedSteps` is the questions
   `/contact?service=<id>`, which pre-ticks that service.
 - **Validation** runs in the order the fields appear: something to go on (message,
   voice note or a ticked service), then name, then email, then email-or-phone.
-- **Budget** is asked in the guided route only, by design.
+- **Budget** is asked in the guided route only, by design, and travels **inside the
+  drafted message**, not as a separate field (a second copy would disagree with the
+  message once the visitor edits it).
+- **Guided answers are sent only while the draft is in use.** Emptying the message
+  box after drafting clears `usedGuide`, so the email does not describe a draft the
+  visitor threw away.
 
 > ⚠️ The quick form must **stay mounted** while the guide runs (it is `hidden`,
 > not unmounted). Unmounting it drops an in-progress voice recording along with

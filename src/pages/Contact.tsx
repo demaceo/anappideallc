@@ -35,7 +35,7 @@ const PROMPTS = [
     iconClass: 'icon-green',
     eyebrow: 'The fit',
     title: 'Budget ballpark, if you have one',
-    body: 'A rough range helps scope the engagement. If you don\'t have a number yet, that\'s a normal place to start; just say so. Pricing is a sliding scale by your business\'s size and stage.',
+    body: 'Mention a rough range in your message (or let the guided questions ask you); it helps scope the engagement. If you don\'t have a number yet, that\'s a normal place to start; just say so. Pricing is a sliding scale by your business\'s size and stage.',
   },
 ] as const
 

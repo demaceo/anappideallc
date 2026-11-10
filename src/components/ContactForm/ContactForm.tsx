@@ -190,6 +190,12 @@ export function ContactForm() {
     set('description', value)
     // Their own edit: it is no longer "a first draft from your answers".
     setDraftNote(null)
+    // Emptying the box throws the draft away: stop sending the guided answers
+    // and the "used the guide" flag, which would describe a draft they discarded.
+    if (!value.trim()) {
+      setUsedGuide(false)
+      lastDraft.current = null
+    }
   }
 
   function changeServices(ids: string[]) {
@@ -315,10 +321,14 @@ export function ContactForm() {
           }
         : null
 
-      // Answers that no longer apply are not sent: a visitor can answer the
-      // search questions, then go back and change to "an app".
-      const hasApp = data.projectType === 'app' || data.projectType === 'both'
-      const hasWeb = data.projectType !== 'app'
+      // Guided answers go along only while the drafted message is in use, and
+      // only those that still apply: a visitor can answer the search questions,
+      // then go back and change to "an app". The budget is not sent on its own:
+      // the draft already carries it, and a second copy would disagree with the
+      // message as soon as the visitor edits it there.
+      const guided = usedGuide
+      const hasApp = guided && (data.projectType === 'app' || data.projectType === 'both')
+      const hasWeb = guided && data.projectType !== 'app'
 
       const res = await fetch('/api/contact', {
         method: 'POST',
@@ -331,17 +341,18 @@ export function ContactForm() {
           preferredContact: data.preferredContact,
           services,
           usedGuide,
-          projectType: data.projectType,
+          projectType: guided ? data.projectType : '',
           platforms: hasApp ? data.platforms : [],
-          category: data.categories
-            .map((c) => (c === 'Something else' ? data.categoryOther : c))
-            .filter(Boolean)
-            .join(', '),
+          category: guided
+            ? data.categories
+                .map((c) => (c === 'Something else' ? data.categoryOther : c))
+                .filter(Boolean)
+                .join(', ')
+            : '',
           seoImportance: hasWeb ? data.seo : '',
           geoImportance: hasWeb ? data.geo : '',
-          audience: data.audience,
+          audience: guided ? data.audience : '',
           description: data.description.trim(),
-          budget: data.budget,
           audio,
           website: trapRef.current?.value ?? '',
           elapsedMs: Date.now() - openedAt.current,

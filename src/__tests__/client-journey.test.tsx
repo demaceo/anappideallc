@@ -176,7 +176,7 @@ describe('Contact form: quick message first, guided questions as the alternative
     )
   })
 
-  it('sends the budget from the guided route, and flags that the guide was used', async () => {
+  it('sends the guided budget inside the message, and flags that the guide was used', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(JSON.stringify({ ok: true, confirmationSent: true }), { status: 200 }),
     )
@@ -200,7 +200,9 @@ describe('Contact form: quick message first, guided questions as the alternative
 
     await screen.findByRole('status')
     const sent = JSON.parse(fetchMock.mock.calls[0][1].body)
-    expect(sent.budget).toBe('not sure yet')
+    // The budget travels in the message the visitor approved, not as a second
+    // copy that would disagree with it after an edit.
+    expect(sent.budget).toBeUndefined()
     expect(sent.usedGuide).toBe(true)
     expect(sent.projectType).toBe('app')
     expect(sent.description).toContain('Budget ballpark: not sure yet.')

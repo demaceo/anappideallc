@@ -283,4 +283,26 @@ describe('Switching modes loses nothing', () => {
     expect(body.seoImportance).toBe('')
     expect(body.geoImportance).toBe('')
   })
+
+  it('stops sending the guided answers once the visitor empties the drafted message', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response(JSON.stringify({ ok: true, confirmationSent: false }), { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+    renderContact()
+    draftFor(/a website/i, { budget: '$4k' })
+    fireEvent.change(message(), { target: { value: '' } })
+    fireEvent.change(message(), { target: { value: 'My own words instead.' } })
+    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Sam' } })
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'sam@example.com' } })
+    fireEvent.click(screen.getByRole('button', { name: /send message/i }))
+    await screen.findByRole('status')
+
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body)
+    expect(body.usedGuide).toBe(false)
+    expect(body.projectType).toBe('')
+    expect(body.audience).toBe('')
+    expect(body.budget).toBeUndefined()
+    expect(body.description).toBe('My own words instead.')
+  })
 })

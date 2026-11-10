@@ -119,7 +119,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const geoImportance = typeof body.geoImportance === 'string' ? body.geoImportance : ''
   const audience = typeof body.audience === 'string' ? body.audience : ''
   const budget = typeof body.budget === 'string' ? body.budget : ''
-  const audio = (body.audio ?? null) as AudioPayload | null
+  // Type-checked like the array fields: a non-string base64 or mimeType used to
+  // throw in Buffer.from / .includes, outside the try block, as an unhandled 500.
+  const rawAudio = (typeof body.audio === 'object' && body.audio !== null ? body.audio : {}) as Record<string, unknown>
+  const audio: AudioPayload | null =
+    typeof rawAudio.base64 === 'string' && rawAudio.base64
+      ? {
+          base64: rawAudio.base64,
+          mimeType: typeof rawAudio.mimeType === 'string' ? rawAudio.mimeType : undefined,
+          durationSec: typeof rawAudio.durationSec === 'number' ? rawAudio.durationSec : undefined,
+        }
+      : null
 
   if (!name.trim()) {
     return res.status(400).json({ error: 'Please add your name.' })

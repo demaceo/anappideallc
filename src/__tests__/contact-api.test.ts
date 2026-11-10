@@ -233,4 +233,19 @@ describe('POST /api/contact: services and the guided flag', () => {
       expect(source, `SERVICE_LABELS is missing or stale for "${s.id}"`).toContain(entry)
     }
   })
+
+  it('rejects a malformed voice note with a 400 instead of crashing', async () => {
+    // base64 and mimeType used to reach Buffer.from / .includes unchecked.
+    const res = await call({ ...NO_IDEA, audio: { base64: 123, mimeType: 5 } })
+    expect(res.statusCode).toBe(400)
+    expect(send).not.toHaveBeenCalled()
+  })
+
+  it('still delivers a message whose voice note is malformed, without the attachment', async () => {
+    send.mockResolvedValue(ok)
+    const res = await call({ ...VALID, audio: { base64: { x: 1 }, mimeType: ['webm'] } })
+    expect(res.statusCode).toBe(200)
+    expect(send.mock.calls[0][0].attachments).toBeUndefined()
+  })
 })
+

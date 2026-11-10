@@ -69,7 +69,8 @@ Services are then de-duplicated and filtered to ids present in `SERVICE_LABELS`
 
 > ⚠️ Array elements must be string-checked before use. A non-string element used
 > to reach `escHtml` and throw a `TypeError` **outside the try block**, giving an
-> unhandled 500 (`api/contact.ts:111-114`).
+> unhandled 500 (`api/contact.ts:111-114`). The `audio` object is checked the same way: a
+> non-string `base64` or `mimeType` is treated as no voice note.
 
 > ⚠️ The Resend SDK does **not throw** when a send is rejected (bad key, quota,
 > unverified domain). It resolves with `{ data: null, error }`. Always check
