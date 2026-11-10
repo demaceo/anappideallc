@@ -26,6 +26,7 @@ repository. The rules are in [`CLAUDE.md`](CLAUDE.md).
 
 - [[contact-form-api]] -- `/api/contact`: bot screening, validation, Resend inquiry + confirmation emails
 - [[contact-form-ui]] -- `/contact`: quick form, services picker, guided questions and the draft handoff
+- [[prerender-hydration]] -- build-time prerender vs. browser hydration; why `/x` and `/x/` must render the same (React #418)
 
 ## decisions
 

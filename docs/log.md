@@ -25,3 +25,11 @@ Append-only. Newest entries at the bottom.
   at `2ca39a1`.
 - Found, not fixed: `/contact` throws React hydration error #418 on `main` too.
 
+## [2026-11-10] fix | React #418 on `/contact/`
+
+- Cause: `BookingFAB` (app shell, not the contact page) compared `pathname === '/contact'`.
+  The prerender renders `/contact`, so the server HTML has no button; at `/contact/` the
+  client rendered one and hydration failed. Now uses `matchPath`.
+- Added `src/__tests__/route-hydration.test.tsx` and [[prerender-hydration]]. Replaced the
+  "Known, pre-existing" note in [[contact-form-ui]] and corrected its `vite preview` note.
+

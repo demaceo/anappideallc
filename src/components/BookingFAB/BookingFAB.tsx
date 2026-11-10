@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router'
+import { matchPath, useLocation } from 'react-router'
 import { SITE } from '../../data/site'
 import { openBookingPopup } from '../../lib/calendly'
 
@@ -14,9 +14,13 @@ import { openBookingPopup } from '../../lib/calendly'
 // app hydrates, with JavaScript off, or if the popup can't load.
 //
 // Hidden on /contact, where the booking card and the form are both on screen.
+// matchPath, not `pathname === '/contact'`: the prerendered HTML is rendered at
+// `/contact`, but a browser may load it at `/contact/`. A strict comparison
+// then shows the button on the client only, and hydration fails (React #418).
+// matchPath applies the router's own rules (optional trailing slash, no case).
 export function BookingFAB() {
   const { pathname } = useLocation()
-  if (pathname === '/contact') return null
+  if (matchPath('/contact', pathname)) return null
 
   const url = SITE.booking.consultationUrl
   return (

@@ -13,6 +13,7 @@ sources:
   - code: src/lib/contact-draft.ts
   - code: src/pages/Contact.tsx
   - code: src/pages/Services.tsx
+  - code: src/components/BookingFAB/BookingFAB.tsx
 verified_at: 784f9e3
 ---
 
@@ -100,14 +101,13 @@ send path. `QuickFields` is the default view; `GuidedSteps` is the questions
 > by `src/styles/__tests__/contrast-tokens.test.ts`, and new CSS must stay on the
 > 0.25rem spacing grid (`var(--space-N)`).
 
-> ⚠️ **Known, pre-existing:** the prerendered `/contact` page throws React error
-> #418 (hydration mismatch) when it loads, on `main` as well as here, while `/`,
-> `/about` and `/services` are clean. React recovers by re-rendering the tree on
-> the client. The form itself hydrates cleanly in isolation (the hydration test
-> above), so the cause is elsewhere on the page. Not yet diagnosed
-> (unverified: likely a different component on `/contact`).
+> ⚠️ `/contact` once threw React error #418 although this form hydrates cleanly.
+> The mismatch was not in the page: the app shell's `BookingFAB` hides itself on
+> `/contact` and compared the pathname with `===`, so at `/contact/` the client
+> rendered a button the prerendered HTML did not have. Fixed; see
+> [[prerender-hydration]] for the rule and for how to check a built page. If #418
+> returns here, look at what the shell renders for this path before the form.
 
-> ⚠️ Local check: `vite preview` serves the prerendered page at `/contact/` (with a
-> trailing slash). At `/contact` it serves the empty SPA shell and every route
-> looks like it throws a hydration error. Production uses `cleanUrls`
-> (`vercel.json`), so it is not affected.
+> ⚠️ Local check: load `/contact/` **with the trailing slash** on `vite preview`.
+> Without it, preview serves the home page's HTML, not this route's
+> ([[prerender-hydration]]).
