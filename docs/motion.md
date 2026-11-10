@@ -54,11 +54,9 @@ Shape data shared by markup and timelines lives in `src/motion/scenes/geometry.t
 
 - **Near the top of the page** (on screen, or nearly, at load): plays once at a
   fixed speed (~2.5s) as soon as the whole scene is in view. There's no
-  stable scroll run to scrub across there: the header's collapse moves the
-  layout for the first ~200px.
-- **Further down:** scrubs to scroll. It never starts before the header has
-  finished collapsing, gets at least 240px of scroll, and always finishes
-  while the whole scene is still visible below the header.
+  scroll run to scrub across there: it would have to start before scroll 0.
+- **Further down:** scrubs to scroll. It gets at least 240px of scroll and
+  always finishes while the whole scene is still visible below the sticky nav.
 - Verified by walking every page in 20px steps at 1440, 1024, and 390px wide:
   every scene finishes fully visible.
 
@@ -86,6 +84,6 @@ Shape data shared by markup and timelines lives in `src/motion/scenes/geometry.t
 - `.grid-2` / `.grid-3`: card grids; `.feature-item` rows become cards inside
   them. Collapse to one column below 768px (`.grid-3` → two below 1024px).
 - `.split`: chapter + scene; single column with the scene first below 1024px.
-- `--sticky-offset` clears the collapsed sticky header (123px on Home).
-- Masthead spacing tokens (`--masthead-pad-*`, `--dateline-gap`) are shared by
-  the base rules and the scroll-collapse keyframes; change them in one place.
+- `--sticky-offset` clears the sticky nav (63px tall on desktop, 61px on
+  phones) plus breathing room. The masthead scrolls away; only the nav sticks,
+  so it must stay a sibling of `.page-header-wrap` (see `PageHeader.tsx`).
