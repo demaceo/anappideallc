@@ -40,10 +40,15 @@ describe('Floating booking button', () => {
     expect(document.querySelector('.contact-fab')).toBeNull()
   })
 
-  it('is hidden on /contact, where booking and the form are already on screen', () => {
-    renderRoute('/contact')
-    expect(fab()).toBeNull()
-  })
+  // The trailing-slash form is what a static host or `vite preview` serves for
+  // the same prerendered file; it must hide the button too (see route-hydration).
+  it.each(['/contact', '/contact/'])(
+    'is hidden on %s, where booking and the form are already on screen',
+    (path) => {
+      renderRoute(path)
+      expect(fab()).toBeNull()
+    },
+  )
 
   it('loads no Calendly code until clicked', () => {
     renderRoute('/')

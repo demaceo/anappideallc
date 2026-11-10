@@ -15,3 +15,6 @@ Append-only. Newest entries at the bottom.
      If you split an existing document, which file became which page;
      if you wrote from the code, what range you covered. -->
 - 2026-11-10: started in grow mode (scaffold + [[contact-form-api]]) at e07eb5d.
+- 2026-11-10: fixed React #418 on `/contact/`: `BookingFAB` compared `pathname === '/contact'`, so a
+  trailing-slash URL rendered the button on the client but not in the prerendered HTML. Now uses
+  `matchPath`. Added `src/__tests__/route-hydration.test.tsx` and the page [[prerender-hydration]].

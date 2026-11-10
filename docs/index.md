@@ -24,6 +24,7 @@ repository. The rules are in [`CLAUDE.md`](CLAUDE.md).
 ## subsystems
 
 - [[contact-form-api]] -- `/api/contact`: bot screening, validation, Resend inquiry + confirmation emails
+- [[prerender-hydration]] -- build-time prerender vs. browser hydration; why `/x` and `/x/` must render the same (React #418)
 
 ## decisions
 
