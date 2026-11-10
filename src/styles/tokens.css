@@ -207,16 +207,15 @@
   /* ═══ Layout ═══
      The page shell was an 880px column, which left ~280px of bare margin each
      side at 1440px. Wide layouts use the shell; running prose stays at a
-     readable measure inside it. Masthead spacing lives here because both the
-     base rules and the scroll-collapse keyframes' `from` state must match. */
+     readable measure inside it. */
   --shell: 1200px;
   --measure: 62ch;
   --masthead-pad-top: clamp(1.5rem, 4vw, 2.5rem);
   --masthead-pad-bottom: clamp(1.25rem, 3vw, 2rem);
   --dateline-gap: var(--space-4);
-  /* Clearance for sticky content under the collapsed sticky header (measured
-     at 123px on Home, 79px elsewhere). */
-  --sticky-offset: 9rem;
+  /* Clearance for sticky content under the sticky nav (63px tall on desktop,
+     61px on phones) plus a little breathing room. */
+  --sticky-offset: 5.5rem;
 
   /* ═══ Type — six fixed steps and seven fluid ones ═══
      Fixed sizes covered 88 declarations across 13 values, ten of them crowded
@@ -269,7 +268,6 @@
 
   /* Motion */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --collapse-range: 60px 200px; /* scroll range over which the masthead collapses */
 
   /* The nine legacy "Editorial Ink" compat aliases (--ink, --paper, --accent,
      --gold, --navy, --muted, --rule, --panel, --white) lived here with a note

@@ -36,64 +36,55 @@ describe('globals.css — main focus outline (audit fix)', () => {
 })
 
 /**
- * Regression — 2026-08 audit P0 (hero disappears without scroll-timeline support).
+ * The masthead no longer collapses on scroll; it scrolls away like any other
+ * content, and the nav bar below it sticks to the top of the viewport.
  *
- * The sticky-header collapse drives `*-collapse` keyframes off `scroll(root)`.
- * The `animation` shorthand resets `animation-duration`; browsers WITHOUT
- * scroll-timeline support resolve that to `0s` rather than `auto`, and a 0s
- * animation with `fill-mode: both` completes instantly and pins the element to
- * its END keyframe. Unguarded, that renders the masthead permanently COLLAPSED
- * on iOS <= 18, Firefox ESR and older Chrome/Edge: h1 at ~21px, and the
- * overline / subtitle / dateline at opacity 0. Measured before the fix:
- * h1 68px -> 21.6px, subtitle max-height 160px -> 0.
- *
- * The guard must stay: the base rules are the static fallback, and only
- * supporting browsers may opt into the scroll-scrubbed collapse.
+ * The old collapse drove `*-collapse` keyframes off `scroll(root)`. It also
+ * needed an @supports guard, because browsers without scroll-timeline support
+ * resolved the `animation` shorthand's duration to 0s and pinned the masthead
+ * to its END keyframe (a permanently collapsed hero on iOS <= 18 and older
+ * Chrome). Sticky positioning has no such failure mode, so none of that
+ * machinery should come back. Do not reintroduce a scroll-scrubbed header.
  */
-describe('globals.css — scroll-driven collapse is @supports-guarded (audit P0)', () => {
-  const SUPPORTS_BLOCK = /@supports\s*\(animation-timeline:\s*scroll\(root\)\)\s*\{/
+describe('globals.css — sticky nav replaces the collapsing masthead', () => {
+  /** The declaration block of the first rule whose selector is exactly `selector`. */
+  function ruleBody(selector: string): string {
+    const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    const match = GLOBALS_CSS.match(new RegExp(`(?:^|\\})\\s*${escaped}\\s*\\{([^}]*)\\}`, 'm'))
+    expect(match, `no rule for ${selector}`).not.toBeNull()
+    return match![1]
+  }
 
-  it('declares an @supports guard for scroll-driven animation', () => {
-    expect(GLOBALS_CSS).toMatch(SUPPORTS_BLOCK)
+  it('sticks the nav bar to the top of the viewport', () => {
+    const nav = ruleBody('.personas-bar')
+    expect(nav).toMatch(/position:\s*sticky/)
+    expect(nav).toMatch(/top:\s*0\s*;/)
+    // Opaque, or page content would show through the stuck bar.
+    expect(nav).toMatch(/background:\s*var\(--c-page\)/)
+    expect(nav).toMatch(/z-index:\s*\d+/)
   })
 
-  it('never sets animation-timeline outside the @supports guard', () => {
-    const guardStart = GLOBALS_CSS.search(SUPPORTS_BLOCK)
-    expect(guardStart).toBeGreaterThan(-1)
-
-    // Walk the guard to its matching close brace, then assert no other rule in
-    // the file sets animation-timeline.
-    let depth = 0
-    let end = GLOBALS_CSS.indexOf('{', guardStart)
-    for (let i = end; i < GLOBALS_CSS.length; i++) {
-      if (GLOBALS_CSS[i] === '{') depth++
-      else if (GLOBALS_CSS[i] === '}') {
-        depth--
-        if (depth === 0) {
-          end = i
-          break
-        }
-      }
-    }
-
-    const outside = GLOBALS_CSS.slice(0, guardStart) + GLOBALS_CSS.slice(end + 1)
-    expect(outside).not.toMatch(/animation-timeline:/)
+  it('keeps anchor and focus targets clear of the stuck nav', () => {
+    // Without this, the skip link's #main-content (and any control scrolled to
+    // the viewport edge) lands underneath the opaque sticky bar.
+    expect(ruleBody('html')).toMatch(/scroll-padding-top:\s*var\(--sticky-offset\)/)
   })
 
-  it('keeps every collapse keyframe reachable from inside the guard', () => {
-    for (const name of [
-      'masthead-collapse',
-      'overline-collapse',
-      'h1-collapse',
-      'subtitle-collapse',
-      'dateline-collapse',
-      'back-home-track',
-      'personas-slim',
-      'persona-tag-slim',
-      'personas-collapse',
-    ]) {
-      expect(GLOBALS_CSS).toMatch(new RegExp(`animation-name:\\s*${name};`))
-    }
+  it('lets the masthead scroll away instead of sticking with the nav', () => {
+    expect(ruleBody('.page-header-wrap')).not.toMatch(/position:\s*sticky/)
+  })
+
+  it('keeps the phone nav to one row so the stuck bar stays slim', () => {
+    const mobile = GLOBALS_CSS.match(/@media\s*\(max-width:\s*640px\)\s*\{\s*\/\*[\s\S]*?\.personas-bar\s*\{([^}]*)\}/)
+    expect(mobile).not.toBeNull()
+    expect(mobile![1]).toMatch(/flex-wrap:\s*nowrap/)
+    expect(mobile![1]).toMatch(/overflow-x:\s*auto/)
+  })
+
+  it('has no scroll-driven animation left', () => {
+    expect(GLOBALS_CSS).not.toMatch(/animation-timeline:/)
+    expect(GLOBALS_CSS).not.toMatch(/@keyframes\s+[\w-]*(collapse|slim|track)\b/)
+    expect(GLOBALS_CSS).not.toMatch(/--collapse-range/)
   })
 })
 
@@ -119,8 +110,8 @@ describe('globals.css — heading keyword is a solid fill (audit P1)', () => {
 /**
  * Regression — 2026-08 audit P1 (no skip link).
  *
- * The sticky header puts a back-home button and four nav links ahead of the
- * content on every route, and there was no way past them for keyboard users.
+ * The header puts a back-home button and the nav links ahead of the content on
+ * every route, and there was no way past them for keyboard users.
  */
 describe('globals.css — skip link (audit P1)', () => {
   it('keeps the skip link focusable but off-screen until focused', () => {

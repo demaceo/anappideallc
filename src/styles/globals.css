@@ -10,7 +10,13 @@
    ═══════════════════════════════════════════════════════════ */
 
 /* ─── SECTION 3: Global page setup ─── */
-html { scroll-behavior: auto; }
+html {
+  scroll-behavior: auto;
+  /* The nav is stuck over the top of the viewport, so anything scrolled to the
+     top edge (the skip link's #main-content, a focused control) would land
+     underneath it. This keeps those targets clear of the bar. */
+  scroll-padding-top: var(--sticky-offset);
+}
 
 body {
   background: var(--c-page);
@@ -24,11 +30,6 @@ body {
      the END of the document — the FAB still floats over mid-scroll content,
      which is why it collapses to a compact corner disc under 480px. */
   padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
-  /* The sticky masthead shrinks as it collapses on scroll. Scroll anchoring
-     would compensate for that height change by pulling the scroll offset back
-     up, which re-expands the header and creates a jittery feedback loop. Opt
-     out so the collapse stays stable as the user scrolls. */
-  overflow-anchor: none;
 }
 
 main:focus { outline: none; }
@@ -56,58 +57,6 @@ h1, h2, h3 {
   padding: 0 clamp(1rem, 4vw, 2rem);
 }
 
-/* ─── Scroll-driven keyframes (Chrome 115+, Firefox 114+, Safari 18+) ─── */
-/* The whole masthead (title, subtitle, hero button, a case study's logo and
-   prev/next arrows) collapses to nothing, so the sticky header ends as just
-   the nav bar. It used to keep a one-line shrunken title, which spent a band
-   of every screen repeating what the visitor had already read. max-height
-   starts above any masthead's natural height; overflow: hidden on .masthead
-   clips the content as it closes. */
-@keyframes masthead-collapse {
-  from { max-height: 40rem; padding-top: var(--masthead-pad-top); padding-bottom: var(--masthead-pad-bottom); border-bottom-width: var(--bw); opacity: 1; }
-  to   { max-height: 0;     padding-top: 0;                      padding-bottom: 0;                         border-bottom-width: 0;         opacity: 0; }
-}
-@keyframes overline-collapse {
-  from { max-height: 3rem;  opacity: 1; margin-bottom: var(--space-5); }
-  to   { max-height: 0;     opacity: 0; margin-bottom: 0;      }
-}
-@keyframes h1-collapse {
-  from { font-size: var(--text-fluid-7); margin-bottom: var(--space-3); }
-  to   { font-size: var(--text-fluid-4); margin-bottom: 0;    }
-}
-@keyframes subtitle-collapse {
-  from { max-height: 10rem; opacity: 1; margin-top: var(--space-3); }
-  to   { max-height: 0;     opacity: 0; margin-top: 0;       }
-}
-@keyframes dateline-collapse {
-  from { max-height: 4rem;  opacity: 1; margin-top: var(--dateline-gap); }
-  to   { max-height: 0;     opacity: 0; margin-top: 0;       }
-}
-/* With the masthead gone, the back-home button rides in the nav row. */
-@keyframes back-home-track {
-  from { top: 1.5rem; min-width: 44px; min-height: 44px; }
-  to   { top: 2px;     min-width: 34px; min-height: 34px; }
-}
-/* Slim the nav bar's vertical padding as the user scrolls so the sticky
-   header reduces to just the nav. Links stay visible (persona-tag-slim
-   only trims their padding, never their content). */
-@keyframes personas-slim {
-  from { padding-top: var(--space-3); padding-bottom: var(--space-4); }
-  to   { padding-top: var(--space-1); padding-bottom: var(--space-2);  }
-}
-@keyframes persona-tag-slim {
-  from { padding-top: var(--space-2); padding-bottom: var(--space-2); }
-  to   { padding-top: var(--space-1);  padding-bottom: var(--space-1);  }
-}
-/* Mobile only: collapse the wrapped nav into a single, horizontally
-   scrollable row so the sticky header shrinks to a slim bar when scrolled.
-   overflow-x is set statically on .personas-bar so it's always scrollable —
-   animating discrete properties like overflow is unreliable across browsers. */
-@keyframes personas-collapse {
-  from { padding-top: var(--space-3); padding-bottom: var(--space-4);   flex-wrap: wrap;   justify-content: center;     padding-left: var(--space-4); }
-  to   { padding-top: var(--space-2);  padding-bottom: var(--space-2); flex-wrap: nowrap; justify-content: flex-start; padding-left: calc(var(--space-4) + 44px + var(--space-2)); }
-}
-
 /* ─── SECTION 4: Masthead / hero header ─── */
 .masthead {
   background: var(--c-page);
@@ -117,16 +66,14 @@ h1, h2, h3 {
   padding: var(--masthead-pad-top) max(clamp(1rem, 4vw, 2rem), calc((100% - var(--shell)) / 2 + 2rem)) var(--masthead-pad-bottom);
   text-align: left;
   position: relative;
-  overflow: hidden;
   border-bottom: var(--bw) solid var(--c-line);
 }
 
+/* The masthead scrolls away like any other content. Only the nav below it
+   sticks (see .personas-bar). `relative` anchors the absolutely positioned
+   skip link and back-home button. */
 .page-header-wrap {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  will-change: transform;
-  transform: translateZ(0);
+  position: relative;
 }
 
 .overline {
@@ -135,10 +82,6 @@ h1, h2, h3 {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-fg-soft);
-  overflow: hidden;
-  /* Mirrors the `from` state of @keyframes overline-collapse so the static
-     (no scroll-timeline) fallback matches the designed expanded masthead
-     exactly rather than sitting 21px tighter. */
   margin-bottom: var(--space-5);
 }
 
@@ -161,13 +104,11 @@ h1, h2, h3 {
   max-width: 560px;
   margin: var(--space-3) 0 0;
   line-height: 1.4;
-  overflow: hidden;
 }
 
 /* Hero call to action — drawn from the brutalist vocabulary (ink slab, square
    corners, inversion on hover) rather than the neon CTA set, so the masthead
-   keeps one voice. Collapses with the rest of the header on scroll; see the
-   @supports block below. */
+   keeps one voice. */
 .hero-cta {
   display: inline-flex;
   align-items: center;
@@ -187,7 +128,6 @@ h1, h2, h3 {
   background: var(--c-accent);
   border: 0;
   border-radius: var(--radius-sm);
-  overflow: hidden;
   transition: background 150ms, color 150ms;
 }
 
@@ -203,24 +143,26 @@ h1, h2, h3 {
 
 .hero-cta:hover::after { transform: translateX(3px); }
 
-@keyframes hero-cta-collapse {
-  from { max-height: 4rem; opacity: 1; margin-top: var(--space-5); }
-  to   { max-height: 0;    opacity: 0; margin-top: 0;       }
-}
-
 .date-line {
   font-family: var(--ff-mono);
   font-size: var(--text-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-fg-soft);
-  overflow: hidden;
-  /* Mirrors the `from` state of @keyframes dateline-collapse — see .overline. */
   margin-top: var(--dateline-gap);
 }
 
 /* ─── SECTION 5: Navigation / legend bar ─── */
+/* Sits in normal flow under the masthead, so it scrolls up with the page and,
+   on reaching the top of the viewport, sticks there for the rest of the page.
+   Its parent is the page container (see PageHeader.tsx); inside the masthead
+   wrapper it could not stick, because a sticky element is held by its parent's
+   box. The background is opaque so content scrolling beneath never shows
+   through, and z-index keeps it above that content. */
 .personas-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   background: var(--c-page);
   padding: var(--space-3) var(--space-8) var(--space-4);
   display: flex;
@@ -272,84 +214,38 @@ h1, h2, h3 {
 .persona-tag--active .persona-tag-mark { opacity: 0.8; }
 
 @media (max-width: 640px) {
-  /* On small screens, collapse the masthead almost immediately as the user
-     scrolls so the sticky header reclaims vertical space sooner. */
-  :root { --collapse-range: 12px 130px; }
-
-  /* Slim-bar nav: starts as a centered, wrapped 2-row bar at the top of the
-     page and collapses to a single, horizontally scrollable row when scrolled
-     (see @keyframes personas-collapse). overflow-x: auto is always on so the
-     Process tab is never clipped on narrow viewports. */
+  /* One row at every scroll position. A wrapped two-row nav would eat ~120px
+     of a phone screen once it is stuck to the top; a single row keeps the
+     stuck bar to ~60px. The row is tightened (no "↳" mark, 8px side padding)
+     so all five tabs fit from 360px up, with the first label still inset 16px
+     like the page gutter. Narrower screens scroll sideways: overflow-x: auto
+     keeps every tab reachable. */
   .personas-bar {
-    padding: var(--space-3) var(--space-4) var(--space-4);
+    padding: var(--space-2);
     gap: var(--space-1);
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    justify-content: flex-start; /* fallback where `safe` is unsupported */
+    justify-content: safe center; /* centred when it fits, start-aligned (scrollable) when not */
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
   .personas-bar::-webkit-scrollbar { display: none; }
+  .persona-tag-mark { display: none; }
   /* Keep tags at full size and let the row scroll instead of squashing them. */
   .persona-tag { flex-shrink: 0; }
   /* Larger tap target on mobile */
   .persona-tag {
     min-height: 44px;
-    padding-top: var(--space-3);
-    padding-bottom: var(--space-3);
-  }
-}
-
-/* ─── Sticky-header collapse — gated on scroll-driven animation support ───
-   Every rule below drives a `*-collapse` keyframe off `scroll(root)`. The
-   `animation` shorthand resets `animation-duration`, and browsers WITHOUT
-   scroll-timeline support resolve that to `0s` rather than `auto`. Paired with
-   `fill-mode: both`, a 0s animation completes instantly and pins the element to
-   its END keyframe — so an unguarded rule renders the masthead permanently
-   COLLAPSED: h1 at ~21px, overline/subtitle/dateline at opacity 0. That wipes
-   out the hero on iOS <= 18, Firefox ESR, and older Chrome/Edge.
-
-   Gating on @supports keeps those browsers on the static, full-size masthead
-   declared above — the correct fallback — and only opts supporting browsers
-   into the scroll-scrubbed collapse. Do NOT move these declarations back into
-   the base rules. ─── */
-@supports (animation-timeline: scroll(root)) {
-  .masthead,
-  .overline,
-  .masthead h1,
-  .subtitle,
-  .date-line,
-  .hero-cta,
-  .back-home,
-  .personas-bar,
-  .persona-tag {
-    animation-timeline: scroll(root);
-    animation-range: var(--collapse-range);
-    animation-timing-function: linear;
-    animation-fill-mode: both;
-  }
-
-  .masthead    { animation-name: masthead-collapse; }
-  .overline    { animation-name: overline-collapse; }
-  .masthead h1 { animation-name: h1-collapse; }
-  .subtitle    { animation-name: subtitle-collapse; }
-  .date-line   { animation-name: dateline-collapse; }
-  .hero-cta    { animation-name: hero-cta-collapse; }
-  .back-home   { animation-name: back-home-track; }
-  .personas-bar { animation-name: personas-slim; }
-  .persona-tag  { animation-name: persona-tag-slim; }
-
-  /* Mobile swaps the nav's slim keyframe for the wrapped -> scrollable one. */
-  @media (max-width: 640px) {
-    .personas-bar { animation-name: personas-collapse; }
+    padding: var(--space-3) var(--space-2);
   }
 }
 
 /* ─── Skip link — first focusable element on every page ───
-   The sticky header puts a back-home button and four nav links ahead of the
-   content on every route, so keyboard and switch users need a way past them.
+   The header puts a back-home button and the nav links ahead of the content
+   on every route, so keyboard and switch users need a way past them.
    Off-screen until focused, then it drops into the top-left corner as a solid
-   ink slab (legible over the bone masthead and over any loud section color
-   that may have scrolled beneath a collapsed header). ─── */
+   ink slab (legible over the bone masthead). ─── */
 .skip-link {
   position: absolute;
   top: 0;
@@ -375,7 +271,8 @@ h1, h2, h3 {
   transform: translateY(0);
 }
 
-/* ─── Back-to-home button — absolute within .page-header-wrap ─── */
+/* ─── Back-to-home button — absolute within .page-header-wrap, so it scrolls
+   away with the masthead ─── */
 .back-home {
   position: absolute;
   top: 1.5rem;
@@ -555,7 +452,7 @@ h1, h2, h3 {
 
 /* ─── Home hero: copy on the left, the founder's portrait on the right ───
    Phones stack the copy and show the portrait as a small avatar row under the
-   buttons, so the masthead (which collapses on the first scroll) stays short. */
+   buttons, so the masthead stays short. */
 .masthead--hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
@@ -3234,19 +3131,10 @@ main a:hover {
   margin-top: var(--space-1);
 }
 
-/* ─── Reduced motion — kill marquee, collapse, and transitions ─── */
+/* ─── Reduced motion — kill marquee and transitions ─── */
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; padding-left: 0; }
   .voice-note-pulse { animation: none; }
-  .masthead,
-  .overline,
-  .masthead h1,
-  .subtitle,
-  .date-line,
-  .hero-cta,
-  .back-home,
-  .personas-bar,
-  .persona-tag { animation: none; }
   *,
   *::before,
   *::after {
@@ -3335,8 +3223,7 @@ main a:hover {
    gated on @supports because a browser that does not understand the alt form
    discards the whole declaration, which would silently delete the ornament
    (Safari only gained it in 17.4, below this project's 16.4 target floor).
-   Unsupported browsers keep the plain glyph — the same progressive-enhancement
-   shape as the scroll-timeline guard above.
+   Unsupported browsers keep the plain glyph.
 
    Only ornament belongs in this list. The verdict-box category labels
    ("Assessment", "Note", "Warning", "Context", "Get in touch") were generated

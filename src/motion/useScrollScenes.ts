@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import type { RefObject } from 'react'
 import { SCENES } from './scenes'
-import { headerCollapseEnd } from './header'
 
 // Site-wide scroll motion (GSAP), scoped to the element in `scopeRef` and
 // re-run whenever `key` changes (the route), so every page gets it from one
@@ -167,29 +166,7 @@ export function useScrollScenes(scopeRef: RefObject<HTMLElement | null>, key: st
 
           return () => cleanups.forEach((fn) => fn())
         })
-        // The sticky masthead collapses over the first --collapse-range of
-        // scroll (a CSS scroll-driven animation), which pulls everything below
-        // it up by a few hundred px AFTER ScrollTrigger measured at load, so
-        // every trigger fired that much late. Re-measure whenever scroll
-        // crosses the end of that range, in either direction, so positions
-        // always match the header state the visitor is actually seeing.
-        const collapseEnd = headerCollapseEnd()
-        let collapsed = window.scrollY > collapseEnd
-        let frame = 0
-        const onScroll = () => {
-          const now = window.scrollY > collapseEnd
-          if (now === collapsed) return
-          collapsed = now
-          cancelAnimationFrame(frame)
-          frame = requestAnimationFrame(() => ScrollTrigger.refresh())
-        }
-        window.addEventListener('scroll', onScroll, { passive: true })
-
-        revert = () => {
-          window.removeEventListener('scroll', onScroll)
-          cancelAnimationFrame(frame)
-          mm.revert()
-        }
+        revert = () => mm.revert()
 
         // Fonts change line heights after load; re-measure trigger positions.
         await (document.fonts?.ready ?? Promise.resolve())

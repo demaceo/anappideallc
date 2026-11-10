@@ -1,5 +1,4 @@
 import type { SceneApi } from './index'
-import { headerCollapseEnd } from '../header'
 
 // Selects a scene's animated parts by their data-p="name" attribute.
 export const parts = (el: HTMLElement) => (name: string) =>
@@ -13,12 +12,12 @@ export const parts = (el: HTMLElement) => (name: string) =>
 // split's bottom nears 66% of the viewport, so the timeline ends at 72%.
 // Compact: it plays as the scene itself crosses the viewport, finishing with
 // its bottom at 65% of the screen so the whole scene (~360px on a phone) is
-// still below the collapsed header (up to ~170px on Home) when it ends.
+// still below the sticky nav when it ends.
 //
-// Near the top (on screen, or nearly, when the page opens), there's no stable
-// scroll run to scrub across: the sticky header's own collapse moves the
-// layout for the first ~200px. Those scenes build themselves once, at a fixed
-// speed, as soon as the whole scene is in view.
+// Near the top (on screen, or nearly, when the page opens), there's no scroll
+// run to scrub across: the scene would have to start before scroll 0. Those
+// scenes build themselves once, at a fixed speed, as soon as the whole scene
+// is in view.
 const AUTOPLAY_SPEED = 2.4 // timeline "scroll seconds" → ~2.5s of real time
 
 export function sceneTimeline({ gsap, ScrollTrigger, el, desktop }: SceneApi) {
@@ -30,7 +29,7 @@ export function sceneTimeline({ gsap, ScrollTrigger, el, desktop }: SceneApi) {
     // Play once, the moment the whole scene is in view: right away if it
     // already is (a trigger at scroll 0 wouldn't fire until the page moved),
     // otherwise when the small scroll brings it fully up. The trigger point is
-    // a function so it's re-read when the collapsing header moves the layout.
+    // a function so it's re-read on every ScrollTrigger.refresh().
     const tl = gsap.timeline({ defaults, paused: true }).timeScale(AUTOPLAY_SPEED)
     const sceneBottom = () => el.getBoundingClientRect().bottom
     if (sceneBottom() <= window.innerHeight) {
@@ -46,17 +45,16 @@ export function sceneTimeline({ gsap, ScrollTrigger, el, desktop }: SceneApi) {
     return tl
   }
   // Positions are functions so every ScrollTrigger.refresh() re-reads the
-  // live layout. A scrubbed scene never starts before the header has finished
-  // collapsing: otherwise, once the layout settles, it's already part-played.
+  // live layout.
   //
   // It gets at least `minRun` px of scroll, but never past the last position
-  // where the whole scene is still below the header (--sticky-offset): a scene
-  // must be seen finishing.
+  // where the whole scene is still below the sticky nav (--sticky-offset): a
+  // scene must be seen finishing.
   const endAt = desktop ? 0.72 : 0.65
   const minRun = 240
   const pageY = (r: DOMRect, edge: 'top' | 'bottom') => r[edge] + window.scrollY
   const naturalStart = () => pageY(trigger.getBoundingClientRect(), 'top') - window.innerHeight * startAt
-  const start = () => Math.max(naturalStart(), headerCollapseEnd() + 1)
+  const start = naturalStart
   const lastVisible = () => {
     const scene = el.getBoundingClientRect()
     return desktop
@@ -72,8 +70,8 @@ export function sceneTimeline({ gsap, ScrollTrigger, el, desktop }: SceneApi) {
   return gsap.timeline({ defaults, scrollTrigger: { trigger, start, end, scrub: 0.8 } })
 }
 
-// --sticky-offset (a rem value) in px: the clearance under the collapsed header.
+// --sticky-offset (a rem value) in px: the clearance under the sticky nav.
 function stickyOffset() {
   const root = getComputedStyle(document.documentElement)
-  return parseFloat(root.getPropertyValue('--sticky-offset')) * parseFloat(root.fontSize) || 144
+  return parseFloat(root.getPropertyValue('--sticky-offset')) * parseFloat(root.fontSize) || 88
 }

@@ -50,6 +50,31 @@ describe('SiteNav — current route is exposed (audit P2)', () => {
 })
 
 /**
+ * The nav sticks to the top of the page once the masthead has scrolled away.
+ * `position: sticky` is held by the element's PARENT box, so the nav only
+ * keeps sticking if it is a sibling of the masthead wrapper. Nested inside it,
+ * it would scroll off with the masthead and the CSS rule would look right
+ * while doing nothing. jsdom has no layout, so this pins the structure.
+ */
+describe('SiteNav — sticks as a sibling of the masthead, not inside it', () => {
+  it.each(['/', '/about', '/work', '/services', '/process', '/contact'])(
+    'renders the nav outside .page-header-wrap on %s',
+    (path) => {
+      const { container, unmount } = renderRoute(path)
+      const nav = container.querySelector('nav.personas-bar')
+      const wrap = container.querySelector('.page-header-wrap')
+      expect(nav).not.toBeNull()
+      expect(wrap).not.toBeNull()
+      expect(nav!.closest('.page-header-wrap')).toBeNull()
+      expect(nav!.parentElement).toBe(wrap!.parentElement)
+      // Still directly after the masthead, so reading and tab order are unchanged.
+      expect(wrap!.nextElementSibling).toBe(nav)
+      unmount()
+    },
+  )
+})
+
+/**
  * Regression — 2026-08 audit P2 (footer had zero navigation links).
  *
  * The masthead nav carries only four sections, so Contact was reachable only
