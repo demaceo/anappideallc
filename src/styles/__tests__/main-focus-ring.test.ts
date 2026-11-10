@@ -64,6 +64,12 @@ describe('globals.css — sticky nav replaces the collapsing masthead', () => {
     expect(nav).toMatch(/z-index:\s*\d+/)
   })
 
+  it('keeps anchor and focus targets clear of the stuck nav', () => {
+    // Without this, the skip link's #main-content (and any control scrolled to
+    // the viewport edge) lands underneath the opaque sticky bar.
+    expect(ruleBody('html')).toMatch(/scroll-padding-top:\s*var\(--sticky-offset\)/)
+  })
+
   it('lets the masthead scroll away instead of sticking with the nav', () => {
     expect(ruleBody('.page-header-wrap')).not.toMatch(/position:\s*sticky/)
   })
