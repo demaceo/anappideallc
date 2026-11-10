@@ -202,8 +202,10 @@ Match the delivery method to the job, and be open with clients about it:
 | --- | --- | --- |
 | Marketing site | Our React/Vite stack, or Framer/Webflow when the client must self-edit | You |
 | Standard integrations | Native integrations, Zapier/Make, Stripe/Square | You |
-| Custom app, complex backend, AI features | Supabase/Vercel stack, with AI-assisted development | You + a **vetted subcontractor** when beyond reach |
-| Specialties (brand identity, photo/video, legal) | Partner bench | Partners, coordinated by you |
+| Custom app, complex backend, AI features | Supabase/Vercel stack, with AI-assisted development | You |
+| Brand identity (logo, colors, brand kit) | Figma | You |
+| Photo/video | In-house for standard shoots | You; a partner for premium or large shoots |
+| Overflow (more work than one person can deliver) | Partner bench | Backup developer and designer, coordinated by you |
 
 Rules: you own the client relationship and QA, your contract allows
 subcontractors, and you never sell a capability without a named way to
@@ -294,4 +296,5 @@ true · CAN-SPAM-compliant email, and no cold SMS without consent.
 - [x] Lead vertical for the first 30 days: beauty, barbers and wellness
 - [x] Market: Denver metro in person; funded founders remote
 - [x] Offer Start Right: yes, with the limits in §4.2
-- [ ] The first 2–3 partners for your bench (designer, backend dev, photographer)
+- [x] Design, backend and standard photo/video are handled in-house
+- [ ] Partner bench for overflow and backup: 1 photographer/videographer for premium shoots, 1 backup developer (see §5)
