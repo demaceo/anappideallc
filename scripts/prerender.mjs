@@ -84,7 +84,7 @@ async function main() {
     // so these must be in static HTML — not just in the React SSR output
     // inside #root where React 19 places them during renderToString.
     const canonical = `${SITE.url}${url === '/' ? '' : url}`
-    const ogImage = `${SITE.url}/og.png`
+    const ogImage = `${SITE.url}${SITE.ogImage}`
     const headTags = [
       `<link rel="canonical" href="${canonical}" />`,
       `<meta property="og:type" content="website" />`,

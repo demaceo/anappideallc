@@ -8,6 +8,10 @@ export const SITE = {
   initials: 'AAI',
   domain: 'anappidea.llc',
   url: 'https://anappidea.llc',
+  // Share image (og:image / twitter:image), 1200x630. Social platforms cache
+  // by URL, so a new banner gets a new filename (og.png -> og-v2.png) and the
+  // static copy in index.html is updated by hand to match.
+  ogImage: '/og-v2.png',
   email: 'hello@anappidea.llc',
   founder: {
     name: 'Demaceo Vincent Howard',
