@@ -76,45 +76,70 @@ describe('Pricing note', () => {
   })
 })
 
-describe('Contact wizard', () => {
+describe('Contact form: quick message first, guided questions as the alternative', () => {
   afterEach(() => vi.unstubAllGlobals())
 
   function stepCount() {
     return document.querySelector('.wizard-step-count')?.textContent
   }
 
-  // Continue and Send sit in the same slot. When React reused the Continue
-  // element and flipped it to type=submit mid-click, the browser's default
-  // action submitted the form as the last step opened. jsdom doesn't replay
-  // that default action, so assert the cause: Send is a fresh element.
-  it('swaps in a new element for Send rather than reusing Continue', () => {
+  // The quick form is the default; the guided questions open from the link
+  // under the message box.
+  function enterGuided() {
     renderRoute('/contact')
+    fireEvent.click(screen.getByRole('button', { name: /not sure what to say\? let me guide you/i }))
+  }
+
+  function fillQuick({ message = 'An app for dog walkers' } = {}) {
+    if (message) fireEvent.change(screen.getByLabelText(/in your words/i), { target: { value: message } })
+    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Sam' } })
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'sam@example.com' } })
+  }
+
+  it('opens on the quick form, with no step counter and a way into the guide', () => {
+    renderRoute('/contact')
+    expect(stepCount()).toBeUndefined()
+    expect(screen.getByLabelText(/in your words/i)).toBeInTheDocument()
+    expect(screen.getByLabelText('Name')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /send message/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /not sure what to say/i })).toBeInTheDocument()
+    // The wizard's questions are not on screen until asked for.
+    expect(screen.queryByText(/what do you need\?/i)).toBeNull()
+  })
+
+  // Continue and the last step's button sit in the same slot. When React
+  // reused one element and flipped its role mid-click, the browser's default
+  // action fired the wrong handler as the last step opened. jsdom doesn't
+  // replay that default action, so assert the cause: a fresh element.
+  it('swaps in a new element for the last step rather than reusing Continue', () => {
+    enterGuided()
     fireEvent.click(screen.getByRole('button', { name: /a website/i }))
     let cont = screen.getByRole('button', { name: /continue/i })
     while (screen.queryByRole('button', { name: /continue/i })) {
       cont = screen.getByRole('button', { name: /continue/i })
       fireEvent.click(cont)
     }
-    expect(screen.getByRole('button', { name: /send message/i })).not.toBe(cont)
-    expect(cont.getAttribute('type')).toBe('button')
+    expect(screen.getByRole('button', { name: /write my first draft/i })).not.toBe(cont)
   })
 
   it('skips the search-visibility step for an app-only project', () => {
-    renderRoute('/contact')
+    enterGuided()
     fireEvent.click(screen.getByRole('button', { name: /a mobile app/i }))
-    expect(stepCount()).toMatch(/01 \/ 06/)
+    expect(stepCount()).toMatch(/01 \/ 05/)
 
     const seen: string[] = []
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 4; i++) {
       fireEvent.click(screen.getByRole('button', { name: /continue/i }))
       seen.push(document.querySelector('.wizard-question')?.textContent ?? '')
     }
     expect(seen.join(' | ')).not.toMatch(/how will people find it/i)
     expect(seen.join(' | ')).toMatch(/which app stores/i)
+    // Five steps for an app (type, stores, business, audience, budget); the last offers the draft.
+    expect(screen.getByRole('button', { name: /write my first draft/i })).toBeInTheDocument()
   })
 
   it('asks the search-visibility question in plain language for a website', () => {
-    renderRoute('/contact')
+    enterGuided()
     fireEvent.click(screen.getByRole('button', { name: /a website/i }))
     fireEvent.click(screen.getByRole('button', { name: /continue/i }))
     expect(screen.getByText(/how will people find it/i)).toBeInTheDocument()
@@ -122,27 +147,22 @@ describe('Contact wizard', () => {
     expect(screen.getByText('Getting recommended by AI assistants')).toBeInTheDocument()
   })
 
-  it('sends the budget and ends on next steps with a booking link', async () => {
+  it('sends a quick message and ends on next steps with a booking link', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(JSON.stringify({ ok: true, confirmationSent: true }), { status: 200 }),
     )
     vi.stubGlobal('fetch', fetchMock)
 
     renderRoute('/contact')
-    fireEvent.click(screen.getByRole('button', { name: /a mobile app/i }))
-    while (screen.queryByLabelText(/in your words/i) === null) {
-      fireEvent.click(screen.getByRole('button', { name: /continue/i }))
-    }
-    fireEvent.change(screen.getByLabelText(/in your words/i), { target: { value: 'An app for dog walkers' } })
-    fireEvent.change(screen.getByLabelText(/budget ballpark/i), { target: { value: 'not sure yet' } })
-    fireEvent.click(screen.getByRole('button', { name: /continue/i }))
-    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Sam' } })
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'sam@example.com' } })
+    fillQuick()
     fireEvent.click(screen.getByRole('button', { name: /send message/i }))
 
     const status = await screen.findByRole('status')
     const sent = JSON.parse(fetchMock.mock.calls[0][1].body)
-    expect(sent.budget).toBe('not sure yet')
+    expect(sent.description).toBe('An app for dog walkers')
+    expect(sent.name).toBe('Sam')
+    expect(sent.services).toEqual([])
+    expect(sent.usedGuide).toBe(false)
     // Bot-screening fields ride along: an empty honeypot and the time open.
     expect(sent.website).toBe('')
     expect(typeof sent.elapsedMs).toBe('number')
@@ -156,18 +176,42 @@ describe('Contact wizard', () => {
     )
   })
 
+  it('sends the budget from the guided route, and flags that the guide was used', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ ok: true, confirmationSent: true }), { status: 200 }),
+    )
+    vi.stubGlobal('fetch', fetchMock)
+
+    enterGuided()
+    fireEvent.click(screen.getByRole('button', { name: /a mobile app/i }))
+    while (screen.queryByLabelText(/budget ballpark/i) === null) {
+      fireEvent.click(screen.getByRole('button', { name: /continue/i }))
+    }
+    fireEvent.change(screen.getByLabelText(/budget ballpark/i), { target: { value: 'not sure yet' } })
+    fireEvent.click(screen.getByRole('button', { name: /write my first draft/i }))
+
+    // Back on the quick form, with the draft in the message box.
+    expect(stepCount()).toBeUndefined()
+    expect((screen.getByLabelText(/in your words/i) as HTMLTextAreaElement).value).toContain(
+      "I'm looking for help building a mobile app.",
+    )
+    fillQuick({ message: '' })
+    fireEvent.click(screen.getByRole('button', { name: /send message/i }))
+
+    await screen.findByRole('status')
+    const sent = JSON.parse(fetchMock.mock.calls[0][1].body)
+    expect(sent.budget).toBe('not sure yet')
+    expect(sent.usedGuide).toBe(true)
+    expect(sent.projectType).toBe('app')
+    expect(sent.description).toContain('Budget ballpark: not sure yet.')
+    expect(sent.services).toEqual(['custom-builds'])
+  })
+
   it('explains a rate-limit response instead of blaming the server', async () => {
     // The Vercel Firewall answers 429 before the function runs, with no JSON.
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('Too Many Requests', { status: 429 })))
     renderRoute('/contact')
-    fireEvent.click(screen.getByRole('button', { name: /a mobile app/i }))
-    while (screen.queryByLabelText(/in your words/i) === null) {
-      fireEvent.click(screen.getByRole('button', { name: /continue/i }))
-    }
-    fireEvent.change(screen.getByLabelText(/in your words/i), { target: { value: 'An idea' } })
-    fireEvent.click(screen.getByRole('button', { name: /continue/i }))
-    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Sam' } })
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'sam@example.com' } })
+    fillQuick({ message: 'An idea' })
     fireEvent.click(screen.getByRole('button', { name: /send message/i }))
 
     const alert = await screen.findByRole('alert')

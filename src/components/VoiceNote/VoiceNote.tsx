@@ -215,8 +215,8 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
   if (state === 'unsupported') {
     return (
       <p className="voice-note-hint">
-        Voice notes aren&apos;t supported in this browser — no worries, your typed
-        message is plenty.
+        Voice notes aren&apos;t supported in this browser, but no worries: your
+        typed message is plenty.
       </p>
     )
   }

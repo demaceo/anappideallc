@@ -2178,7 +2178,7 @@ main[data-project-theme] .project-cover-block::before {
 .contact-form :is(.form-input, .form-textarea) { background: oklch(100% 0 0); }
 .contact-form :is(.form-input, .form-textarea):focus { outline-color: var(--ink); }
 /* Picked answers: a soft green tint with a green edge, ink text. */
-.contact-form :is(.choice-card.selected, .chip.selected, .rating-opt.selected) {
+.contact-form :is(.choice-card.selected, .chip.selected, .rating-opt.selected, .service-picker-row.selected) {
   background: var(--c-accent-soft);
   color: var(--ink);
   box-shadow: inset 0 0 0 1px var(--c-accent);
@@ -2768,6 +2768,156 @@ main[data-project-theme] .project-cover-block::before {
   background: var(--c-accent);
   color: var(--c-fg);
   font-weight: 700;
+}
+
+/* Service picker: a button that opens a group of checkboxes, in the page flow.
+   Lives inside .contact-form, where --c-bg is the ink and --c-fg the paper. */
+.service-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.service-picker-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--ff-body);
+  font-size: var(--text-md);
+  line-height: 1.4;
+  text-align: left;
+  color: var(--c-bg);
+  background: oklch(100% 0 0);
+  border: var(--bw) solid var(--c-bg-soft);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 150ms;
+}
+.service-picker-toggle:hover { border-color: var(--c-bg); }
+.service-picker-value { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.service-picker-caret {
+  flex-shrink: 0;
+  font-family: var(--ff-mono);
+  font-size: var(--text-lg);
+  line-height: 1;
+  transition: transform 150ms var(--ease);
+}
+.service-picker-toggle[aria-expanded='true'] .service-picker-caret { transform: rotate(45deg); }
+
+/* No display rule here, so the [hidden] attribute works. */
+.service-picker-fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.service-picker-legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+  font-family: var(--ff-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-bg-soft);
+}
+.service-picker-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: var(--space-3);
+  border: var(--bw) solid var(--c-bg-faint);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 150ms;
+}
+.service-picker-row:hover { background: var(--c-bg-faint); }
+.service-picker-check {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: var(--space-1) 0 0;
+  accent-color: var(--c-accent);
+  cursor: pointer;
+}
+/* The global focus ring covers links and buttons only; a native checkbox
+   would otherwise show whatever the browser draws, or nothing. */
+.service-picker-check:focus-visible {
+  outline: var(--bw-thick) solid var(--c-bg);
+  outline-offset: 2px;
+}
+.service-picker-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.service-picker-title {
+  font-size: var(--text-md);
+  font-weight: 700;
+  line-height: 1.3;
+}
+.service-picker-meta {
+  font-family: var(--ff-mono);
+  font-size: var(--text-sm);
+  color: var(--c-bg-soft);
+}
+.service-picker-help {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--c-bg-soft);
+}
+
+/* The quick form (default) and the guided questions are two forms in one card.
+   The quick one stays mounted while the guided one runs, so a rule that sets
+   `display` would beat the UA's [hidden] and leave it on screen. */
+.contact-quick,
+.contact-guided {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.contact-quick[hidden] { display: none; }
+.contact-quick-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* "Not sure what to say?": a quiet link under the message box, not a second
+   call to action. A button for behaviour, dressed as a link. */
+.contact-guide-link {
+  align-self: flex-start;
+  min-height: 44px;
+  padding: var(--space-2) 0;
+  font-family: var(--ff-body);
+  font-size: var(--text-md);
+  color: var(--c-bg);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+}
+.contact-guide-link:hover { text-decoration-thickness: 2px; }
+
+/* Shown under the message box after the guided questions wrote into it. */
+.contact-draft-note {
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--c-accent-soft);
+  border-left: var(--bw-thick) solid var(--c-accent);
+  border-radius: var(--radius-sm);
 }
 
 /* SEO / GEO rating rows */

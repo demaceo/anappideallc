@@ -5,7 +5,17 @@ import { describe, it, expect } from 'vitest'
 // House style (docs/brand-voice.md): no em-dashes in copy a visitor reads.
 // These files mix copy with code comments, which may use them, so comments
 // are stripped before checking.
-const FILES = ['src/pages/Contact.tsx', 'src/components/ConsultCTA/ConsultCTA.tsx', 'api/contact.ts']
+const FILES = [
+  'src/pages/Contact.tsx',
+  'src/components/ContactForm/ContactForm.tsx',
+  'src/components/ContactForm/QuickFields.tsx',
+  'src/components/ContactForm/GuidedSteps.tsx',
+  'src/components/ServicePicker/ServicePicker.tsx',
+  'src/components/VoiceNote/VoiceNote.tsx',
+  'src/lib/contact-draft.ts',
+  'src/components/ConsultCTA/ConsultCTA.tsx',
+  'api/contact.ts',
+]
 
 const stripComments = (src: string) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1')
 

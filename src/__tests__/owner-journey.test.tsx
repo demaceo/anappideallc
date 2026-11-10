@@ -142,33 +142,41 @@ describe('About reads in the owner’s language', () => {
  * tap appeared to do nothing.
  */
 describe('Contact form validation points at the problem', () => {
-  function goToLastStep() {
-    renderRoute('/contact')
-    fireEvent.click(screen.getByRole('button', { name: /a mobile app/i }))
-    while (screen.queryByLabelText(/in your words/i) === null) {
-      fireEvent.click(screen.getByRole('button', { name: /continue/i }))
-    }
-    fireEvent.change(screen.getByLabelText(/in your words/i), { target: { value: 'An idea' } })
-    fireEvent.click(screen.getByRole('button', { name: /continue/i }))
-  }
+  const send = () => fireEvent.click(screen.getByRole('button', { name: /send message/i }))
 
   it('shows the message under the field, marks it invalid, and moves focus to it', async () => {
-    goToLastStep()
-    fireEvent.click(screen.getByRole('button', { name: /send message/i }))
+    renderRoute('/contact')
+    // The message comes first: with nothing to go on, that is the problem.
+    send()
+
+    const box = screen.getByLabelText(/in your words/i)
+    const alert = await screen.findByRole('alert')
+    expect(alert).toHaveTextContent(/pick a service, add a sentence/i)
+    expect(box).toHaveAttribute('aria-invalid', 'true')
+    expect(box.getAttribute('aria-describedby')).toContain(alert.id)
+    // The message lives in the same field group as the input it is about.
+    expect(box.closest('.form-group')).toContainElement(alert)
+    await waitFor(() => expect(document.activeElement).toBe(box))
+  })
+
+  it('then points at the name once there is a message', async () => {
+    renderRoute('/contact')
+    fireEvent.change(screen.getByLabelText(/in your words/i), { target: { value: 'An idea' } })
+    send()
 
     const name = screen.getByLabelText('Name')
     const alert = await screen.findByRole('alert')
     expect(alert).toHaveTextContent(/add your name/i)
     expect(name).toHaveAttribute('aria-invalid', 'true')
     expect(name).toHaveAttribute('aria-describedby', alert.id)
-    // The message lives in the same field group as the input it is about.
     expect(name.closest('.form-group')).toContainElement(alert)
     await waitFor(() => expect(document.activeElement).toBe(name))
   })
 
   it('clears the message once the visitor starts fixing it', async () => {
-    goToLastStep()
-    fireEvent.click(screen.getByRole('button', { name: /send message/i }))
+    renderRoute('/contact')
+    fireEvent.change(screen.getByLabelText(/in your words/i), { target: { value: 'An idea' } })
+    send()
     await screen.findByRole('alert')
     fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Sam' } })
     expect(screen.queryByRole('alert')).toBeNull()
