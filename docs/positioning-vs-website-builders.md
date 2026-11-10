@@ -11,7 +11,7 @@ _An App Idea LLC · strategy working doc · 2026-11_
 
 ## 0. Assumptions (correct me if any are wrong)
 
-1. **Market:** Denver first, remote second. This matches the README.
+1. **Market:** Denver metro (in person) for local businesses; funded founders remote. See §4.3.
 2. **"Entrepreneurs with funding"** covers two groups: (a) people with a
    grant, a CDFI/SBA loan, a pitch-competition win or accelerator money, and
    (b) early-stage founders with friends-and-family or angel money. They have
@@ -120,21 +120,53 @@ We offer:
 
 ---
 
-## 4. Offer ladder (proposal)
+## 4. Offer ladder & pricing (DRAFT — verify pricing)
 
-Placeholder ranges. **You set the real numbers.** Check them against Denver
-freelance and agency rates before publishing.
+> **Status:** draft, pending the Denver-metro competitor comparison. Goal set by
+> the owner: **prices that similar services find hard to compete with.**
 
-| Tier | Who | What's in it | Pricing model |
+| Tier | Who | What's in it | Price (draft) |
 | --- | --- | --- | --- |
-| **Start Right** (DIY+) | Brand-new or very tight budget | We set up their builder site properly with a strategy session, copy help and Google Business Profile, plus 1 training session | Low fixed fee |
-| **Launch** | Established SMB | Custom fast site, local SEO foundation, booking/payments wiring, analytics, training | Fixed project fee, split payments |
-| **Grow** (retainer) | Launch clients | Hosting, updates, security, monthly report, SEO and content, small changes | Monthly |
-| **Automate** | Ops-heavy SMBs | CRM, automations, integrations, internal tools | Project + optional retainer |
-| **Product Sprint → Build** | Funded founders | Discovery sprint → MVP (web, mobile, AI) with milestones and funder-ready reports | Sprint fee → milestone billing |
+| **Start Right** | Brand-new or very tight budget | Set up their own builder site properly: 1 strategy session, setup, Google Business Profile | **$299–$499** flat _(proposed, see note)_ |
+| **Launch** | Established SMB | Custom fast site, booking/payments, local SEO foundation, analytics, training | **$699–$3,500**, split 50/25/25 |
+| **Grow** (retainer) | Launch clients | Hosting, updates, security, monthly report, SEO, small changes | **$150–$400/mo** |
+| **Automate** | Ops-heavy SMBs | CRM, automations, integrations, internal tools | **from $1,500** per project |
+| **Product Sprint** | Funded founders | 1–2 weeks: scoped MVP plan, clickable prototype, budget | **$2,500–$4,000** flat |
+| **MVP Build** | Funded founders, after Sprint | Web, mobile or AI MVP with milestones and funder-ready reports | **$10k–$40k+**, milestone billing |
 
-**Why include "Start Right":** it turns the "I'll just use Wix" objection into
-a sale and a future upgrade, instead of a lost lead.
+> ⚠️ **Pricing note.** Launch now starts at $699, which falls below the old
+> Start Right price ($500–$900). Start Right has to sit clearly under Launch or
+> nobody picks it, so it is proposed at $299–$499. **Confirm before publishing.**
+> Also define what $699 buys (e.g., a one-page site with booking) so the low
+> end doesn't turn into a full custom build at a loss.
+
+### 4.1 Selling each tier: the "why", in the customer's words
+
+Use these lines on the pricing page, in proposals and on calls. Each one
+answers the customer's question "why should I pay for this?"
+
+| Tier | Customer-facing pitch |
+| --- | --- |
+| **Start Right** | "Already want to use Wix or Squarespace? Do it right the first time. We set it up and get you on Google Maps in one session, so you don't lose a weekend to it. Upgrade later and your fee counts toward it." |
+| **Launch** | "A site built for *your* customers, not a template: online booking, payments, and showing up on Google, from $699. Pay in three parts and own everything: your domain, your logins, your code." |
+| **Grow** | "You run your business; we keep your site working. Updates, security, and a plain-English report every month showing calls and bookings from your site, for less than one missed customer." |
+| **Automate** | "Stop copying and pasting. We connect your booking, payments and messages so leads turn into appointments on their own. Most owners get hours back every week." |
+| **Product Sprint** | "Got funding and a deadline? In 1–2 weeks you'll have a scoped plan, a clickable prototype and a real budget, ready to show your funder, before you spend big on building." |
+| **MVP Build** | "We build the version that proves your idea, in milestones you can see and report on. No black box, no surprise bills." |
+
+### 4.2 Internal pricing rules (not published)
+
+1. **Publish starting prices** ("Launch from $699"). Being open about cost builds trust with this audience.
+2. **Founding clients:** the first 2–3 clients get about 30% off, in exchange for a case study and a testimonial.
+3. **Raise prices after every 3 delivered projects.**
+4. **Start Right limits:** at most 2 a month; fixed scope (one session, setup, Google Business Profile); no open-ended revisions; the fee is credited toward Launch if they upgrade within 6 months; never the headline offer, used to answer the "I'll just use Wix" objection.
+5. **Always sell the Product Sprint before quoting an MVP Build.**
+
+### 4.3 Market & focus (decided)
+
+- **Local small businesses:** Denver metro, in person: Denver, Aurora, Boulder, Golden, Littleton, Thornton, Glendale, Lakewood, Englewood, Arvada, Westminster and nearby.
+- **Funded founders:** remote from day one, run as a separate, low-effort track. Show up at pitch competitions, accelerator demo days and SBDC workshops, and lead with the Sprint.
+- **First 30-day niche:** beauty, barbers and wellness. Runner-up: home services and trades.
 
 ---
 
@@ -231,8 +263,10 @@ true · CAN-SPAM-compliant email, and no cold SMS without consent.
 
 ## 10. Decisions only you can make
 
-- [ ] Real price ranges for each tier
-- [ ] Lead vertical for the first 30 days (pick one)
-- [ ] Denver-only, or remote from day one?
-- [ ] Whether to offer the DIY "Start Right" tier
+- [x] Price ranges for each tier: drafted in §4 (Launch $699–$3,500, set by the owner)
+- [ ] Confirm Start Right at $299–$499, and define what the $699 Launch includes
+- [ ] Final check of prices against the Denver-metro competitor comparison
+- [x] Lead vertical for the first 30 days: beauty, barbers and wellness
+- [x] Market: Denver metro in person; funded founders remote
+- [x] Offer Start Right: yes, with the limits in §4.2
 - [ ] The first 2–3 partners for your bench (designer, backend dev, photographer)
