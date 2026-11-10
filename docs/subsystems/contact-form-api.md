@@ -7,7 +7,7 @@ sources:
   - code: api/contact.ts
   - code: src/data/services.ts
   - code: src/__tests__/contact-api.test.ts
-verified_at: 2ca39a1
+verified_at: 09a1945
 ---
 
 # Contact form API
@@ -25,18 +25,18 @@ that talks to it is described in [[contact-form-ui]].
    - `elapsedMs` below 2 s (`MIN_FILL_MS`, `api/contact.ts:18`) means too fast to
      be a human
    Both silently answer success and send nothing.
-3. **Validation** (`api/contact.ts:124-145`): a name is required; either an email
+3. **Validation** (`api/contact.ts:134-155`): a name is required; either an email
    or a phone number is required; and there must be **something to go on**: a
    description, a voice note, *or* at least one known service. The description
    can arrive as `description` or the legacy `message`.
 4. **Inquiry email** to `TO_EMAIL`, with summary rows, contact details and an
    optional voice-note attachment of up to 6 MB (`MAX_AUDIO_BYTES`)
-   (`api/contact.ts:147-232`). The rows start with "Services" when any were
+   (`api/contact.ts:157-242`). The rows start with "Services" when any were
    ticked and end with "Used the guided questions" when `usedGuide` is exactly
    `true`. With services but no message and no voice note, the email says
    "They did not write a message" instead of a "Their idea" block.
-5. **Confirmation email** to the visitor, best-effort (`api/contact.ts:245`,
-   `sendConfirmation` at `api/contact.ts:254`).
+5. **Confirmation email** to the visitor, best-effort (`api/contact.ts:255`,
+   `sendConfirmation` at `api/contact.ts:264`).
 
 Env vars: `RESEND_API_KEY`, `TO_EMAIL`, `FROM_EMAIL`. The last two default to
 `hello@anappidea.llc`.
@@ -69,18 +69,18 @@ Services are then de-duplicated and filtered to ids present in `SERVICE_LABELS`
 
 > ⚠️ Array elements must be string-checked before use. A non-string element used
 > to reach `escHtml` and throw a `TypeError` **outside the try block**, giving an
-> unhandled 500 (`api/contact.ts:111-114`). The `audio` object is checked the same way: a
+> unhandled 500 (`api/contact.ts:111-131`). The `audio` object is checked the same way: a
 > non-string `base64` or `mimeType` is treated as no voice note.
 
 > ⚠️ The Resend SDK does **not throw** when a send is rejected (bad key, quota,
 > unverified domain). It resolves with `{ data: null, error }`. Always check
 > `error`. Relying on try/catch alone once told visitors "thanks" for messages
-> that never arrived (`api/contact.ts:208-232`).
+> that never arrived (`api/contact.ts:218-242`).
 
 > ⚠️ The confirmation email is **fixed copy, no echo** of the name or message,
 > and is only sent when `elapsedMs` is present. Echoing form text would let
 > anyone send arbitrary content from this domain to a stranger's address
-> (`api/contact.ts:238-253`).
+> (`api/contact.ts:248-263`).
 
 > ⚠️ `BOOKING_URL` is duplicated from `SITE.booking.consultationUrl` in
 > `src/data/site.ts` on purpose. This function ships as its own ESM bundle, and
@@ -88,4 +88,4 @@ Services are then de-duplicated and filtered to ids present in `SERVICE_LABELS`
 > together (`api/contact.ts:9-12`).
 
 > ⚠️ All user text going into the inquiry HTML must pass through `escHtml`
-> (`api/contact.ts:299`).
+> (`api/contact.ts:309`).
