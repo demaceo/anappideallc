@@ -84,6 +84,8 @@ Shape data shared by markup and timelines lives in `src/motion/scenes/geometry.t
 - `.grid-2` / `.grid-3`: card grids; `.feature-item` rows become cards inside
   them. Collapse to one column below 768px (`.grid-3` → two below 1024px).
 - `.split`: chapter + scene; single column with the scene first below 1024px.
-- `--sticky-offset` clears the sticky nav (63px tall on desktop, 61px on
-  phones) plus breathing room. The masthead scrolls away; only the nav sticks,
-  so it must stay a sibling of `.page-header-wrap` (see `PageHeader.tsx`).
+- The sticky site bar (back-home button + nav) is exactly `--nav-h` tall;
+  `--sticky-offset` is `--nav-h` + `--sticky-gap`, the clearance for sticky
+  content and scroll targets under it. Change the bar's height there, nowhere
+  else. The masthead scrolls away; only the bar sticks, so it must stay a
+  sibling of `.page-header-wrap` (see `PageHeader.tsx`).

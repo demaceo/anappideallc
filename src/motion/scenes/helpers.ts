@@ -70,8 +70,11 @@ export function sceneTimeline({ gsap, ScrollTrigger, el, desktop }: SceneApi) {
   return gsap.timeline({ defaults, scrollTrigger: { trigger, start, end, scrub: 0.8 } })
 }
 
-// --sticky-offset (a rem value) in px: the clearance under the sticky nav.
+// The clearance under the sticky site bar, in px: --nav-h + --sticky-gap (both
+// plain rem values; --sticky-offset itself is a calc() that parseFloat can't
+// read). 88 is the fallback where styles aren't available.
 function stickyOffset() {
   const root = getComputedStyle(document.documentElement)
-  return parseFloat(root.getPropertyValue('--sticky-offset')) * parseFloat(root.fontSize) || 88
+  const rem = (name: string) => parseFloat(root.getPropertyValue(name))
+  return (rem('--nav-h') + rem('--sticky-gap')) * parseFloat(root.fontSize) || 88
 }

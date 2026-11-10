@@ -50,28 +50,67 @@ describe('SiteNav — current route is exposed (audit P2)', () => {
 })
 
 /**
- * The nav sticks to the top of the page once the masthead has scrolled away.
- * `position: sticky` is held by the element's PARENT box, so the nav only
- * keeps sticking if it is a sibling of the masthead wrapper. Nested inside it,
- * it would scroll off with the masthead and the CSS rule would look right
- * while doing nothing. jsdom has no layout, so this pins the structure.
+ * The site bar (back-home button + nav) sticks to the top of the page once the
+ * masthead has scrolled away. `position: sticky` is held by the element's
+ * PARENT box, so it only keeps sticking if it is a sibling of the masthead
+ * wrapper. Nested inside it, it would scroll off with the masthead and the CSS
+ * rule would look right while doing nothing. jsdom has no layout, so this pins
+ * the structure.
  */
-describe('SiteNav — sticks as a sibling of the masthead, not inside it', () => {
+describe('Site bar — sticks as a sibling of the masthead, not inside it', () => {
   it.each(['/', '/about', '/work', '/services', '/process', '/contact'])(
-    'renders the nav outside .page-header-wrap on %s',
+    'renders the bar, with the nav in it, outside .page-header-wrap on %s',
     (path) => {
       const { container, unmount } = renderRoute(path)
-      const nav = container.querySelector('nav.personas-bar')
+      const bar = container.querySelector('.site-bar')
       const wrap = container.querySelector('.page-header-wrap')
-      expect(nav).not.toBeNull()
+      expect(bar).not.toBeNull()
       expect(wrap).not.toBeNull()
-      expect(nav!.closest('.page-header-wrap')).toBeNull()
-      expect(nav!.parentElement).toBe(wrap!.parentElement)
+      expect(bar!.closest('.page-header-wrap')).toBeNull()
+      expect(bar!.parentElement).toBe(wrap!.parentElement)
       // Still directly after the masthead, so reading and tab order are unchanged.
-      expect(wrap!.nextElementSibling).toBe(nav)
+      expect(wrap!.nextElementSibling).toBe(bar)
+      expect(bar!.querySelector('nav.personas-bar')).not.toBeNull()
       unmount()
     },
   )
+})
+
+/**
+ * The masthead (and the back button that used to live in it) scrolls away, so
+ * the way home has to live in the sticky bar. It must not show on Home, where
+ * it would link to the page you are on.
+ */
+describe('Back-home button — pinned in the site bar', () => {
+  it.each(['/about', '/work', '/services', '/process', '/contact', '/support'])(
+    'is inside the sticky bar, ahead of the nav, on %s',
+    (path) => {
+      const { container, unmount } = renderRoute(path)
+      const bar = container.querySelector('.site-bar')!
+      const back = within(bar as HTMLElement).getByRole('link', { name: /back to home/i })
+      expect(back).toHaveAttribute('href', '/')
+      expect(back).toHaveClass('back-home')
+      expect(bar).toHaveClass('site-bar--has-back')
+      // Not in the masthead wrapper, which scrolls away.
+      expect(container.querySelector('.page-header-wrap .back-home')).toBeNull()
+      // Back button first, then the main navigation, in document order.
+      const nav = bar.querySelector('nav.personas-bar')!
+      expect(back.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+      unmount()
+    },
+  )
+
+  it('is absent on Home', () => {
+    const { container } = renderRoute('/')
+    expect(container.querySelector('.back-home')).toBeNull()
+    expect(container.querySelector('.site-bar')).not.toHaveClass('site-bar--has-back')
+  })
+
+  it('stays out of the main navigation links', () => {
+    renderRoute('/work')
+    const nav = screen.getByRole('navigation', { name: /main navigation/i })
+    expect(within(nav).queryByRole('link', { name: /back to home/i })).toBeNull()
+  })
 })
 
 /**

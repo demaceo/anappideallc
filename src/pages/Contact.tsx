@@ -184,8 +184,8 @@ export default function Contact() {
     if (prevStep.current !== stepIdx) {
       const el = stageRef.current
       if (el) {
-        // The sticky nav is the only part of the header left on screen.
-        const headerEl = document.querySelector('.personas-bar') as HTMLElement | null
+        // The sticky site bar is the only part of the header left on screen.
+        const headerEl = document.querySelector('.site-bar') as HTMLElement | null
         const headerH = headerEl?.offsetHeight ?? 0
         const rect = el.getBoundingClientRect()
         const targetY = rect.top + window.scrollY - headerH - 16

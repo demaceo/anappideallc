@@ -69,9 +69,9 @@ h1, h2, h3 {
   border-bottom: var(--bw) solid var(--c-line);
 }
 
-/* The masthead scrolls away like any other content. Only the nav below it
-   sticks (see .personas-bar). `relative` anchors the absolutely positioned
-   skip link and back-home button. */
+/* The masthead scrolls away like any other content. Only the site bar below
+   it sticks (see .site-bar). `relative` anchors the absolutely positioned
+   skip link. */
 .page-header-wrap {
   position: relative;
 }
@@ -152,29 +152,50 @@ h1, h2, h3 {
   margin-top: var(--dateline-gap);
 }
 
-/* ─── SECTION 5: Navigation / legend bar ─── */
+/* ─── SECTION 5: Site bar — back-home button + navigation ─── */
 /* Sits in normal flow under the masthead, so it scrolls up with the page and,
    on reaching the top of the viewport, sticks there for the rest of the page.
    Its parent is the page container (see PageHeader.tsx); inside the masthead
    wrapper it could not stick, because a sticky element is held by its parent's
    box. The background is opaque so content scrolling beneath never shows
-   through, and z-index keeps it above that content. */
-.personas-bar {
+   through, and z-index keeps it above that content.
+
+   Its height is exactly --nav-h (tokens.css), which --sticky-offset and the
+   scene timelines are derived from, so the bar and the clearance under it
+   cannot drift apart. */
+.site-bar {
+  --back-left: var(--space-3); /* the back button's inset from the bar's left edge */
   position: sticky;
   top: 0;
   z-index: 20;
+  box-sizing: border-box;
+  height: var(--nav-h);
   background: var(--c-page);
-  padding: var(--space-3) var(--space-8) var(--space-4);
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1);
-  justify-content: center;
   border-bottom: var(--bw) solid var(--c-line);
 }
+
+/* One row at every width and scroll position, centred when the tabs fit and
+   start-aligned (scrollable) when they do not, so every tab stays reachable.
+   A wrapped two-row nav would eat ~120px of a phone screen once stuck. */
+.personas-bar {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 0 var(--space-8);
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: var(--space-1);
+  justify-content: flex-start; /* fallback where `safe` is unsupported */
+  justify-content: safe center;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.personas-bar::-webkit-scrollbar { display: none; }
 
 .persona-tag {
   display: flex;
   align-items: center;
+  flex-shrink: 0; /* scroll the row rather than squash the tabs */
   padding: var(--space-2) var(--space-4);
   text-decoration: none;
   transition: background 150ms, color 150ms;
@@ -214,30 +235,18 @@ h1, h2, h3 {
 .persona-tag--active .persona-tag-mark { opacity: 0.8; }
 
 @media (max-width: 640px) {
-  /* One row at every scroll position. A wrapped two-row nav would eat ~120px
-     of a phone screen once it is stuck to the top; a single row keeps the
-     stuck bar to ~60px. The row is tightened (no "↳" mark, 8px side padding)
-     so all five tabs fit from 360px up, with the first label still inset 16px
-     like the page gutter. Narrower screens scroll sideways: overflow-x: auto
-     keeps every tab reachable. */
-  .personas-bar {
-    padding: var(--space-2);
-    gap: var(--space-1);
-    flex-wrap: nowrap;
-    justify-content: flex-start; /* fallback where `safe` is unsupported */
-    justify-content: safe center; /* centred when it fits, start-aligned (scrollable) when not */
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-  .personas-bar::-webkit-scrollbar { display: none; }
+  /* Tightened (no "↳" mark, no gap, 4px of padding either side of a label) so
+     all five tabs, and the back button's room, fit from 360px up. Narrower
+     screens scroll the row sideways. min-width keeps even the shortest tab
+     ("Work") a 44px-wide tap target. */
+  .site-bar { --back-left: var(--space-2); }
+  .personas-bar { padding: 0 var(--space-2); gap: 0; }
   .persona-tag-mark { display: none; }
-  /* Keep tags at full size and let the row scroll instead of squashing them. */
-  .persona-tag { flex-shrink: 0; }
-  /* Larger tap target on mobile */
   .persona-tag {
+    justify-content: center;
+    min-width: 44px;
     min-height: 44px;
-    padding: var(--space-3) var(--space-2);
+    padding: var(--space-3) var(--space-1);
   }
 }
 
@@ -271,13 +280,16 @@ h1, h2, h3 {
   transform: translateY(0);
 }
 
-/* ─── Back-to-home button — absolute within .page-header-wrap, so it scrolls
-   away with the masthead ─── */
+/* ─── Back-to-home button — pinned at the left end of the site bar ───
+   Absolutely positioned over the bar (not a flex item of the nav), so the tabs
+   stay centred and do not jump sideways between Home, which has no button, and
+   the inner pages. It sits outside the scrolling nav row, so tabs scroll
+   underneath it on narrow screens. */
 .back-home {
   position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
-  z-index: 25;
+  top: 50%;
+  left: var(--back-left);
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -291,6 +303,14 @@ h1, h2, h3 {
   border: var(--bw-thick) solid var(--c-line);
   background: var(--c-bg);
   transition: background 150ms, color 150ms;
+}
+
+/* Where the centred tabs could run under the button, start the row after it:
+   button left offset + its 44px width + a small gap. */
+@media (max-width: 720px) {
+  .site-bar--has-back .personas-bar {
+    padding-left: calc(var(--back-left) + 44px + var(--space-1));
+  }
 }
 
 .back-home:hover,

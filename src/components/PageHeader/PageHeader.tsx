@@ -7,6 +7,7 @@ interface PageHeaderProps {
 
 export function PageHeader({ children }: PageHeaderProps) {
   const { pathname } = useLocation()
+  const isHome = pathname === '/'
 
   return (
     <>
@@ -18,21 +19,24 @@ export function PageHeader({ children }: PageHeaderProps) {
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        {pathname !== '/' && (
+        {children}
+      </div>
+      {/* The site bar (back-home button + nav) is a sibling of the masthead
+          wrapper, not a child of it. `position: sticky` only holds while the
+          element's parent is still on screen, so inside the wrapper the bar
+          would scroll away with the masthead. As a child of the page, it
+          scrolls up with the masthead and then sticks to the top for the rest
+          of the page, with the way home always in reach. */}
+      <div className={`site-bar${isHome ? '' : ' site-bar--has-back'}`}>
+        {!isHome && (
           <nav aria-label="Back to home">
             <Link to="/" className="back-home" aria-label="Back to home">
               ←
             </Link>
           </nav>
         )}
-        {children}
+        <SiteNav />
       </div>
-      {/* A sibling of the masthead wrapper, not a child of it. `position:
-          sticky` only holds while the element's parent is still on screen, so
-          inside the wrapper the nav would scroll away with the masthead. As a
-          child of the page, it scrolls up with the masthead and then sticks
-          to the top for the rest of the page. */}
-      <SiteNav />
     </>
   )
 }

@@ -213,9 +213,12 @@
   --masthead-pad-top: clamp(1.5rem, 4vw, 2.5rem);
   --masthead-pad-bottom: clamp(1.25rem, 3vw, 2rem);
   --dateline-gap: var(--space-4);
-  /* Clearance for sticky content under the sticky nav (63px tall on desktop,
-     61px on phones) plus a little breathing room. */
-  --sticky-offset: 5.5rem;
+  /* The sticky site bar is exactly --nav-h tall (see .site-bar), and sticky
+     content sits --sticky-gap below it. Keep both plain rem values: the scene
+     timelines read them in JS (motion/scenes/helpers.ts). */
+  --nav-h: 4rem;
+  --sticky-gap: 1.5rem;
+  --sticky-offset: calc(var(--nav-h) + var(--sticky-gap));
 
   /* ═══ Type — six fixed steps and seven fluid ones ═══
      Fixed sizes covered 88 declarations across 13 values, ten of them crowded
