@@ -100,6 +100,9 @@ export function QuickFields({
               : "Here's a first draft from your answers. Change anything you like."}
           </p>
         )}
+        {/* Directly under the message box: for a visitor who would rather
+            say it than type it, this is where they are already looking. */}
+        <VoiceNote value={voice} onChange={onVoiceChange} />
         <button
           type="button"
           id="cf-guide-link"
@@ -109,11 +112,6 @@ export function QuickFields({
         >
           Not sure what to say? Let me guide you
         </button>
-      </div>
-
-      <div className="form-group">
-        <span className="form-label">Or talk it through (optional)</span>
-        <VoiceNote value={voice} onChange={onVoiceChange} />
       </div>
 
       <div className="contact-quick-details">

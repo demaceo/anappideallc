@@ -47,3 +47,49 @@ describe('contact form: service picker styles', () => {
     )
   })
 })
+
+describe('contact form: voice note row', () => {
+  it('makes the record button a 48px target, above the 44px minimum', () => {
+    const action = ruleBody('.voice-note-action')
+    expect(action).toMatch(/width:\s*3rem/)
+    expect(action).toMatch(/height:\s*3rem/)
+  })
+
+  it('draws the button solid ink with a paper icon, so it reads as a button', () => {
+    // Inside the form card --c-bg is the ink and --c-fg the paper.
+    const action = ruleBody('.voice-note-action')
+    expect(action).toMatch(/background:\s*var\(--c-bg\)/)
+    expect(action).toMatch(/[^-]color:\s*var\(--c-fg\)/)
+  })
+
+  it('keeps the offer and the button on one row, the offer taking the free space', () => {
+    expect(ruleBody('.voice-note-row')).toMatch(/justify-content:\s*space-between/)
+    expect(ruleBody('.voice-note-text')).toMatch(/flex:\s*1/)
+  })
+
+  it('keeps the timer whole when the row wraps', () => {
+    expect(ruleBody('.voice-note-timer')).toMatch(/white-space:\s*nowrap/)
+  })
+
+  it('no longer styles the old text-button recorder', () => {
+    expect(GLOBALS_CSS).not.toMatch(/\.voice-note-btn|\.voice-note-discard|\.voice-note-done/)
+  })
+})
+
+describe('contact form: accessibility contrast and names (audit)', () => {
+  it('colours the "microphone blocked" message like the other errors, not the 2.9:1 orange-red', () => {
+    // --c-accent-2 on the paper card is 2.88:1; --form-error is 6.6:1.
+    expect(GLOBALS_CSS).toMatch(/\.contact-form \.voice-note-hint\.error\s*\{[^}]*color:\s*var\(--form-error\)/)
+  })
+
+  it('gives the recording button an ink edge, so its boundary does not rest on orange-red alone', () => {
+    const rec = GLOBALS_CSS.match(/\.voice-note-action\.recording,\s*\.voice-note-action\.recording:hover\s*\{([^}]*)\}/)
+    expect(rec).not.toBeNull()
+    expect(rec![1]).toMatch(/border-color:\s*var\(--c-bg\)/)
+  })
+
+  it('keeps the Send button\'s decorative arrow out of its accessible name', () => {
+    expect(GLOBALS_CSS).toMatch(/\.form-submit-btn::after\s*\{\s*content:\s*'→'\s*\/\s*''/)
+  })
+})
+

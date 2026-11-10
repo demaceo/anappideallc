@@ -77,7 +77,10 @@ export function ServicePicker({
         }
       }}
     >
-      <span className="form-label" id={labelId}>
+      {/* Hidden from the accessibility tree because the button below is named
+          from it (aria-labelledby still reads hidden elements): otherwise a
+          screen reader says the label once as text and again as the name. */}
+      <span className="form-label" id={labelId} aria-hidden="true">
         {label} <span className="form-label-opt">optional</span>
       </span>
 

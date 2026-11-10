@@ -8,6 +8,8 @@ sources:
   - code: src/components/ContactForm/QuickFields.tsx
   - code: src/components/ContactForm/GuidedSteps.tsx
   - code: src/components/ServicePicker/ServicePicker.tsx
+  - code: src/components/VoiceNote/VoiceNote.tsx
+  - code: src/components/PageHeader/PageHeader.tsx
   - code: src/lib/contact-draft.ts
   - code: src/pages/Contact.tsx
   - code: src/pages/Services.tsx
@@ -20,6 +22,10 @@ verified_at: 2ca39a1
 a voice note, then contact details, then Send. The old question-by-question
 wizard is an alternative, opened from a quiet link under the message box. It
 sends to [[contact-form-api]].
+
+The voice note (`src/components/VoiceNote/VoiceNote.tsx`) sits **directly under the
+message box** as one row: a short offer ("Easier to say it out loud? ...") on the
+left, one 48px ink mic button on the right.
 
 `src/pages/Contact.tsx` is page chrome only; the form is `ContactForm`
 (`src/components/ContactForm/ContactForm.tsx`). It owns all state and the single
@@ -46,6 +52,20 @@ send path. `QuickFields` is the default view; `GuidedSteps` is the questions
 > the typed text, ticks and details. `.contact-quick[hidden]` needs its own
 > `display: none` rule, because the class sets `display: flex`, which beats the
 > browser's `[hidden]` (`src/styles/globals.css`, `.contact-quick`).
+
+> ⚠️ The voice note's button is **one element for every state** (record, stop,
+> remove), with its label, icon and handler changing. Separate buttons per state
+> get unmounted as the state changes and drop keyboard focus to the page. Its
+> announcements use a plain `aria-live="polite"` span, **not** `role="status"`:
+> that role is what the "Message received" confirmation uses, and an always-present
+> second one makes `getByRole('status')` (and "the status" for assistive tech)
+> ambiguous (`VoiceNote.tsx`, `src/__tests__/voice-note.test.tsx`).
+
+> ⚠️ The back button in the site bar is an **SVG arrow**, not a "←" text glyph:
+> fonts draw arrows low in the line box, which left it about 4px below the centre
+> of its square. It is positioned on whole pixels (`top: calc((var(--nav-h) -
+> 44px) / 2)`), because `top: 50%` of the bar's 63px interior lands on a half pixel
+> and blurs its border (`src/components/PageHeader/PageHeader.tsx`, `.back-home`).
 
 > ⚠️ Read `?service=` through `useSyncExternalStore` with an empty server
 > snapshot, never straight from `useLocation()` into the first render. The page

@@ -90,6 +90,14 @@ describe('ServicePicker — a disclosure of checkboxes', () => {
     expect(toggleButton()).toHaveAccessibleName(/what are you looking for\? optional fix my site/i)
   })
 
+  it('does not make a screen reader read the label twice', () => {
+    // The button is named from the label via aria-labelledby, which still works
+    // for an aria-hidden element; leaving it exposed too reads it as text AND name.
+    const { container } = render(<Harness />)
+    expect(container.querySelector('.service-picker > .form-label')).toHaveAttribute('aria-hidden', 'true')
+    expect(toggleButton()).toHaveAccessibleName(/what are you looking for/i)
+  })
+
   it('describes the toggle with the help text', () => {
     render(<Harness />)
     expect(toggleButton()).toHaveAccessibleDescription("Skip this if you're not sure.")

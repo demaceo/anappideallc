@@ -90,6 +90,10 @@ describe('Back-home button — pinned in the site bar', () => {
       const back = within(bar as HTMLElement).getByRole('link', { name: /back to home/i })
       expect(back).toHaveAttribute('href', '/')
       expect(back).toHaveClass('back-home')
+      // An SVG icon, not a "←" text glyph: fonts draw arrows low in the line
+      // box, which left the arrow ~4px below the centre of its square.
+      expect(back.querySelector('svg')).not.toBeNull()
+      expect(back).toHaveTextContent(/^$/)
       expect(bar).toHaveClass('site-bar--has-back')
       // Not in the masthead wrapper, which scrolls away.
       expect(container.querySelector('.page-header-wrap .back-home')).toBeNull()

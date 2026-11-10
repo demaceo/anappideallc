@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { IconMic, IconTrash, IconCheck, IconPlay, IconPause } from '../icons'
+import { IconMic, IconStop, IconTrash, IconCheck, IconPlay, IconPause } from '../icons'
 
 // Hard cap so the recording stays small enough to ride along in the JSON
 // request body (Resend attaches it to the email). At ~32 kbps Opus this is
@@ -122,6 +122,9 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
   const [state, setState] = useState<RecState>('idle')
   const [elapsed, setElapsed] = useState(0)
   const [error, setError] = useState<string | null>(null)
+  // What a screen reader is told when the recorder changes state. The visible
+  // text changes too, but a change in the page is not announced by itself.
+  const [announcement, setAnnouncement] = useState('')
 
   const recorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<Blob[]>([])
@@ -180,6 +183,9 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
         const blob = new Blob(chunksRef.current, { type: mimeType })
         if (blob.size > 0) {
           onChange({ blob, mimeType, durationSec: duration })
+          // Floored, like the on-screen time, so the two never disagree.
+          const secs = Math.max(1, Math.floor(duration))
+          setAnnouncement(`Voice note attached, ${secs} ${secs === 1 ? 'second' : 'seconds'}.`)
         }
         setState('idle')
       }
@@ -189,6 +195,7 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
       startedRef.current = Date.now()
       setElapsed(0)
       setState('recording')
+      setAnnouncement('Recording started.')
       timerRef.current = setInterval(() => {
         const secs = (Date.now() - startedRef.current) / 1000
         setElapsed(secs)
@@ -210,55 +217,79 @@ export function VoiceNote({ value, onChange }: VoiceNoteProps) {
     onChange(null)
     setElapsed(0)
     setState('idle')
+    setAnnouncement('Voice note removed.')
   }
 
-  if (state === 'unsupported') {
-    return (
-      <p className="voice-note-hint">
-        Voice notes aren&apos;t supported in this browser, but no worries: your
-        typed message is plenty.
-      </p>
-    )
-  }
+  const recording = state === 'recording'
+  const unsupported = state === 'unsupported'
+  const attached = !recording && !!value
+
+  // ONE button for every state, so it stays the same element: keyboard focus
+  // survives record -> stop -> remove -> record again. Separate buttons per
+  // state would be unmounted as the state changes and drop focus to the page.
+  // Its accessible name says what it will do next.
+  const action = recording
+    ? { label: 'Stop recording', onClick: stopRecording, Icon: IconStop }
+    : attached
+      ? { label: 'Remove voice note and record again', onClick: discard, Icon: IconTrash }
+      : { label: 'Record a voice note', onClick: startRecording, Icon: IconMic }
 
   return (
     <div className="voice-note">
-      {state !== 'recording' && !value && (
-        <button type="button" className="voice-note-btn" onClick={startRecording}>
-          <IconMic size={16} />
-          Record a voice note
-        </button>
-      )}
-
-      {state === 'recording' && (
-        <div className="voice-note-live">
-          <button type="button" className="voice-note-btn recording" onClick={stopRecording}>
-            <span className="voice-note-pulse" />
-            Stop recording
-          </button>
-          <span className="voice-note-timer" aria-live="off">
-            {fmt(elapsed)} <span className="voice-note-max">/ {fmt(MAX_SECONDS)}</span>
-          </span>
-        </div>
-      )}
-
-      {state !== 'recording' && value && (
-        <div className="voice-note-done">
-          <span className="voice-note-saved">
-            <IconCheck size={14} /> Voice note attached · {fmt(value.durationSec)}
-          </span>
-
-          {previewUrl && (
-            <RecordedPlayer key={previewUrl} url={previewUrl} fallbackDuration={value.durationSec} />
+      <div className="voice-note-row">
+        <div className="voice-note-text">
+          {recording ? (
+            <span className="voice-note-live">
+              <span className="voice-note-pulse" aria-hidden="true" />
+              Recording{' '}
+              <span className="voice-note-timer" aria-live="off">
+                {fmt(elapsed)} <span className="voice-note-max">/ {fmt(MAX_SECONDS)}</span>
+              </span>
+            </span>
+          ) : attached ? (
+            <span className="voice-note-saved">
+              <IconCheck size={14} /> Voice note attached · {fmt(value.durationSec)}
+            </span>
+          ) : unsupported ? (
+            <span>
+              Voice notes aren&apos;t supported in this browser, but no worries: your
+              typed message is plenty.
+            </span>
+          ) : (
+            <span>Easier to say it out loud? Tap the mic and record a voice note instead.</span>
           )}
-
-          <button type="button" className="voice-note-discard" onClick={discard}>
-            <IconTrash size={14} /> Remove &amp; re-record
-          </button>
         </div>
+
+        <button
+          type="button"
+          className={`voice-note-action${recording ? ' recording' : ''}${attached ? ' attached' : ''}${unsupported ? ' unavailable' : ''}`}
+          aria-label={action.label}
+          title={action.label}
+          // Where recording is not supported the button stays (so focus is not
+          // dropped) but does nothing, and says so.
+          aria-disabled={unsupported || undefined}
+          onClick={unsupported ? undefined : action.onClick}
+        >
+          <action.Icon size={22} />
+        </button>
+      </div>
+
+      {attached && previewUrl && (
+        <RecordedPlayer key={previewUrl} url={previewUrl} fallbackDuration={value.durationSec} />
       )}
 
-      {error && <p className="voice-note-hint error">{error}</p>}
+      {error && (
+        <p className="voice-note-hint error" role="alert">
+          {error}
+        </p>
+      )}
+
+      {/* A live region, but deliberately without role="status": that role is
+          also what the "Message received" confirmation uses, and a second one
+          that is always on the page makes "the status" ambiguous. */}
+      <span className="sr-only" aria-live="polite" aria-atomic="true">
+        {announcement}
+      </span>
     </div>
   )
 }

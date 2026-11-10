@@ -230,6 +230,14 @@ export function IconMic(p: IconProps) {
   )
 }
 
+export function IconStop(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <rect x="6" y="6" width="12" height="12" rx="2" />
+    </Svg>
+  )
+}
+
 export function IconTrash(p: IconProps) {
   return (
     <Svg {...p}>
