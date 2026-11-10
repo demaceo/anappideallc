@@ -2,6 +2,7 @@ import { useParams, Link, Navigate } from 'react-router'
 import { getCaseStudyBySlug, getAdjacentCaseStudies } from '../data/case-studies'
 import { PROJECT_COLORS } from '../data/project-colors'
 import { RouteHead } from '../components/SEO/RouteHead'
+import { META } from '../lib/seo'
 import { PageHeader } from '../components/PageHeader/PageHeader'
 import { NextStep } from '../components/NextStep/NextStep'
 import { Marquee } from '../components/Marquee/Marquee'
@@ -35,6 +36,17 @@ const SLUG_TO_LOGO: Record<string, React.ComponentType<{ size?: number; color?: 
   'unmasked-coaching': LogoUnmasked,
   'timeless-coach-consult': LogoTimeless,
   'portfolio': LogoPortfolio,
+}
+
+// META (src/lib/seo.ts) is the single source of truth for titles and
+// descriptions: the prerender step writes them into <head>, so the page must
+// emit the same values or crawlers see two conflicting titles per URL.
+function fallbackMeta(project: { slug: string; title: string; category: string; metaDescription: string }) {
+  return {
+    path: `/work/${project.slug}`,
+    title: `${project.title} — ${project.category} | An App Idea LLC`,
+    description: project.metaDescription,
+  }
 }
 
 export default function ProjectDetail() {
@@ -75,11 +87,7 @@ export default function ProjectDetail() {
 
   return (
     <>
-      <RouteHead
-        path={`/work/${project.slug}`}
-        title={`${project.title} — ${project.category} | An App Idea LLC`}
-        description={project.metaDescription}
-      />
+      <RouteHead {...(META[`/work/${project.slug}`] ?? fallbackMeta(project))} />
 
       <PageHeader>
         <header className="masthead">

@@ -99,3 +99,22 @@ If migrating from `milehighinterface.com`:
   links back to the domain.
 - **Track progress** under **Pages** (indexed vs. not) and **Performance**
   (impressions/clicks) over the following weeks.
+
+---
+
+## Reading the "Why pages aren't indexed" report
+
+- **Page with redirect** — expected when the property is the `www` URL-prefix
+  (`https://www.anappidea.llc/`): `www` 308-redirects to the apex by design.
+  Fix by viewing the **Domain property** (step 1) instead; do not remove the
+  redirect.
+- **Alternate page with proper canonical tag** — a URL whose canonical points
+  at a different URL (typically the `www`/`http` variant of a page). Benign;
+  it means Google followed the canonical to `https://anappidea.llc/...`.
+- **Crawled – currently not indexed** — Google fetched the page and chose not
+  to index it. On a young domain this is mostly thin or boilerplate pages
+  (per-app privacy/terms, legal indexes). Strengthen internal links and
+  unique copy to the pages you want indexed, then use **Request indexing**.
+- Each prerendered page must carry exactly one `<title>`, description and
+  canonical in `<head>` (`scripts/prerender.mjs` strips the React-hoisted
+  duplicates). Check with `curl -s <url> | grep -c 'rel="canonical"'` → `1`.
