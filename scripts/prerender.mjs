@@ -118,7 +118,14 @@ async function main() {
 
     const withLd = cleaned.replace('</head>', `  ${headTags}\n  </head>`)
 
-    const html = await render(url)
+    // React 19 emits the page's <title>/<meta>/<link> inline inside #root
+    // during renderToString. The <head> already carries the authoritative copy
+    // (injected above), so drop the duplicates: two canonicals or titles per
+    // URL are a mixed signal to Google.
+    const html = (await render(url))
+      .replace(/<title>[\s\S]*?<\/title>/g, '')
+      .replace(/<meta\s+(?:name|property)="(?:description|og:[^"]*|twitter:[^"]*)"[^>]*\/?>/g, '')
+      .replace(/<link\s+rel="canonical"[^>]*\/?>/g, '')
     const final = withLd.replace(
       '<div id="root"></div>',
       `<div id="root">${html}</div>`,
