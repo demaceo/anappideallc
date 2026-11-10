@@ -8,6 +8,7 @@ repository. The rules are in [`CLAUDE.md`](CLAUDE.md).
 ## Start here
 
 1. [[contact-form-api]] -- the only server code; how inquiries reach the inbox
+2. [[contact-form-ui]] -- the /contact form: quick message first, guided questions as the alternative
 
 (Grows as work touches new areas.)
 
@@ -24,6 +25,7 @@ repository. The rules are in [`CLAUDE.md`](CLAUDE.md).
 ## subsystems
 
 - [[contact-form-api]] -- `/api/contact`: bot screening, validation, Resend inquiry + confirmation emails
+- [[contact-form-ui]] -- `/contact`: quick form, services picker, guided questions and the draft handoff
 
 ## decisions
 

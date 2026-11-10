@@ -11,8 +11,11 @@ const FROM_EMAIL = process.env.FROM_EMAIL ?? 'hello@anappidea.llc'
 // an extensionless import into src/ is a runtime resolution risk.
 const BOOKING_URL = 'https://calendly.com/anappidea/30min'
 
-// Real visitors walk a 6–7 step wizard; nobody finishes it in under this.
-const MIN_FILL_MS = 3000
+// Nobody types a message and their details in under this, not even with
+// autofill and a pasted message. Kept low on purpose: silently dropping a real
+// lead costs more than letting an occasional bot through, and the honeypot and
+// the Vercel Firewall rate limit still stand behind it.
+const MIN_FILL_MS = 2000
 
 // Reject voice notes larger than this once base64-decoded (~6 MB) so a single
 // request can't blow past the platform body limit or the email size cap.
@@ -30,6 +33,26 @@ const PROJECT_TYPE_LABELS: Record<string, string> = {
   both: 'Both an app and a website',
   unsure: 'Not sure yet',
 }
+
+// Mirrors `services` in src/data/services.ts (id -> title). Not imported, for the
+// same reason as BOOKING_URL above; src/__tests__/contact-api.test.ts fails when
+// the two drift. Unknown ids are dropped, so the visitor's tick can never put
+// text of their choosing into the email.
+const SERVICE_LABELS: Record<string, string> = {
+  'business-websites': 'A Website for Your Business',
+  'site-fixes': 'Fix My Existing Site',
+  'own-it': 'Own It: Learn to Run Your Site',
+  'ai-integration': 'AI for Your Business',
+  'custom-builds': 'Apps & Custom Software',
+}
+
+// Cap what a single request can carry in an array field.
+const MAX_LIST_ITEMS = 20
+
+const strings = (v: unknown): string[] =>
+  Array.isArray(v)
+    ? v.filter((x): x is string => typeof x === 'string').slice(0, MAX_LIST_ITEMS)
+    : []
 
 const PLATFORM_LABELS: Record<string, string> = {
   ios: 'iOS App Store',
@@ -85,13 +108,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ''
 
   const projectType = typeof body.projectType === 'string' ? body.projectType : ''
-  const platforms = Array.isArray(body.platforms) ? (body.platforms as string[]) : []
+  // Elements are string-checked: a non-string used to throw inside escHtml,
+  // outside the try block below, and answer with an unhandled 500.
+  const platforms = strings(body.platforms)
+  const services = [...new Set(strings(body.services))].filter((id) => id in SERVICE_LABELS)
+  // True once the visitor used the guided questions to write their message.
+  const usedGuide = body.usedGuide === true
   const category = typeof body.category === 'string' ? body.category : ''
   const seoImportance = typeof body.seoImportance === 'string' ? body.seoImportance : ''
   const geoImportance = typeof body.geoImportance === 'string' ? body.geoImportance : ''
   const audience = typeof body.audience === 'string' ? body.audience : ''
   const budget = typeof body.budget === 'string' ? body.budget : ''
-  const audio = (body.audio ?? null) as AudioPayload | null
+  // Type-checked like the array fields: a non-string base64 or mimeType used to
+  // throw in Buffer.from / .includes, outside the try block, as an unhandled 500.
+  const rawAudio = (typeof body.audio === 'object' && body.audio !== null ? body.audio : {}) as Record<string, unknown>
+  const audio: AudioPayload | null =
+    typeof rawAudio.base64 === 'string' && rawAudio.base64
+      ? {
+          base64: rawAudio.base64,
+          mimeType: typeof rawAudio.mimeType === 'string' ? rawAudio.mimeType : undefined,
+          durationSec: typeof rawAudio.durationSec === 'number' ? rawAudio.durationSec : undefined,
+        }
+      : null
 
   if (!name.trim()) {
     return res.status(400).json({ error: 'Please add your name.' })
@@ -108,13 +146,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Leave an email or a phone number so I have a way to reach you.' })
   }
 
+  // A message, a voice note, or at least one service is enough to know where to
+  // start. Only KNOWN services count, so a request of unknown ids is no idea.
   const hasAudio = !!audio?.base64
-  if (!description.trim() && !hasAudio) {
-    return res.status(400).json({ error: 'Add a sentence about what you need, or a quick voice note, so I know where to start.' })
+  if (!description.trim() && !hasAudio && services.length === 0) {
+    return res.status(400).json({ error: 'Pick a service, add a sentence about what you need, or leave a quick voice note, so I know where to start.' })
   }
 
   // Build the summary rows from whatever the visitor chose to share.
   const rows: Array<[string, string]> = []
+  if (services.length) rows.push(['Services', services.map((id) => SERVICE_LABELS[id]).join(', ')])
   if (projectType) rows.push(['Project type', PROJECT_TYPE_LABELS[projectType] ?? projectType])
   if (platforms.length) {
     rows.push(['Platforms', platforms.map((p) => PLATFORM_LABELS[p] ?? p).join(', ')])
@@ -124,6 +165,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (geoImportance) rows.push(['GEO importance', IMPORTANCE_LABELS[geoImportance] ?? geoImportance])
   if (audience) rows.push(['Target audience', audience])
   if (budget.trim()) rows.push(['Budget', budget])
+  if (usedGuide) rows.push(['Used the guided questions', 'Yes'])
 
   const summaryHtml = rows.length
     ? `<table style="border-collapse:collapse;margin:0 0 18px">${rows
@@ -145,9 +187,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ? `<p style="margin:0 0 12px;color:#6b6355;font-size:13px">${contactBits.join(' &nbsp;·&nbsp; ')}</p>`
     : ''
 
+  // With only services ticked there is no message to show; say so, so the
+  // missing "Their idea" block reads as deliberate rather than as a bug.
   const descriptionHtml = description.trim()
     ? `<p style="margin:0 0 8px"><strong>Their idea:</strong></p><p style="white-space:pre-wrap;margin:0 0 18px">${escHtml(description)}</p>`
-    : ''
+    : !hasAudio
+      ? '<p style="margin:0 0 18px;color:#6b6355;font-size:13px">They did not write a message. Ask what they need on the call.</p>'
+      : ''
 
   const audioHtml = hasAudio
     ? `<p style="margin:0 0 18px;color:#6b6355;font-size:13px">🎙️ A voice note is attached${audio?.durationSec ? ` (${Math.round(audio.durationSec)}s)` : ''

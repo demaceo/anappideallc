@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router'
+import { IconArrowLeft } from '../icons'
 import { SiteNav } from '../SiteNav/SiteNav'
 
 interface PageHeaderProps {
@@ -30,8 +31,10 @@ export function PageHeader({ children }: PageHeaderProps) {
       <div className={`site-bar${isHome ? '' : ' site-bar--has-back'}`}>
         {!isHome && (
           <nav aria-label="Back to home">
+            {/* An SVG, not a "←" text glyph: fonts draw arrows low in the line
+                box, which left the glyph ~4px below the centre of its square. */}
             <Link to="/" className="back-home" aria-label="Back to home">
-              ←
+              <IconArrowLeft size={20} strokeWidth={2} />
             </Link>
           </nav>
         )}

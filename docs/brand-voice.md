@@ -199,6 +199,7 @@ wonders whether two buttons do different things.
 | The Calendly booking | a free 30-minute call | **Book a free call** | consultation, a time, session, demo |
 | The Contact page form | a message | **Send me a message →** | guided form, inquiry, submit |
 | The form's send button | | **Send message** | Submit |
+| The question-by-question helper on the form | the questions | **Not sure what to say? Let me guide you** / **Write my first draft** | wizard, guided form, step-by-step |
 
 Form copy speaks to someone **running a business** ("What do you need?",
 "What kind of business is it?"), not to an app founder pitching an idea.
