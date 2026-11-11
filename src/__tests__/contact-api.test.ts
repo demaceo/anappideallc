@@ -144,10 +144,10 @@ describe('POST /api/contact: services and the guided flag', () => {
 
   it('lists the ticked services by title in the inquiry email', async () => {
     send.mockResolvedValue(ok)
-    await call({ ...VALID, services: ['site-fixes', 'own-it'] })
+    await call({ ...VALID, services: ['site-fixes', 'care-plan'] })
     const html = send.mock.calls[0][0].html
     expect(html).toContain('Services')
-    expect(html).toContain('Fix My Existing Site, Own It: Learn to Run Your Site')
+    expect(html).toContain('Fix My Existing Site, Keep It Running: Monthly Care')
   })
 
   it('escapes service titles that contain markup characters', async () => {
@@ -183,11 +183,11 @@ describe('POST /api/contact: services and the guided flag', () => {
 
   it('drops unknown ids and repeats, never putting visitor text in the email', async () => {
     send.mockResolvedValue(ok)
-    await call({ ...VALID, services: ['own-it', 'own-it', 'evil <b>x</b>'] })
+    await call({ ...VALID, services: ['care-plan', 'care-plan', 'evil <b>x</b>'] })
     const html = send.mock.calls[0][0].html
-    expect(html).toContain('Own It: Learn to Run Your Site')
+    expect(html).toContain('Keep It Running: Monthly Care')
     expect(html).not.toContain('evil')
-    expect(html.match(/Own It: Learn to Run Your Site/g)).toHaveLength(1)
+    expect(html.match(/Keep It Running: Monthly Care/g)).toHaveLength(1)
   })
 
   it('ignores non-string elements in services and platforms instead of throwing', async () => {

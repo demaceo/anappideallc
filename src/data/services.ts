@@ -1,6 +1,6 @@
 // Services offered by An App Idea LLC.
 //
-// Four plain offers an owner can pick from, then one for bigger builds. The
+// Plain offers an owner can pick from, then one for bigger builds. The
 // list used to read like a startup menu (MVPs, UI engineering, data
 // visualization) next to the offers most owners come for, and "Six ways"
 // meant nothing to someone who needed a website. Wording here is the wording
@@ -13,35 +13,35 @@ export interface Service {
   title: string
   description: string
   features: string[]
-  technologies: string[]
   useCases: string[]
   deliverables: string[]
   metric?: { label: string; value: string }
   // One short line under the title in the Home offer list.
   tagline?: string
-  // Public starting price. Rates come from SITE.pricing; the sliding-scale
-  // discount (SITE.pricing.range) applies to fixed-price projects only.
+  // Public price. The sliding-scale discount (SITE.pricing.range) applies to
+  // every service, hourly work included.
   price?: { label: string; note?: string }
   // Marks the offer shown after a "Building something bigger?" divider, so the
-  // four offers most owners come for are not mixed in with custom builds.
+  // offers most owners come for are not mixed in with custom builds.
   group?: 'bigger'
 }
 
+// Keep ids stable: they travel in /contact?service=<id> links and the contact
+// API maps them to titles (SERVICE_LABELS in api/contact.ts, which must match).
 export const services: Service[] = [
   {
     id: 'business-websites',
     slug: 'business-websites',
     title: 'A Website for Your Business',
     description:
-      'A site that shows up when people search for what you do, works on a phone, and lets customers book, call, or message you. Ready in 3 to 5 weeks. You own it, and I teach you to run it.',
+      'A site that shows up when people search for what you do, works on a phone, and lets customers book, call, or message you. Start with one page, or go bigger with a full site. You own it, and I teach you to run it: I bring several years of experience teaching software engineering, so training starts where you are.',
     features: [
       'Looks right and loads fast on any phone',
       'Customers can book, call, or message you',
       'Shows up when people search for what you do',
       'You can change your own prices, photos, and hours',
-      'A simple report on who visits and where they come from',
+      'Training included, so you can run it yourself',
     ],
-    technologies: ['Next.js', 'Sanity CMS', 'Contentful', 'Vercel', 'Plausible', 'Schema.org', 'Resend'],
     useCases: [
       'Small businesses getting online or outgrowing a template site',
       'Service businesses that need booking, quotes, or lead capture',
@@ -53,9 +53,37 @@ export const services: Service[] = [
       'Your site set up to be found on Google',
       'Visitor reports ready to read',
     ],
-    metric: { label: 'Ready in', value: '3–5 weeks' },
-    tagline: 'Ready in 3–5 weeks',
-    price: { label: 'From $3,700', note: 'With the Own It teaching package: $4,400' },
+    metric: { label: 'Full site ready in', value: '3–5 weeks' },
+    tagline: 'One page or a full site',
+    price: {
+      label: 'From $699',
+      note: 'One-page site: $699. Full multi-page site: $1,500–$3,500. Any page or feature beyond one page moves to the full-site price.',
+    },
+  },
+  {
+    id: 'start-right',
+    slug: 'start-right',
+    title: 'Set Up Your Own Site, the Right Way',
+    description:
+      'Already want to use Wix or Squarespace? Do it right the first time. In one working session I set up your site properly and get you on Google Maps, so you do not lose a weekend to it. Upgrade later and your fee counts toward a full website.',
+    features: [
+      'Your builder site set up with the right pages and layout',
+      'Your Google Business Profile set up, so you show up on Maps',
+      'Clear words for what you do and how to book',
+      'A quick walkthrough so you can keep it updated',
+    ],
+    useCases: [
+      'Brand-new businesses on a tight budget',
+      'Owners who want to do it themselves, with a pro start',
+    ],
+    deliverables: [
+      'Your builder site, set up and live',
+      'Your Google Business Profile, live',
+      'Credit toward a full website if you upgrade within 6 months',
+    ],
+    metric: { label: 'Time', value: 'One session' },
+    tagline: 'One session, done',
+    price: { label: '$299–$499', note: 'Fixed scope: one session. Your fee counts toward a full website if you upgrade within 6 months.' },
   },
   {
     id: 'site-fixes',
@@ -70,7 +98,6 @@ export const services: Service[] = [
       'Pages where visitors get stuck, made clearer',
       'A plain-language note on what was wrong and what changed',
     ],
-    technologies: ['React', 'Next.js', 'TypeScript', 'HTML & CSS', 'Vercel'],
     useCases: [
       'A bug you noticed that needs fixing now',
       "A site whose original developer isn't answering",
@@ -81,69 +108,62 @@ export const services: Service[] = [
       'A short write-up of the cause',
       'Notes on anything else that could break',
     ],
-    metric: { label: 'Rush turnaround', value: '1 business day' },
-    tagline: 'Rush: 1 business day',
-    price: { label: '$92/hour', note: '2-hour minimum ($184). Needed within 1 business day: $138/hour.' },
+    metric: { label: 'Billed', value: 'By the hour' },
+    tagline: 'Billed by the hour',
+    price: { label: '$110/hour', note: '2-hour minimum ($220). The same rate covers support after launch and work beyond an agreed scope.' },
   },
   {
-    id: 'own-it',
-    slug: 'own-it',
-    title: 'Own It: Learn to Run Your Site',
+    id: 'care-plan',
+    slug: 'care-plan',
+    title: 'Keep It Running: Monthly Care',
     description:
-      "A separate teaching package for after the build. I teach you to manage your own website, read your analytics, check its performance, and put AI to work in your business, so you're never stuck waiting on someone else to change a price or read your traffic. I bring several years of experience teaching software engineering to a wide range of students, so the sessions start where you are.",
+      'You run your business; I keep your site working. Updates, security, small changes, and a plain-English report every month showing the calls and bookings your site brought in.',
     features: [
-      'Updating your own pages, photos, prices, and posts',
-      'Reading your visitor numbers: who comes, from where, and what they do',
-      'Checking your site is fast, online, and easy to find',
-      'Spotting when something breaks and knowing what to do next',
-      'Using AI tools in your daily work without exposing customer information',
-      'One-on-one sessions at your pace, in plain language',
+      'Updates and security checks every month',
+      'Small changes to text, photos, prices, and hours',
+      'A monthly report in plain English: visitors, calls, bookings',
+      'Ongoing work to show up on Google, on the higher plans',
     ],
-    technologies: ['Plausible', 'Google Analytics', 'Google Search Console', 'PageSpeed Insights', 'Your CMS', 'Claude · ChatGPT · Gemini'],
     useCases: [
-      'Owners who want to update their own site without calling anyone',
-      'Teams who want to understand their numbers, not just receive a report',
-      'Businesses ready to use AI but unsure where to start',
+      'Owners who would rather not touch the site after launch',
+      'Businesses that want steady progress on Google',
     ],
     deliverables: [
-      'One-on-one teaching sessions',
-      'Written guides for your exact setup',
-      'A monthly checklist for your numbers and site health',
-      'An AI playbook for your business',
+      'Monthly updates and checks',
+      'A monthly report',
+      'Small changes, done for you',
     ],
-    metric: { label: 'Goal', value: 'You run it' },
-    tagline: 'At your pace',
-    price: { label: 'From $750' },
+    metric: { label: 'Commitment', value: 'Month to month' },
+    tagline: 'Month to month',
+    price: { label: '$150–$400/month', note: 'Search (SEO) work is included on plans from $300/month.' },
   },
   {
     id: 'ai-integration',
     slug: 'ai-integration',
-    title: 'AI for Your Business',
+    title: 'AI & Automation for Your Business',
     description:
-      'Your website, store, or booking system already works. I add AI to it, like answering common questions, replying to routine messages, and sending booking reminders, and I keep it running. It sits on top of what you already have, so there is no rebuild.',
+      'Your website, store, or booking system already works. I connect it to the rest of your tools and add AI where it helps, like answering common questions, replying to routine messages, and sending booking reminders, so leads turn into appointments on their own. No rebuild.',
     features: [
       'A chat helper that answers from your own information, not generic replies',
-      'Search that understands what your customers mean',
+      'Booking, payments, and messages connected, so nothing is copied by hand',
       'Booking reminders and routine replies sent for you',
       'Fits onto what you already run',
       "Your customers' information stays protected",
       'Spending limits, so costs never surprise you',
     ],
-    technologies: ['Gemini', 'Groq', 'ElevenLabs', 'Deepgram', 'Firebase', 'Vercel'],
     useCases: [
       'Shops and service businesses whose site works but predates AI',
       'Booking and scheduling systems drowning in routine questions',
-      'Owners who want AI without handing customer data to a third party',
+      'Owners copying the same details between tools every day',
     ],
     deliverables: [
-      'AI features live on your site or system',
+      'AI and automations live on your site or system',
       'A dashboard showing what it does and what it costs',
       'A walkthrough call so you know how it works',
-      'Monthly tuning and updates, and a quarterly cost review',
     ],
     metric: { label: 'Rebuild needed', value: 'None' },
     tagline: 'No rebuild needed',
-    price: { label: 'From $4,100' },
+    price: { label: 'From $1,500', note: 'Priced per project, scoped in writing before work starts.' },
   },
   {
     id: 'custom-builds',
@@ -151,7 +171,7 @@ export const services: Service[] = [
     group: 'bigger',
     title: 'Apps & Custom Software',
     description:
-      'Got an idea for an app, a customer portal, or a dashboard of your numbers? I build it from start to finish: design, code, and launch. We begin with the smallest working version that shows people want it, so you do not spend big before you know.',
+      'Got an idea for an app, a customer portal, or a dashboard of your numbers? It starts with a Product Sprint: in 1 to 2 weeks you get a scoped plan, a clickable prototype, and a real budget, ready to show a funder, before you spend big. Then I build the version that proves the idea, in milestones you can see.',
     features: [
       'An app for iPhone, Android, or the web',
       'Customer sign-in, accounts, and payments',
@@ -159,24 +179,23 @@ export const services: Service[] = [
       'Easy to use and accessible to everyone (WCAG AA)',
       'A progress demo every week, so nothing is a surprise',
     ],
-    technologies: ['Next.js', 'React', 'TypeScript', 'Supabase', 'PostgreSQL', 'Stripe', 'D3.js', 'Recharts', 'Vercel'],
     useCases: [
-      'Founders testing whether an idea has customers',
+      'Founders with funding and a deadline',
       'Teams pitching to investors with a working demo',
       'Established businesses exploring a new product line',
     ],
     deliverables: [
+      'Product Sprint: plan, clickable prototype, and budget',
       'A working app or dashboard, live',
-      'Everything customers need to sign in and pay',
-      'A plan for growing it',
+      'Progress reports you can share with funders',
       'Plain-language documentation',
     ],
     // Matches the Process page: Discovery 1–2 + Design 2–3 + Development 4–8
     // weeks. Launch adds another 1–2, so this is time to build, not to launch.
     metric: { label: 'Time to build', value: '7–13 weeks' },
     price: {
-      label: 'From $2,800',
-      note: 'Dashboards from $2,800. Apps typically $16,000–$36,000. Interface work by the hour: $92/hour.',
+      label: 'Sprint $2,500–$4,000',
+      note: 'Product Sprint: $2,500–$4,000. App or MVP builds: typically $10,000–$40,000+, billed by milestone.',
     },
   },
 ]

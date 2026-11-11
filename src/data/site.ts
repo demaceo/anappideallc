@@ -78,7 +78,7 @@ export const SITE = {
   terms: {
     payment: {
       title: 'How you pay',
-      body: 'Fixed-price projects are 50% to start and 50% when it launches. You get the full price in writing before you pay anything.',
+      body: 'Fixed-price projects are paid in three parts: 50% to start, 25% at the halfway review, and 25% at launch. App builds are billed by milestone. You get the full price in writing before you pay anything.',
     },
     ownership: {
       title: 'What you own',
@@ -86,23 +86,39 @@ export const SITE = {
     },
     running: {
       title: 'What it costs to keep running',
-      body: 'Hosting is paid straight to the provider, not to me: usually about $20 a month, plus around $15 to $20 a year for your domain. I confirm the exact numbers in your quote. There is no required monthly fee to me.',
+      body: 'Hosting is paid straight to the provider, not to me: usually about $20 a month, plus around $15 to $20 a year for your domain. I confirm the exact numbers in your quote. A monthly care plan with me is optional, from $150 a month.',
+    },
+    provide: {
+      title: 'What I need from you',
+      body: 'Your logo, photos, and the basics about your business: services, hours, and how customers reach you. No logo or photos yet? I can create them, and I will tell you the cost up front. You review the site before it goes live.',
+    },
+    appStores: {
+      title: 'App store fees',
+      body: 'Publishing an app means paying the stores directly, in your name: Apple charges $99 a year and Google Play charges a one-time $25. Those go to Apple and Google, not to me.',
+    },
+    revisions: {
+      title: 'Revisions',
+      body: 'Two rounds of revisions are included in every project. You see the work, tell me what to change, and I change it, twice. Need more? I quote extra rounds before doing any of that work.',
+    },
+    cancellation: {
+      title: 'If you need to cancel',
+      body: 'The deposit is non-refundable once work starts, because it holds your spot and pays for the first stage. If you cancel partway through, you pay only for the milestones already completed, and you keep that work.',
     },
     afterLaunch: {
       title: 'After it launches',
-      body: '30 days of free bug fixes. If something does not work the way we agreed, I fix it at no charge. After that, fixes are $92/hour with a 2-hour minimum.',
+      body: '30 days of free bug fixes. If something does not work the way we agreed, I fix it at no charge. After that, fixes are $110/hour with a 2-hour minimum.',
     },
   },
   // Cost signal shown on Services and Contact so visitors can self-qualify
   // before booking. Renders nothing while `range` is blank — fill in a real
   // range (e.g. 'MVPs typically run $X–$Y'); never ship a placeholder number.
   pricing: {
-    range: 'Sliding scale: 40% off fixed-price projects for businesses in their first year or under $100k in annual revenue.',
+    range: 'Sliding scale: 25% off every service for businesses in their first year or under $100k in annual revenue.',
     // Optional sentence after the range, e.g. how quotes are scoped.
-    note: 'Hourly work is $92/hour and isn’t discounted.',
+    note: 'Hourly work is $110/hour, with a 2-hour minimum.',
     // One line under the Home hero buttons: the two facts that answer "can I
     // afford to ask?" before anyone scrolls.
-    heroLine: 'Free 30-minute call · 40% off for businesses in their first year or under $100k in revenue',
+    heroLine: 'Free 30-minute call · 25% off for businesses in their first year or under $100k in revenue',
   },
 } as const
 

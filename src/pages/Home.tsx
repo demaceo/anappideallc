@@ -16,7 +16,7 @@ import { Counter } from '../components/Counter/Counter'
 import { FounderPortrait } from '../components/FounderPortrait/FounderPortrait'
 import { PricingNote } from '../components/PricingNote/PricingNote'
 
-// The four offers most owners come for, then the bigger-build offer under its
+// The offers most owners come for, then the bigger-build offer under its
 // own divider, as on the Services page.
 const OFFERS = services.filter((s) => s.group !== 'bigger')
 const BIGGER = services.find((s) => s.group === 'bigger')
@@ -113,7 +113,7 @@ export default function Home() {
         <Section color="page">
           <div className="section-header">
             <span className="section-num">Services</span>
-            <h2>Four ways to <span className="accent-word">start</span></h2>
+            <h2>Five ways to <span className="accent-word">start</span></h2>
             <div className="section-rule" />
           </div>
           <p className="offers-lede">Not sure which? That's what the free call is for.</p>

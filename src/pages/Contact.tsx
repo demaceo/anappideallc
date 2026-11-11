@@ -117,8 +117,10 @@ export default function Contact() {
         <VerdictBox variant="note">
           <p>
             {SITE.founder.location} · Mountain Time (US/Denver).
-            I work with business owners anywhere, remotely, and keep calls
-            at hours that suit you.
+            I meet business owners in person across the Denver metro
+            (Denver, Aurora, Boulder, Golden, Lakewood, Littleton,
+            Thornton, Glendale and nearby) and work remotely with founders
+            anywhere, at hours that suit you.
           </p>
         </VerdictBox>
 
@@ -140,7 +142,7 @@ export default function Contact() {
               <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
             </li>
             <li>
-              <strong>Book a call</strong>
+              <strong>Book a free call</strong>
               Free 30-minute call
             </li>
             <li>

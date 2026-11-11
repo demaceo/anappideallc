@@ -33,3 +33,4 @@ Append-only. Newest entries at the bottom.
 - Added `src/__tests__/route-hydration.test.tsx` and [[prerender-hydration]]. Replaced the
   "Known, pre-existing" note in [[contact-form-ui]] and corrected its `vite preview` note.
 
+- 2026-11-11: added [[adding-a-page]] (prerender-list trap, hit while adding /privacy).

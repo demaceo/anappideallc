@@ -10,9 +10,9 @@ export default function PaybackTerms() {
     <>
       <LegalPage
         path="/legal/payback/terms"
-        appLabel="Ôwn (Payback)"
+        appLabel="Payback Ôwn"
         docType="terms"
-        subtitle={`Ôwn (Payback Own) — ${OPERATOR}`}
+        subtitle={`Payback Ôwn — ${OPERATOR}`}
         dateLine="Effective: December 8, 2025 · Last Updated: September 18, 2026"
       >
 
@@ -67,7 +67,7 @@ export default function PaybackTerms() {
 
         <h3 className="legal-subsection">2.1 What Payback Own Does</h3>
         <p>
-          Ôwn (marketed as "Payback Own") is a privacy-first mobile application available on iOS
+          Payback Ôwn ("Ôwn") is a privacy-first mobile application available on iOS
           and Android that:
         </p>
         <ul className="legal-list">
@@ -658,7 +658,7 @@ export default function PaybackTerms() {
           <ul className="source-list">
             <li>
               <strong>App</strong>
-              Ôwn (Payback Own)
+              Payback Ôwn
             </li>
             <li>
               <strong>Platform</strong>

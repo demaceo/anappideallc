@@ -1,7 +1,7 @@
 // 5-phase workflow, written for the owner rather than for another developer.
 // Each phase carries two timelines: a website (3–5 weeks end to end) and an
 // app or custom build (7–13 weeks to build, plus launch). Showing only the app
-// timeline made a $3,700 website look like a three-month project.
+// timeline made a small website look like a three-month project.
 
 export interface ProcessStep {
   step: '01' | '02' | '03' | '04' | '05'
@@ -94,7 +94,7 @@ export const processSteps: ProcessStep[] = [
     step: '05',
     title: 'Hand It Over',
     description:
-      "You don't leave with a login and a prayer. We walk through your site or app together until you can update it, read your numbers, and check its health on your own. Want to go deeper? That's the Own It package.",
+      "You don't leave with a login and a prayer. We walk through your site or app together until you can update it, read your numbers, and check its health on your own. Training is part of every website build.",
     substeps: [
       'A live walkthrough of how to change your pages and settings',
       'A tour of your numbers: where they live and what they mean',
@@ -108,7 +108,7 @@ export const processSteps: ProcessStep[] = [
       'A plain-language guide for your setup',
       'Admin access and accounts in your name',
       'A monthly checklist for your site',
-      'Optional path into the Own It package',
+      'Optional monthly care plan, if you would rather not run it yourself',
     ],
   },
 ]

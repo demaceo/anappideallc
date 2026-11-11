@@ -23,9 +23,9 @@ describe('Service prices', () => {
     }
   })
 
-  it('lists the fix-my-existing-site offer with its rush terms on Services and Home', () => {
+  it('lists the fix-my-existing-site offer with its hourly terms on Services and Home', () => {
     const fixes = services.find((s) => s.id === 'site-fixes')!
-    expect(fixes.price!.note).toMatch(/2-hour minimum.*\$138\/hour/)
+    expect(fixes.price!.note).toMatch(/2-hour minimum \(\$220\)/)
     for (const path of ['/', '/services']) {
       const { unmount } = renderRoute(path)
       expect(screen.getAllByText(fixes.title).length).toBeGreaterThan(0)
@@ -33,8 +33,8 @@ describe('Service prices', () => {
     }
   })
 
-  it('mentions the teaching background in the Own It offer', () => {
-    const ownIt = services.find((s) => s.id === 'own-it')!
-    expect(ownIt.description).toMatch(/several years of experience teaching software engineering/)
+  it('mentions the teaching background in the website offer', () => {
+    const site = services.find((s) => s.id === 'business-websites')!
+    expect(site.description).toMatch(/several years of experience teaching software engineering/)
   })
 })

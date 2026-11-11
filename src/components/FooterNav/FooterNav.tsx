@@ -12,6 +12,7 @@ const FOOTER_LINKS = [
   { to: '/process',    label: 'Process'     },
   { to: '/why-not-ai', label: 'Why not AI'  },
   { to: '/support',    label: 'Support'     },
+  { to: '/privacy',    label: 'Privacy'     },
   { to: '/legal',      label: 'Legal'       },
   { to: '/contact',    label: 'Contact'     },
 ] as const

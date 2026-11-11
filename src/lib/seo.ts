@@ -28,7 +28,7 @@ export const META: Record<string, { title: string; description: string; path: st
   '/services': {
     title: `Services: Business Websites, AI Integration & Apps | ${SITE.name}`,
     description:
-      'Business websites from $3,700, fixes to existing sites at $92/hour, the Own It teaching package, AI integration, MVPs, and data visualization. 40% sliding-scale discount and a free first consultation.',
+      'Business websites from $699, set-up help for Wix or Squarespace, site fixes at $110/hour, monthly care plans, AI and automation, and app builds. 25% sliding-scale discount and a free 30-minute call.',
     path: '/services',
   },
   '/process': {
@@ -38,7 +38,7 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/process',
   },
   '/contact': {
-    title: `Hire a Mobile App Developer | ${SITE.name}, Denver, CO`,
+    title: `Contact: Book a Free Call | ${SITE.name}, Denver, CO`,
     description:
       'Need a website, app, or AI for your small business? Free 30-minute call, sliding-scale pricing, and a reply within 1–2 business days. Everyone welcome.',
     path: '/contact',
@@ -55,10 +55,16 @@ export const META: Record<string, { title: string; description: string; path: st
       'Support for every app by An App Idea LLC. Report a bug, delete your data, manage a subscription, or ask a question. Answered directly by the builder, within 1–2 business days. Privacy and terms for each app.',
     path: '/support',
   },
+  '/privacy': {
+    title: `Website Privacy Policy | ${SITE.name}`,
+    description:
+      'What An App Idea LLC collects when you visit anappidea.llc or send a message through the contact form, how it is used, and how to have it deleted.',
+    path: '/privacy',
+  },
   '/legal': {
     title: `Legal: Privacy Policy & Terms for Every App | ${SITE.name}`,
     description:
-      'Privacy Policy and Terms of Service for every app published by An App Idea LLC: The Yap App, Ôwn (Payback), Pinpoint, DrayagePro TMS, Zoori, Feng Shui, and STLMNT.',
+      'Privacy Policy and Terms of Service for every app published by An App Idea LLC: The Yap App, Payback Ôwn, Pinpoint, DrayagePro TMS, Zoori, Feng Shui, and STLMNT.',
     path: '/legal',
   },
   '/legal/yap': {
@@ -68,9 +74,9 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/legal/yap',
   },
   '/legal/payback': {
-    title: `Legal — Ôwn (Payback) | ${SITE.name}`,
+    title: `Legal — Payback Ôwn | ${SITE.name}`,
     description:
-      'Privacy Policy and Terms of Service for Ôwn (Payback Own), the local-first consumer insights app by An App Idea LLC.',
+      'Privacy Policy and Terms of Service for Payback Ôwn, the local-first consumer insights app by An App Idea LLC.',
     path: '/legal/payback',
   },
   '/legal/pinpoint': {
@@ -116,7 +122,7 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/work/pinpoint-civic-engagement',
   },
   '/work/payback-consumer-intelligence': {
-    title: `Payback — Privacy-First Consumer Intelligence | ${SITE.name}`,
+    title: `Payback Ôwn — Privacy-First Consumer Intelligence | ${SITE.name}`,
     description:
       'Case study: Payback, a privacy-first app live on the App Store, with on-device parsing, an AES-256 SQLCipher vault, and a guarded Gemini AI proxy that never stores your exports on a server.',
     path: '/work/payback-consumer-intelligence',
@@ -188,27 +194,27 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/legal/yap/terms',
   },
   '/support/payback': {
-    title: `Support — Ôwn (Payback) | ${SITE.name}`,
+    title: `Support — Payback Ôwn | ${SITE.name}`,
     description:
-      'Help with Ôwn (Payback Own): how to request a Google Takeout or Meta data export and bring it in, what Instant and Quick Analysis each do, what stays on your device, and how to delete your account. Operated by An App Idea LLC.',
+      'Help with Payback Ôwn: how to request a Google Takeout or Meta data export and bring it in, what Instant and Quick Analysis each do, what stays on your device, and how to delete your account. Operated by An App Idea LLC.',
     path: '/support/payback',
   },
   '/legal/payback/privacy': {
-    title: `Privacy Policy — Ôwn (Payback) | ${SITE.name}`,
+    title: `Privacy Policy — Payback Ôwn | ${SITE.name}`,
     description:
-      'Privacy Policy for Ôwn (Payback Own) on iOS & Android. Local-first AES-256 encrypted architecture. Covers Google/Meta data processing, AI analysis via Gemini, GDPR, UK GDPR, CCPA, and India DPDP rights. Operated by An App Idea LLC.',
+      'Privacy Policy for Payback Ôwn on iOS & Android. Local-first AES-256 encrypted architecture. Covers Google/Meta data processing, AI analysis via Gemini, GDPR, UK GDPR, CCPA, and India DPDP rights. Operated by An App Idea LLC.',
     path: '/legal/payback/privacy',
   },
   '/legal/payback/terms': {
-    title: `Terms of Service — Ôwn (Payback) | ${SITE.name}`,
+    title: `Terms of Service — Payback Ôwn | ${SITE.name}`,
     description:
-      'Terms of Service for Ôwn (Payback Own) on iOS & Android. 20-section agreement covering eligibility, AI analysis, data ownership, disclaimers, arbitration, and governing law (Colorado). Operated by An App Idea LLC.',
+      'Terms of Service for Payback Ôwn on iOS & Android. 20-section agreement covering eligibility, AI analysis, data ownership, disclaimers, arbitration, and governing law (Colorado). Operated by An App Idea LLC.',
     path: '/legal/payback/terms',
   },
   '/legal/payback/data-deletion': {
-    title: `Account & Data Deletion — Ôwn (Payback) | ${SITE.name}`,
+    title: `Account & Data Deletion — Payback Ôwn | ${SITE.name}`,
     description:
-      'How to delete your Ôwn (Payback Own) account and all associated data, in-app or by request. Covers what is removed immediately, what takes up to 30 days, and how to revoke Google or Apple account access. Operated by An App Idea LLC.',
+      'How to delete your Payback Ôwn account and all associated data, in-app or by request. Covers what is removed immediately, what takes up to 30 days, and how to revoke Google or Apple account access. Operated by An App Idea LLC.',
     path: '/legal/payback/data-deletion',
   },
   '/legal/pinpoint/privacy': {
@@ -429,7 +435,7 @@ function buildPageGraph(route: string): object[] {
               name: 'Do you work remotely?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Yes. The studio is based in Denver, CO, but works with founders remotely across US, UK, and international time zones without friction.',
+                text: 'Yes. The studio is based in Denver, CO. Local business owners across the Denver metro can meet in person, and founders anywhere can work with the studio remotely.',
               },
             },
           ],
@@ -609,7 +615,7 @@ function buildPageGraph(route: string): object[] {
               name: 'I already started my app with AI: is that wasted?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Not at all. An AI draft is a great starting point and often clarifies what you want. Bring it to a free consultation and we\'ll map the path from your current draft to a launched, secure, maintainable product.',
+                text: 'Not at all. An AI draft is a great starting point and often clarifies what you want. Bring it to a free 30-minute call and we\'ll map the path from your current draft to a launched, secure, maintainable product.',
               },
             },
             {

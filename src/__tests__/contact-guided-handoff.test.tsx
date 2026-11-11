@@ -115,12 +115,12 @@ describe('Guided questions hand a draft back to the quick form', () => {
   it('adds to the ticked services and never unticks one', () => {
     renderContact()
     fireEvent.click(servicesToggle())
-    fireEvent.click(screen.getByRole('checkbox', { name: /own it/i }))
+    fireEvent.click(screen.getByRole('checkbox', { name: /keep it running/i }))
     draftFor(/a website/i)
     // The panel they opened is still open when they come back from the guide.
     expect(servicesToggle()).toHaveAttribute('aria-expanded', 'true')
     expect(screen.getByRole('checkbox', { name: /a website for your business/i })).toBeChecked()
-    expect(screen.getByRole('checkbox', { name: /own it/i })).toBeChecked()
+    expect(screen.getByRole('checkbox', { name: /keep it running/i })).toBeChecked()
   })
 
   it('ticks nothing for "not sure", and the visitor can still untick what it did tick', () => {
@@ -199,7 +199,7 @@ describe('Switching modes loses nothing', () => {
     fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Sam' } })
     fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'sam@example.com' } })
     fireEvent.click(servicesToggle())
-    fireEvent.click(screen.getByRole('checkbox', { name: /ai for your business/i }))
+    fireEvent.click(screen.getByRole('checkbox', { name: /ai & automation for your business/i }))
     fireEvent.click(screen.getByRole('button', { name: /record a stub voice note/i }))
 
     fireEvent.click(guideLink())
@@ -211,7 +211,7 @@ describe('Switching modes loses nothing', () => {
     expect(message().value).toBe('Typed first')
     expect(screen.getByLabelText('Name')).toHaveValue('Sam')
     expect(screen.getByLabelText('Email')).toHaveValue('sam@example.com')
-    expect(servicesToggle()).toHaveTextContent('AI for Your Business')
+    expect(servicesToggle()).toHaveTextContent('AI & Automation for Your Business')
     expect(screen.getByRole('button', { name: /record a stub voice note/i })).toHaveAttribute('data-has-voice', 'yes')
   })
 

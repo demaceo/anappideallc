@@ -75,7 +75,7 @@ export default function Support() {
 
         <VerdictBox variant="context">
           <p>
-            Using <strong>Ôwn (Payback)</strong>? It has its own{' '}
+            Using <strong>Payback Ôwn</strong>? It has its own{' '}
             <Link to="/support/payback">support page</Link>, covering how to
             request a Google or Meta data export, what each kind of analysis
             does, and what stays on your device.

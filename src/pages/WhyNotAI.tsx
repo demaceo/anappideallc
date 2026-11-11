@@ -237,7 +237,7 @@ export default function WhyNotAI() {
             </li>
             <li>
               <strong>Learn to use it</strong>
-              The Own It package teaches AI for your business, safely.
+              Training on using AI safely in your business comes with the build.
             </li>
             <li>
               <strong>Start free</strong>

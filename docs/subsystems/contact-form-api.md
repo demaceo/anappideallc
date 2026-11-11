@@ -2,12 +2,12 @@
 title: Contact form API
 type: subsystem
 created: 2026-11-10
-updated: 2026-11-10
+updated: 2026-11-11
 sources:
   - code: api/contact.ts
   - code: src/data/services.ts
   - code: src/__tests__/contact-api.test.ts
-verified_at: 09a1945
+verified_at: 893f69f
 ---
 
 # Contact form API
@@ -89,3 +89,8 @@ Services are then de-duplicated and filtered to ids present in `SERVICE_LABELS`
 
 > ⚠️ All user text going into the inquiry HTML must pass through `escHtml`
 > (`api/contact.ts:309`).
+
+> ⚠️ Service ids in `src/data/services.ts` travel in `/contact?service=<id>` links
+> and are mapped to titles by `SERVICE_LABELS` in `api/contact.ts` (not imported,
+> same reason as `BOOKING_URL`). Adding, renaming or removing a service means
+> editing both. `src/__tests__/contact-api.test.ts` fails when they drift.

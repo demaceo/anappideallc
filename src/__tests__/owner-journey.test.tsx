@@ -19,12 +19,12 @@ function renderRoute(path: string) {
  * to keep running, who owns it, how do I pay, how long does a website take.
  */
 describe('Services speak to the owner', () => {
-  it('leads with four plain offers, then one for bigger builds', () => {
-    expect(services.filter((s) => s.group !== 'bigger')).toHaveLength(4)
+  it('leads with five plain offers, then one for bigger builds', () => {
+    expect(services.filter((s) => s.group !== 'bigger')).toHaveLength(5)
     expect(services.filter((s) => s.group === 'bigger')).toHaveLength(1)
     const { container } = renderRoute('/services')
     expect(container.querySelectorAll('.svc-item')).toHaveLength(services.length)
-    expect(screen.getByText(/four ways to start, plus bigger builds/i)).toBeInTheDocument()
+    expect(screen.getByText(/five ways to start, plus bigger builds/i)).toBeInTheDocument()
     // The old heading said "Six ways" over a list of seven.
     expect(screen.queryByText(/six ways/i)).toBeNull()
   })
@@ -46,7 +46,7 @@ describe('Straight answers about money', () => {
   })
 
   it('commits to the agreed terms in plain numbers', () => {
-    expect(SITE.terms.payment.body).toMatch(/50% to start and 50% when it launches/)
+    expect(SITE.terms.payment.body).toMatch(/50% to start, 25% at the halfway review, and 25% at launch/)
     expect(SITE.terms.ownership.body).toMatch(/in your name from day one/)
     expect(SITE.terms.running.body).toMatch(/about \$20 a month/)
     expect(SITE.terms.afterLaunch.body).toMatch(/30 days of free bug fixes/)

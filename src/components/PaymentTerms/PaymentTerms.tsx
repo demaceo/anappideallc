@@ -11,6 +11,10 @@ const TERMS = [
   { key: 'payment', label: 'Payment' },
   { key: 'ownership', label: 'Ownership' },
   { key: 'running', label: 'Running costs' },
+  { key: 'provide', label: 'Your part' },
+  { key: 'appStores', label: 'Apps' },
+  { key: 'revisions', label: 'Revisions' },
+  { key: 'cancellation', label: 'Cancelling' },
   { key: 'afterLaunch', label: 'Support' },
 ] as const
 

@@ -30,7 +30,7 @@ export default function Process() {
 
       <PageHeader>
         <header className="masthead">
-          <p className="overline">An App Idea LLC · How we work</p>
+          <p className="overline">An App Idea LLC · How it works</p>
           <h1>Process</h1>
           <p className="date-line">Talk it through → See it → Build it → Go live → Hand it over</p>
         </header>
@@ -68,9 +68,9 @@ export default function Process() {
             <span className="stat-desc">To build, plus 1–2 weeks to launch</span>
           </div>
           <div className="stat-box neutral">
-            <span className="stat-label-top">Fixing an existing site</span>
-            <span className="stat-num medium">1 business day</span>
-            <span className="stat-desc">Rush turnaround · $138/hour</span>
+            <span className="stat-label-top">Setting up your own site</span>
+            <span className="stat-num medium">One session</span>
+            <span className="stat-desc">Wix or Squarespace, plus Google Maps</span>
           </div>
         </div>
 
@@ -124,7 +124,7 @@ export default function Process() {
 
         <NextStep
           heading="Step zero is a free call"
-          blurb="Before Step 1 starts, we talk it through: what you need, who it's for, and whether we're a fit."
+          blurb="Before Step 1 starts, we talk it through: what you need, who it's for, and whether I'm the right fit."
         />
 
         <StoryNext id="handoff" />

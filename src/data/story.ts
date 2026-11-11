@@ -84,7 +84,7 @@ export const STORY: StoryChapter[] = [
     heading: 'Built for you. Handed to you.',
     body: [
       'Picture a Monday where the website just works, bookings come in on their own, and you know what your numbers mean without asking anyone.',
-      "Every engagement has two halves. First I build it: the website, the app, the AI tools. Then the Own It package teaches you to run it, so the second job gets smaller instead of bigger. Pricing works on a sliding scale based on your business's size and stage.",
+      "Every engagement has two halves. First I build it: the website, the app, the AI tools. Then I teach you to run it, so the second job gets smaller instead of bigger. Pricing works on a sliding scale based on your business's size and stage.",
     ],
     bridge: 'How the handoff works',
   },
@@ -118,7 +118,7 @@ export const STORY: StoryChapter[] = [
     heading: "Your business is the job. Let's take the second one off your plate.",
     body: [
       'Remember that Tuesday night tutorial? This is where it ends.',
-      "The first consultation is free, and pricing works on a sliding scale based on your business's size and stage. Bring what you've got. Everyone's welcome. And if you're a Black or brown business owner who's been told to figure the tech out alone, this studio was built for you.",
+      "The first call is free, and pricing works on a sliding scale based on your business's size and stage. Bring what you've got. Everyone's welcome. And if you're a Black or brown business owner who's been told to figure the tech out alone, this studio was built for you.",
     ],
   },
 ]
