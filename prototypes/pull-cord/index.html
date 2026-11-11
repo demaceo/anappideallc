@@ -1,0 +1,1456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pull Cord Prototype</title>
+<meta name="description" content="An App Idea LLC homepage prototype: a pull cord turns the light on at the turn from problem to solution.">
+<!--
+  ════════════════════════════════════════════════════════════════════════
+  PULL-CORD PROTOTYPE · An App Idea LLC homepage slice
+  Standalone, dependency-free. NOT part of the Vite app build. The production
+  version will be ported into the site's GSAP engine; this file only proves
+  the feel. Sections, in order:
+    CSS  1 tokens · 2 base + layout · 3 sections · 4 lighting · 5 cord + knob
+         6 prototype controls · 7 no-JS + reduced motion
+    JS   1 setup + copy · 2 lighting · 3 rope physics · 4 render
+         5 pull interaction · 6 loop + measurement · 7 prototype controls
+  ════════════════════════════════════════════════════════════════════════
+-->
+<script>
+  /* Before first paint: JS visitors start in the dark. No-JS visitors (and
+     search engines, print) get the finished, LIT page with a static cord.
+     The lit state is deliberately NOT persisted so the owner can retry the
+     pull on every reload. PRODUCTION: remember it (localStorage, e.g.
+     'aai-light' = 'on') and skip `lights-off` for returning visitors, so
+     nobody is forced back into the dark on every visit. */
+  (function (d) {
+    var r = d.documentElement;
+    r.classList.add('js', 'lights-off');
+    try {
+      r.setAttribute('data-bulb', matchMedia('(prefers-color-scheme: dark)').matches ? 'uv' : 'warm');
+    } catch (e) {}
+  })(document);
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unbounded:wght@400..900&display=swap">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 1 · TOKENS
+   One number drives the room: --lit (0 = lights off, 1 = lit). Every
+   colour is a pair, -off and -on, mixed by --lit. The two bulbs only swap
+   the pairs. --reveal (the UV fine print) and --fil (the bulb's filament)
+   are separate so they can lag or lead the room.
+   ═══════════════════════════════════════════════════════════════════════ */
+@property --lit    { syntax: '<number>'; inherits: true; initial-value: 1; }
+@property --reveal { syntax: '<number>'; inherits: true; initial-value: 1; }
+@property --fil    { syntax: '<number>'; inherits: true; initial-value: 1; }
+
+:root {
+  --lit: 1;
+  --reveal: 1;
+  --fil: 1;
+
+  /* ── Warm incandescent bulb (light scheme). The -on values are the live
+        site's tokens (src/styles/tokens.css); -off is a dim warm room. ── */
+  --bg-off: oklch(26% 0.014 65);          --bg-on: oklch(97.2% 0.006 85);
+  --ink-off: oklch(91% 0.014 85);         --ink-on: oklch(17% 0.004 100);
+  --ink2-off: oklch(79% 0.026 75);        --ink2-on: oklch(40% 0.022 75);
+  --accent-off: oklch(82% 0.075 150);     --accent-on: oklch(39% 0.065 158);
+  --on-accent-off: oklch(22% 0.014 65);   --on-accent-on: oklch(99.6% 0.002 90);
+  --card-off: oklch(30% 0.014 65);        --card-on: oklch(99.6% 0.002 90);
+  --line-off: oklch(44% 0.014 70);        --line-on: oklch(84% 0.012 85);
+  --rule-off: oklch(66% 0.016 75);        --rule-on: oklch(17% 0.004 100);
+  --cord-off: oklch(74% 0.02 75);         --cord-on: oklch(26% 0.01 80);
+  --note-off: oklch(79% 0.026 75);        --note-on: oklch(37% 0.045 150);
+  --focus-off: oklch(87% 0.13 85);        --focus-on: oklch(39% 0.065 158);
+  --band-bg-off: oklch(20% 0.012 65);     --band-bg-on: oklch(17% 0.004 100);
+  --band-ink-off: oklch(91% 0.014 85);    --band-ink-on: oklch(97% 0.005 90);
+  --band-acc-off: oklch(80% 0.07 150);    --band-acc-on: oklch(84% 0.085 155);
+  --cta-bg-off: oklch(32% 0.035 155);     --cta-bg-on: oklch(39% 0.065 158);
+  --cta-ink-off: oklch(93% 0.012 90);     --cta-ink-on: oklch(99.6% 0.002 90);
+  --cta-ink2-off: oklch(85% 0.05 150);    --cta-ink2-on: oklch(88% 0.07 155);
+  --cta-line-off: oklch(46% 0.035 155);   --cta-line-on: oklch(52% 0.06 158);
+  --cta-btn-off: oklch(91% 0.012 90);     --cta-btn-on: oklch(99.6% 0.002 90);
+  --cta-btn-ink-off: oklch(28% 0.04 155); --cta-btn-ink-on: oklch(33% 0.065 158);
+  --glass-off: oklch(34% 0.012 70 / 0.55); --glass-on: oklch(97% 0.075 92);
+  --edge-off: oklch(66% 0.016 75);        --edge-on: oklch(78% 0.1 80);
+  --filament-off: oklch(58% 0.02 70);     --filament-on: oklch(70% 0.19 58);
+  --glow: oklch(88% 0.15 80);
+  --pool: oklch(91% 0.1 84 / 0.55);
+  --note-glow: 0;                          /* no phosphor under a warm bulb */
+
+  /* Mix curves: how far each family of colours is from off (0%) to on.
+     Under the warm bulb the ink goes from light-on-dark to dark-on-light.
+     Mixed linearly, ink and ground would pass through the same mid-tone
+     together and every line of text would vanish for ~150ms. So the warm
+     room behaves like a real bulb: the ground (--p) warms a little
+     (lit 0 → 0.3), then jumps most of the way (0.3 → 0.36, about one frame
+     of the transition), then settles (eyes adjusting). The ink family
+     (--pi) flips in the middle of that jump, so text never sits on a
+     ground of its own tone. Warm notes are ordinary small print and flip
+     with the ink (--pn). */
+  --p: calc((min(var(--lit), 0.3) * 0.5 + clamp(0, (var(--lit) - 0.3) * 10, 0.6) + max(0, var(--lit) - 0.36) * 0.390625) * 100%);
+  --pi: calc(clamp(0, (var(--lit) - 0.33) * 50, 1) * 100%);
+  --pn: var(--pi);
+}
+
+/* ── Blacklight (UV) bulb (dark scheme). Lit stays dark: an indigo-black
+      ground, blue-white ink, fluorescent chartreuse accent, and the fine
+      print in invisible ink. The block is repeated: once for no-JS visitors
+      via the media query, once for the prototype switch / head script. ── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-bulb="warm"]) {
+    --bg-off: oklch(20% 0.014 275);         --bg-on: oklch(15% 0.055 288);
+    --ink-off: oklch(87% 0.01 270);         --ink-on: oklch(95% 0.03 255);
+    --ink2-off: oklch(76% 0.018 270);       --ink2-on: oklch(83% 0.05 268);
+    --accent-off: oklch(82% 0.06 135);      --accent-on: oklch(91% 0.21 125);
+    --on-accent-off: oklch(19% 0.02 275);   --on-accent-on: oklch(17% 0.05 288);
+    --card-off: oklch(24% 0.014 275);       --card-on: oklch(20% 0.07 288);
+    --line-off: oklch(40% 0.016 275);       --line-on: oklch(42% 0.09 292);
+    --rule-off: oklch(62% 0.016 275);       --rule-on: oklch(72% 0.08 280);
+    --cord-off: oklch(70% 0.02 275);        --cord-on: oklch(93% 0.06 265);
+    --note-off: oklch(24.5% 0.016 275);     --note-on: oklch(91% 0.21 125);
+    --focus-off: oklch(84% 0.1 135);        --focus-on: oklch(91% 0.21 125);
+    --band-bg-off: oklch(16% 0.012 275);    --band-bg-on: oklch(11% 0.045 288);
+    --band-ink-off: oklch(87% 0.01 270);    --band-ink-on: oklch(95% 0.03 255);
+    --band-acc-off: oklch(80% 0.05 135);    --band-acc-on: oklch(91% 0.21 125);
+    --cta-bg-off: oklch(24% 0.014 275);     --cta-bg-on: oklch(20% 0.07 288);
+    --cta-ink-off: oklch(87% 0.01 270);     --cta-ink-on: oklch(95% 0.03 255);
+    --cta-ink2-off: oklch(80% 0.05 135);    --cta-ink2-on: oklch(91% 0.21 125);
+    --cta-line-off: oklch(40% 0.016 275);   --cta-line-on: oklch(91% 0.21 125);
+    --cta-btn-off: oklch(82% 0.06 135);     --cta-btn-on: oklch(91% 0.21 125);
+    --cta-btn-ink-off: oklch(19% 0.02 275); --cta-btn-ink-on: oklch(17% 0.05 288);
+    --glass-off: oklch(26% 0.04 295 / 0.8); --glass-on: oklch(34% 0.13 290);
+    --edge-off: oklch(56% 0.04 290);        --edge-on: oklch(62% 0.14 292);
+    --filament-off: oklch(50% 0.03 290);    --filament-on: oklch(90% 0.11 300);
+    --glow: oklch(52% 0.16 292);
+    --pool: oklch(32% 0.11 285 / 0.30);
+    --note-glow: 0.5;
+    /* The UV ground stays dark and the ink stays light, so nothing crosses:
+       everything follows the light, and the fine print lags it (phosphor). */
+    --p: calc(var(--lit) * 100%);
+    --pi: calc(var(--lit) * 100%);
+    --pn: calc(var(--reveal) * 100%);
+  }
+}
+:root[data-bulb="uv"] {
+  --bg-off: oklch(20% 0.014 275);         --bg-on: oklch(15% 0.055 288);
+  --ink-off: oklch(87% 0.01 270);         --ink-on: oklch(95% 0.03 255);
+  --ink2-off: oklch(76% 0.018 270);       --ink2-on: oklch(83% 0.05 268);
+  --accent-off: oklch(82% 0.06 135);      --accent-on: oklch(91% 0.21 125);
+  --on-accent-off: oklch(19% 0.02 275);   --on-accent-on: oklch(17% 0.05 288);
+  --card-off: oklch(24% 0.014 275);       --card-on: oklch(20% 0.07 288);
+  --line-off: oklch(40% 0.016 275);       --line-on: oklch(42% 0.09 292);
+  --rule-off: oklch(62% 0.016 275);       --rule-on: oklch(72% 0.08 280);
+  --cord-off: oklch(70% 0.02 275);        --cord-on: oklch(93% 0.06 265);
+  --note-off: oklch(24.5% 0.016 275);     --note-on: oklch(91% 0.21 125);
+  --focus-off: oklch(84% 0.1 135);        --focus-on: oklch(91% 0.21 125);
+  --band-bg-off: oklch(16% 0.012 275);    --band-bg-on: oklch(11% 0.045 288);
+  --band-ink-off: oklch(87% 0.01 270);    --band-ink-on: oklch(95% 0.03 255);
+  --band-acc-off: oklch(80% 0.05 135);    --band-acc-on: oklch(91% 0.21 125);
+  --cta-bg-off: oklch(24% 0.014 275);     --cta-bg-on: oklch(20% 0.07 288);
+  --cta-ink-off: oklch(87% 0.01 270);     --cta-ink-on: oklch(95% 0.03 255);
+  --cta-ink2-off: oklch(80% 0.05 135);    --cta-ink2-on: oklch(91% 0.21 125);
+  --cta-line-off: oklch(40% 0.016 275);   --cta-line-on: oklch(91% 0.21 125);
+  --cta-btn-off: oklch(82% 0.06 135);     --cta-btn-on: oklch(91% 0.21 125);
+  --cta-btn-ink-off: oklch(19% 0.02 275); --cta-btn-ink-on: oklch(17% 0.05 288);
+  --glass-off: oklch(26% 0.04 295 / 0.8); --glass-on: oklch(34% 0.13 290);
+  --edge-off: oklch(56% 0.04 290);        --edge-on: oklch(62% 0.14 292);
+  --filament-off: oklch(50% 0.03 290);    --filament-on: oklch(90% 0.11 300);
+  --glow: oklch(52% 0.16 292);
+  --pool: oklch(32% 0.11 285 / 0.30);
+  --note-glow: 0.5;
+  --p: calc(var(--lit) * 100%);
+  --pi: calc(var(--lit) * 100%);
+  --pn: calc(var(--reveal) * 100%);
+}
+
+/* Derived, live tokens: off ↔ on, mixed by the light. Surfaces use --p,
+   the ink family --pi (see the warm block). Declared on :root, where --lit
+   animates, and inherited by everything below. Without
+   @property support --lit can't animate, so this degrades to a class swap
+   (0 or 1) with no in-between. */
+:root {
+  --bg:       color-mix(in oklch, var(--bg-off), var(--bg-on) var(--p));
+  --ink:      color-mix(in oklch, var(--ink-off), var(--ink-on) var(--pi));
+  --ink2:     color-mix(in oklch, var(--ink2-off), var(--ink2-on) var(--pi));
+  --accent:   color-mix(in oklch, var(--accent-off), var(--accent-on) var(--pi));
+  --on-accent:color-mix(in oklch, var(--on-accent-off), var(--on-accent-on) var(--pi));
+  --card:     color-mix(in oklch, var(--card-off), var(--card-on) var(--p));
+  --line:     color-mix(in oklch, var(--line-off), var(--line-on) var(--pi));
+  --rule:     color-mix(in oklch, var(--rule-off), var(--rule-on) var(--pi));
+  --cord:     color-mix(in oklch, var(--cord-off), var(--cord-on) var(--pi));
+  --focus:    color-mix(in oklch, var(--focus-off), var(--focus-on) var(--pi));
+  --band-bg:  color-mix(in oklch, var(--band-bg-off), var(--band-bg-on) var(--p));
+  --band-ink: color-mix(in oklch, var(--band-ink-off), var(--band-ink-on) var(--p));
+  --band-acc: color-mix(in oklch, var(--band-acc-off), var(--band-acc-on) var(--p));
+  --cta-bg:   color-mix(in oklch, var(--cta-bg-off), var(--cta-bg-on) var(--p));
+  --cta-ink:  color-mix(in oklch, var(--cta-ink-off), var(--cta-ink-on) var(--p));
+  --cta-ink2: color-mix(in oklch, var(--cta-ink2-off), var(--cta-ink2-on) var(--p));
+  --cta-line: color-mix(in oklch, var(--cta-line-off), var(--cta-line-on) var(--p));
+  --cta-btn:  color-mix(in oklch, var(--cta-btn-off), var(--cta-btn-on) var(--p));
+  --cta-btn-ink: color-mix(in oklch, var(--cta-btn-ink-off), var(--cta-btn-ink-on) var(--p));
+  /* The fine print: flips with the ink (warm) or lags the light (UV). */
+  --note:     color-mix(in oklch, var(--note-off), var(--note-on) var(--pn));
+  /* The bulb follows its filament, which leads the room. */
+  --glass:    color-mix(in oklch, var(--glass-off), var(--glass-on) calc(var(--fil) * 100%));
+  --edge:     color-mix(in oklch, var(--edge-off), var(--edge-on) calc(var(--fil) * 100%));
+  --filament: color-mix(in oklch, var(--filament-off), var(--filament-on) calc(var(--fil) * 100%));
+
+  /* Type: the site's three families. */
+  --ff-display: 'Unbounded', ui-sans-serif, system-ui, sans-serif;
+  --ff-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --ff-mono: 'Space Mono', ui-monospace, monospace;
+  --measure: 62ch;
+  --radius-sm: 8px;
+  --radius: 12px;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* ── Layout geometry. Wide screens (≥1024px) use three columns: the copy,
+        a LANE the cord hangs in, and a side column (portrait, stats, prompt).
+        Narrower screens hang the cord in the right gutter instead. ── */
+  --shell: 1200px;
+  --pad-l: clamp(20px, 5vw, 64px);
+  --pad-r: var(--pad-l);
+  --lane: 120px;
+  --side: 248px;
+  --cord-shift: 8px;              /* cord sits just right of lane centre */
+  --fx-w: 100px;                  /* bulb fixture width (viewBox 80×140) */
+  --sway: 30;                     /* max sideways swing, px (read by JS) */
+  /* x of the cord, relative to the full-width page */
+  --cord-x: calc(min(50% + var(--shell) / 2, 100% - var(--pad-r)) - var(--side) - var(--lane) / 2 + var(--cord-shift));
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --cord-inset: 32px;           /* cord distance from the right edge */
+    --pad-l: 40px;
+    --pad-r: calc(var(--cord-inset) + 40px);
+    --cord-x: calc(100% - var(--cord-inset));
+    --fx-w: 84px;
+    --sway: 14;
+  }
+}
+@media (max-width: 699px) {
+  :root {
+    --cord-inset: 24px;
+    --pad-l: 20px;
+    --pad-r: calc(var(--cord-inset) + 24px);   /* text never sits under the cord */
+    --fx-w: 72px;
+    --sway: 10;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 2 · BASE + LAYOUT
+   ═══════════════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  background: var(--bg);
+  color: var(--ink);
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+}
+html.lights-off, html[data-bulb="uv"] { color-scheme: dark; }
+body {
+  margin: 0;
+  background: var(--bg);
+  font: 400 1.0625rem/1.62 var(--ff-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { margin: 0; font-family: var(--ff-display); font-weight: 600; text-wrap: balance; letter-spacing: -0.02em; }
+p { margin: 0; text-wrap: pretty; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { color: var(--accent); }
+img { display: block; max-width: 100%; height: auto; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* The page is the coordinate system for the bulb, cord and knob. */
+.page { position: relative; z-index: 1; overflow-x: clip; }
+
+.shell {
+  box-sizing: content-box;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--pad-l) var(--pad-r);
+}
+/* Below the turn the cord is gone: give the gutter back. */
+.shell--open { padding-inline: var(--pad-l); }
+
+/* Three-column room grid (≥1024px): copy | cord lane | side */
+.grid3 { display: grid; grid-template-columns: minmax(0, 1fr) var(--lane) var(--side); }
+.c-main { grid-column: 1; min-width: 0; }
+.c-side { grid-column: 3; min-width: 0; padding-left: 12px; }
+@media (max-width: 1023px) { .grid3 { display: block; } .c-side { padding-left: 0; } }
+
+.label {
+  font: 400 0.75rem/1.5 var(--ff-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+.accent-word { color: var(--accent); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 3 · SECTIONS (real homepage copy)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Hero: four text elements (overline, h1, subtitle, actions) + portrait. */
+.hero { padding-block: 64px 48px; }
+.hero .c-main { container-type: inline-size; }
+/* The headline is sized from its own column (cqi), so it fills the copy
+   column in exactly two lines on every desktop width (spec: ≤2 lines). The
+   whole line measures ~35em in Unbounded 700, and its best two-line break
+   needs the column to be ≥18.6em, hence 5.2cqi. The vw line is a fallback
+   for browsers without container units. */
+.hero h1 {
+  font-size: clamp(1.75rem, 0.9rem + 2.2vw, 2.6rem);
+  font-size: clamp(1.75rem, 5.2cqi, 2.8rem);
+  font-weight: 700;
+  line-height: 1.03;
+  letter-spacing: -0.035em;
+  margin-top: 20px;
+}
+.hero .subtitle {
+  margin-top: 22px;
+  max-width: 54ch;
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.2rem);
+  color: var(--ink2);
+}
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 26px; margin-top: 30px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  min-height: 48px; padding: 0 22px;
+  border-radius: var(--radius-sm);
+  background: var(--accent); color: var(--on-accent);
+  font: 700 0.8125rem/1 var(--ff-mono); letter-spacing: 0.08em; text-transform: uppercase;
+  text-decoration: none;
+}
+.btn:hover { color: var(--on-accent); filter: brightness(1.08); }
+.link-mono {
+  font: 700 0.8125rem/1.4 var(--ff-mono); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink); text-underline-offset: 0.35em;
+  min-height: 44px; display: inline-flex; align-items: center;
+}
+.portrait { margin: 0; align-self: center; }
+.portrait img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius); }
+.portrait figcaption { margin-top: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); font: 400 0.75rem/1.6 var(--ff-mono); color: var(--ink2); }
+.portrait figcaption strong { display: block; color: var(--ink); font-weight: 700; }
+@media (max-width: 1023px) {
+  .hero { padding-top: calc(var(--fx-w) * 1.75 * 0.84 + 16px); padding-bottom: 36px; }
+  /* One column: ≤3 lines at 390px (spec), sized from the column too. */
+  .hero h1 { margin-top: 14px; font-size: clamp(1.375rem, 1rem + 1.6vw, 2rem); font-size: clamp(1.375rem, 7.4cqi, 2rem); }  /* 2rem cap: no big jump down at the 1024px desktop switch */
+  .portrait { display: flex; align-items: center; gap: 14px; margin-top: 32px; }
+  .portrait img { width: 64px; border-radius: 50%; flex: none; }
+  .portrait figcaption { margin: 0; padding: 0; border: 0; }
+}
+
+/* The hero-scale line, moved just below the hero (hero ≤4 text elements). */
+.scale p { padding-top: 14px; border-top: 1px solid var(--line); font: 400 0.8125rem/1.6 var(--ff-mono); color: var(--ink2); max-width: 62ch; }
+
+.intro { padding-block: 56px 24px; }
+.intro p { font-size: clamp(1.125rem, 1rem + 0.5vw, 1.35rem); line-height: 1.55; max-width: var(--measure); }
+
+/* The problem: the 10:40pm chapter + its two sourced numbers. */
+.problem { padding-block: 56px 32px; }
+.problem h2, .turn h2, .lit-section h2 { font-size: clamp(1.375rem, 1rem + 1.5vw, 2.125rem); line-height: 1.15; }
+.problem h2 { max-width: 22ch; }
+.problem .body p { margin-top: 20px; max-width: var(--measure); color: var(--ink); }
+.problem .body p + p { color: var(--ink2); }
+.evidence { list-style: none; margin: 0; padding: 0; display: grid; gap: 28px; }
+.evidence li { padding-top: 14px; border-top: 1px solid var(--rule); }
+.ev-num { display: block; font: 600 2.4rem/1 var(--ff-display); letter-spacing: -0.03em; color: var(--accent); }
+.ev-label { margin-top: 10px; font-size: 0.9375rem; line-height: 1.5; }
+.ev-src { margin-top: 8px; font: 400 0.75rem/1.5 var(--ff-mono); color: var(--ink2); }
+/* Wide screens: the side column is empty beside the intro (the portrait
+   ends early), so the numbers move up into that space instead of leaving a
+   ~380px hole. They still sit well clear of the portrait at 1024-1440px. */
+@media (min-width: 1024px) { .problem .evidence { margin-top: -200px; padding-left: 12px; } }   /* 12px: line up with the portrait */
+@media (max-width: 1023px) {
+  .evidence { margin-top: 36px; }
+}
+@media (min-width: 700px) and (max-width: 1023px) { .evidence { grid-template-columns: 1fr 1fr; gap: 28px 32px; } }
+
+/* The turn: where the cord ends. Reads right with the light on or off. */
+.turn { padding-block: 72px 88px; }
+.turn h2 { font-size: clamp(1.5rem, 1rem + 2vw, 2.6rem); }
+.turn .turn-line { margin-top: 16px; max-width: 46ch; font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.2rem); color: var(--ink2); }
+.pull { display: flex; align-items: center; min-height: 64px; }
+.pull-prompt { font: 400 0.875rem/1.4 var(--ff-mono); letter-spacing: 0.04em; color: var(--ink2); }
+@media (min-width: 1024px) {
+  .turn .grid3 { align-items: center; }
+  .pull { grid-column: 2 / 4; padding-left: calc(var(--lane) + 12px); }
+}
+@media (max-width: 1023px) {
+  .pull { justify-content: flex-end; margin-top: 28px; padding-right: 12px; }
+  .pull-prompt { text-align: right; }
+}
+
+/* ── Lit: everything below the turn ─────────────────────────────────── */
+.lit-section { padding-block: 88px; }
+@media (max-width: 699px) { .lit-section { padding-block: 64px; } .turn { padding-bottom: 64px; } .band blockquote { padding-block: 72px; } }
+.lit-section h2 { margin-bottom: 28px; }
+.rule-head { padding-bottom: 18px; border-bottom: 1px solid var(--rule); margin-bottom: 32px; }
+.rule-head h2 { margin: 0; }
+
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; display: flex; flex-direction: column; gap: 10px; }
+.stat .label { font-size: 0.6875rem; }
+.stat-num { font: 600 clamp(2rem, 1.5rem + 2vw, 3.25rem)/1 var(--ff-display); letter-spacing: -0.03em; }
+.stat-num.medium { font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem); }
+.stat-desc { font: 400 0.8125rem/1.5 var(--ff-mono); color: var(--ink2); margin-top: auto; }   /* shared baseline across cards */
+@media (max-width: 760px) { .stats { grid-template-columns: 1fr; } }
+
+.band { background: var(--band-bg); color: var(--band-ink); }
+.band blockquote { margin: 0; padding-block: 96px; max-width: 30em; }
+.band blockquote p { font: 500 clamp(1.25rem, 1rem + 1.2vw, 1.85rem)/1.35 var(--ff-display); letter-spacing: -0.015em; text-wrap: balance; hanging-punctuation: first; }
+/* Hang the opening quote into the margin (Safari does it natively). */
+@supports not (hanging-punctuation: first) { .band blockquote p { text-indent: -0.42em; } }
+.band cite { display: block; margin-top: 24px; font: 400 0.75rem/1.5 var(--ff-mono); font-style: normal; letter-spacing: 0.08em; text-transform: uppercase; color: var(--band-acc); }
+
+.offers-lede { color: var(--ink2); margin: -12px 0 28px; }
+.offer-list { list-style: none; margin: 0; padding: 0; }   /* the rule-head's rule is its top edge */
+.offer {
+  display: grid; grid-template-columns: minmax(0, 1fr) 17rem; column-gap: 48px;
+  padding-block: 28px; border-bottom: 1px solid var(--line);
+}
+.offer-main { max-width: 64ch; }
+.offer .note { align-self: start; }   /* rule only as tall as the note */
+.offer-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; }
+.offer-title { font-size: clamp(1.125rem, 1rem + 0.5vw, 1.4rem); line-height: 1.25; }
+.offer-meta { font: 400 0.75rem/1.4 var(--ff-mono); color: var(--ink2); letter-spacing: 0.04em; }
+.offer-body { margin-top: 10px; color: var(--ink2); }
+.offer-price { display: inline-block; margin-top: 14px; font: 700 0.875rem/1.4 var(--ff-mono); color: var(--accent); }
+.after-offers { display: grid; grid-template-columns: minmax(0, 1fr) 17rem; column-gap: 48px; margin-top: 36px; }
+.bigger { border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 24px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; background: var(--card); }
+.bigger strong { font: 600 1.05rem/1.3 var(--ff-display); letter-spacing: -0.01em; }
+.bigger .price { font: 700 0.8125rem/1.4 var(--ff-mono); color: var(--accent); }
+.services-more { margin-top: 20px; }
+.services-more a { font-weight: 500; }
+.notes-col { display: grid; gap: 20px; align-content: start; }
+@media (max-width: 1023px) {
+  .offer, .after-offers { grid-template-columns: 1fr; }
+  .offer .note { margin-top: 16px; }
+  .notes-col { margin-top: 28px; }
+}
+
+/* The free-call card (tier-1 CTA: the loudest thing on the page). */
+.call-layout { display: grid; grid-template-columns: minmax(0, 1fr) 17rem; column-gap: 48px; align-items: end; }
+.call {
+  background: var(--cta-bg); color: var(--cta-ink);
+  border: 1px solid var(--cta-line); border-radius: var(--radius);
+  padding: clamp(24px, 4vw, 44px);
+}
+.call h3 { font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.4rem); line-height: 1.1; }
+.call .label { color: var(--cta-ink2); margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--cta-line); }
+.steps { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 28px; }
+.steps li { padding-left: 14px; border-left: 2px solid var(--cta-ink2); }
+.call-foot { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--cta-line); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.call-foot p { font: 400 0.8125rem/1.5 var(--ff-mono); }
+.btn-call { background: var(--cta-btn); color: var(--cta-btn-ink); }
+.btn-call:hover { color: var(--cta-btn-ink); }
+/* The page focus colour is the card's own green under the warm bulb, so
+   inside the card the ring takes the card's ink (≥9:1 lit, ≥3:1 always). */
+.call :focus-visible { outline-color: var(--cta-ink); }
+.write { margin-top: 28px; max-width: var(--measure); color: var(--ink2); }
+.write a { color: var(--ink); }
+@media (max-width: 1023px) {
+  .call-layout { grid-template-columns: 1fr; }
+  .call-layout .note { margin-top: 20px; }
+}
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
+
+.foot { padding-block: 40px 120px; border-top: 1px solid var(--line); }
+.foot p { font: 400 0.75rem/1.6 var(--ff-mono); letter-spacing: 0.04em; color: var(--ink2); }
+
+/* ── The fine print ──────────────────────────────────────────────────────
+   Margin notes in the founder's voice. Warm bulb: ordinary small print,
+   readable on or off. UV bulb, lights on: fluorescent with a faint phosphor
+   glow (notes only; never on body text).
+
+   !! SANCTIONED CONTRAST EXCEPTION !!
+   Under the UV bulb with the lights OFF, --note resolves to "invisible ink"
+   (--note-off ≈ the ground, ~1.2:1). This is the ONE deliberate exception to
+   WCAG AA on the page. The notes stay in the DOM and in reading order (no
+   aria-hidden, no display:none, no visibility:hidden), so screen readers
+   always get them, and every fact also lives in the Warm bulb's version and
+   on the real Services page. Do not copy this pattern anywhere else. */
+.note {
+  margin: 0;
+  padding-left: 14px;
+  border-left: 1px solid var(--note);
+  font: italic 400 0.8125rem/1.6 var(--ff-mono);
+  color: var(--note);
+  text-shadow: 0 0 calc(7px * var(--reveal)) color-mix(in oklch, var(--note-on) calc(var(--note-glow) * var(--reveal) * 100%), transparent);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 4 · LIGHTING
+   ═══════════════════════════════════════════════════════════════════════ */
+html {
+  --ease-light: cubic-bezier(0.3, 0.6, 0.3, 1);
+  transition: --lit 420ms var(--ease-light), --reveal 600ms ease-out 140ms, --fil 140ms ease-out;
+}
+html.js { --fil: 0; }
+html.js.fil-on { --fil: 1; }
+html.lights-off { --lit: 0; --reveal: 0; transition: --lit 200ms ease-in, --reveal 160ms ease-in, --fil 170ms ease-in; }
+/* During the UV flicker JS writes --lit/--fil inline, frame-exact. */
+html.no-trans { transition: --reveal 600ms ease-out 140ms; }
+/* The incandescent warm-up's one tiny flicker. */
+html.fil-dip { --fil: 0.35; transition: none; }
+
+/* A soft pool of light from the top of the viewport, while lit. Sits behind
+   the page (z-index 0 under .page's 1) so it tints the ground, never text. */
+.pool {
+  position: fixed; inset: 0 0 auto 0; height: 80vh; z-index: 0; pointer-events: none;
+  opacity: var(--lit);
+  background: radial-gradient(70% 90% at var(--cord-x) 0%, var(--pool), transparent 72%);
+}
+
+/* Lights off, the room falls away at its edges: a fixed, very low vignette
+   behind the page (so text contrast only rises toward the dark corners).
+   It fades out as the light comes on. */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  opacity: calc(1 - var(--lit));
+  background: radial-gradient(120% 90% at var(--cord-x) 0%, transparent 40%, oklch(0% 0 0 / 0.22));
+}
+
+/* The bulb fixture: hangs from the top of the document, scrolls away like
+   the ceiling. Drawn in ink-and-accent line art; the glass and filament
+   follow --fil. */
+.fixture {
+  position: absolute; top: 0; z-index: 2; pointer-events: none;
+  left: calc(var(--cord-x) - var(--fx-w) * 0.85);
+  width: var(--fx-w); aspect-ratio: 80 / 140;
+}
+.fixture svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.fixture .pin { position: absolute; left: 85%; top: 38.5714%; width: 0; height: 0; }
+.fx-ink { fill: var(--ink); }
+.fx-wire { stroke: var(--ink); stroke-width: 1.5; }
+.fx-ring { stroke: var(--bg); stroke-width: 1.2; }
+.bulb-glass { fill: var(--glass); stroke: var(--edge); stroke-width: 1.2; }
+.bulb-filament { fill: none; stroke: var(--filament); stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+.bulb-glow { opacity: calc(var(--fil) * 0.95); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 5 · CORD + KNOB
+   ═══════════════════════════════════════════════════════════════════════ */
+.cord-svg {
+  position: absolute; left: 0; top: 0; width: 100%; height: 0; z-index: 2;
+  overflow: visible; pointer-events: none;
+}
+.cord-path { fill: none; stroke: var(--cord); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+@media (max-width: 699px) { .cord-path { stroke-width: 1.75; } }
+
+/* Rest spot for the knob. Absolutely positioned with no `top`, so it keeps
+   its static (vertically centred) place in the .pull row; JS measures it. */
+.knob-slot { position: absolute; left: calc(var(--cord-x) - 32px); width: 64px; height: 64px; pointer-events: none; }
+
+/* The knob is a real toggle button. 64×64 hit area, touch-action:none so a
+   drag on it pulls the cord instead of scrolling; elsewhere the page scrolls.
+   The cord ties on at (32, 8); the bead (22×44) centres at (32, 37). */
+.knob {
+  position: absolute; left: 0; top: 0; z-index: 3;
+  width: 64px; height: 64px; padding: 0; margin: 0;
+  border: 0; border-radius: 50%; background: transparent; color: inherit;
+  cursor: grab; touch-action: none; -webkit-tap-highlight-color: transparent;
+  transform-origin: 32px 8px;
+  will-change: transform;
+}
+.knob:active { cursor: grabbing; }
+.knob:focus-visible { outline: 2px solid var(--focus); outline-offset: -4px; border-radius: 50%; }
+.knob svg { display: block; width: 64px; height: 64px; overflow: visible; pointer-events: none; }
+.knob .bead { fill: var(--accent); stroke: var(--ink); stroke-width: 0.8; }
+.knob .cap { fill: var(--ink); }
+.knob .groove { stroke: var(--on-accent); stroke-width: 0.8; opacity: 0.55; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 6 · PROTOTYPE CONTROLS (not part of the eventual design)
+   Neutral and fixed so they read the same in every state.
+   ═══════════════════════════════════════════════════════════════════════ */
+.proto {
+  position: fixed; left: 0; bottom: 12px; z-index: 50;
+  color-scheme: dark;
+  font: 400 0.75rem/1.4 var(--ff-mono);
+  color: oklch(95% 0.005 270);
+}
+.proto details {
+  background: oklch(23% 0.01 270 / 0.94);
+  border: 1px solid oklch(45% 0.01 270);
+  border-radius: 10px;
+  box-shadow: 0 6px 24px oklch(0% 0 0 / 0.25);
+}
+.proto summary {
+  list-style: none; cursor: pointer; min-height: 40px; padding: 0 12px;
+  display: flex; align-items: center; gap: 8px;
+  letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700;
+}
+.proto summary::-webkit-details-marker { display: none; }
+.proto summary::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: oklch(82% 0.17 85); }
+/* Collapsed it is a 20px tab on the left edge, labelled vertically. Every
+   layout keeps ≥20px of left padding, so the tab never sits on the copy
+   (320px, phones, 200% zoom). Opened, it becomes the full panel. */
+.proto details:not([open]) { border-left: 0; border-radius: 0 8px 8px 0; }
+.proto details:not([open]) summary {
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  width: 19px; min-height: 0; padding: 12px 0; gap: 8px;
+  font-size: 0.625rem; letter-spacing: 0.14em;
+}
+.proto details:not([open]) summary::before { width: 6px; height: 6px; }
+.proto details[open] { margin-left: 8px; }
+.proto details[open] summary::after { content: '−'; margin-left: auto; padding-left: 10px; font-weight: 400; }
+.proto summary:focus-visible, .proto button:focus-visible, .proto input:focus-visible + span { outline: 2px solid oklch(85% 0.14 85); outline-offset: 2px; }
+.proto-body { padding: 4px 14px 14px; display: grid; gap: 10px; }
+.proto fieldset { border: 0; margin: 0; padding: 0; }
+.proto legend { padding: 0; margin-bottom: 6px; color: oklch(80% 0.01 270); }
+.seg { display: flex; border: 1px solid oklch(50% 0.01 270); border-radius: 7px; overflow: hidden; }
+.seg label { position: relative; flex: 1; }
+.seg input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg span { display: block; padding: 8px 12px; text-align: center; cursor: pointer; }
+.seg label + label span { border-left: 1px solid oklch(50% 0.01 270); }
+.seg input:checked + span { background: oklch(95% 0.005 270); color: oklch(20% 0.01 270); font-weight: 700; }
+.proto button {
+  font: inherit; color: inherit; background: transparent; cursor: pointer;
+  border: 1px solid oklch(60% 0.01 270); border-radius: 7px; padding: 8px 12px; min-height: 36px;
+}
+.proto button:hover { background: oklch(32% 0.01 270); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 7 · NO-JS + REDUCED MOTION
+   Without JS the page is the finished, lit picture: the cord is drawn as a
+   static line down the room sections (one segment per section, so no
+   measuring is needed) with a bead where the knob would hang.
+   ═══════════════════════════════════════════════════════════════════════ */
+html:not(.js) .knob, html:not(.js) .pull-prompt, html:not(.js) .proto, html:not(.js) .cord-svg { display: none; }
+html:not(.js) .rail { position: relative; }
+html:not(.js) .rail::before {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 2px;
+  left: calc(var(--cord-x) - 1px); background: var(--cord);
+}
+html:not(.js) .hero.rail::before { top: calc(var(--fx-w) * 0.675); }
+html:not(.js) .turn.rail::before { display: none; }
+html:not(.js) .turn .knob-slot::before {
+  content: ''; position: absolute; left: 31px; bottom: 44px; width: 2px; height: 2000px; background: var(--cord);
+}
+html:not(.js) .turn .knob-slot::after {
+  content: ''; position: absolute; left: 21px; top: 15px; width: 22px; height: 44px; border-radius: 11px 11px 12px 12px;
+  background: var(--accent); border: 1px solid var(--ink);
+}
+html:not(.js) .turn { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  html, html.lights-off, html.no-trans {
+    transition: --lit 180ms linear, --reveal 180ms linear, --fil 180ms linear;
+  }
+  html.fil-dip { --fil: 1; }
+}
+@media print {
+  .proto, .knob, .pull-prompt, .pool, body::before { display: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="pool" aria-hidden="true"></div>
+
+<div class="page">
+  <!-- The ceiling fixture: canopy, flex, socket with its pull switch, bulb. -->
+  <div class="fixture" aria-hidden="true">
+    <svg viewBox="0 0 80 140" focusable="false">
+      <defs>
+        <radialGradient id="glow-grad">
+          <stop offset="0" style="stop-color: var(--glow); stop-opacity: 0.8"/>
+          <stop offset="0.4" style="stop-color: var(--glow); stop-opacity: 0.28"/>
+          <stop offset="1" style="stop-color: var(--glow); stop-opacity: 0"/>
+        </radialGradient>
+      </defs>
+      <circle class="bulb-glow" cx="40" cy="90" r="50" fill="url(#glow-grad)"/>
+      <rect class="fx-ink" x="27" y="-2" width="26" height="7" rx="2"/>
+      <line class="fx-wire" x1="40" y1="5" x2="40" y2="27"/>
+      <rect class="fx-ink" x="30" y="26" width="20" height="30" rx="3"/>
+      <line class="fx-ring" x1="31" y1="33" x2="49" y2="33"/>
+      <line class="fx-ring" x1="31" y1="49" x2="49" y2="49"/>
+      <!-- pull switch: arm + chain guide; the cord leaves its bottom at (68,54) -->
+      <rect class="fx-ink" x="49" y="38" width="16" height="4" rx="1"/>
+      <rect class="fx-ink" x="64" y="36" width="8" height="18" rx="2"/>
+      <!-- screw base -->
+      <rect class="fx-ink" x="33" y="55" width="14" height="10" rx="1.5"/>
+      <line class="fx-ring" x1="33.5" y1="58.5" x2="46.5" y2="58.5"/>
+      <line class="fx-ring" x1="33.5" y1="61.5" x2="46.5" y2="61.5"/>
+      <!-- glass + filament -->
+      <path class="bulb-glass" d="M34 65 C34 71 20 76 20 92 A20 20 0 0 0 60 92 C60 76 46 71 46 65 Z"/>
+      <path class="bulb-filament" d="M37.5 65.5 L37.5 85 M42.5 65.5 L42.5 85 M37.5 85 q1.25 -3.5 2.5 0 q1.25 3.5 2.5 0"/>
+    </svg>
+    <span class="pin"></span>
+  </div>
+
+  <!-- The cord: one path, document coordinates, drawn by JS. -->
+  <svg class="cord-svg" aria-hidden="true" focusable="false"><path class="cord-path" d=""/></svg>
+
+  <!-- ── 1 · Hero (lights off) ─────────────────────────────────────────── -->
+  <header class="hero rail">
+    <div class="shell grid3">
+      <div class="c-main">
+        <p class="label">Websites · Apps · AI · Denver, Colorado</p>
+        <h1>Your business is the job. The tech shouldn’t be a second one.</h1>
+        <p class="subtitle">Websites, mobile apps, and AI for small businesses, built with Black and brown business owners in mind. I build it, then teach you to run it.</p>
+        <div class="hero-actions">
+          <a class="btn" href="https://calendly.com/anappidea/30min" target="_blank" rel="noopener noreferrer">Book a free call<span class="sr-only"> (opens in a new tab)</span><span aria-hidden="true">↗</span></a>
+          <a class="link-mono" href="https://www.anappidea.llc/contact">Send me a message →</a>
+        </div>
+      </div>
+      <figure class="portrait c-side">
+        <img src="founder.webp" width="400" height="400" alt="Demaceo Vincent Howard" fetchpriority="high">
+        <figcaption><strong>Demaceo Vincent Howard</strong>Founder · Denver, Colorado</figcaption>
+      </figure>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="scale rail">
+      <div class="shell grid3"><p class="c-main">Free 30-minute call · 40% off for businesses in their first year or under $100k in revenue</p></div>
+    </div>
+
+    <!-- ── 2 · Intro ────────────────────────────────────────────────────── -->
+    <section class="intro rail" aria-label="Introduction">
+      <div class="shell grid3">
+        <p class="c-main">Bring the idea, even a half-formed one. I’m a Black founder in Denver, and I build websites, apps, and AI tools for Black and brown business owners who’ve had the drive all along and not the backing. Then I hand you the keys and the know-how.</p>
+      </div>
+    </section>
+
+    <!-- ── 3 · The problem ──────────────────────────────────────────────── -->
+    <section class="problem rail" aria-labelledby="problem-h">
+      <div class="shell grid3">
+        <div class="c-main body">
+          <h2 id="problem-h">Nobody hands you the second job. You just end up with it.</h2>
+          <p>It’s 10:40pm on a Tuesday. The shop closed hours ago, and you’re on video 4 of a tutorial about DNS records. Tomorrow you open at 7:00am.</p>
+          <p>That’s the second job: the website, the booking system, the analytics, the AI everyone says you need. For Black and brown business owners, it usually lands with less money behind it and fewer people to call. The numbers say so.</p>
+        </div>
+        <ul class="evidence c-side">
+          <li>
+            <span class="ev-num">19%</span>
+            <p class="ev-label">of businesses with 1–9 employees say they have a technology advantage over competitors, versus 44% of those with 50 or more.</p>
+            <p class="ev-src"><a href="https://www.nfib.com/wp-content/uploads/2025/06/2025-NFIB-Technology-Survey-1.pdf">NFIB, Small Business and Technology 2025</a> · Jun 2025</p>
+          </li>
+          <li>
+            <span class="ev-num">0.4%</span>
+            <p class="ev-label">of U.S. startup funding went to startups with a Black founder in 2024.</p>
+            <p class="ev-src"><a href="https://news.crunchbase.com/diversity/startup-funding-share-black-founders-down-cleantech-healthcare/">Crunchbase News</a> · Feb 2025</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── 4 · The turn: the cord ends here ─────────────────────────────── -->
+    <section class="turn rail" aria-labelledby="turn-h">
+      <div class="shell grid3">
+        <div class="c-main">
+          <h2 id="turn-h">Now there’s someone to call.</h2>
+          <p class="turn-line">One person who builds it, fixes it, and teaches you to run it. Even the light switch is yours.</p>
+        </div>
+        <div class="pull">
+          <span class="knob-slot" aria-hidden="true"></span>
+          <button class="knob" id="knob" type="button" aria-pressed="false" aria-label="Pull the cord for the light">
+            <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+              <!-- the bead is drawn at 1× and scaled 1.45× about its tie point -->
+              <g transform="translate(32 8) scale(1.45) translate(-28 -9)">
+                <rect class="cap" x="24.5" y="9" width="7" height="5.5" rx="1.5"/>
+                <path class="bead" d="M28 14 C33.5 14 35.5 20 35.5 29 C35.5 38.5 32.5 44 28 44 C23.5 44 20.5 38.5 20.5 29 C20.5 20 22.5 14 28 14 Z"/>
+                <line class="groove" x1="21.6" y1="22" x2="34.4" y2="22"/>
+                <line class="groove" x1="21.2" y1="37" x2="34.8" y2="37"/>
+              </g>
+            </svg>
+          </button>
+          <p class="pull-prompt" id="pull-prompt" aria-hidden="true">Pull for the light</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 5 · Lit ─────────────────────────────────────────────────────── -->
+    <section class="lit-section ships" aria-labelledby="ships-h">
+      <div class="shell shell--open">
+        <div class="rule-head"><h2 id="ships-h">What <span class="accent-word">ships</span> here</h2></div>
+        <div class="stats">
+          <div class="stat">
+            <span class="label">Products shipped</span>
+            <span class="stat-num">12</span>
+            <span class="stat-desc">iOS · Android · Web · AI-integrated</span>
+          </div>
+          <div class="stat">
+            <span class="label">A business website</span>
+            <span class="stat-num medium">3–5 weeks</span>
+            <span class="stat-desc">First call to launch</span>
+          </div>
+          <div class="stat">
+            <span class="label">AI-integrated builds</span>
+            <span class="stat-num">4</span>
+            <span class="stat-desc">Gemini · ElevenLabs · Firebase</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-label="From the founder">
+      <div class="shell shell--open">
+        <blockquote>
+          <p>“Most ‘AI-powered’ tools are a chat box added on top. I build AI that does real work for your business, and I keep your customers’ information where it belongs.”</p>
+          <cite>Demaceo Vincent Howard, An App Idea LLC</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="lit-section offers" aria-labelledby="offers-h">
+      <div class="shell shell--open">
+        <div class="rule-head"><h2 id="offers-h">Four ways to <span class="accent-word">start</span></h2></div>
+        <p class="offers-lede">Not sure which? That’s what the free call is for.</p>
+        <ol class="offer-list">
+          <li class="offer">
+            <div class="offer-main">
+              <div class="offer-head"><h3 class="offer-title">A Website for Your Business</h3><span class="offer-meta">Ready in 3–5 weeks</span></div>
+              <p class="offer-body">A site that shows up when people search for what you do, works on a phone, and lets customers book, call, or message you. Ready in 3 to 5 weeks. You own it, and I teach you to run it.</p>
+              <span class="offer-price">From $3,700</span>
+            </div>
+            <p class="note" data-anchor="offer:website">Want me to teach you to run it, too? With the Own It teaching package, it’s $4,400.</p>
+          </li>
+          <li class="offer">
+            <div class="offer-main">
+              <div class="offer-head"><h3 class="offer-title">Fix My Existing Site</h3><span class="offer-meta">Rush: 1 business day</span></div>
+              <p class="offer-body">Someone else built your site, and now something’s broken or customers keep getting stuck. I find the problem and fix it, or tighten up the pages that confuse people, without starting over.</p>
+              <span class="offer-price">$92/hour</span>
+            </div>
+            <p class="note" data-anchor="offer:site-fixes">Two-hour minimum, so the smallest bill is $184. Need it within 1 business day? $138/hour.</p>
+          </li>
+          <li class="offer">
+            <div class="offer-main">
+              <div class="offer-head"><h3 class="offer-title">Own It: Learn to Run Your Site</h3><span class="offer-meta">At your pace</span></div>
+              <p class="offer-body">A separate teaching package for after the build. I teach you to manage your own website, read your analytics, check its performance, and put AI to work in your business, so you’re never stuck waiting on someone else to change a price or read your traffic. I bring several years of experience teaching software engineering to a wide range of students, so the sessions start where you are.</p>
+              <span class="offer-price">From $750</span>
+            </div>
+          </li>
+          <li class="offer">
+            <div class="offer-main">
+              <div class="offer-head"><h3 class="offer-title">AI for Your Business</h3><span class="offer-meta">No rebuild needed</span></div>
+              <p class="offer-body">Your website, store, or booking system already works. I add AI to it, like answering common questions, replying to routine messages, and sending booking reminders, and I keep it running. It sits on top of what you already have, so there is no rebuild.</p>
+              <span class="offer-price">From $4,100</span>
+            </div>
+          </li>
+        </ol>
+        <div class="after-offers">
+          <div>
+            <div class="bigger">
+              <span class="label">Building something bigger?</span>
+              <strong>Apps &amp; Custom Software</strong>
+              <span class="price">From $2,800 · 7–13 weeks</span>
+            </div>
+            <p class="services-more"><a href="https://www.anappidea.llc/services">See what’s included, and how payment and ownership work →</a></p>
+          </div>
+          <div class="notes-col">
+            <p class="note" data-anchor="offers:pricing">First year in business, or under $100k a year? Fixed-price projects are 40% off. Hourly work isn’t.</p>
+            <p class="note" data-anchor="offers:ownership">Your domain, hosting, code, and content are in your name from day one. If we part ways, you keep it all.</p>
+            <p class="note" data-anchor="offers:running-costs">Hosting is paid to the provider, usually about $20 a month. There’s no required monthly fee to me.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lit-section conversation" aria-labelledby="talk-h">
+      <div class="shell shell--open">
+        <div class="rule-head"><h2 id="talk-h">Start a <span class="accent-word">conversation</span></h2></div>
+        <div class="call-layout">
+          <div class="call">
+            <h3>A free 30-minute call</h3>
+            <p class="label">On the call</p>
+            <ol class="steps">
+              <li>You tell me about your business and what is not working.</li>
+              <li>I tell you honestly whether I am the right fit, and what it would cost.</li>
+              <li>You leave with a clear next step, even if it is not with me.</li>
+            </ol>
+            <div class="call-foot">
+              <p>Nothing to prepare. Half an idea is plenty.</p>
+              <a class="btn btn-call" href="https://calendly.com/anappidea/30min" target="_blank" rel="noopener noreferrer">Book a free call<span class="sr-only"> (opens in a new tab)</span><span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+          <p class="note" data-anchor="call-card">If we go ahead, you get the full price in writing before you pay anything. Fixed-price work is 50% to start, 50% at launch.</p>
+        </div>
+        <p class="write">Prefer to write? Send a few sentences to <a href="mailto:hello@anappidea.llc">hello@anappidea.llc</a>, or <a href="https://www.anappidea.llc/contact">use the form</a>. I read everything and reply within 1–2 business days.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="shell shell--open"><p>An App Idea LLC · Denver, Colorado · We’ll leave the light on.</p></div>
+  </footer>
+</div>
+
+<!-- Prototype controls: for judging the idea only, not part of the design. -->
+<aside class="proto" aria-label="Prototype controls">
+  <details id="proto-panel">
+    <summary>Prototype</summary>
+    <div class="proto-body">
+      <fieldset>
+        <legend>Bulb</legend>
+        <div class="seg">
+          <label><input type="radio" name="bulb" value="auto" checked><span>Auto</span></label>
+          <label><input type="radio" name="bulb" value="warm"><span>Warm</span></label>
+          <label><input type="radio" name="bulb" value="uv"><span>UV</span></label>
+        </div>
+      </fieldset>
+      <button type="button" id="lights-off">Lights off</button>
+    </div>
+  </details>
+</aside>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 1 · SETUP + COPY
+     ═════════════════════════════════════════════════════════════════════ */
+  const root = document.documentElement;
+  const page = document.querySelector('.page');
+  const pinEl = document.querySelector('.fixture .pin');
+  const slotEl = document.querySelector('.knob-slot');
+  const knob = document.getElementById('knob');
+  const cordSvg = document.querySelector('.cord-svg');
+  const cordPath = cordSvg.querySelector('path');
+  const promptEl = document.getElementById('pull-prompt');
+
+  // Approved copy (copy brief). The knob's accessible name is fixed in the
+  // markup ("Pull the cord for the light"); aria-pressed alone carries the
+  // on/off state, so screen readers don't hear the state twice.
+  const COPY = {
+    promptWarm: 'Pull for the light',
+    promptUV: 'Pull to read the fine print',
+    promptOff: 'Pull again, lights out',
+  };
+
+  const mqDark = matchMedia('(prefers-color-scheme: dark)');
+  const mqReduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const mqFine = matchMedia('(pointer: fine)');
+  let reduce = mqReduce.matches;
+
+  let pref = 'auto';            // prototype switch: auto | warm | uv
+  let lit = false;              // never persisted (see the <head> note)
+
+  const bulb = () => (pref === 'auto' ? (mqDark.matches ? 'uv' : 'warm') : pref);
+
+  function updateCopy() {
+    promptEl.textContent = lit ? COPY.promptOff : (bulb() === 'uv' ? COPY.promptUV : COPY.promptWarm);
+    knob.setAttribute('aria-pressed', String(lit));
+  }
+  function applyBulb() {
+    root.setAttribute('data-bulb', bulb());
+    updateCopy();
+  }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 2 · LIGHTING
+     Warm: the filament glows first (~160ms, one tiny flicker), then the
+     room comes up over ~420ms (the ground jumps early and the ink flips in
+     that same frame; see the mix curves in CSS 1). UV: a fluorescent-tube stutter (3 quick
+     flickers, <300ms), then the indigo ground; the fine print follows on
+     --reveal. Off reverses in ~200ms. Reduced motion: a 180ms crossfade.
+     ═════════════════════════════════════════════════════════════════════ */
+  let timers = [];
+  const later = (ms, fn) => timers.push(setTimeout(fn, ms));
+  function clearSequence() {
+    timers.forEach(clearTimeout);
+    timers = [];
+    root.classList.remove('no-trans', 'fil-dip');
+    root.style.removeProperty('--lit');
+    root.style.removeProperty('--fil');
+  }
+
+  function setLit(on, { haptic = true } = {}) {
+    if (on === lit) return;
+    lit = on;
+    clearSequence();
+    updateCopy();
+    if (haptic && navigator.vibrate) { try { navigator.vibrate(12); } catch (e) {} }
+
+    if (!on) {
+      root.classList.remove('fil-on');
+      root.classList.add('lights-off');
+      return;
+    }
+    if (reduce) {
+      root.classList.add('fil-on');
+      root.classList.remove('lights-off');
+      return;
+    }
+    if (bulb() === 'warm') {
+      root.classList.add('fil-on');                       // filament warms up
+      later(70, () => root.classList.add('fil-dip'));     // one tiny flicker
+      later(110, () => root.classList.remove('fil-dip'));
+      later(160, () => root.classList.remove('lights-off')); // then the room
+    } else {
+      root.classList.add('no-trans');
+      const steps = [[0, 0.7], [45, 0.05], [100, 0.85], [140, 0.12], [210, 1]];
+      for (const [t, v] of steps) later(t, () => {
+        root.style.setProperty('--lit', v);
+        root.style.setProperty('--fil', v);
+      });
+      later(250, () => {
+        root.classList.add('fil-on');
+        root.classList.remove('lights-off', 'no-trans');  // --reveal now fades in
+        root.style.removeProperty('--lit');
+        root.style.removeProperty('--fil');
+      });
+    }
+  }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 3 · ROPE PHYSICS
+     Verlet rope, one node per ~32px, pinned at the switch, knob node
+     heavier. Each step: integrate (gravity + damping + forces), 14
+     distance-constraint passes, a long-range tether (keeps a 2000px+ rope
+     from stretching under its own weight), then a soft sideways wall that
+     grows with depth so the cord can never swing over text or the bulb.
+     Sideways motion is damped less than vertical, so a sway swings back
+     past plumb once or twice before it settles.
+     ═════════════════════════════════════════════════════════════════════ */
+  const ROPE = {
+    spacing: 32,       // px per segment (spec: 28–40)
+    iterations: 14,    // constraint passes (spec: 10+)
+    gravity: 4800,     // px/s²: a ~1300px cord swings in ~2.7s, not 4s
+    dampX: 0.99,       // per 1/120s step: sideways swings carry past rest
+    dampY: 0.978,      // vertical: heavy, no bounce along the cord
+    knobInvMass: 0.3,  // knob ≈ 3.3× a cord node
+    step: 1 / 120,
+  };
+  let n = 0, seg = 0, L = 0, maxSway = 30;
+  // The pull stretches the whole cord. After a release `stretch` relaxes to
+  // 1 on a spring; `stretchMin` caps how far it rebounds (set on release),
+  // and `sPrev` is the segment length the previous step used.
+  let stretch = 1, stretchV = 0, stretchMin = 1, sPrev = 0;
+  let X, Y, PX, PY, FX, INV;
+  const pin = { x: 0, y: 0 };
+  const rest = { x: 0, y: 0 };
+  let kin = null;            // kinematic target for the knob node (drag / tug)
+
+  function buildRope() {
+    n = Math.max(6, Math.round(L / ROPE.spacing) + 1);
+    seg = L / (n - 1);
+    X = new Float64Array(n); Y = new Float64Array(n);
+    PX = new Float64Array(n); PY = new Float64Array(n);
+    FX = new Float64Array(n); INV = new Float64Array(n);
+    stretch = 1; stretchV = 0; stretchMin = 1; sPrev = 0;
+    for (let i = 0; i < n; i++) {
+      X[i] = PX[i] = pin.x;
+      Y[i] = PY[i] = pin.y + i * seg;
+      INV[i] = i === 0 ? 0 : (i === n - 1 ? ROPE.knobInvMass : 1);
+    }
+  }
+
+  // Spring-back: ω ≈ 22/s (period ~280ms), damping ratio ≈ 0.56, so the
+  // knob bobs up past rest once, by ~12% of the pull (≈14px after a full
+  // pull, ≈5px after a 45px one), and settles. REBOUND caps the bob at 15%.
+  const STRETCH_K = 500, STRETCH_C = 25, REBOUND = 0.15;
+  // Sideways room at depth d below the pin: none at the switch, full
+  // --sway further down (so the swing clears the bulb glass).
+  const swayLimit = (d) => Math.min(maxSway, Math.max(0, d) * 0.1);
+
+  function physicsStep(dt) {
+    const g = ROPE.gravity * dt * dt;
+    const dt2 = dt * dt;
+    const last = n - 1;
+    for (let i = 1; i < n; i++) {
+      if (i === last && kin) continue;
+      const vx = (X[i] - PX[i]) * ROPE.dampX;
+      const vy = (Y[i] - PY[i]) * ROPE.dampY;
+      PX[i] = X[i]; PY[i] = Y[i];
+      X[i] += vx + FX[i] * dt2;
+      Y[i] += vy + g;
+      FX[i] = 0;
+    }
+    if (kin) {
+      PX[last] = X[last]; PY[last] = Y[last];
+      X[last] = kin.x; Y[last] = kin.y;
+      stretch = Math.max(1, Math.hypot(kin.x - pin.x, kin.y - pin.y) / L);
+      stretchV = 0;
+    } else if (stretch !== 1 || stretchV) {
+      // Spring-back (constants above): the knob rises a little past rest
+      // and settles. A hard snap would fling it up the page.
+      stretchV += (-STRETCH_K * (stretch - 1) - STRETCH_C * stretchV) * dt;
+      stretch += stretchV * dt;
+      if (stretch < stretchMin) { stretch = stretchMin; stretchV = Math.max(0, stretchV); }
+      if (Math.abs(stretch - 1) < 1e-5 && Math.abs(stretchV) < 1e-4) { stretch = 1; stretchV = 0; }
+    }
+    const s = seg * stretch;
+    // Stretch belongs to the whole cord, so when it changes every node moves
+    // with it, previous position included. Otherwise the constraints would
+    // turn the shrink into upward velocity and the cord would recoil like a
+    // yo-yo instead of following the spring.
+    if (sPrev && s !== sPrev) {
+      const grow = s / sPrev - 1;
+      for (let i = 1; i < n; i++) {
+        if (i === last && kin) continue;
+        const dy = (Y[i] - pin.y) * grow;
+        Y[i] += dy; PY[i] += dy;
+      }
+    }
+    sPrev = s;
+    for (let k = 0; k < ROPE.iterations; k++) {
+      for (let i = 0; i < last; i++) {
+        const j = i + 1;
+        const w1 = INV[i], w2 = (j === last && kin) ? 0 : INV[j];
+        const w = w1 + w2;
+        if (!w) continue;
+        const dx = X[j] - X[i], dy = Y[j] - Y[i];
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1e-6;
+        const diff = (dist - s) / dist / w;
+        X[i] += dx * diff * w1; Y[i] += dy * diff * w1;
+        X[j] -= dx * diff * w2; Y[j] -= dy * diff * w2;
+      }
+    }
+    // Long-range tether + soft sideways wall.
+    for (let i = 1; i < n; i++) {
+      if (i === last && kin) continue;
+      const dx = X[i] - pin.x, dy = Y[i] - pin.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const max = i * s;
+      if (dist > max) { X[i] = pin.x + dx * max / dist; Y[i] = pin.y + dy * max / dist; }
+      // Past the limit the wall pushes back like a spring and bleeds off the
+      // outward speed, so the cord turns around instead of sticking to it.
+      // A hard stop a little further out keeps it clear of text and glass.
+      const lim = swayLimit(Y[i] - pin.y);
+      const off = X[i] - pin.x;
+      const over = off > lim ? off - lim : (off < -lim ? off + lim : 0);
+      if (over) {
+        X[i] -= over * 0.5;
+        const v = X[i] - PX[i];
+        if (v * over > 0) PX[i] = X[i] - v * 0.5;
+        const hard = lim * 1.2 + 2;
+        if (Math.abs(X[i] - pin.x) > hard) { X[i] = pin.x + Math.sign(over) * hard; PX[i] = X[i]; }
+      }
+    }
+  }
+
+  function energy() {
+    let e = 0;
+    for (let i = 1; i < n; i++) { const vx = X[i] - PX[i], vy = Y[i] - PY[i]; e += vx * vx + vy * vy; }
+    return e;
+  }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 4 · RENDER
+     Catmull-Rom through the nodes → one cubic-Bézier path. The knob is
+     a <button> moved with a transform and tilted to the last segment.
+     ═════════════════════════════════════════════════════════════════════ */
+  // Where the cord ties onto the knob, and the bead centre, in the button's
+  // own 64×64 box (matches .knob's transform-origin and its SVG).
+  const KNOB_TIE_X = 32, KNOB_TIE_Y = 8, KNOB_BEAD_Y = 37;
+  let lastD = '';
+  function render(xs, ys) {
+    const m = xs.length;
+    let d = 'M' + xs[0].toFixed(1) + ',' + ys[0].toFixed(1);
+    for (let i = 0; i < m - 1; i++) {
+      const i0 = i > 0 ? i - 1 : 0, i3 = i + 2 < m ? i + 2 : m - 1;
+      const c1x = xs[i] + (xs[i + 1] - xs[i0]) / 6, c1y = ys[i] + (ys[i + 1] - ys[i0]) / 6;
+      const c2x = xs[i + 1] - (xs[i3] - xs[i]) / 6, c2y = ys[i + 1] - (ys[i3] - ys[i]) / 6;
+      d += 'C' + c1x.toFixed(1) + ',' + c1y.toFixed(1) + ' ' + c2x.toFixed(1) + ',' + c2y.toFixed(1) + ' ' + xs[i + 1].toFixed(1) + ',' + ys[i + 1].toFixed(1);
+    }
+    if (d !== lastD) { cordPath.setAttribute('d', d); lastD = d; }
+    const kx = xs[m - 1], ky = ys[m - 1];
+    const ang = Math.atan2(kx - xs[m - 2], ky - ys[m - 2]) * -180 / Math.PI;
+    knob.style.transform = `translate3d(${(kx - KNOB_TIE_X).toFixed(1)}px, ${(ky - KNOB_TIE_Y).toFixed(1)}px, 0) rotate(${ang.toFixed(2)}deg)`;
+  }
+  // Reduced motion / before the rope exists: a straight, still line.
+  function renderStraight(tx = rest.x, ty = rest.y) {
+    render([pin.x, (pin.x + tx) / 2, tx], [pin.y, (pin.y + ty) / 2, ty]);
+  }
+
+  // Idle drift: when the rope has settled the sim sleeps and the cord just
+  // breathes (a closed-form sine, ~1.5px at the knob), rendered at ~15fps.
+  let asleep = false, sleptAt = 0, lastIdle = 0;
+  let DX, DY;   // what was last drawn while asleep (to wake seamlessly)
+  function renderDrift(now) {
+    const t = now / 1000;
+    const ramp = Math.min(1, (now - sleptAt) / 1200);
+    const amp = (maxSway > 20 ? 1.6 : 1.1) * ramp;
+    for (let i = 0; i < n; i++) {
+      const s = i / (n - 1);
+      X[i] += (pin.x - X[i]) * 0.03;      // a slow lean eases back to plumb
+      DX[i] = X[i] + amp * s * (Math.sin(t * 0.9 + s * 2.4) * 0.7 + Math.sin(t * 0.37 + 1.3) * 0.3);
+      DY[i] = Y[i];
+    }
+    render(DX, DY);
+  }
+  function sleep(now) {
+    asleep = true; sleptAt = now;
+    DX = Float64Array.from(X); DY = Float64Array.from(Y);
+  }
+  // Pick the sim up from exactly what the drift last drew.
+  function wakeRope() {
+    asleep = false;
+    for (let i = 1; i < n; i++) { X[i] = PX[i] = DX[i]; }
+  }
+  function wake() {
+    if (!asleep) return;
+    wakeRope();
+    ensureLoop();
+  }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 5 · PULL INTERACTION
+     pointerdown captures; the knob node follows the pointer (down ≤120px,
+     sideways a little); releasing past 40px, or a fast downward flick,
+     toggles. A plain tap / click / Enter / Space plays a short tug and
+     toggles. The cord springs back with a little overshoot.
+     ═════════════════════════════════════════════════════════════════════ */
+  let drag = null, tug = null, suppressClick = false;
+  const PULL_MAX = 120, PULL_TOGGLE = 40, TUG_MS = 120, TUG_DEPTH = 46;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+  function toggleFromUser() { setLit(!lit); }
+
+  function release() {
+    kin = null;
+    // The stretch spring in physicsStep does the spring-back; this caps
+    // how far past rest it may rebound, in proportion to the pull.
+    stretchMin = 1 - REBOUND * (stretch - 1);
+    if (reduce) { renderStraight(); return; }
+    ensureLoop();
+  }
+
+  // A tap / click / key plays a short tug, then toggles. Its timing must
+  // not depend on the frame loop (keyboard users, throttled tabs), so it
+  // has its own timer, which "Lights off" can cancel.
+  let tugTimer = 0;
+  function pullOnce() {
+    if (tugTimer) return;                      // already tugging
+    if (reduce || !running()) { toggleFromUser(); return; }
+    wake();
+    tug = { t0: performance.now() };
+    tugTimer = setTimeout(() => { tugTimer = 0; tug = null; release(); toggleFromUser(); }, TUG_MS);
+  }
+  function cancelTug() {
+    if (!tugTimer) return;
+    clearTimeout(tugTimer);
+    tugTimer = 0; tug = null;
+    release();
+  }
+
+  // Release speed from the last ~80ms of samples (distance / time). A
+  // running average from 0 never caught up within a short real-world tug.
+  const FLICK_WINDOW = 80, FLICK_SPEED = 0.5, FLICK_MIN = 12;   // ms, px/ms, px
+  function releaseSpeed(d, e) {
+    let t0 = e.timeStamp, y0 = e.clientY;
+    for (let k = d.samples.length - 1; k >= 0; k--) {
+      const [t, y] = d.samples[k];
+      if (e.timeStamp - t > FLICK_WINDOW) break;
+      t0 = t; y0 = y;
+    }
+    return e.timeStamp > t0 ? (e.clientY - y0) / (e.timeStamp - t0) : 0;
+  }
+
+  knob.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    try { knob.setPointerCapture(e.pointerId); } catch (err) {}
+    drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, dy: 0, moved: 0, samples: [[e.timeStamp, e.clientY]] };
+    wake();
+    kin = { x: rest.x, y: rest.y };
+  });
+  knob.addEventListener('pointermove', (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+    drag.moved = Math.max(drag.moved, Math.hypot(dx, dy));
+    // Down up to 120px (a little resistance past 90), barely up, a little sideways.
+    const py = dy > 0 ? Math.min(PULL_MAX, dy < 90 ? dy : 90 + (dy - 90) * 0.4) : Math.max(-12, dy * 0.3);
+    const px = clamp(dx * 0.5, -22, 22);
+    kin = { x: rest.x + px, y: rest.y + py };
+    drag.dy = py;
+    drag.samples.push([e.timeStamp, e.clientY]);
+    if (drag.samples.length > 24) drag.samples.shift();
+    if (reduce) renderStraight(kin.x, kin.y);
+  });
+  function endDrag(e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    const d = drag;
+    drag = null;
+    try { knob.releasePointerCapture(e.pointerId); } catch (err) {}
+    suppressClick = true;                       // the click that follows is ours
+    setTimeout(() => { suppressClick = false; }, 450);
+    if (e.type === 'pointercancel') { release(); return; }
+    if (d.moved < 6) { kin = null; pullOnce(); return; }           // a tap
+    const flick = d.dy >= FLICK_MIN && releaseSpeed(d, e) > FLICK_SPEED;
+    release();
+    if (d.dy >= PULL_TOGGLE || flick) toggleFromUser();
+  }
+  knob.addEventListener('pointerup', endDrag);
+  knob.addEventListener('pointercancel', endDrag);
+  // Keyboard (Enter / Space) and assistive tech arrive as a plain click.
+  knob.addEventListener('click', () => {
+    if (suppressClick) { suppressClick = false; return; }
+    pullOnce();
+  });
+
+  /* Fine pointers only: brushing through the cord nudges it. It fires once
+     per crossing: when the pointer's path since the last event passes over
+     the cord (so a fast swipe that jumps it between two events still
+     counts). The push grows with the swipe's speed (px per event) and is
+     capped, so a quick swipe swings it ~6-12px and never out of its lane. */
+  const NUDGE_GAIN = 0.06, NUDGE_MAX = 1.25; // px per 1/120s step
+  let lastPX = null;
+  window.addEventListener('pointermove', (e) => {
+    if (!mqFine.matches || drag || reduce || !visible || !n) { lastPX = e.clientX; return; }
+    const vx = lastPX == null ? 0 : e.clientX - lastPX;
+    lastPX = e.clientX;
+    if (!vx) return;
+    const x = e.clientX - pageLeft, y = e.clientY + scrollYNow - pageTop;
+    if (y < pin.y + 40 || y > rest.y) return;
+    const i = clamp(Math.round((y - pin.y) / seg), 1, n - 1);
+    const xs = asleep ? DX : X;
+    if ((x - vx - xs[i]) * (x - xs[i]) > 0) return;    // did not cross it
+    wake();
+    const imp = clamp(vx * NUDGE_GAIN, -NUDGE_MAX, NUDGE_MAX);
+    for (let j = Math.max(1, i - 3); j <= Math.min(n - 1, i + 3); j++) PX[j] -= imp * (1 - Math.abs(j - i) * 0.25);
+  }, { passive: true });
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 6 · LOOP + MEASUREMENT
+     One rAF loop, only while the cord is near the viewport and the tab
+     is visible. Scroll is read in a passive listener and cached. The
+     loop never reads layout; measure() does, on resize / font load.
+     ═════════════════════════════════════════════════════════════════════ */
+  let raf = 0, lastT = 0, acc = 0, calm = 0;
+  let visible = false, built = false;
+  let scrollYNow = window.scrollY, lastScrollY = scrollYNow;
+  let vs = 0, vsPrev = 0;                      // smoothed scroll velocity, px/s
+  let vh = window.innerHeight, pageTop = 0, pageLeft = 0;
+
+  const running = () => visible && !document.hidden && !reduce && built;
+  // The only places a frame is requested. `raf` is non-zero while one is
+  // pending, so there is never more than one chain of frames.
+  function ensureLoop() {
+    if (running() && !raf) { lastT = performance.now(); raf = requestAnimationFrame(frame); }
+  }
+  const nextFrame = () => { if (!raf) raf = requestAnimationFrame(frame); };
+
+  /* Scroll → sway. The page moving is the room moving: a lagged, clamped
+     sideways push, mostly on the part of the cord you can see, that leans
+     while you scroll and swings back past rest when you stop. */
+  function scrollForces(dt, now) {
+    const jump = scrollYNow - lastScrollY;
+    lastScrollY = scrollYNow;
+    // A jump of more than a screen in one frame is an anchor link / restore,
+    // not a hand on the page: ignore it rather than whip the cord.
+    const raw = Math.abs(jump) > vh ? 0 : clamp(jump / Math.max(dt, 1e-3), -4000, 4000);
+    vs += (raw - vs) * (1 - Math.exp(-dt / 0.12));
+    const accel = (vs - vsPrev) / Math.max(dt, 1e-3);
+    vsPrev = vs;
+    if (Math.abs(vs) < 2 && Math.abs(accel) < 20) return 0;
+    const room = Math.max(0.5, maxSway / 30);  // narrower gutter, gentler push
+    const F = clamp(vs * 0.22 + accel * 0.015, -700, 700) * room;
+    const viewTop = scrollYNow - pageTop, mid = viewTop + vh * 0.5, span = vh * 0.75;
+    const t = now / 1000;
+    for (let i = 1; i < n; i++) {
+      const u = (Y[i] - mid) / span;
+      const w = 0.25 + 0.75 * Math.exp(-u * u);
+      FX[i] += F * w * (1 + 0.25 * Math.sin(i * 0.35 + t * 1.7));
+    }
+    return Math.abs(vs);
+  }
+
+  function frame(now) {
+    raf = 0;
+    if (!running()) return;
+    const dt = Math.min(0.05, (now - lastT) / 1000);
+    lastT = now;
+
+    if (asleep) {
+      // Cheap check for scroll motion while asleep.
+      const moved = Math.abs(scrollYNow - lastScrollY) > 0.5;
+      if (moved || kin || tug) { wakeRope(); }     // carry on in this frame
+      else {
+        lastScrollY = scrollYNow; vs = vsPrev = 0;
+        if (now - lastIdle > 66) { renderDrift(now); lastIdle = now; }
+        nextFrame();
+        return;
+      }
+    }
+
+    if (tug) {
+      const p = Math.min(1, (now - tug.t0) / TUG_MS);
+      kin = { x: rest.x, y: rest.y + TUG_DEPTH * (1 - (1 - p) * (1 - p)) };
+    }
+    const speed = scrollForces(dt, now);
+    acc += dt;
+    let steps = 0;
+    while (acc >= ROPE.step && steps < 6) { physicsStep(ROPE.step); acc -= ROPE.step; steps++; }
+    if (steps === 6) acc = 0;
+    render(X, Y);
+
+    if (!kin && !tug && stretch === 1 && speed < 4 && energy() < n * 0.0004) calm += dt; else calm = 0;
+    if (calm > 0.6) { calm = 0; sleep(now); }
+    nextFrame();
+  }
+
+  function measure() {
+    const pr = page.getBoundingClientRect();
+    const p = pinEl.getBoundingClientRect();
+    const s = slotEl.getBoundingClientRect();
+    pageLeft = pr.left;
+    pageTop = pr.top + window.scrollY;
+    vh = window.innerHeight;
+    maxSway = parseFloat(getComputedStyle(root).getPropertyValue('--sway')) || 20;
+    const nx = p.left - pr.left, ny = p.top - pr.top;
+    const restY = s.top + s.height / 2 - pr.top - (KNOB_BEAD_Y - KNOB_TIE_Y);   // bead centre on the slot
+    const newL = restY - ny;
+    cordSvg.style.height = Math.ceil(restY + PULL_MAX + 60) + 'px';
+    const changed = !built || Math.abs(nx - pin.x) > 0.5 || Math.abs(ny - pin.y) > 0.5 || Math.abs(newL - L) > 0.5;
+    pin.x = nx; pin.y = ny; rest.x = nx; rest.y = restY; L = newL;
+    if (changed && L > 40) {
+      buildRope();
+      built = true;
+      asleep = false; kin = null; calm = 0;
+    }
+    if (reduce) renderStraight(); else { render(X, Y); ensureLoop(); }
+  }
+
+  window.addEventListener('scroll', () => { scrollYNow = window.scrollY; if (asleep) ensureLoop(); }, { passive: true });
+
+  let measureQueued = false;
+  const queueMeasure = () => {
+    if (measureQueued) return;
+    measureQueued = true;
+    requestAnimationFrame(() => { measureQueued = false; measure(); });
+  };
+  new ResizeObserver(queueMeasure).observe(page);
+  window.addEventListener('resize', queueMeasure, { passive: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(queueMeasure);
+
+  new IntersectionObserver((entries) => {
+    visible = entries[0].isIntersecting;
+    if (visible) { lastScrollY = scrollYNow; ensureLoop(); }
+  }, { rootMargin: '200px 0px' }).observe(cordSvg);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) ensureLoop(); });
+
+  mqReduce.addEventListener('change', () => {
+    reduce = mqReduce.matches;
+    if (reduce) { kin = null; tug = null; renderStraight(); }
+    else { buildRope(); asleep = false; render(X, Y); ensureLoop(); }
+  });
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 7 · PROTOTYPE CONTROLS
+     Bulb: Auto (follows prefers-color-scheme live) · Warm · UV.
+     "Lights off" resets the room so the pull can be tried again.
+     ═════════════════════════════════════════════════════════════════════ */
+  // Starts collapsed (a small chip) so it never sits on the copy; open it
+  // to switch bulbs or reset.
+  document.querySelectorAll('input[name="bulb"]').forEach((r) => {
+    r.addEventListener('change', () => { if (r.checked) { pref = r.value; applyBulb(); } });
+  });
+  // A tug in flight would turn the light back on after the reset: cancel it.
+  document.getElementById('lights-off').addEventListener('click', () => { cancelTug(); setLit(false, { haptic: false }); });
+  mqDark.addEventListener('change', () => { if (pref === 'auto') applyBulb(); });
+
+  applyBulb();
+  measure();
+})();
+</script>
+</body>
+</html>
