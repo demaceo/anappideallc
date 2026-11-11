@@ -8,7 +8,7 @@ sources:
   - code: src/lib/seo.ts
   - code: src/components/FooterNav/FooterNav.tsx
   - code: scripts/prerender.mjs
-verified_at: 4b2da50
+verified_at: 893f69f
 ---
 
 # Adding a page
