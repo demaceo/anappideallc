@@ -88,6 +88,14 @@ export const SITE = {
       title: 'What it costs to keep running',
       body: 'Hosting is paid straight to the provider, not to me: usually about $20 a month, plus around $15 to $20 a year for your domain. I confirm the exact numbers in your quote. There is no required monthly fee to me.',
     },
+    provide: {
+      title: 'What I need from you',
+      body: 'Your logo, photos, and the basics about your business: services, hours, and how customers reach you. No logo or photos yet? I can create them, and I will tell you the cost up front. You review the site before it goes live.',
+    },
+    appStores: {
+      title: 'App store fees',
+      body: 'Publishing an app means paying the stores directly, in your name: Apple charges $99 a year and Google Play charges a one-time $25. Those go to Apple and Google, not to me.',
+    },
     afterLaunch: {
       title: 'After it launches',
       body: '30 days of free bug fixes. If something does not work the way we agreed, I fix it at no charge. After that, fixes are $92/hour with a 2-hour minimum.',

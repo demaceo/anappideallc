@@ -118,7 +118,7 @@ export const STORY: StoryChapter[] = [
     heading: "Your business is the job. Let's take the second one off your plate.",
     body: [
       'Remember that Tuesday night tutorial? This is where it ends.',
-      "The first consultation is free, and pricing works on a sliding scale based on your business's size and stage. Bring what you've got. Everyone's welcome. And if you're a Black or brown business owner who's been told to figure the tech out alone, this studio was built for you.",
+      "The first call is free, and pricing works on a sliding scale based on your business's size and stage. Bring what you've got. Everyone's welcome. And if you're a Black or brown business owner who's been told to figure the tech out alone, this studio was built for you.",
     ],
   },
 ]

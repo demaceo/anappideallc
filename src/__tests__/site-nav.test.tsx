@@ -125,7 +125,7 @@ describe('Back-home button — pinned in the site bar', () => {
  * prose links mid-page.
  */
 describe('FooterNav — full site index (audit P2)', () => {
-  const EXPECTED = ['About', 'Work', 'Services', 'Process', 'Why not AI', 'Support', 'Legal', 'Contact']
+  const EXPECTED = ['About', 'Work', 'Services', 'Process', 'Why not AI', 'Support', 'Privacy', 'Legal', 'Contact']
 
   it.each(['/', '/about', '/work', '/services', '/process', '/contact', '/support', '/why-not-ai', '/legal'])(
     'renders the full link set on %s',

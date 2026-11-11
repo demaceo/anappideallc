@@ -38,7 +38,7 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/process',
   },
   '/contact': {
-    title: `Hire a Mobile App Developer | ${SITE.name}, Denver, CO`,
+    title: `Contact: Book a Free Call | ${SITE.name}, Denver, CO`,
     description:
       'Need a website, app, or AI for your small business? Free 30-minute call, sliding-scale pricing, and a reply within 1–2 business days. Everyone welcome.',
     path: '/contact',
@@ -54,6 +54,12 @@ export const META: Record<string, { title: string; description: string; path: st
     description:
       'Support for every app by An App Idea LLC. Report a bug, delete your data, manage a subscription, or ask a question. Answered directly by the builder, within 1–2 business days. Privacy and terms for each app.',
     path: '/support',
+  },
+  '/privacy': {
+    title: `Website Privacy Policy | ${SITE.name}`,
+    description:
+      'What An App Idea LLC collects when you visit anappidea.llc or send a message through the contact form, how it is used, and how to have it deleted.',
+    path: '/privacy',
   },
   '/legal': {
     title: `Legal: Privacy Policy & Terms for Every App | ${SITE.name}`,
@@ -429,7 +435,7 @@ function buildPageGraph(route: string): object[] {
               name: 'Do you work remotely?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Yes. The studio is based in Denver, CO, but works with founders remotely across US, UK, and international time zones without friction.',
+                text: 'Yes. The studio is based in Denver, CO. Local business owners across the Denver metro can meet in person, and founders anywhere can work with the studio remotely.',
               },
             },
           ],
@@ -609,7 +615,7 @@ function buildPageGraph(route: string): object[] {
               name: 'I already started my app with AI: is that wasted?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Not at all. An AI draft is a great starting point and often clarifies what you want. Bring it to a free consultation and we\'ll map the path from your current draft to a launched, secure, maintainable product.',
+                text: 'Not at all. An AI draft is a great starting point and often clarifies what you want. Bring it to a free 30-minute call and we\'ll map the path from your current draft to a launched, secure, maintainable product.',
               },
             },
             {

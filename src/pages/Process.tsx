@@ -30,7 +30,7 @@ export default function Process() {
 
       <PageHeader>
         <header className="masthead">
-          <p className="overline">An App Idea LLC · How we work</p>
+          <p className="overline">An App Idea LLC · How it works</p>
           <h1>Process</h1>
           <p className="date-line">Talk it through → See it → Build it → Go live → Hand it over</p>
         </header>
@@ -124,7 +124,7 @@ export default function Process() {
 
         <NextStep
           heading="Step zero is a free call"
-          blurb="Before Step 1 starts, we talk it through: what you need, who it's for, and whether we're a fit."
+          blurb="Before Step 1 starts, we talk it through: what you need, who it's for, and whether I'm the right fit."
         />
 
         <StoryNext id="handoff" />
