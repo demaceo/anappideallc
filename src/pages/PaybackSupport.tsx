@@ -52,7 +52,7 @@ export default function PaybackSupport() {
 
       <PageHeader>
         <header className="masthead">
-          <p className="overline">Support · Ôwn (Payback)</p>
+          <p className="overline">Support · Payback Ôwn</p>
           <h1>Help with <em>Ôwn</em></h1>
           <p className="subtitle">
             Ôwn turns the data export you can already request from Google or
@@ -225,7 +225,7 @@ export default function PaybackSupport() {
 
         <div className="policy-list">
           <div className="policy-row">
-            <span className="policy-app">Ôwn (Payback)</span>
+            <span className="policy-app">Payback Ôwn</span>
             <span className="policy-links">
               <Link to="/legal/payback/privacy">Privacy Policy</Link>
               <Link to="/legal/payback/terms">Terms of Service</Link>

@@ -23,7 +23,7 @@ export const legalApps: LegalApp[] = [
   },
   {
     slug: 'payback',
-    name: 'Ôwn (Payback)',
+    name: 'Payback Ôwn',
     blurb: 'Local-first consumer insights, built so your data stays on your device.',
     privacy: '/legal/payback/privacy',
     terms: '/legal/payback/terms',

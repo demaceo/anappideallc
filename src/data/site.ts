@@ -96,6 +96,14 @@ export const SITE = {
       title: 'App store fees',
       body: 'Publishing an app means paying the stores directly, in your name: Apple charges $99 a year and Google Play charges a one-time $25. Those go to Apple and Google, not to me.',
     },
+    revisions: {
+      title: 'Revisions',
+      body: 'Two rounds of revisions are included in every project. You see the work, tell me what to change, and I change it, twice. Need more? I quote extra rounds before doing any of that work.',
+    },
+    cancellation: {
+      title: 'If you need to cancel',
+      body: 'The deposit is non-refundable once work starts, because it holds your spot and pays for the first stage. If you cancel partway through, you pay only for the milestones already completed, and you keep that work.',
+    },
     afterLaunch: {
       title: 'After it launches',
       body: '30 days of free bug fixes. If something does not work the way we agreed, I fix it at no charge. After that, fixes are $92/hour with a 2-hour minimum.',
@@ -105,12 +113,12 @@ export const SITE = {
   // before booking. Renders nothing while `range` is blank — fill in a real
   // range (e.g. 'MVPs typically run $X–$Y'); never ship a placeholder number.
   pricing: {
-    range: 'Sliding scale: 40% off fixed-price projects for businesses in their first year or under $100k in annual revenue.',
+    range: 'Sliding scale: 25% off fixed-price projects for businesses in their first year or under $100k in annual revenue.',
     // Optional sentence after the range, e.g. how quotes are scoped.
     note: 'Hourly work is $92/hour and isn’t discounted.',
     // One line under the Home hero buttons: the two facts that answer "can I
     // afford to ask?" before anyone scrolls.
-    heroLine: 'Free 30-minute call · 40% off for businesses in their first year or under $100k in revenue',
+    heroLine: 'Free 30-minute call · 25% off for businesses in their first year or under $100k in revenue',
   },
 } as const
 

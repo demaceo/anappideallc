@@ -174,7 +174,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: 'payback-consumer-intelligence',
-    title: 'Payback',
+    title: 'Payback Ôwn',
     category: 'Privacy-first analytics',
     summary:
       'A privacy-first app, live on the App Store, that turns your Google and Meta data exports and on-device signals into an AI-written picture of your habits, without storing your data on our servers.',

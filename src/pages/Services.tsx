@@ -132,9 +132,6 @@ export default function Services() {
                             {s.metric.label}: {s.metric.value}
                           </span>
                         )}
-                        <span className="svc-meta">
-                          Built with: {s.technologies.join(' · ')}
-                        </span>
                       </div>
                       <div>
                         <span className="svc-sublabel">Deliverables</span>
