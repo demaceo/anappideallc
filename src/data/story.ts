@@ -84,7 +84,7 @@ export const STORY: StoryChapter[] = [
     heading: 'Built for you. Handed to you.',
     body: [
       'Picture a Monday where the website just works, bookings come in on their own, and you know what your numbers mean without asking anyone.',
-      "Every engagement has two halves. First I build it: the website, the app, the AI tools. Then the Own It package teaches you to run it, so the second job gets smaller instead of bigger. Pricing works on a sliding scale based on your business's size and stage.",
+      "Every engagement has two halves. First I build it: the website, the app, the AI tools. Then I teach you to run it, so the second job gets smaller instead of bigger. Pricing works on a sliding scale based on your business's size and stage.",
     ],
     bridge: 'How the handoff works',
   },

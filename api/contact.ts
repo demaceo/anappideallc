@@ -40,9 +40,10 @@ const PROJECT_TYPE_LABELS: Record<string, string> = {
 // text of their choosing into the email.
 const SERVICE_LABELS: Record<string, string> = {
   'business-websites': 'A Website for Your Business',
+  'start-right': 'Set Up Your Own Site, the Right Way',
   'site-fixes': 'Fix My Existing Site',
-  'own-it': 'Own It: Learn to Run Your Site',
-  'ai-integration': 'AI for Your Business',
+  'care-plan': 'Keep It Running: Monthly Care',
+  'ai-integration': 'AI & Automation for Your Business',
   'custom-builds': 'Apps & Custom Software',
 }
 

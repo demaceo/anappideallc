@@ -68,9 +68,9 @@ export default function Process() {
             <span className="stat-desc">To build, plus 1–2 weeks to launch</span>
           </div>
           <div className="stat-box neutral">
-            <span className="stat-label-top">Fixing an existing site</span>
-            <span className="stat-num medium">1 business day</span>
-            <span className="stat-desc">Rush turnaround · $138/hour</span>
+            <span className="stat-label-top">Setting up your own site</span>
+            <span className="stat-num medium">One session</span>
+            <span className="stat-desc">Wix or Squarespace, plus Google Maps</span>
           </div>
         </div>
 

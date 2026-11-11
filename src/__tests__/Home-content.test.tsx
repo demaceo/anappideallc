@@ -34,7 +34,7 @@ describe('Home — hybrid redesign', () => {
     // the accessible name insert a space (e.g. "builder ,"), so match on the
     // punctuation-free portion — the visible text itself is unchanged.
     expect(screen.getByRole('heading', { name: /what ships here/i })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /four ways to start/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /five ways to start/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /why a builder/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /not just a bot/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /start a conversation/i })).toBeInTheDocument()

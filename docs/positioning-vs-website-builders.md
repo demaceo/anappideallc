@@ -158,6 +158,8 @@ answers the customer's question "why should I pay for this?"
 3. **Raise prices after every 3 delivered projects.**
 4. **Start Right limits:** at most 2 a month; fixed scope (one session, setup, Google Business Profile); no open-ended revisions; the fee is credited toward Launch if they upgrade within 6 months; never the headline offer, used to answer the "I'll just use Wix" objection.
 5. **Always sell the Product Sprint before quoting an MVP Build.**
+6. **One hourly rate: $110/hour, 2-hour minimum.** It covers fixes to existing sites, support after the 30 free days, and out-of-scope work. There is no separate rush rate.
+7. **Public sliding scale: 25% off every service** for businesses in their first year or under $100k in annual revenue. (Replaced the old 40%.)
 
 ### 4.3 Market & focus (decided)
 

@@ -102,7 +102,7 @@ describe('Contact quick form: sending', () => {
     vi.stubGlobal('fetch', fetchMock)
     renderRoute()
     fireEvent.click(servicesToggle())
-    fireEvent.click(screen.getByRole('checkbox', { name: /ai for your business/i }))
+    fireEvent.click(screen.getByRole('checkbox', { name: /ai & automation for your business/i }))
     fireEvent.click(screen.getByRole('checkbox', { name: /a website for your business/i }))
     fireEvent.change(screen.getByLabelText(/in your words/i), { target: { value: 'Hi' } })
     fillContact()
@@ -146,9 +146,9 @@ describe('Contact quick form: sending', () => {
     fireEvent.change(screen.getByLabelText(/in your words/i), { target: { value: 'Hi' } })
     fillContact()
     fireEvent.click(servicesToggle())
-    fireEvent.keyDown(screen.getByRole('checkbox', { name: /own it/i }), { key: 'Enter' })
+    fireEvent.keyDown(screen.getByRole('checkbox', { name: /keep it running/i }), { key: 'Enter' })
     expect(fetchMock).not.toHaveBeenCalled()
-    expect(screen.getByRole('checkbox', { name: /own it/i })).toBeChecked()
+    expect(screen.getByRole('checkbox', { name: /keep it running/i })).toBeChecked()
   })
 })
 
@@ -176,7 +176,7 @@ describe('Contact quick form: validation order follows the page', () => {
   it('accepts a ticked service as something to go on', () => {
     renderRoute()
     fireEvent.click(servicesToggle())
-    fireEvent.click(screen.getByRole('checkbox', { name: /own it/i }))
+    fireEvent.click(screen.getByRole('checkbox', { name: /keep it running/i }))
     fireEvent.click(sendButton())
     // Past the idea check: now it is the missing name.
     expect(screen.getByRole('alert')).toHaveTextContent(/add your name/i)
@@ -187,7 +187,7 @@ describe('Contact quick form: validation order follows the page', () => {
     fireEvent.click(sendButton())
     expect(screen.getByRole('alert')).toBeInTheDocument()
     fireEvent.click(servicesToggle())
-    fireEvent.click(screen.getByRole('checkbox', { name: /own it/i }))
+    fireEvent.click(screen.getByRole('checkbox', { name: /keep it running/i }))
     expect(screen.queryByRole('alert')).toBeNull()
   })
 })
@@ -198,17 +198,17 @@ describe('Contact quick form: ?service= pre-ticks from the Services page', () =>
     expect(servicesToggle()).toHaveTextContent('Fix My Existing Site')
     fireEvent.click(servicesToggle())
     expect(screen.getByRole('checkbox', { name: /fix my existing site/i })).toBeChecked()
-    expect(screen.getByRole('checkbox', { name: /own it/i })).not.toBeChecked()
+    expect(screen.getByRole('checkbox', { name: /keep it running/i })).not.toBeChecked()
   })
 
   it('sends the pre-ticked service', async () => {
     const fetchMock = okFetch()
     vi.stubGlobal('fetch', fetchMock)
-    renderRoute('/contact?service=own-it')
+    renderRoute('/contact?service=care-plan')
     fillContact()
     fireEvent.click(sendButton())
     await screen.findByRole('status')
-    expect(sentBody(fetchMock).services).toEqual(['own-it'])
+    expect(sentBody(fetchMock).services).toEqual(['care-plan'])
   })
 
   it('ignores ids that are not services', () => {
@@ -219,14 +219,14 @@ describe('Contact quick form: ?service= pre-ticks from the Services page', () =>
   })
 
   it('takes several, and the visitor can untick them', () => {
-    renderRoute('/contact?service=site-fixes&service=own-it')
+    renderRoute('/contact?service=site-fixes&service=care-plan')
     fireEvent.click(servicesToggle())
     expect(screen.getByRole('checkbox', { name: /fix my existing site/i })).toBeChecked()
-    expect(screen.getByRole('checkbox', { name: /own it/i })).toBeChecked()
+    expect(screen.getByRole('checkbox', { name: /keep it running/i })).toBeChecked()
     fireEvent.click(screen.getByRole('checkbox', { name: /fix my existing site/i }))
     expect(screen.getByRole('checkbox', { name: /fix my existing site/i })).not.toBeChecked()
     // Unticking is theirs to keep: the link does not tick it again.
-    expect(screen.getByRole('checkbox', { name: /own it/i })).toBeChecked()
+    expect(screen.getByRole('checkbox', { name: /keep it running/i })).toBeChecked()
   })
 
   it('adds the service from a newer ?service= link on top of what the visitor ticked', async () => {
@@ -236,12 +236,12 @@ describe('Contact quick form: ?service= pre-ticks from the Services page', () =>
     render(<RouterProvider router={router} />)
     fireEvent.click(servicesToggle())
     fireEvent.click(screen.getByRole('checkbox', { name: /fix my existing site/i }))
-    await act(() => router.navigate('/contact?service=own-it'))
+    await act(() => router.navigate('/contact?service=care-plan'))
     expect(screen.getByRole('checkbox', { name: /fix my existing site/i })).toBeChecked()
-    expect(screen.getByRole('checkbox', { name: /own it/i })).toBeChecked()
+    expect(screen.getByRole('checkbox', { name: /keep it running/i })).toBeChecked()
     // ...and an untick after that is still theirs to keep.
-    fireEvent.click(screen.getByRole('checkbox', { name: /own it/i }))
-    expect(screen.getByRole('checkbox', { name: /own it/i })).not.toBeChecked()
+    fireEvent.click(screen.getByRole('checkbox', { name: /keep it running/i }))
+    expect(screen.getByRole('checkbox', { name: /keep it running/i })).not.toBeChecked()
   })
 
   it('links every "Start here" on the Services page to its own service', () => {

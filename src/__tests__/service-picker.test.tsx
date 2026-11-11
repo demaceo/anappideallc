@@ -5,7 +5,7 @@ import { ServicePicker, type ServiceOption } from '../components/ServicePicker/S
 
 const OPTIONS: ServiceOption[] = [
   { id: 'a', title: 'A Website', hint: 'Ready in 3–5 weeks' },
-  { id: 'b', title: 'Fix My Site', hint: '$92/hour' },
+  { id: 'b', title: 'Fix My Site', hint: '$110/hour' },
   { id: 'c', title: 'Apps & Custom Software' },
 ]
 

@@ -29,7 +29,7 @@ export default function Services() {
           <p className="overline">An App Idea LLC · What I build</p>
           <h1>Services</h1>
           <p className="subtitle">Built for you. Handed to you.</p>
-          <p className="date-line">Four ways to start, plus bigger builds</p>
+          <p className="date-line">Five ways to start, plus bigger builds</p>
         </header>
       </PageHeader>
 

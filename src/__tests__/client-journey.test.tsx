@@ -70,7 +70,7 @@ describe('Pricing note', () => {
       const { unmount } = renderRoute(path)
       const note = document.querySelector('.verdict-box.note')
       expect(note).toHaveTextContent(SITE.pricing.range)
-      expect(note).toHaveTextContent('$92/hour')
+      expect(note).toHaveTextContent('$110/hour')
       unmount()
     }
   })
