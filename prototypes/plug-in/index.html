@@ -77,6 +77,7 @@
   --room-floor-deep: oklch(11% 0.01 50);
   --room-base: oklch(22% 0.014 58);
   --room-base-edge: oklch(33% 0.018 62);
+  --room-gutter: oklch(17% 0.012 58);       /* the wall at the room's vignetted right edge */
   --room-ink: oklch(93% 0.012 85);          /* 13:1+ on the wall */
   --room-ink-2: oklch(82% 0.03 80);         /* hint text, 9:1+ */
   --room-line: oklch(70% 0.02 80);
@@ -304,9 +305,12 @@ html.measuring .fx-sec { transform: none !important; transition: none !important
    "released" (JS 10): it scrolls and takes input while the last of the
    room fades out on top. */
 html.intro:not(.released), html.intro:not(.released) body { overflow: hidden; }
-/* With classic scrollbars, the reserved gutter (CSS 2) sits beside the
-   fixed room: paint it room-dark, not page-light, while the room is up. */
-html.intro:not(.released) { background: var(--room-floor-deep); }
+/* With classic scrollbars the reserved gutter (CSS 2) sits outside the
+   fixed room, and only the root's background COLOUR paints there (Chrome
+   clips root background images and fixed boxes to the scrollport). Match
+   it to the wall at the room's right edge, which is most of that edge, so
+   the room still reads as the whole screen rather than a box. */
+html.intro:not(.released) { background-color: var(--room-gutter); }
 .room { display: none; }
 html.intro .room {
   /* clip, not just hidden: nothing (focus, scrollIntoView) can scroll the
@@ -352,8 +356,9 @@ html.intro .room {
 @media (max-width: 699px) and (max-height: 700px) {
   html.intro .room { --floor-y: 52%; --bead-y: 38%; --dev-w: min(124px, 40vw, 23vh); }
 }
-/* Very short + narrow (landscape phones, 200% zoom): there is width to
-   spare but no height, so "Plug it in" goes back beside the device. */
+/* Very short + narrow, still portrait (small windows): no height, so
+   "Plug it in" goes back beside the device. Short LANDSCAPE rooms have
+   their own layout (CSS 8b). */
 @media (max-width: 699px) and (max-height: 480px) {
   html.intro .room { --dev-w: min(120px, 30vh); }
 }
@@ -363,17 +368,13 @@ html.intro .room {
   html.intro .room { --rose-x: 57%; --rose-vw: 57vw; --fx-scale: 1; }
 }
 
-/* The room opens from the lit bulb: a radial mask whose clear centre
-   (--reveal) grows over the boot, so the page appears inside a widening
-   warm circle instead of the whole room crossfading through grey. */
-@property --reveal { syntax: '<length>'; inherits: false; initial-value: 0px; }
-.room-bg {
-  position: absolute; inset: 0;
-  --reveal: 0px;
-  /* --reveal is the circle's soft outer edge: at 0 the room is solid. */
-  -webkit-mask-image: radial-gradient(circle at var(--rose-x) var(--bulb-y), transparent calc(var(--reveal) - 140px), #000 var(--reveal));
-  mask-image: radial-gradient(circle at var(--rose-x) var(--bulb-y), transparent calc(var(--reveal) - 140px), #000 var(--reveal));
-}
+/* The room's backdrop (wall, floor, the device's glow). In the boot it
+   crossfades out (CSS 9) while the bulb's warm pool spreads over it, so the
+   page appears to open from the lit bulb. Both are opacity/transform only,
+   which the compositor runs off the main thread. (An animated radial mask
+   was used before: it looked the same but repainted the whole viewport
+   every frame and dropped to ~15fps on large software-rendered screens.) */
+.room-bg { position: absolute; inset: 0; }
 .wall {
   position: absolute; left: 0; right: 0; top: 0; height: var(--floor-y);
   background:
@@ -415,6 +416,7 @@ html.intro .room {
 .pool {
   position: absolute; inset: 0; pointer-events: none; opacity: 0;
   background: radial-gradient(circle at var(--rose-x) var(--bulb-y), oklch(92% 0.1 85 / 0.6), oklch(84% 0.11 78 / 0.22) 26%, oklch(80% 0.1 75 / 0.06) 50%, transparent 68%);
+  transform-origin: var(--rose-x) var(--bulb-y);    /* it spreads from the bulb */
   transition: opacity 650ms ease;
 }
 
@@ -529,8 +531,8 @@ html.intro .room {
 @media (max-width: 699px) and (max-height: 700px) {
   .bubble { top: 58px; --bubble-max: calc(var(--rose-vw) - 70px); }
 }
-/* Very short (landscape phones, 200% zoom): right up under the ceiling,
-   tighter padding, so the tail stays above the outlet. */
+/* Very short (see CSS 5; landscape is CSS 8b): right up under the
+   ceiling, tighter padding, so the tail stays above the outlet. */
 @media (max-width: 699px) and (max-height: 480px) {
   .bubble { top: 8px; }
   .bubble .bubble-text { padding: 10px 16px 11px; }
@@ -691,6 +693,35 @@ html.intro .room {
 .fx { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 11; pointer-events: none; }
 
 /* ═══════════════════════════════════════════════════════════════════════
+   CSS 8b · SHORT LANDSCAPE (a phone turned sideways, 200% zoom)
+   Width to spare, no height. One layout for every short, wide room,
+   whatever its width (568×320 to ~930×430): the device sits bottom-left,
+   smaller, with "Plug it in" BESIDE it on the floor; the lamp is just left
+   of centre with its hint under the bead; the outlet + plug sit in the
+   right third, the lamp cable comes down just clear of Skip; and the
+   bubble hangs upper-left, above the device (JS 9 also lifts it clear of
+   the device and outlet should its text run long). Comes after every
+   other room rule, so it wins over both the phone and desktop layouts.
+   ═══════════════════════════════════════════════════════════════════════ */
+@media (orientation: landscape) and (max-height: 480px) {
+  html.intro .room {
+    --rose-x: 46%; --rose-vw: 46vw; --fx-scale: 1; --bead-scale: 0.9; --flex: 20px;
+    --bead-y: 46%; --floor-y: 72%;
+    --outlet-x: calc(100% - 104px); --plug-dx: -76px; --cable-x: calc(100% - 214px);
+    --dev-w: clamp(132px, 42vh, 172px); --dev-left: 16px; --dev-bottom: 8px;
+  }
+  .hint { left: calc(var(--rose-x) + var(--pin-dx)); top: calc(var(--bead-y) + 44px); transform: translateX(-50%); }
+  .hint::before { display: none; }
+  .bubble { right: auto; left: 14px; top: 8px; --bubble-max: calc(var(--rose-vw) - 100px); }
+  .bubble .bubble-text { padding: 10px 16px 11px; font-size: clamp(13px, 2.1vw, 17px); }
+  .outlet svg { --outlet-scale: 1; }
+  .plugin-btn {
+    left: calc(var(--dev-left) + var(--dev-w) + 16px); --btn-x: 0px;
+    bottom: calc(var(--dev-bottom) + 14px); padding: 0 16px; white-space: nowrap;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
    CSS 9 · BOOT SEQUENCE
    JS adds these classes on a timeline (JS 10). The room dissolves into
    the page; the bulb and cord stay on top a moment longer.
@@ -702,7 +733,15 @@ html.intro .room {
 .room.booting .plugin-btn, .room.booting .hint { opacity: 0; transition: opacity 250ms ease; }
 .room.fade-top .skip { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 250ms ease, visibility 0s linear 250ms; }
 .room.lit .pool { opacity: 1; }
-.room.dissolve .room-bg { --reveal: calc(150vmax + 140px); transition: --reveal 700ms cubic-bezier(0.3, 0, 0.2, 1); }
+/* The room opens: the backdrop fades while the warm pool swells out from
+   the bulb and washes the middle of the screen light first, so the
+   crossfade reads as light filling the room, not as the room going grey. */
+.room.dissolve .room-bg { opacity: 0; transition: opacity 700ms cubic-bezier(0.45, 0, 0.35, 1); }
+.room.dissolve .pool { transform: scale(2.6); opacity: 0; transition: transform 1000ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 600ms ease 300ms; }
+/* The scrollbar gutter (classic scrollbars) is painted by the root's
+   background colour, room-dark while the intro runs (CSS 5): it fades to
+   the page with the room, so no dark strip is left beside the lit page. */
+html.intro:has(.room.dissolve) { background-color: var(--c-page); transition: background-color 600ms ease; }
 .room.dissolve .outlet, .room.dissolve .plug, .room.dissolve .cable-g { opacity: 0; transition: opacity 600ms ease; }
 .room.dissolve .bubble { opacity: 0; }
 .room.fade-top .fixture, .room.fade-top .cord, .room.fade-top .bead, .room.fade-top .pool { opacity: 0; transition: opacity 500ms ease; }
@@ -774,19 +813,27 @@ html.intro .room {
 html.intro .proto { display: none; }
 .proto[hidden] { display: none; }
 .proto details { background: oklch(23% 0.01 270 / 0.95); border: 1px solid oklch(45% 0.01 270); border-radius: 10px; box-shadow: 0 6px 24px oklch(0% 0 0 / 0.25); }
-.proto summary { list-style: none; cursor: pointer; min-height: 40px; padding: 0 12px; display: flex; align-items: center; gap: 8px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; }
+.proto summary { position: relative; list-style: none; cursor: pointer; min-height: 44px; padding: 0 12px; display: flex; align-items: center; gap: 8px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; }
 .proto summary::-webkit-details-marker { display: none; }
 .proto summary::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: oklch(82% 0.17 85); }
 .proto details:not([open]) { border-left: 0; border-radius: 0 8px 8px 0; }
 .proto details:not([open]) summary { writing-mode: vertical-rl; transform: rotate(180deg); width: 19px; min-height: 0; padding: 12px 0; font-size: 0.625rem; letter-spacing: 0.14em; }
 .proto details:not([open]) summary::before { width: 6px; height: 6px; }
+/* The collapsed tab is a 19px sliver; this invisible strip widens its hit
+   area to 44px. Symmetric, so the tab's 180° turn doesn't matter (the half
+   past the screen's left edge is simply off-screen). */
+.proto details:not([open]) summary::after { content: ''; position: absolute; inset: 0 -25px; }
 .proto details[open] { margin-left: 8px; }
 .proto details[open] summary::after { content: '−'; margin-left: auto; padding-left: 10px; font-weight: 400; }
+/* Rings sit on the dark panel, never on the light page: the summary's is
+   drawn inside it (the collapsed tab has no panel around it), the
+   buttons' falls in the panel's padding. */
 .proto summary:focus-visible, .proto button:focus-visible { outline: 2px solid oklch(85% 0.14 85); outline-offset: 2px; }
+.proto summary:focus-visible { outline-offset: -3px; border-radius: 7px; }
 .proto-body { padding: 4px 14px 14px; display: grid; gap: 10px; min-width: 210px; }
 .proto-state { color: oklch(82% 0.01 270); }
 .proto-state b { color: oklch(95% 0.005 270); font-weight: 700; }
-.proto button { font: inherit; color: inherit; background: transparent; cursor: pointer; border: 1px solid oklch(60% 0.01 270); border-radius: 7px; padding: 8px 12px; min-height: 36px; }
+.proto button { font: inherit; color: inherit; background: transparent; cursor: pointer; border: 1px solid oklch(60% 0.01 270); border-radius: 7px; padding: 8px 12px; min-height: 44px; }
 .proto button:hover { background: oklch(32% 0.01 270); }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -819,6 +866,149 @@ html:not(.has-traces) .site::before {
 </style>
 </head>
 <body>
+
+<!-- ════════════════════════ THE ROOM (first-visit intro) ════════════════════════
+     A modal dialog over the finished page. Without JS it is display:none.
+     It comes FIRST in the body so that, on a slow connection, the browser
+     parses and paints the dark room before any of the lit page arrives
+     (it is position:fixed and traps focus, so source order changes neither
+     its look nor the tab order). -->
+<div class="room" id="room" role="dialog" aria-modal="true" aria-labelledby="room-title" aria-describedby="room-desc" tabindex="-1">
+  <h2 id="room-title" class="sr-only">Is it plugged in?</h2>
+  <p id="room-desc" class="sr-only">A short intro, about 15 seconds. Pull the light cord, then plug the lamp in. Or skip to the site.</p>
+
+  <div class="room-bg" aria-hidden="true">
+    <div class="wall"></div><div class="baseboard"></div><div class="floor"></div>
+    <div class="dev-glow"></div>
+  </div>
+  <div class="pool" aria-hidden="true"></div>
+
+  <div class="outlet" aria-hidden="true">
+    <span class="hl-ring"></span>
+    <svg viewBox="0 0 48 76" focusable="false">
+      <rect class="o-plate" x="2" y="2" width="44" height="72" rx="6"/>
+      <circle class="o-screw" cx="24" cy="10" r="2.2"/>
+      <circle class="o-screw" cx="24" cy="66" r="2.2"/>
+      <rect class="o-face" x="11" y="21" width="26" height="34" rx="8"/>
+      <rect class="o-slot" x="17" y="29" width="3" height="10" rx="1"/>
+      <rect class="o-slot" x="28" y="29" width="3" height="10" rx="1"/>
+      <path class="o-slot" d="M21.5 49 a2.5 2.5 0 0 1 5 0 v2 h-5 z"/>
+    </svg>
+    <span class="socket"></span>
+  </div>
+
+  <svg class="ropes" aria-hidden="true" focusable="false">
+    <g class="cable-g">
+      <path class="cable-run" d=""/><!-- along the ceiling into the rose -->
+      <path class="cable" d=""/>
+      <path class="cable-hi" d=""/>
+      <path class="pulse glow" d="" pathLength="1"/>
+      <path class="pulse core" d="" pathLength="1"/>
+    </g>
+    <path class="cord" d=""/>
+  </svg>
+
+  <div class="fixture" aria-hidden="true">
+    <svg width="120" height="14" viewBox="0 0 120 14" focusable="false">
+      <path class="fx-rose" d="M34 0 H86 V3 Q84 12 72 13 H48 Q36 12 34 3 Z"/>
+    </svg>
+    <span class="flex"></span>
+    <div class="lamp">
+      <svg width="120" height="80" viewBox="0 0 120 80" focusable="false">
+        <defs>
+          <radialGradient id="glow-grad">
+            <stop offset="0" stop-color="oklch(95% 0.1 88)" stop-opacity="0.95"/>
+            <stop offset="0.35" stop-color="oklch(88% 0.13 80)" stop-opacity="0.35"/>
+            <stop offset="1" stop-color="oklch(80% 0.12 75)" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle class="bulb-glow" cx="60" cy="53" r="62" fill="url(#glow-grad)"/>
+        <!-- socket + pull switch on a short arm, out past the glass, so the
+             cord hangs clear of it (the cord leaves the switch at 85.5, 18) -->
+        <rect class="fx-metal" x="51" y="0" width="18" height="25" rx="3"/>
+        <line class="fx-ring" x1="52" y1="7" x2="68" y2="7"/>
+        <line class="fx-ring" x1="52" y1="18" x2="68" y2="18"/>
+        <rect class="fx-metal" x="68" y="9" width="13" height="5" rx="1"/>
+        <rect class="fx-metal" x="80" y="6" width="11" height="12" rx="2"/>
+        <!-- glass, shine, filament -->
+        <path class="bulb-glass" d="M54 25 C54 31 38 37 38 53 A22 22 0 0 0 82 53 C82 37 66 31 66 25 Z"/>
+        <path class="bulb-shine" d="M44 47 Q45 39 51 35"/>
+        <path class="bulb-fil" d="M56.5 26 L56.5 48 M63.5 26 L63.5 48 M56.5 48 q0.9 -3.4 1.75 0 q0.9 3.4 1.75 0 q0.9 -3.4 1.75 0 q0.9 3.4 1.75 0"/>
+      </svg>
+      <span class="pin"></span>
+    </div>
+  </div>
+
+  <span class="bead-slot" aria-hidden="true"></span>
+  <span class="plug-slot" aria-hidden="true"></span>
+  <span class="cable-anchor" aria-hidden="true"></span>
+
+  <div class="bubble" aria-hidden="true">
+    <svg width="10" height="10" focusable="false">
+      <defs>
+        <pattern id="halftone" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+          <circle cx="3" cy="3" r="1.25" fill="oklch(72% 0.13 72)"/>
+        </pattern>
+        <radialGradient id="dot-fade" cx="1" cy="0" r="0.75">
+          <stop offset="0" stop-color="#fff"/><stop offset="0.55" stop-color="#fff" stop-opacity="0.6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </radialGradient>
+        <mask id="dot-mask" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="url(#dot-fade)"/></mask>
+        <clipPath id="bubble-clip"><path class="b-clip" d=""/></clipPath>
+      </defs>
+      <path class="b-body" d=""/>
+      <rect class="b-dots" x="0" y="0" width="0" height="0" clip-path="url(#bubble-clip)" mask="url(#dot-mask)"/>
+      <path class="b-line" d=""/>
+    </svg>
+    <p class="bubble-text"></p>
+  </div>
+
+  <div class="device" aria-hidden="true">
+    <div class="egg">
+      <div class="bezel">
+        <div class="lcd">
+          <canvas class="sprite" width="32" height="32"></canvas>
+          <p class="lcd-text"></p>
+        </div>
+      </div>
+      <div class="keys"><i></i><i></i><i></i></div>
+    </div>
+  </div>
+
+  <canvas class="fx" aria-hidden="true"></canvas>
+
+  <!-- Focusable controls, in tab order: Skip → bead → plug → Plug it in -->
+  <button class="skip" type="button" id="skip">Skip to the site</button>
+  <button class="bead" type="button" id="bead" aria-label="Pull the light cord">
+    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <defs>
+        <radialGradient id="bead-grad" cx="0.36" cy="0.3" r="0.8">
+          <stop offset="0" stop-color="oklch(86% 0.1 82)"/>
+          <stop offset="0.45" stop-color="oklch(68% 0.11 70)"/>
+          <stop offset="1" stop-color="oklch(42% 0.08 55)"/>
+        </radialGradient>
+      </defs>
+      <rect x="28.5" y="7" width="7" height="7" rx="1.5" fill="oklch(66% 0.08 78)" stroke="oklch(36% 0.04 60)" stroke-width="0.8"/>
+      <path d="M32 12.5 C41 12.5 44.5 21 44.5 32 C44.5 45 39.5 52.5 32 52.5 C24.5 52.5 19.5 45 19.5 32 C19.5 21 23 12.5 32 12.5 Z" fill="url(#bead-grad)" stroke="oklch(30% 0.04 55)" stroke-width="1"/>
+      <path d="M21.2 22.5 H42.8 M20.6 42 H43.4" stroke="oklch(36% 0.06 55 / 0.5)" stroke-width="1.2"/>
+      <ellipse cx="27" cy="24" rx="3" ry="6" fill="oklch(100% 0 0 / 0.22)"/>
+    </svg>
+  </button>
+  <p class="hint" aria-hidden="true">Pull the cord</p>
+  <button class="plug" type="button" id="plug" aria-label="Plug the lamp in" tabindex="-1">
+    <span class="hl-ring"></span>
+    <svg viewBox="0 0 56 56" aria-hidden="true" focusable="false">
+      <rect class="p-prong" x="20" y="-3" width="4" height="13" rx="1"/>
+      <rect class="p-prong" x="32" y="-3" width="4" height="13" rx="1"/>
+      <rect class="p-body" x="13" y="9" width="30" height="31" rx="7"/>
+      <rect class="p-face" x="17" y="13" width="22" height="5" rx="2.5"/>
+      <path d="M17 24 H39 M17 28 H39 M17 32 H39" stroke="oklch(58% 0.012 80)" stroke-width="1"/>
+      <path class="p-relief" d="M22.5 40 H33.5 L31.5 47.5 H24.5 Z"/>
+    </svg>
+  </button>
+  <button class="btn plugin-btn" type="button" id="plugin-btn" hidden>Plug it in</button>
+
+  <div class="sr-only" aria-live="polite" id="live"></div>
+</div>
 
 <!-- ════════════════════════ THE PAGE (finished, lit) ════════════════════════ -->
 <div class="site" id="site">
@@ -977,145 +1167,6 @@ html:not(.has-traces) .site::before {
   <svg class="traces" id="traces" aria-hidden="true" focusable="false"></svg>
 </div>
 
-<!-- ════════════════════════ THE ROOM (first-visit intro) ════════════════════════
-     A modal dialog over the finished page. Without JS it is display:none. -->
-<div class="room" id="room" role="dialog" aria-modal="true" aria-labelledby="room-title" aria-describedby="room-desc" tabindex="-1">
-  <h2 id="room-title" class="sr-only">Is it plugged in?</h2>
-  <p id="room-desc" class="sr-only">A short intro, about 15 seconds. Pull the light cord, then plug the lamp in. Or skip to the site.</p>
-
-  <div class="room-bg" aria-hidden="true">
-    <div class="wall"></div><div class="baseboard"></div><div class="floor"></div>
-    <div class="dev-glow"></div>
-  </div>
-  <div class="pool" aria-hidden="true"></div>
-
-  <div class="outlet" aria-hidden="true">
-    <span class="hl-ring"></span>
-    <svg viewBox="0 0 48 76" focusable="false">
-      <rect class="o-plate" x="2" y="2" width="44" height="72" rx="6"/>
-      <circle class="o-screw" cx="24" cy="10" r="2.2"/>
-      <circle class="o-screw" cx="24" cy="66" r="2.2"/>
-      <rect class="o-face" x="11" y="21" width="26" height="34" rx="8"/>
-      <rect class="o-slot" x="17" y="29" width="3" height="10" rx="1"/>
-      <rect class="o-slot" x="28" y="29" width="3" height="10" rx="1"/>
-      <path class="o-slot" d="M21.5 49 a2.5 2.5 0 0 1 5 0 v2 h-5 z"/>
-    </svg>
-    <span class="socket"></span>
-  </div>
-
-  <svg class="ropes" aria-hidden="true" focusable="false">
-    <g class="cable-g">
-      <path class="cable-run" d=""/><!-- along the ceiling into the rose -->
-      <path class="cable" d=""/>
-      <path class="cable-hi" d=""/>
-      <path class="pulse glow" d="" pathLength="1"/>
-      <path class="pulse core" d="" pathLength="1"/>
-    </g>
-    <path class="cord" d=""/>
-  </svg>
-
-  <div class="fixture" aria-hidden="true">
-    <svg width="120" height="14" viewBox="0 0 120 14" focusable="false">
-      <path class="fx-rose" d="M34 0 H86 V3 Q84 12 72 13 H48 Q36 12 34 3 Z"/>
-    </svg>
-    <span class="flex"></span>
-    <div class="lamp">
-      <svg width="120" height="80" viewBox="0 0 120 80" focusable="false">
-        <defs>
-          <radialGradient id="glow-grad">
-            <stop offset="0" stop-color="oklch(95% 0.1 88)" stop-opacity="0.95"/>
-            <stop offset="0.35" stop-color="oklch(88% 0.13 80)" stop-opacity="0.35"/>
-            <stop offset="1" stop-color="oklch(80% 0.12 75)" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <circle class="bulb-glow" cx="60" cy="53" r="62" fill="url(#glow-grad)"/>
-        <!-- socket + pull switch on a short arm, out past the glass, so the
-             cord hangs clear of it (the cord leaves the switch at 85.5, 18) -->
-        <rect class="fx-metal" x="51" y="0" width="18" height="25" rx="3"/>
-        <line class="fx-ring" x1="52" y1="7" x2="68" y2="7"/>
-        <line class="fx-ring" x1="52" y1="18" x2="68" y2="18"/>
-        <rect class="fx-metal" x="68" y="9" width="13" height="5" rx="1"/>
-        <rect class="fx-metal" x="80" y="6" width="11" height="12" rx="2"/>
-        <!-- glass, shine, filament -->
-        <path class="bulb-glass" d="M54 25 C54 31 38 37 38 53 A22 22 0 0 0 82 53 C82 37 66 31 66 25 Z"/>
-        <path class="bulb-shine" d="M44 47 Q45 39 51 35"/>
-        <path class="bulb-fil" d="M56.5 26 L56.5 48 M63.5 26 L63.5 48 M56.5 48 q0.9 -3.4 1.75 0 q0.9 3.4 1.75 0 q0.9 -3.4 1.75 0 q0.9 3.4 1.75 0"/>
-      </svg>
-      <span class="pin"></span>
-    </div>
-  </div>
-
-  <span class="bead-slot" aria-hidden="true"></span>
-  <span class="plug-slot" aria-hidden="true"></span>
-  <span class="cable-anchor" aria-hidden="true"></span>
-
-  <div class="bubble" aria-hidden="true">
-    <svg width="10" height="10" focusable="false">
-      <defs>
-        <pattern id="halftone" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
-          <circle cx="3" cy="3" r="1.25" fill="oklch(72% 0.13 72)"/>
-        </pattern>
-        <radialGradient id="dot-fade" cx="1" cy="0" r="0.75">
-          <stop offset="0" stop-color="#fff"/><stop offset="0.55" stop-color="#fff" stop-opacity="0.6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
-        </radialGradient>
-        <mask id="dot-mask" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="url(#dot-fade)"/></mask>
-        <clipPath id="bubble-clip"><path class="b-clip" d=""/></clipPath>
-      </defs>
-      <path class="b-body" d=""/>
-      <rect class="b-dots" x="0" y="0" width="0" height="0" clip-path="url(#bubble-clip)" mask="url(#dot-mask)"/>
-      <path class="b-line" d=""/>
-    </svg>
-    <p class="bubble-text"></p>
-  </div>
-
-  <div class="device" aria-hidden="true">
-    <div class="egg">
-      <div class="bezel">
-        <div class="lcd">
-          <canvas class="sprite" width="32" height="32"></canvas>
-          <p class="lcd-text"></p>
-        </div>
-      </div>
-      <div class="keys"><i></i><i></i><i></i></div>
-    </div>
-  </div>
-
-  <canvas class="fx" aria-hidden="true"></canvas>
-
-  <!-- Focusable controls, in tab order: Skip → bead → plug → Plug it in -->
-  <button class="skip" type="button" id="skip">Skip to the site</button>
-  <button class="bead" type="button" id="bead" aria-label="Pull the light cord">
-    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-      <defs>
-        <radialGradient id="bead-grad" cx="0.36" cy="0.3" r="0.8">
-          <stop offset="0" stop-color="oklch(86% 0.1 82)"/>
-          <stop offset="0.45" stop-color="oklch(68% 0.11 70)"/>
-          <stop offset="1" stop-color="oklch(42% 0.08 55)"/>
-        </radialGradient>
-      </defs>
-      <rect x="28.5" y="7" width="7" height="7" rx="1.5" fill="oklch(66% 0.08 78)" stroke="oklch(36% 0.04 60)" stroke-width="0.8"/>
-      <path d="M32 12.5 C41 12.5 44.5 21 44.5 32 C44.5 45 39.5 52.5 32 52.5 C24.5 52.5 19.5 45 19.5 32 C19.5 21 23 12.5 32 12.5 Z" fill="url(#bead-grad)" stroke="oklch(30% 0.04 55)" stroke-width="1"/>
-      <path d="M21.2 22.5 H42.8 M20.6 42 H43.4" stroke="oklch(36% 0.06 55 / 0.5)" stroke-width="1.2"/>
-      <ellipse cx="27" cy="24" rx="3" ry="6" fill="oklch(100% 0 0 / 0.22)"/>
-    </svg>
-  </button>
-  <p class="hint" aria-hidden="true">Pull the cord</p>
-  <button class="plug" type="button" id="plug" aria-label="Plug the lamp in" tabindex="-1">
-    <span class="hl-ring"></span>
-    <svg viewBox="0 0 56 56" aria-hidden="true" focusable="false">
-      <rect class="p-prong" x="20" y="-3" width="4" height="13" rx="1"/>
-      <rect class="p-prong" x="32" y="-3" width="4" height="13" rx="1"/>
-      <rect class="p-body" x="13" y="9" width="30" height="31" rx="7"/>
-      <rect class="p-face" x="17" y="13" width="22" height="5" rx="2.5"/>
-      <path d="M17 24 H39 M17 28 H39 M17 32 H39" stroke="oklch(58% 0.012 80)" stroke-width="1"/>
-      <path class="p-relief" d="M22.5 40 H33.5 L31.5 47.5 H24.5 Z"/>
-    </svg>
-  </button>
-  <button class="btn plugin-btn" type="button" id="plugin-btn" hidden>Plug it in</button>
-
-  <div class="sr-only" aria-live="polite" id="live"></div>
-</div>
-
 <!-- Mini-you, docked after the boot. -->
 <div class="badge-wrap" id="badge-wrap">
   <div class="badge-card" id="badge-card" hidden>
@@ -1170,6 +1221,9 @@ html:not(.has-traces) .site::before {
 
   const mqReduce = matchMedia('(prefers-reduced-motion: reduce)');
   const mqFine = matchMedia('(pointer: fine)');
+  // The short-landscape room (CSS 8b) uses the phone's compact sizes too.
+  const mqShort = matchMedia('(orientation: landscape) and (max-height: 480px)');
+  const compactRoom = () => vw < 700 || mqShort.matches;
   let reduce = mqReduce.matches;
 
   // Story copy (the visitor's inner monologue, then mini-you).
@@ -1454,17 +1508,19 @@ html:not(.has-traces) .site::before {
   const CHEER_R = { x: 22, y: 3, rows: ['    kkkk ', '   ksssSk', '   ksSssk', '   kssSSk', '    kkkk ',
     '    kssk ', '    kSsk ', '   kssk  ', '   kssk  ', '   kSsk  ', '   kssk  ', '  kssk   ', '  kSsk   ',
     '  kssk   ', '  kssk   ', '  kttk   ', '  kttk   ', '  kTtk   ', ' ktttk   ', 'ttttTk   ', 'tttTk    '] };
-  // Point-down: the sleeve leaves the shoulder, the forearm runs down and
-  // out at 45°, and a fist ends in one index finger pointing straight down
-  // (rows 30–31), the fist kept clear of the canvas edge.
-  const POINT_R = { x: 20, y: 25, rows: [
-    '    k      ',
-    '           ',
-    '   Ttsk    ',
-    '   kksskk  ',
-    '     ksssk ',
-    '      ksSk ',
-    '       ksk ',
+  // Point-down: the sleeve stands out from the shoulder (rows 25–27), the
+  // forearm drops to a 2×2 fist (rows 28–29) and one index finger points
+  // straight down (row 30, its tip outlined on row 31). The whole hand is
+  // inside the grid, 3px in from the right edge. Mirrored for 'pointL'
+  // (JS 4 picks the side the plug and outlet are on).
+  const POINT_R = { x: 23, y: 25, rows: [
+    ' kk     ',
+    'tTtk    ',
+    'ttTtk   ',
+    'kkkssk  ',
+    '  kssSk ',
+    '   ksk  ',
+    '    k   ',
   ] };
   // Overlays on the eyes (rows 10–14, columns 9–22).
   const HAPPY = { x: 9, y: 12, rows: ['sskksssssskksS', 'sksskssssksskS'] };          // ^ ^
@@ -1548,9 +1604,10 @@ html:not(.has-traces) .site::before {
     pin.x = p.x; pin.y = p.y;
     rest.x = p.x; rest.y = s.y - (BEAD_Y - BEAD_TIE_Y);
     L = rest.y - pin.y;
-    maxSway = vw < 700 ? 12 : 24;
+    const compact = compactRoom();
+    maxSway = compact ? 12 : 24;
     floorY = floorEl.getBoundingClientRect().top;
-    floorC = floorY + (vw < 700 ? 13 : 18);      // where things lie on the floor
+    floorC = floorY + (compact ? 13 : 18);       // where things lie on the floor
     floorP = floorC - 13;                         // the plug's attach point when lying
     const so = center(socketEl); sock.x = so.x; sock.y = so.y;
     anchor.x = center(anchorEl).x;
@@ -1708,8 +1765,16 @@ html:not(.has-traces) .site::before {
 
   function buildCable() {
     const endX = plugged ? sock.x : plugRestX, endY = plugged ? sock.y + PLUG_BODY : floorP;
+    // Length: down the wall, then along the floor to the farther of (a)
+    // where the plug rests and (b) the foot of the wall under the socket
+    // plus the climb up into it, with some slack. Sized only for (a), a
+    // plugged-in cable is too short to lie on the floor: it pulls taut off
+    // the wall and swings through the boot pulse.
     const run1 = floorC - anchor.y, run2 = Math.abs(endX - anchor.x), slack = 30;
-    const Lc = run1 + run2 + slack;
+    const toRest = Math.abs(plugRestX - anchor.x);
+    const toSocket = Math.abs(sock.x - anchor.x) + Math.max(0, floorC - (sock.y + PLUG_BODY));
+    const Lc = run1 + Math.max(toRest, toSocket) + slack;
+    const lie = Lc - run1;                 // the length lying on the floor
     cn = Math.max(8, Math.round(Lc / CAB.spacing) + 1);
     cseg = Lc / (cn - 1);
     CX = new Float64Array(cn); CY = new Float64Array(cn); CPX = new Float64Array(cn); CPY = new Float64Array(cn); CINV = new Float64Array(cn);
@@ -1718,7 +1783,7 @@ html:not(.has-traces) .site::before {
       const sdist = i * cseg;
       let x, y;
       if (sdist <= run1) { x = anchor.x; y = anchor.y + sdist; }
-      else { x = anchor.x + dir * Math.min(run2, (sdist - run1) * run2 / (run2 + slack)); y = floorC; }
+      else { x = anchor.x + dir * run2 * (sdist - run1) / lie; y = floorC; }   // slack bunches evenly
       CX[i] = CPX[i] = x; CY[i] = CPY[i] = y;
       CINV[i] = i === 0 ? 0 : (i === cn - 1 ? CAB.plugInv : 1);
     }
@@ -1785,8 +1850,12 @@ html:not(.has-traces) .site::before {
       const lying = !cKin && CY[last] >= floorP - 0.5;
       target = lying ? (dx > 0 ? -90 : 90) : Math.atan2(-dx, dy) * 180 / Math.PI;
     }
-    let delta = ((target - plugAng + 540) % 360) - 180;
-    plugAng += reduce ? delta : delta * Math.min(1, (dt || 0.016) * 16);
+    // While a tween carries the plug in, tickTween turns it upright in step
+    // with its travel; otherwise the angle eases toward the cable's.
+    if (!tween) {
+      const delta = ((target - plugAng + 540) % 360) - 180;
+      plugAng += reduce ? delta : delta * Math.min(1, (dt || 0.016) * 16);
+    }
     plugBtn.style.transform = `translate3d(${(CX[last] - PLUG_AX).toFixed(1)}px, ${(CY[last] - PLUG_AY).toFixed(1)}px, 0) rotate(${plugAng.toFixed(1)}deg)`;
   }
   // Reduced motion: no rope physics. The cable is drawn from the ceiling
@@ -1936,11 +2005,15 @@ html:not(.has-traces) .site::before {
   /* ═════════════════════════════════════════════════════════════════════
      JS 8 · PLUG DRAG
      The plug follows the pointer (pointer capture); its cable drags along.
-     Within 60px of the outlet it snaps in with a 2px seat. Released far
-     away, it falls back to the floor. Enter/Space (or "Plug it in")
-     animates it in.
+     Within 60px of the outlet it snaps in: a short straight slide into the
+     socket, then the 2px seat (CSS 8). Released far away, it falls back to
+     the floor. Enter/Space (or "Plug it in") carries it in on a lifted arc.
+     Either way the plug's end of the cable is MOVED over several frames,
+     never teleported: a jump of the rope's kinematic end turns straight
+     into velocity and whips the whole cable up the wall.
      ═════════════════════════════════════════════════════════════════════ */
   const SNAP = 60;
+  const SNAP_MS = 140, CARRY_MS = 650, CARRY_LIFT = 46;
   let pdrag = null, suppressPlugClick = false;
   function maxReach(x, y) {
     // Keep the plug inside the room and within the cable's length.
@@ -1964,12 +2037,12 @@ html:not(.has-traces) .site::before {
     else { cKin = heldTarget(); wakeCable(); }
   }
   plugBtn.addEventListener('pointerdown', (e) => {
-    if (plugged || (state !== 'dark')) return;
+    // Already on its way in (a snap or "Plug it in"): let it finish.
+    if (plugged || tween || state !== 'dark') return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     try { plugBtn.setPointerCapture(e.pointerId); } catch (err) {}
     releaseSkipFocus();
     pdrag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, moved: 0 };
-    tween = null;
   });
   plugBtn.addEventListener('pointermove', (e) => {
     if (!pdrag || e.pointerId !== pdrag.id) return;
@@ -1979,7 +2052,7 @@ html:not(.has-traces) .site::before {
     if (Math.hypot(e.clientX - sock.x, e.clientY - sock.y) < SNAP) {
       try { plugBtn.releasePointerCapture(e.pointerId); } catch (err) {}
       pdrag = null; held = null; suppressPlugClick = true; setTimeout(() => { suppressPlugClick = false; }, 450);
-      seatPlug();
+      if (reduce) seatPlug(); else carryPlugIn(SNAP_MS, 0);
     }
   });
   function endPlugDrag(e) {
@@ -2003,16 +2076,26 @@ html:not(.has-traces) .site::before {
   function plugItIn() {
     if (plugged || state !== 'dark' || tween) return;
     if (reduce) { seatPlug(); return; }
+    carryPlugIn(CARRY_MS, CARRY_LIFT);
+  }
+  // Ease the plug's end of the cable from where it is now to the socket
+  // over `dur` ms (arching up by `lift` px mid-way), then seat it. Its tilt
+  // eases to upright on the same curve, so it arrives straight and the 2px
+  // seat plays on an upright plug (not a twist inside the outlet). The loop
+  // drives it (tickTween); reduced motion seats directly instead.
+  function carryPlugIn(dur, lift) {
     const last = cn - 1;
-    tween = { t0: performance.now(), dur: 650, x0: CX[last], y0: CY[last], x1: sock.x, y1: sock.y + PLUG_BODY };
+    const a0 = ((plugAng % 360) + 540) % 360 - 180;     // the same tilt, in -180..180
+    tween = { t0: performance.now(), dur, lift, a0, x0: CX[last], y0: CY[last], x1: sock.x, y1: sock.y + PLUG_BODY };
     wakeCable();
   }
   function tickTween(now) {
     if (!tween) return;
     const t = Math.min(1, (now - tween.t0) / tween.dur);
     const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-    const lift = Math.sin(Math.PI * t) * 46;
+    const lift = Math.sin(Math.PI * t) * tween.lift;
     cKin = { x: tween.x0 + (tween.x1 - tween.x0) * e, y: tween.y0 + (tween.y1 - tween.y0) * e - lift };
+    plugAng = tween.a0 * (1 - e);
     if (t >= 1) { tween = null; seatPlug(); }
   }
   function seatPlug() {
@@ -2073,7 +2156,7 @@ html:not(.has-traces) .site::before {
     // The path can never be narrower than the text.
     const w = Math.ceil(Math.max(bubbleText.scrollWidth, bubbleText.offsetWidth)), h = Math.ceil(bubbleText.offsetHeight);
     bubble.style.transform = '';
-    const small = vw < 700, short = small && vh <= 480;
+    const small = compactRoom(), short = small && vh <= 480;
     const m = 4, T = short ? 22 : (small ? 30 : 42);
     const x0 = Math.round(w * 0.26), x1 = x0 + (small ? 18 : 24);
     const tail = { x0, x1, tx: x0 - (small ? 4 : 10), ty: h + T };
@@ -2089,6 +2172,25 @@ html:not(.has-traces) .site::before {
     bubbleText.style.transform = `translate(${m}px, ${m}px)`;
     bubble.style.setProperty('--rot', BUBBLE_ROT[i] + 'deg');
     bubble.style.transformOrigin = `${tail.tx + m}px ${tail.ty + m}px`;
+    keepBubbleClear(w + 2 * m + 10, h + T + 2 * m + 10);
+  }
+  // The bubble must never cover mini-you or the outlet ("Look down" has to
+  // land on a visible outlet). CSS places it; if its box (tail and 3D depth
+  // included) would reach either one below it, lift it until it ends 8px
+  // above, but never past the top edge. The device is measured where it
+  // rests (offset*, which ignore the transform that parks it off-screen
+  // before it slides in).
+  function keepBubbleClear(bw, bh) {
+    bubble.style.top = '';
+    const bl = bubble.offsetLeft, bt = bubble.offsetTop;
+    const o = $('.outlet svg', room).getBoundingClientRect();
+    const keep = [
+      { l: device.offsetLeft, r: device.offsetLeft + device.offsetWidth, t: device.offsetTop },
+      { l: o.left, r: o.right, t: o.top },
+    ];
+    let maxBottom = Infinity;
+    for (const k of keep) if (bl < k.r && bl + bw > k.l && k.t > bt) maxBottom = Math.min(maxBottom, k.t - 8);
+    if (bt + bh > maxBottom) bubble.style.top = Math.max(4, Math.floor(maxBottom - bh)) + 'px';
   }
   function showBubble(i) {
     bubbleIdx = i;
@@ -2357,8 +2459,12 @@ html:not(.has-traces) .site::before {
     // Something in this frame (e.g. seatPlug → wakeCable → ensureLoop)
     // may already have scheduled the next one: never start a second chain.
     if (raf || !loopOn()) return;
+    // Reduced motion: no ropes, sparks, tween or sprite animation, so the
+    // loop has nothing to tick. Every handler renders its still frame
+    // directly; ensureLoop() restarts this if motion is turned back on.
+    if (reduce) return;
     // Nothing moving but the drift and the sprite: tick ~15×/s, not 60.
-    const idle = (reduce || asleep) && !cAwake && !tween && !sparks.length && !kin && !tug;
+    const idle = asleep && !cAwake && !tween && !sparks.length && !kin && !tug;
     if (idle) idleTimer = setTimeout(() => { idleTimer = 0; if (loopOn() && !raf) raf = requestAnimationFrame(frame); }, 55);
     else raf = requestAnimationFrame(frame);
   }
@@ -2436,6 +2542,8 @@ html:not(.has-traces) .site::before {
       resizeQueued = false;
       if (state === 'dark' || state === 'plugged') {
         measureRoom(); buildCord(); buildCable();
+        // The plug may now be on the device's other side (a rotated phone).
+        if (pose === 'point' || pose === 'pointL') setPose('point');
         if (reduce) { renderCordStraight(); renderCableStatic(CX[cn - 1], CY[cn - 1]); } else { renderCord(X, Y); renderCable(1); ensureLoop(); }
         if (state === 'dark' && bubbleIdx >= 0 && bubble.classList.contains('show')) layoutBubble(bubbleIdx);
       }
@@ -2449,7 +2557,15 @@ html:not(.has-traces) .site::before {
   mqReduce.addEventListener('change', () => {
     reduce = mqReduce.matches;
     if (state === 'off') return;
-    if (reduce) { kin = null; tug = null; renderCordStraight(); renderCableStatic(CX[cn - 1], CY[cn - 1]); }
+    if (reduce) {
+      // The loop stops ticking under reduced motion (JS 11): drop anything
+      // in flight so nothing is left frozen mid-air.
+      kin = null; tug = null;
+      sparks.length = 0; fx.clearRect(0, 0, vw, vh); sparksDrawn = false;
+      renderCordStraight();
+      if (tween) seatPlug();                // it was on its way in: finish it
+      else renderCableStatic(CX[cn - 1], CY[cn - 1]);
+    }
     else { buildCord(); buildCable(); renderCord(X, Y); renderCable(1); ensureLoop(); }
   });
 
