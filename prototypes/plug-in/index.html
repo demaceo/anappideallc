@@ -1,0 +1,2528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plug It In</title>
+<meta name="description" content="An App Idea LLC homepage prototype: the light won't come on until you plug it in yourself, then the site boots up.">
+<!--
+  ════════════════════════════════════════════════════════════════════════
+  "IS IT PLUGGED IN?" PROTOTYPE v2 · An App Idea LLC homepage slice
+  Standalone, dependency-free. NOT part of the Vite app build.
+
+  The finished, lit homepage is the document. A first-visit intro sits ON
+  TOP of it as a modal dialog (a dark room): the cord fails, a tiny pixel
+  founder points out the lamp isn't plugged in, the visitor plugs it in,
+  and the page boots as circuit traces draw through it.
+
+  CSS  1 tokens · 2 page layout · 3 sections · 4 circuit traces
+       5 room scene · 6 comic bubble · 7 device + sprite · 8 plug + outlet
+       9 boot sequence · 10 badge · 11 prototype controls
+       12 no-JS, reduced motion, print
+  JS   1 setup · 2 circuit traces · 3 sprite · 4 room measure
+       5 ropes/physics · 6 sparks · 7 cord pull · 8 plug drag
+       9 story beats (bubble, device) · 10 boot sequence · 11 loop
+       12 dialog (focus trap, skip) · 13 badge · 14 prototype controls
+       15 init
+  ════════════════════════════════════════════════════════════════════════
+-->
+<script>
+  /* Before first paint: run the intro only for a first visit with JS on.
+     Storage can throw (private mode, sandboxed frames): then run it. */
+  (function (d) {
+    var run = true;
+    try { if (localStorage.getItem('aai-intro-seen')) run = false; } catch (e) {}
+    if (location.hash === '#skip-intro') run = false;
+    if (run) d.className += ' js intro';
+  })(document.documentElement);
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unbounded:wght@400..900&display=swap">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 1 · TOKENS
+   Page tokens are the live site's (src/styles/tokens.css). Room tokens
+   are a warm near-black, never a blue UI black.
+   ═══════════════════════════════════════════════════════════════════════ */
+:root {
+  --c-page: oklch(97.2% 0.006 85);
+  --c-bg: oklch(99.6% 0.002 90);
+  --c-fg: oklch(17% 0.004 100);
+  --c-fg-soft: oklch(17% 0.004 100 / 0.72);
+  --c-line-soft: oklch(84% 0.012 85);
+  --c-accent: oklch(39% 0.065 158);
+  --c-accent-soft: oklch(94.5% 0.02 158);
+  --c-accent-bright: oklch(84% 0.085 155);
+
+  --ff-display: 'Unbounded', ui-sans-serif, system-ui, sans-serif;
+  --ff-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --ff-mono: 'Space Mono', ui-monospace, monospace;
+  --measure: 62ch;
+  --radius-sm: 8px;
+  --radius: 12px;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Page gutters. The circuit traces live in them, so they are never
+     narrower than a trace + its spur (see CSS 4). */
+  --pad-l: clamp(48px, 7vw, 104px);
+  --pad-r: var(--pad-l);
+
+  /* Circuit traces */
+  --trace: var(--c-accent);
+  --trace-on-ink: var(--c-accent-bright);
+
+  /* The room */
+  --room-wall-top: oklch(15.5% 0.011 55);
+  --room-wall: oklch(19% 0.014 58);
+  --room-floor: oklch(17% 0.016 52);
+  --room-floor-deep: oklch(11% 0.01 50);
+  --room-base: oklch(22% 0.014 58);
+  --room-base-edge: oklch(33% 0.018 62);
+  --room-ink: oklch(93% 0.012 85);          /* 13:1+ on the wall */
+  --room-ink-2: oklch(82% 0.03 80);         /* hint text, 9:1+ */
+  --room-line: oklch(70% 0.02 80);
+  --room-focus: oklch(86% 0.14 85);         /* warm yellow ring, 10:1+ */
+  --cord: oklch(74% 0.022 75);
+  --cable: oklch(52% 0.016 65);
+  --glow-warm: oklch(90% 0.13 85);
+  --ochre: oklch(76% 0.13 75);              /* the bubble's 3D extrusion */
+  --ochre-deep: oklch(48% 0.1 60);
+  --paper: oklch(97% 0.018 88);
+
+  /* The pixel device */
+  --shell: oklch(41% 0.07 158);
+  --shell-hi: oklch(60% 0.085 158);
+  --shell-lo: oklch(27% 0.05 158);
+  --lcd: oklch(85% 0.06 125);
+  --lcd-ink: oklch(27% 0.05 145);           /* 9:1 on --lcd */
+}
+@media (max-width: 699px) {
+  :root { --pad-l: 34px; --pad-r: 20px; }   /* the phone trace sits at 12px */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 2 · PAGE LAYOUT
+   ═══════════════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
+/* scrollbar-gutter: the page is the same width with scroll locked (intro)
+   and unlocked, so traces routed under the dialog still line up after. */
+html { background: var(--c-page); color: var(--c-fg); -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }
+body { margin: 0; background: var(--c-page); font: 400 1.0625rem/1.62 var(--ff-body); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+h1, h2, h3 { margin: 0; font-family: var(--ff-display); font-weight: 600; letter-spacing: -0.02em; text-wrap: balance; }
+p { margin: 0; text-wrap: pretty; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { color: var(--c-accent); }
+img { display: block; max-width: 100%; height: auto; }
+:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; border-radius: 4px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.site { position: relative; }
+.shell { padding-inline: var(--pad-l) var(--pad-r); }
+.wrap { max-width: 1200px; margin-inline: auto; }
+
+.label {
+  font: 400 0.75rem/1.5 var(--ff-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c-fg-soft);
+}
+.accent-word { color: var(--c-accent); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  min-height: 48px; padding: 0 22px;
+  border-radius: var(--radius-sm);
+  background: var(--c-accent); color: var(--c-bg);
+  font: 700 0.8125rem/1 var(--ff-mono); letter-spacing: 0.08em; text-transform: uppercase;
+  text-decoration: none; border: 0; cursor: pointer;
+}
+.btn:hover { color: var(--c-bg); filter: brightness(1.1); }
+.link-mono {
+  font: 700 0.8125rem/1.4 var(--ff-mono); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--c-fg); text-underline-offset: 0.35em;
+  min-height: 44px; display: inline-flex; align-items: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 3 · SECTIONS (real homepage copy, src/pages/Home.tsx + src/data)
+   ═══════════════════════════════════════════════════════════════════════ */
+/* Top bar. Its bottom edge is where the first trace branches, so it has no
+   rule of its own once the traces are drawn (no-JS keeps a hairline). */
+.topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 76px; }
+.wordmark { font: 600 1.0625rem/1 var(--ff-display); letter-spacing: -0.02em; text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
+.wordmark span { color: var(--c-accent); }
+.topnav { display: flex; gap: 26px; }
+.topnav a { font: 400 0.75rem/1 var(--ff-mono); letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+.topnav a:hover { text-decoration: underline; }
+@media (max-width: 899px) { .topnav { display: none; } }
+
+.hero { padding-block: 64px 72px; }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 72px; align-items: center; }
+.hero h1 {
+  margin-top: 20px;
+  font-size: clamp(1.75rem, 0.9rem + 2.7vw, 3.35rem);
+  font-weight: 700; line-height: 1.04; letter-spacing: -0.035em;
+}
+.hero h1:focus { outline: none; }
+.hero .subtitle { margin-top: 24px; max-width: 54ch; font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.2rem); color: var(--c-fg-soft); }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 26px; margin-top: 32px; }
+.hero-scale { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--c-line-soft); max-width: 62ch; font: 400 0.8125rem/1.6 var(--ff-mono); color: var(--c-fg-soft); }
+.portrait { margin: 0; }
+.portrait img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius); }
+.portrait figcaption { margin-top: 14px; font: 400 0.75rem/1.6 var(--ff-mono); color: var(--c-fg-soft); }
+.portrait figcaption strong { display: block; color: var(--c-fg); font-weight: 700; }
+@media (max-width: 1023px) {
+  .hero { padding-block: 44px 48px; }
+  .hero .wrap { grid-template-columns: 1fr; gap: 0; }
+  .portrait { display: flex; align-items: center; gap: 14px; margin-top: 32px; }
+  .portrait img { width: 64px; border-radius: 50%; flex: none; }
+  .portrait figcaption { margin: 0; }
+}
+
+.intro-block { padding-block: 8px 40px; }
+.intro-block p { font-size: clamp(1.125rem, 1rem + 0.5vw, 1.35rem); line-height: 1.55; max-width: var(--measure); }
+
+.problem { padding-block: 56px 88px; }
+.problem .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 72px; }
+.problem h2, .sec-head h2 { font-size: clamp(1.375rem, 1rem + 1.5vw, 2.125rem); line-height: 1.15; }
+.problem h2 { max-width: 22ch; }
+.problem .body p { margin-top: 20px; max-width: var(--measure); }
+.problem .body p + p { color: var(--c-fg-soft); }
+.evidence { list-style: none; margin: 0; padding: 0; display: grid; gap: 28px; align-content: start; }
+.evidence li { padding-top: 14px; border-top: 1px solid var(--c-fg); }
+.ev-num { display: block; font: 600 2.4rem/1 var(--ff-display); letter-spacing: -0.03em; color: var(--c-accent); }
+.ev-label { margin-top: 10px; font-size: 0.9375rem; line-height: 1.5; }
+.ev-src { margin-top: 8px; font: 400 0.75rem/1.5 var(--ff-mono); color: var(--c-fg-soft); }
+@media (max-width: 1023px) {
+  .problem .wrap { grid-template-columns: 1fr; gap: 36px; }
+}
+@media (min-width: 700px) and (max-width: 1023px) { .evidence { grid-template-columns: 1fr 1fr; gap: 28px 32px; } }
+
+.block { padding-block: 88px; }
+@media (max-width: 699px) { .block { padding-block: 64px; } .problem { padding-bottom: 64px; } }
+.sec-head { padding-bottom: 18px; border-bottom: 1px solid var(--c-fg); margin-bottom: 32px; }
+.sec-head .label { display: block; margin-bottom: 10px; }
+
+.ships { background: var(--c-bg); }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.stat { background: var(--c-page); border: 1px solid var(--c-line-soft); border-radius: var(--radius); padding: 24px; display: flex; flex-direction: column; gap: 10px; }
+.stat .label { font-size: 0.6875rem; }
+.stat-num { font: 600 clamp(2rem, 1.5rem + 2vw, 3.25rem)/1 var(--ff-display); letter-spacing: -0.03em; }
+.stat-num.medium { font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem); }
+.stat-desc { font: 400 0.8125rem/1.5 var(--ff-mono); color: var(--c-fg-soft); margin-top: auto; }
+@media (max-width: 760px) { .stats { grid-template-columns: 1fr; } }
+
+.band { background: var(--c-fg); color: var(--c-bg); }
+.band blockquote { margin: 0; padding-block: 96px; max-width: 30em; }
+@media (max-width: 699px) { .band blockquote { padding-block: 72px; } }
+.band blockquote p { font: 500 clamp(1.25rem, 1rem + 1.2vw, 1.85rem)/1.35 var(--ff-display); letter-spacing: -0.015em; text-wrap: balance; }
+.band cite { display: block; margin-top: 24px; font: 400 0.75rem/1.5 var(--ff-mono); font-style: normal; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-accent-bright); }
+
+.offers-lede { color: var(--c-fg-soft); margin: -12px 0 12px; }
+.offer-list { list-style: none; margin: 0; padding: 0; }
+.offer { padding-block: 28px; border-bottom: 1px solid var(--c-line-soft); display: grid; grid-template-columns: minmax(0, 1fr) 15rem; column-gap: 48px; }
+.offer-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; }
+.offer-title { font-size: clamp(1.125rem, 1rem + 0.5vw, 1.4rem); line-height: 1.25; }
+.offer-meta { font: 400 0.75rem/1.4 var(--ff-mono); color: var(--c-fg-soft); letter-spacing: 0.04em; }
+.offer-body { margin-top: 10px; color: var(--c-fg-soft); max-width: 64ch; }
+.offer-price { align-self: start; padding-top: 4px; font: 700 0.875rem/1.4 var(--ff-mono); color: var(--c-accent); }
+.offer-price small { display: block; margin-top: 6px; font: 400 0.75rem/1.5 var(--ff-mono); color: var(--c-fg-soft); }
+@media (max-width: 899px) { .offer { grid-template-columns: 1fr; } .offer-price { margin-top: 14px; } }
+.bigger { margin-top: 36px; border: 1px solid var(--c-line-soft); border-radius: var(--radius); padding: 22px 24px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; background: var(--c-bg); }
+.bigger strong { font: 600 1.05rem/1.3 var(--ff-display); letter-spacing: -0.01em; }
+.bigger .price { font: 700 0.8125rem/1.4 var(--ff-mono); color: var(--c-accent); }
+.services-more { margin-top: 20px; }
+.services-more a { font-weight: 500; }
+.small-print { margin-top: 16px; font: 400 0.75rem/1.6 var(--ff-mono); color: var(--c-fg-soft); max-width: 70ch; }
+
+/* The free-call card: the loudest thing on the page. */
+.call { background: var(--c-accent); color: var(--c-bg); border-radius: var(--radius); padding: clamp(24px, 4vw, 44px); }
+.call h3 { font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.4rem); line-height: 1.1; }
+.call .label { color: var(--c-accent-bright); margin-top: 26px; padding-top: 22px; border-top: 1px solid oklch(99.6% 0.002 90 / 0.25); }
+.steps { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 28px; }
+.steps li { padding-left: 14px; border-left: 2px solid var(--c-accent-bright); }
+.call-foot { margin-top: 28px; padding-top: 22px; border-top: 1px solid oklch(99.6% 0.002 90 / 0.25); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.call-foot p { font: 400 0.8125rem/1.5 var(--ff-mono); }
+.btn-call { background: var(--c-bg); color: var(--c-accent); }
+.btn-call:hover { color: var(--c-accent); }
+.call :focus-visible { outline-color: var(--c-bg); }
+.write { margin-top: 28px; max-width: var(--measure); color: var(--c-fg-soft); }
+.write a { color: var(--c-fg); }
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
+
+.foot { padding-block: 40px 120px; border-top: 1px solid var(--c-line-soft); }
+.foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; }
+.foot p { font: 400 0.75rem/1.6 var(--ff-mono); letter-spacing: 0.04em; color: var(--c-fg-soft); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 4 · CIRCUIT TRACES
+   One SVG over the whole page, drawn by JS from the real section boxes.
+   Hairlines in the forest accent, 45/90° corners, round vias and a few
+   square solder pads. They run only in the gutters and gaps, so text never
+   sits on a line. After the boot they stay as quiet decoration.
+   Each path has pathLength=1, so "1" is its full length for the dash draw.
+   ═══════════════════════════════════════════════════════════════════════ */
+.traces { position: absolute; left: 0; top: 0; z-index: 2; pointer-events: none; overflow: visible; }
+.traces path {
+  fill: none; stroke: var(--trace); stroke-width: 1.35;
+  stroke-linejoin: miter; stroke-linecap: butt;
+  stroke-dasharray: 1 1; stroke-dashoffset: 0;
+  opacity: 0.42;
+  transition: opacity 1.2s ease;
+}
+.traces .ink path { stroke: var(--trace-on-ink); opacity: 0.38; }
+.traces path.off { stroke-dashoffset: 1; }
+.traces path.live { opacity: 0.95; }
+.traces .pad { fill: var(--c-page); stroke: var(--trace); stroke-width: 1.25; opacity: 0.55; transition: opacity 0.4s ease, fill 0.4s ease; }
+.traces .ink .pad { fill: var(--c-fg); stroke: var(--trace-on-ink); }
+.traces .pad.sq { fill: var(--trace); }
+.traces .ink .pad.sq { fill: var(--trace-on-ink); }
+.traces .pad.off { opacity: 0; }
+.traces .pad.lit { fill: var(--trace); opacity: 0.7; }
+.traces .ink .pad.lit { fill: var(--trace-on-ink); }
+.traces .pad.flash { animation: via-flash 900ms ease-out; }
+@keyframes via-flash {
+  0% { opacity: 1; filter: drop-shadow(0 0 0 oklch(70% 0.14 155)); }
+  25% { opacity: 1; filter: drop-shadow(0 0 5px oklch(70% 0.14 155)) drop-shadow(0 0 2px oklch(80% 0.12 155)); }
+  100% { opacity: 0.7; filter: drop-shadow(0 0 0 oklch(70% 0.14 155)); }
+}
+/* With the traces drawn, the top bar's divider IS the trace. */
+html:not(.has-traces) .topbar { border-bottom: 1px solid var(--c-line-soft); }
+
+/* Before the boot (only while the intro runs) the page waits at 35%,
+   6px low. Each part rises as its trace reaches it. */
+html.intro .fx-sec { opacity: 0.35; transform: translateY(6px); }
+html.intro .fx-sec.on { opacity: 1; transform: none; transition: opacity 600ms ease, transform 600ms var(--ease); }
+html.intro .fx-sec.on.now { transition: none; }
+html.measuring .fx-sec { transform: none !important; transition: none !important; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 5 · ROOM SCENE (the intro dialog)
+   Positions are CSS custom properties on .room, so the layout lives here;
+   JS only measures marker elements on resize.
+   ═══════════════════════════════════════════════════════════════════════ */
+/* Scroll is locked while the dialog is up. Late in the boot the page is
+   "released" (JS 10): it scrolls and takes input while the last of the
+   room fades out on top. */
+html.intro:not(.released), html.intro:not(.released) body { overflow: hidden; }
+/* With classic scrollbars, the reserved gutter (CSS 2) sits beside the
+   fixed room: paint it room-dark, not page-light, while the room is up. */
+html.intro:not(.released) { background: var(--room-floor-deep); }
+.room { display: none; }
+html.intro .room {
+  /* clip, not just hidden: nothing (focus, scrollIntoView) can scroll the
+     room, even though the parked device hangs below its bottom edge. */
+  display: block; position: fixed; inset: 0; z-index: 100; overflow: hidden; overflow: clip;
+  color: var(--room-ink); outline: none; color-scheme: dark;
+  touch-action: manipulation;
+  /* layout */
+  --rose-x: 50%;           /* ceiling rose / bulb, from the left */
+  --rose-vw: 50vw;         /* the same, in vw (for sizes inside shrink-to-fit boxes) */
+  --fx-scale: 1.45;        /* the fixture is drawn at 120px wide, then scaled */
+  --bead-scale: 1;         /* the bead's drawing, scaled about its tie point */
+  --flex: 64px;            /* flex length, rose to socket (before scaling) */
+  --pin-dx: calc(25.5px * var(--fx-scale));   /* the pull switch, just right of the glass */
+  --bulb-y: calc((67px + var(--flex)) * var(--fx-scale));
+  --bead-y: 52%;           /* bead centre at rest */
+  --floor-y: 80%;          /* the wall meets the floor */
+  --outlet-x: calc(100% - 380px);
+  --plug-dx: 84px;         /* plug rests this far right of the outlet */
+  --cable-x: calc(100% - 214px);   /* where the lamp cable comes down (clear of Skip) */
+  --dev-w: clamp(196px, 27vh, 248px);
+  --dev-left: max(24px, 6%);
+  --dev-bottom: 3%;
+  /* --dev-h (the device's rendered height) is set by JS 4 on measure. */
+}
+/* Big desktop rooms: the lamp is the hero object, so it grows with them. */
+@media (min-width: 1200px) and (min-height: 760px) {
+  html.intro .room { --fx-scale: 1.8; --bead-scale: 1.25; }
+}
+/* Phones: the device sits bottom-centre with "Plug it in" above it, the
+   outlet + plug lower-left, the lamp ~60% across. */
+@media (max-width: 699px) {
+  html.intro .room {
+    --rose-x: 60%; --rose-vw: 60vw; --fx-scale: 1.1; --flex: 34px; --bead-y: 41%; --floor-y: 57%;
+    --outlet-x: 31%; --plug-dx: -62px; --cable-x: 9px;
+    --dev-w: min(180px, 48vw, 26vh);
+    --dev-left: calc(50% - var(--dev-w) / 2);
+    --dev-bottom: 8px;
+  }
+}
+/* Short phones (e.g. 320×568): the floor rises a little so the plug, the
+   button and the device stack without touching. */
+@media (max-width: 699px) and (max-height: 700px) {
+  html.intro .room { --floor-y: 52%; --bead-y: 38%; --dev-w: min(124px, 40vw, 23vh); }
+}
+/* Very short + narrow (landscape phones, 200% zoom): there is width to
+   spare but no height, so "Plug it in" goes back beside the device. */
+@media (max-width: 699px) and (max-height: 480px) {
+  html.intro .room { --dev-w: min(120px, 30vh); }
+}
+/* 320-wide: a slightly smaller lamp a little left, so it clears Skip on
+   its right and the bubble on its left. */
+@media (max-width: 340px) {
+  html.intro .room { --rose-x: 57%; --rose-vw: 57vw; --fx-scale: 1; }
+}
+
+/* The room opens from the lit bulb: a radial mask whose clear centre
+   (--reveal) grows over the boot, so the page appears inside a widening
+   warm circle instead of the whole room crossfading through grey. */
+@property --reveal { syntax: '<length>'; inherits: false; initial-value: 0px; }
+.room-bg {
+  position: absolute; inset: 0;
+  --reveal: 0px;
+  /* --reveal is the circle's soft outer edge: at 0 the room is solid. */
+  -webkit-mask-image: radial-gradient(circle at var(--rose-x) var(--bulb-y), transparent calc(var(--reveal) - 140px), #000 var(--reveal));
+  mask-image: radial-gradient(circle at var(--rose-x) var(--bulb-y), transparent calc(var(--reveal) - 140px), #000 var(--reveal));
+}
+.wall {
+  position: absolute; left: 0; right: 0; top: 0; height: var(--floor-y);
+  background:
+    radial-gradient(ellipse 60% 55% at var(--rose-x) 0%, oklch(23% 0.018 62), transparent 72%),
+    repeating-linear-gradient(90deg, transparent 0 58px, oklch(100% 0 0 / 0.016) 58px 60px),
+    linear-gradient(var(--room-wall-top), var(--room-wall));
+}
+.baseboard {
+  position: absolute; left: 0; right: 0; top: calc(var(--floor-y) - 14px); height: 14px;
+  background: var(--room-base); box-shadow: inset 0 1px 0 var(--room-base-edge);
+}
+.floor {
+  position: absolute; left: 0; right: 0; top: var(--floor-y); bottom: 0;
+  background: linear-gradient(var(--room-floor), var(--room-floor-deep));
+}
+.floor::before {      /* floorboards: seams that open up toward the viewer */
+  content: ''; position: absolute; inset: 0;
+  background:
+    linear-gradient(oklch(0% 0 0 / 0.32) 0 1px, transparent 1px 12px, oklch(0% 0 0 / 0.26) 12px 13px, transparent 13px 30px, oklch(0% 0 0 / 0.22) 30px 31px, transparent 31px 56px, oklch(0% 0 0 / 0.2) 56px 57px, transparent 57px 92px, oklch(0% 0 0 / 0.18) 92px 93px, transparent 93px 140px, oklch(0% 0 0 / 0.16) 140px 141px, transparent 141px);
+}
+.floor::after {       /* the wall's shadow on the floor, and the dark falling off */
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(oklch(0% 0 0 / 0.35), transparent 22px), radial-gradient(120% 90% at 50% 0%, transparent 40%, oklch(0% 0 0 / 0.35));
+}
+.room-bg::after {     /* a soft vignette: the corners fall away */
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(130% 100% at var(--rose-x) 30%, transparent 45%, oklch(0% 0 0 / 0.4));
+}
+/* The device's backlight is the only light in the room: it pools on the floor. */
+.dev-glow {
+  position: absolute; left: calc(var(--dev-left) - var(--dev-w) * 0.8); bottom: calc(var(--dev-bottom) - var(--dev-w) * 0.35);
+  width: calc(var(--dev-w) * 2.6); height: calc(var(--dev-w) * 1.3);
+  background: radial-gradient(closest-side, oklch(78% 0.08 135 / 0.2), oklch(70% 0.07 135 / 0.07) 55%, transparent);
+  opacity: 0; transition: opacity 900ms ease 200ms;
+}
+.room.has-device .dev-glow { opacity: 1; }
+
+/* The bulb's warm pool (boot only). Sits over the room, under the props. */
+.pool {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle at var(--rose-x) var(--bulb-y), oklch(92% 0.1 85 / 0.6), oklch(84% 0.11 78 / 0.22) 26%, oklch(80% 0.1 75 / 0.06) 50%, transparent 68%);
+  transition: opacity 650ms ease;
+}
+
+/* Ceiling rose → flex → socket + pull switch → bulb. */
+.fixture { position: absolute; top: 0; left: calc(var(--rose-x) - 60px); width: 120px; z-index: 4; pointer-events: none; display: flex; flex-direction: column; align-items: center; transform: scale(var(--fx-scale)); transform-origin: 50% 0; transition: opacity 500ms ease; }
+.fixture svg { display: block; overflow: visible; }
+.fixture .flex { width: 2px; height: var(--flex); background: oklch(44% 0.014 62); }
+.fixture .lamp { position: relative; width: 120px; height: 80px; }
+.fixture .pin { position: absolute; left: 85.5px; top: 18px; width: 0; height: 0; }
+.fx-rose { fill: oklch(30% 0.012 60); stroke: oklch(44% 0.016 62); stroke-width: 1; }
+.fx-metal { fill: oklch(36% 0.03 75); stroke: oklch(52% 0.04 78); stroke-width: 1; }
+.fx-ring { stroke: oklch(26% 0.02 70); stroke-width: 1.2; }
+.bulb-glass { fill: oklch(34% 0.012 70 / 0.42); stroke: oklch(64% 0.02 80); stroke-width: 1.4; transition: fill 400ms ease, stroke 400ms ease; }
+.bulb-shine { fill: none; stroke: oklch(100% 0 0 / 0.16); stroke-width: 1.6; stroke-linecap: round; }
+.bulb-fil { fill: none; stroke: oklch(52% 0.04 55); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.bulb-glow { opacity: 0; }
+/* A failed pull: the filament flashes and dies (once or twice). */
+.fixture.flick .bulb-fil { animation: fil-flick 380ms linear; }
+.fixture.flick .bulb-glow { animation: glow-flick 380ms linear; }
+@keyframes fil-flick {
+  0%, 100% { stroke: oklch(52% 0.04 55); }
+  8% { stroke: oklch(88% 0.16 75); } 22% { stroke: oklch(60% 0.12 55); }
+  34% { stroke: oklch(80% 0.17 65); } 50% { stroke: oklch(52% 0.04 55); }
+}
+@keyframes glow-flick { 0%, 100% { opacity: 0; } 8% { opacity: 0.5; } 22% { opacity: 0.08; } 34% { opacity: 0.3; } 50% { opacity: 0; } }
+/* Boot: the filament warms dull orange → bright, ONE tiny flicker. */
+.fixture.warm .bulb-fil { animation: fil-warm 520ms ease-out forwards; }
+.fixture.warm .bulb-glass { fill: oklch(96% 0.07 92 / 0.9); stroke: oklch(80% 0.1 82); }
+.fixture.warm .bulb-glow { animation: glow-warm 520ms ease-out forwards; }
+@keyframes fil-warm {
+  0% { stroke: oklch(52% 0.04 55); } 35% { stroke: oklch(66% 0.17 50); }
+  52% { stroke: oklch(58% 0.13 50); } 70% { stroke: oklch(80% 0.17 62); }
+  100% { stroke: oklch(97% 0.08 92); }
+}
+@keyframes glow-warm { 0% { opacity: 0; } 35% { opacity: 0.45; } 52% { opacity: 0.25; } 100% { opacity: 1; } }
+
+/* Cord + cable: one SVG, viewport coordinates, drawn by JS. */
+.ropes { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none; overflow: visible; }
+.cord { fill: none; stroke: var(--cord); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; transition: opacity 500ms ease; }
+.cable, .cable-run { fill: none; stroke: var(--cable); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+.cable-hi { fill: none; stroke: oklch(64% 0.016 70 / 0.55); stroke-width: 1.2; stroke-linecap: round; transform: translate(-0.8px, -1px); }
+.pulse { fill: none; stroke-linecap: round; opacity: 0; }
+.pulse.glow { stroke: oklch(90% 0.15 88 / 0.75); stroke-width: 16; filter: blur(5px); }
+.pulse.core { stroke: oklch(99% 0.05 95); stroke-width: 4.5; }
+
+/* The bead: a real button. 64×64 hit area, touch-action:none so a drag
+   pulls the cord. The cord ties on at (32, 8); the bead centres at (32, 37). */
+.bead {
+  position: absolute; left: 0; top: 0; z-index: 8;
+  width: 64px; height: 64px; padding: 0; margin: 0;
+  border: 0; border-radius: 50%; background: transparent; color: inherit;
+  cursor: grab; touch-action: none; -webkit-tap-highlight-color: transparent;
+  transform-origin: 32px 8px; will-change: transform;
+}
+.bead:active { cursor: grabbing; }
+.bead svg { display: block; width: 64px; height: 64px; overflow: visible; pointer-events: none; transform: scale(var(--bead-scale)); transform-origin: 32px 8px; }
+.bead-slot, .plug-slot, .cable-anchor { position: absolute; width: 0; height: 0; pointer-events: none; }
+.bead-slot { left: calc(var(--rose-x) + var(--pin-dx)); top: var(--bead-y); }
+.cable-anchor { left: var(--cable-x); top: 0; }
+.plug-slot { left: calc(var(--outlet-x) + var(--plug-dx)); top: var(--floor-y); }
+
+.hint {
+  position: absolute; z-index: 8; margin: 0;
+  left: calc(var(--rose-x) + var(--pin-dx) + 40px); top: var(--bead-y); transform: translateY(-50%);
+  font: 400 0.8125rem/1.3 var(--ff-mono); letter-spacing: 0.06em; color: var(--room-ink-2);
+  transition: opacity 400ms ease; pointer-events: none; white-space: nowrap;
+}
+.hint::before { content: ''; display: inline-block; width: 18px; height: 1px; margin-right: 10px; vertical-align: middle; background: var(--room-ink-2); opacity: 0.6; }
+@media (max-width: 699px) {
+  .hint { left: calc(var(--rose-x) + var(--pin-dx)); top: calc(var(--bead-y) + 44px); transform: translateX(-50%); }
+  .hint::before { display: none; }
+}
+.room.pulled .hint { opacity: 0; }
+
+/* Until JS 12 has placed them (end of openRoom), the script-positioned
+   props would paint stacked at the top-left: keep them hidden. */
+.room:not(.ready) :is(.bead, .plug, .ropes, .hint) { visibility: hidden; }
+
+/* Buttons in the room share one ring: warm yellow on the dark. */
+.room :focus-visible { outline: 2px solid var(--room-focus); outline-offset: 3px; }
+.room .bead:focus-visible { outline-offset: -6px; border-radius: 50%; }
+.skip {
+  position: absolute; top: 14px; right: 14px; z-index: 12;
+  min-height: 44px; padding: 0 16px; border-radius: var(--radius-sm);
+  background: oklch(15% 0.01 55 / 0.7); color: var(--room-ink);
+  border: 1px solid oklch(60% 0.02 75);
+  font: 700 0.75rem/1.25 var(--ff-mono); letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer; transition: opacity 300ms ease, background 150ms ease;
+}
+.skip:hover { background: oklch(26% 0.014 60); }
+@media (max-width: 599px) { .skip { max-width: 108px; padding: 4px 12px; text-align: left; } }
+/* 320-wide: tuck Skip into the corner, clear of the ceiling rose. */
+@media (max-width: 340px) { .skip { top: 8px; right: 8px; max-width: 92px; padding: 4px 9px; letter-spacing: 0.05em; } }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 6 · COMIC BUBBLE
+   The visitor's inner monologue. Drawn by JS as ONE SVG path (balloon +
+   tail) around the measured text: thick ink outline, off-white paper,
+   halftone dots in one corner, and a stacked solid extrusion (8 × 1px
+   drop-shadows) for the 3D depth. It pops 0.6 → 1.06 → 1.
+   ═══════════════════════════════════════════════════════════════════════ */
+.bubble {
+  position: absolute; z-index: 7; pointer-events: none;
+  right: calc(100% - var(--rose-x) + 70px); top: 14%;
+  --bubble-max: min(390px, calc(var(--rose-vw) - 120px));
+  visibility: hidden;
+}
+@media (max-width: 699px) {
+  .bubble { right: auto; left: 14px; top: calc(var(--bulb-y) + 42px); --bubble-max: calc(var(--rose-vw) - 34px); }
+}
+/* Short phones: the bubble moves up beside the bulb, clear of the outlet. */
+@media (max-width: 699px) and (max-height: 700px) {
+  .bubble { top: 58px; --bubble-max: calc(var(--rose-vw) - 70px); }
+}
+/* Very short (landscape phones, 200% zoom): right up under the ceiling,
+   tighter padding, so the tail stays above the outlet. */
+@media (max-width: 699px) and (max-height: 480px) {
+  .bubble { top: 8px; }
+  .bubble .bubble-text { padding: 10px 16px 11px; }
+}
+.bubble.show { visibility: visible; }
+.bubble svg { display: block; overflow: visible;
+  filter:
+    drop-shadow(1px 1px 0 var(--ochre)) drop-shadow(1px 1px 0 var(--ochre))
+    drop-shadow(1px 1px 0 var(--ochre)) drop-shadow(1px 1px 0 var(--ochre))
+    drop-shadow(1px 1px 0 var(--ochre)) drop-shadow(1px 1px 0 var(--ochre))
+    drop-shadow(1.5px 1.5px 0 var(--ochre-deep));
+}
+.bubble .b-body { fill: var(--paper); }
+.bubble .b-line { fill: none; stroke: var(--c-fg); stroke-width: 3.5; stroke-linejoin: round; }
+.bubble .b-dots { fill: url(#halftone); }
+.bubble-text {
+  position: absolute; left: 0; top: 0; margin: 0;
+  max-width: var(--bubble-max); width: max-content;
+  padding: 22px 34px 24px;
+  font: 800 clamp(16px, 0.55rem + 1.3vw, 28px)/1.12 var(--ff-display);
+  letter-spacing: 0.005em; text-transform: uppercase; color: var(--c-fg);
+  text-wrap: balance;
+}
+@media (max-width: 699px) { .bubble-text { padding: 14px 18px 15px; font-size: clamp(13px, 3.8vw, 15px); } }
+/* 320-wide: one size down so "YESTERDAY…" fits the narrow balloon. */
+@media (max-width: 340px) { .bubble-text { padding: 12px 12px 13px; font-size: 12px; letter-spacing: -0.005em; } }
+.bubble.pop { animation: bubble-pop 260ms cubic-bezier(0.3, 0.7, 0.4, 1) both; }
+@keyframes bubble-pop {
+  0% { transform: rotate(var(--rot)) scale(0.6); opacity: 0; }
+  55% { transform: rotate(var(--rot)) scale(1.06); opacity: 1; }
+  100% { transform: rotate(var(--rot)) scale(1); opacity: 1; }
+}
+.bubble { transform: rotate(var(--rot, -2deg)); }
+.bubble.out { opacity: 0; transition: opacity 200ms ease; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 7 · DEVICE + SPRITE
+   An egg-shaped handheld in forest-green plastic. Sizes are in em, from
+   --dev-w; the LCD text has a px floor so it stays readable on phones.
+   ═══════════════════════════════════════════════════════════════════════ */
+.device {
+  position: absolute; z-index: 6; left: var(--dev-left); bottom: var(--dev-bottom);
+  width: var(--dev-w); font-size: calc(var(--dev-w) / 16);
+  transform: translateY(calc(100% + 80px)); visibility: hidden;
+  transition: transform 720ms cubic-bezier(0.2, 0.9, 0.25, 1.08), visibility 0s linear 720ms;
+}
+.room.has-device .device { transform: none; visibility: visible; transition: transform 720ms cubic-bezier(0.2, 0.9, 0.25, 1.08), visibility 0s; }
+.egg {
+  position: relative; display: flex; flex-direction: column; align-items: center;
+  padding: 2.5em 0 1.6em;
+  border-radius: 50% 50% 46% 46% / 58% 58% 42% 42%;
+  background:
+    radial-gradient(ellipse 60% 42% at 34% 20%, oklch(66% 0.08 158 / 0.55), transparent 70%),
+    radial-gradient(ellipse 85% 75% at 45% 38%, var(--shell) 40%, var(--shell-lo) 100%);
+  box-shadow:
+    inset 0 -0.5em 1em oklch(18% 0.04 158 / 0.55),
+    inset 0.3em 0.35em 0.6em oklch(70% 0.08 158 / 0.35),
+    0 1.2em 2em oklch(0% 0 0 / 0.45);
+}
+/* specular highlight + key ring */
+.egg::before {
+  content: ''; position: absolute; left: 17%; top: 7%; width: 30%; height: 13%;
+  border-radius: 50%; background: radial-gradient(closest-side, oklch(100% 0 0 / 0.38), transparent);
+  transform: rotate(-24deg);
+}
+.egg::after {
+  content: ''; position: absolute; left: 50%; top: -0.75em; width: 1.3em; height: 1.3em; margin-left: -0.65em;
+  border-radius: 50%; border: 0.22em solid oklch(62% 0.02 80); border-bottom-color: transparent;
+}
+.bezel {
+  position: relative; width: 74%; padding: 0.42em; border-radius: 0.9em;
+  background: oklch(22% 0.025 158);
+  box-shadow: inset 0 0.12em 0.3em oklch(0% 0 0 / 0.6), 0 0.08em 0 oklch(62% 0.07 158 / 0.5);
+}
+.lcd {
+  position: relative; display: flex; flex-direction: column; align-items: center;
+  padding: 0.5em 0.45em 0.55em; border-radius: 0.55em; overflow: hidden;
+  background: var(--lcd); color: var(--lcd-ink);
+  box-shadow: inset 0 0 0.6em oklch(55% 0.06 130 / 0.45), 0 0 1.6em oklch(86% 0.1 125 / 0.42);
+}
+.lcd::after {          /* the LCD's pixel grid, very faint */
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg, oklch(0% 0 0 / 0.035) 0 1px, transparent 1px 3px), repeating-linear-gradient(90deg, oklch(0% 0 0 / 0.03) 0 1px, transparent 1px 3px);
+}
+.sprite { display: block; width: 96px; height: 96px; image-rendering: pixelated; image-rendering: crisp-edges; }
+.lcd-text {
+  width: 100%; margin: 0.35em 0 0; min-height: calc(3 * 1.3em);
+  font: 700 max(11px, 0.84em)/1.3 var(--ff-mono); letter-spacing: 0.01em; text-align: center; text-wrap: balance;
+  color: var(--lcd-ink);
+}
+.lcd-text.typing::after { content: ''; display: inline-block; width: 0.55em; height: 1em; margin-left: 2px; vertical-align: -0.12em; background: var(--lcd-ink); animation: caret 0.6s steps(1) infinite; }
+@keyframes caret { 50% { opacity: 0; } }
+.keys { display: flex; gap: 1.1em; margin-top: 1em; }
+.keys i {
+  width: 1.25em; height: 1.25em; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, oklch(96% 0.02 90), oklch(80% 0.03 85) 60%, oklch(64% 0.03 80));
+  box-shadow: 0 0.1em 0 oklch(20% 0.03 158 / 0.7);
+}
+.keys i:nth-child(2) { transform: translateY(0.35em); }
+
+/* "Plug it in": the keyboard / AT / one-tap path. Site button style. */
+.plugin-btn {
+  position: absolute; z-index: 10;
+  left: calc(var(--dev-left) + var(--dev-w) + 26px); bottom: calc(var(--dev-bottom) + var(--dev-w) * 0.5);
+  border: 1px solid oklch(62% 0.08 158);
+  --btn-x: 0px;
+  opacity: 0; transform: translate(var(--btn-x), 8px); transition: opacity 400ms ease 500ms, transform 400ms var(--ease) 500ms;
+}
+/* Phones: centred above the device (--dev-h comes from JS 4). */
+@media (max-width: 699px) {
+  .plugin-btn { left: 50%; --btn-x: -50%; bottom: calc(var(--dev-bottom) + var(--dev-h, 200px) + 10px); padding: 0 16px; white-space: nowrap; }
+}
+@media (max-width: 699px) and (max-height: 480px) {
+  .plugin-btn { left: calc(var(--dev-left) + var(--dev-w) + 16px); --btn-x: 0px; bottom: calc(var(--dev-bottom) + var(--dev-h, 160px) * 0.35); }
+}
+.room.has-device .plugin-btn { opacity: 1; transform: translate(var(--btn-x), 0); }
+.plugin-btn[hidden] { display: none; }
+.plugin-btn[aria-disabled="true"] { cursor: default; filter: none; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 8 · PLUG + OUTLET
+   ═══════════════════════════════════════════════════════════════════════ */
+.outlet { position: absolute; z-index: 2; left: var(--outlet-x); top: calc(var(--floor-y) - 70px); width: 0; height: 0; transition: opacity 600ms ease; }
+.outlet svg { position: absolute; left: -24px; top: -38px; width: 48px; height: 76px; overflow: visible; transform: scale(var(--outlet-scale, 1.18)); }
+@media (max-width: 699px) { .outlet svg { --outlet-scale: 1; } }
+.outlet .socket { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+.o-plate { fill: oklch(52% 0.012 80); stroke: oklch(64% 0.014 82); stroke-width: 1; }
+.o-face { fill: oklch(46% 0.012 78); stroke: oklch(36% 0.01 75); stroke-width: 1; }
+.o-slot { fill: oklch(14% 0.008 60); }
+.o-screw { fill: oklch(60% 0.02 80); stroke: oklch(40% 0.01 70); stroke-width: 0.6; }
+
+.plug {
+  position: absolute; left: 0; top: 0; z-index: 9;
+  width: 56px; height: 56px; padding: 0; margin: 0; border: 0; border-radius: 12px;
+  background: transparent; color: inherit; cursor: grab;
+  touch-action: none; -webkit-tap-highlight-color: transparent;
+  transform-origin: 28px 46px; will-change: transform;
+}
+.plug:active { cursor: grabbing; }
+.plug svg { display: block; width: 56px; height: 56px; overflow: visible; pointer-events: none; }
+.p-body { fill: oklch(72% 0.012 82); stroke: oklch(40% 0.012 70); stroke-width: 1; }
+.p-face { fill: oklch(64% 0.012 80); }
+.p-prong { fill: oklch(74% 0.09 82); stroke: oklch(46% 0.06 70); stroke-width: 0.6; }
+.p-relief { fill: oklch(44% 0.014 65); }
+.plug.seated .p-prong { opacity: 0; }
+.plug.seated svg { animation: seat 260ms ease-out; }
+@keyframes seat { 0% { transform: translateY(-2px) scale(1.04); } 45% { transform: translateY(2px) scale(0.95); } 100% { transform: none; } }
+.room:not(.has-device) .plug { cursor: grab; }
+
+/* "Look down": the only pulse in the scene. A ring on the plug + outlet. */
+.hl-ring { position: absolute; pointer-events: none; border-radius: 50%; border: 2px solid var(--room-focus); opacity: 0; }
+.outlet .hl-ring { left: -40px; top: -48px; width: 80px; height: 96px; border-radius: 22px; }
+.plug .hl-ring { left: -6px; top: -6px; width: 68px; height: 68px; }
+.room.hl .hl-ring { animation: hl 1.15s ease-out 3; }
+@keyframes hl { 0% { opacity: 0.95; transform: scale(0.88); } 100% { opacity: 0; transform: scale(1.18); } }
+
+/* sparks + arc */
+.fx { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 11; pointer-events: none; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 9 · BOOT SEQUENCE
+   JS adds these classes on a timeline (JS 10). The room dissolves into
+   the page; the bulb and cord stay on top a moment longer.
+   ═══════════════════════════════════════════════════════════════════════ */
+/* Skip stays visible and clickable until the page is released (fade-top);
+   nothing else in the room takes input once the boot starts. */
+.room.booting { pointer-events: none; }
+.room.booting .skip { pointer-events: auto; }
+.room.booting .plugin-btn, .room.booting .hint { opacity: 0; transition: opacity 250ms ease; }
+.room.fade-top .skip { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 250ms ease, visibility 0s linear 250ms; }
+.room.lit .pool { opacity: 1; }
+.room.dissolve .room-bg { --reveal: calc(150vmax + 140px); transition: --reveal 700ms cubic-bezier(0.3, 0, 0.2, 1); }
+.room.dissolve .outlet, .room.dissolve .plug, .room.dissolve .cable-g { opacity: 0; transition: opacity 600ms ease; }
+.room.dissolve .bubble { opacity: 0; }
+.room.fade-top .fixture, .room.fade-top .cord, .room.fade-top .bead, .room.fade-top .pool { opacity: 0; transition: opacity 500ms ease; }
+.cable-g { transition: opacity 600ms ease; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 10 · BADGE (mini-you, docked)
+   ═══════════════════════════════════════════════════════════════════════ */
+.badge-wrap { position: fixed; right: 16px; bottom: 16px; z-index: 60; display: none; }
+.badge-wrap.show { display: block; }
+.badge {
+  width: 56px; height: 56px; padding: 0; border-radius: 50%; cursor: pointer;
+  border: 3px solid var(--shell); background: var(--lcd);
+  box-shadow: 0 0 0 1px var(--shell-lo), 0 6px 18px oklch(17% 0.004 100 / 0.25), inset 0 0 8px oklch(55% 0.06 130 / 0.45);
+  display: grid; place-items: center; overflow: hidden;
+}
+.badge canvas { width: 48px; height: 48px; image-rendering: pixelated; image-rendering: crisp-edges; margin-top: 6px; }
+.badge-wrap.pop .badge { animation: badge-pop 420ms cubic-bezier(0.3, 0.7, 0.4, 1.3); }
+@keyframes badge-pop { 0% { transform: scale(0.4); opacity: 0; } 100% { transform: none; opacity: 1; } }
+/* Dismiss: a 44×44 target ABOVE the badge, 8px clear of it (a tap on the
+   badge never lands on ×) and in the same column, so it covers no more of
+   the page than the badge does. The drawn chip is a 24px circle. While the
+   card is open it has its own close, so × steps aside. */
+.badge-x {
+  position: absolute; left: 6px; top: -52px; width: 44px; height: 44px; padding: 0;
+  border: 0; border-radius: 50%; background: transparent; color: var(--c-fg);
+  font: 700 14px/1 var(--ff-body); cursor: pointer;
+  display: grid; place-items: center;
+}
+.badge-x::before {
+  content: ''; position: absolute; left: 10px; top: 10px; width: 24px; height: 24px; z-index: -1;
+  border-radius: 50%; border: 1px solid var(--c-line-soft); background: var(--c-bg);
+  box-shadow: 0 2px 8px oklch(17% 0.004 100 / 0.18);
+}
+.badge-x { isolation: isolate; }
+.badge-card:not([hidden]) ~ .badge-x { display: none; }
+.badge-card {
+  position: absolute; right: 0; bottom: 68px; width: 244px;
+  padding: 14px 48px 14px 14px; border-radius: var(--radius);
+  background: var(--lcd); color: var(--lcd-ink); border: 3px solid var(--shell);
+  box-shadow: 0 10px 28px oklch(17% 0.004 100 / 0.22);
+  font: 700 0.8125rem/1.45 var(--ff-mono);
+}
+.badge-card[hidden] { display: none; }
+.badge-card a { color: var(--lcd-ink); text-underline-offset: 0.25em; }
+.badge-card :focus-visible { outline-color: var(--c-fg); }
+/* The badge and its × float over light AND dark sections (the quote band):
+   a two-tone ring, ink line on a paper halo, reads ≥3:1 on both. */
+.badge:focus-visible, .badge-x:focus-visible {
+  outline: 2px solid var(--c-fg); outline-offset: 3px;
+}
+.badge:focus-visible { box-shadow: 0 0 0 7px var(--c-bg), 0 6px 18px oklch(17% 0.004 100 / 0.25); }
+.badge-x:focus-visible { outline-offset: -6px; box-shadow: none; }
+.badge-x:focus-visible::before { box-shadow: 0 0 0 7px var(--c-bg); }
+.card-x {
+  position: absolute; right: 0; top: 0; width: 44px; height: 44px; padding: 0;
+  border: 0; border-radius: 8px; background: transparent; color: var(--lcd-ink);
+  font: 700 18px/1 var(--ff-body); cursor: pointer;
+}
+/* Short viewports (landscape phones, 200% zoom): a fixed helper would
+   cover too much of the reading area, so it stays out of the way. */
+@media (max-height: 480px) { .badge-wrap.show { display: none; } }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 11 · PROTOTYPE CONTROLS (not part of the design)
+   Only shown once the intro is closed, so it can never cover the scene.
+   ═══════════════════════════════════════════════════════════════════════ */
+.proto { position: fixed; left: 0; bottom: 12px; z-index: 55; color-scheme: dark; font: 400 0.75rem/1.4 var(--ff-mono); color: oklch(95% 0.005 270); }
+html.intro .proto { display: none; }
+.proto[hidden] { display: none; }
+.proto details { background: oklch(23% 0.01 270 / 0.95); border: 1px solid oklch(45% 0.01 270); border-radius: 10px; box-shadow: 0 6px 24px oklch(0% 0 0 / 0.25); }
+.proto summary { list-style: none; cursor: pointer; min-height: 40px; padding: 0 12px; display: flex; align-items: center; gap: 8px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; }
+.proto summary::-webkit-details-marker { display: none; }
+.proto summary::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: oklch(82% 0.17 85); }
+.proto details:not([open]) { border-left: 0; border-radius: 0 8px 8px 0; }
+.proto details:not([open]) summary { writing-mode: vertical-rl; transform: rotate(180deg); width: 19px; min-height: 0; padding: 12px 0; font-size: 0.625rem; letter-spacing: 0.14em; }
+.proto details:not([open]) summary::before { width: 6px; height: 6px; }
+.proto details[open] { margin-left: 8px; }
+.proto details[open] summary::after { content: '−'; margin-left: auto; padding-left: 10px; font-weight: 400; }
+.proto summary:focus-visible, .proto button:focus-visible { outline: 2px solid oklch(85% 0.14 85); outline-offset: 2px; }
+.proto-body { padding: 4px 14px 14px; display: grid; gap: 10px; min-width: 210px; }
+.proto-state { color: oklch(82% 0.01 270); }
+.proto-state b { color: oklch(95% 0.005 270); font-weight: 700; }
+.proto button { font: inherit; color: inherit; background: transparent; cursor: pointer; border: 1px solid oklch(60% 0.01 270); border-radius: 7px; padding: 8px 12px; min-height: 36px; }
+.proto button:hover { background: oklch(32% 0.01 270); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CSS 12 · NO-JS, REDUCED MOTION, PRINT
+   No JS: the finished lit page, a single static trace down the left gutter.
+   ═══════════════════════════════════════════════════════════════════════ */
+html:not(.has-traces) .site::before {
+  content: ''; position: absolute; left: 12px; top: 76px; bottom: 0; width: 1.35px;
+  background: var(--trace); opacity: 0.35;
+}
+@media (min-width: 700px) { html:not(.has-traces) .site::before { left: calc(var(--pad-l) - 36px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble.pop { animation: bubble-fade 180ms ease both; }
+  @keyframes bubble-fade { from { opacity: 0; } to { opacity: 1; } }
+  .device, .room.has-device .device { transition: opacity 200ms ease, visibility 0s; transform: none; }
+  .device { opacity: 0; }
+  .room.has-device .device { opacity: 1; }
+  .room.hl .hl-ring { animation: none; opacity: 0.9; }
+  .plug.seated svg { animation: none; }
+  .lcd-text.typing::after { animation: none; }
+  .traces path, .traces .pad { transition: none; }
+  html.intro .fx-sec, html.intro .fx-sec.on { transform: none; transition: opacity 180ms linear; }
+  .fixture.warm .bulb-fil { animation: none; stroke: oklch(97% 0.08 92); }
+  .fixture.warm .bulb-glow { animation: none; opacity: 1; }
+}
+@media print {
+  .room, .proto, .badge-wrap, .traces { display: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════ THE PAGE (finished, lit) ════════════════════════ -->
+<div class="site" id="site">
+  <div class="topbar shell fx-sec" data-step="0">
+    <div class="wrap">
+      <a class="wordmark" href="https://www.anappidea.llc/">An App <span>Idea</span></a>
+      <nav class="topnav" aria-label="Site">
+        <a href="https://www.anappidea.llc/services">Services</a>
+        <a href="https://www.anappidea.llc/work">Work</a>
+        <a href="https://www.anappidea.llc/about">About</a>
+        <a href="https://www.anappidea.llc/contact">Contact</a>
+      </nav>
+    </div>
+  </div>
+
+  <header class="hero shell">
+    <div class="wrap">
+      <div class="hero-copy fx-sec" data-step="1">
+        <p class="label">Websites · Apps · AI · Denver, Colorado</p>
+        <h1 id="h1" tabindex="-1">Your business is the job. The tech shouldn’t be a second one.</h1>
+        <p class="subtitle">Websites, mobile apps, and AI for small businesses, built with Black and brown business owners in mind. I build it, then teach you to run it.</p>
+        <div class="hero-actions">
+          <a class="btn" href="https://calendly.com/anappidea/30min" target="_blank" rel="noopener noreferrer">Book a free call<span class="sr-only"> (opens in a new tab)</span><span aria-hidden="true">↗</span></a>
+          <a class="link-mono" href="https://www.anappidea.llc/contact">Send me a message →</a>
+        </div>
+        <p class="hero-scale">Free 30-minute call · 40% off for businesses in their first year or under $100k in revenue</p>
+      </div>
+      <figure class="portrait fx-sec" data-step="2">
+        <img src="founder.webp" width="400" height="400" alt="Demaceo Vincent Howard, founder of An App Idea LLC" fetchpriority="high">
+        <figcaption><strong>Demaceo Vincent Howard</strong>Founder · Denver, Colorado</figcaption>
+      </figure>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="intro-block shell fx-sec" data-step="3" aria-label="Introduction">
+      <div class="wrap">
+        <p>Bring the idea, even a half-formed one. I’m a Black founder in Denver, and I build websites, apps, and AI tools for Black and brown business owners who’ve had the drive all along and not the backing. Then I hand you the keys and the know-how.</p>
+      </div>
+    </section>
+
+    <section class="problem shell fx-sec" data-step="4" aria-labelledby="problem-h">
+      <div class="wrap">
+        <div class="body">
+          <h2 id="problem-h">Nobody hands you the second job. You just end up with it.</h2>
+          <p>It’s 10:40pm on a Tuesday. The shop closed hours ago, and you’re on video 4 of a tutorial about DNS records. Tomorrow you open at 7:00am.</p>
+          <p>That’s the second job: the website, the booking system, the analytics, the AI everyone says you need. For Black and brown business owners, it usually lands with less money behind it and fewer people to call. The numbers say so.</p>
+        </div>
+        <ul class="evidence">
+          <li>
+            <span class="ev-num">19%</span>
+            <p class="ev-label">of businesses with 1–9 employees say they have a technology advantage over competitors, versus 44% of those with 50 or more.</p>
+            <p class="ev-src"><a href="https://www.nfib.com/wp-content/uploads/2025/06/2025-NFIB-Technology-Survey-1.pdf">NFIB, Small Business and Technology 2025</a> · Jun 2025</p>
+          </li>
+          <li>
+            <span class="ev-num">0.4%</span>
+            <p class="ev-label">of U.S. startup funding went to startups with a Black founder in 2024.</p>
+            <p class="ev-src"><a href="https://news.crunchbase.com/diversity/startup-funding-share-black-founders-down-cleantech-healthcare/">Crunchbase News</a> · Feb 2025</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="ships block shell fx-sec" data-step="5" aria-labelledby="ships-h">
+      <div class="wrap">
+        <div class="sec-head"><span class="label">At a glance</span><h2 id="ships-h">What <span class="accent-word">ships</span> here</h2></div>
+        <div class="stats">
+          <div class="stat"><span class="label">Products shipped</span><span class="stat-num">12</span><span class="stat-desc">iOS · Android · Web · AI-integrated</span></div>
+          <div class="stat"><span class="label">A business website</span><span class="stat-num medium">3–5 weeks</span><span class="stat-desc">First call to launch</span></div>
+          <div class="stat"><span class="label">AI-integrated builds</span><span class="stat-num">4</span><span class="stat-desc">Gemini · ElevenLabs · Firebase</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band shell fx-sec" data-step="6" aria-label="From the founder">
+      <div class="wrap">
+        <blockquote>
+          <p>“Most ‘AI-powered’ tools are a chat box added on top. I build AI that does real work for your business, and I keep your customers’ information where it belongs.”</p>
+          <cite>Demaceo Vincent Howard, An App Idea LLC</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="offers block shell fx-sec" data-step="7" aria-labelledby="offers-h">
+      <div class="wrap">
+        <div class="sec-head"><span class="label">Services</span><h2 id="offers-h">Four ways to <span class="accent-word">start</span></h2></div>
+        <p class="offers-lede">Not sure which? That’s what the free call is for.</p>
+        <ol class="offer-list">
+          <li class="offer">
+            <div>
+              <div class="offer-head"><h3 class="offer-title">A Website for Your Business</h3><span class="offer-meta">Ready in 3–5 weeks</span></div>
+              <p class="offer-body">A site that shows up when people search for what you do, works on a phone, and lets customers book, call, or message you. Ready in 3 to 5 weeks. You own it, and I teach you to run it.</p>
+            </div>
+            <p class="offer-price">From $3,700<small>With the Own It teaching package: $4,400</small></p>
+          </li>
+          <li class="offer">
+            <div>
+              <div class="offer-head"><h3 class="offer-title">Fix My Existing Site</h3><span class="offer-meta">Rush: 1 business day</span></div>
+              <p class="offer-body">Someone else built your site, and now something’s broken or customers keep getting stuck. I find the problem and fix it, or tighten up the pages that confuse people, without starting over.</p>
+            </div>
+            <p class="offer-price">$92/hour<small>2-hour minimum ($184). Needed within 1 business day: $138/hour.</small></p>
+          </li>
+          <li class="offer">
+            <div>
+              <div class="offer-head"><h3 class="offer-title">Own It: Learn to Run Your Site</h3><span class="offer-meta">At your pace</span></div>
+              <p class="offer-body">A separate teaching package for after the build. I teach you to manage your own website, read your analytics, check its performance, and put AI to work in your business, so you’re never stuck waiting on someone else to change a price or read your traffic.</p>
+            </div>
+            <p class="offer-price">From $750</p>
+          </li>
+          <li class="offer">
+            <div>
+              <div class="offer-head"><h3 class="offer-title">AI for Your Business</h3><span class="offer-meta">No rebuild needed</span></div>
+              <p class="offer-body">Your website, store, or booking system already works. I add AI to it, like answering common questions, replying to routine messages, and sending booking reminders, and I keep it running. It sits on top of what you already have, so there is no rebuild.</p>
+            </div>
+            <p class="offer-price">From $4,100</p>
+          </li>
+        </ol>
+        <div class="bigger">
+          <span class="label">Building something bigger?</span>
+          <strong>Apps &amp; Custom Software</strong>
+          <span class="price">From $2,800 · 7–13 weeks</span>
+        </div>
+        <p class="services-more"><a href="https://www.anappidea.llc/services">See what’s included, and how payment and ownership work →</a></p>
+        <p class="small-print">Sliding scale: 40% off fixed-price projects for businesses in their first year or under $100k in annual revenue. Hourly work is $92/hour and isn’t discounted.</p>
+      </div>
+    </section>
+
+    <section class="conversation block shell fx-sec" data-step="8" aria-labelledby="talk-h">
+      <div class="wrap">
+        <div class="sec-head"><span class="label">Contact</span><h2 id="talk-h">Start a <span class="accent-word">conversation</span></h2></div>
+        <div class="call">
+          <h3>A free 30-minute call</h3>
+          <p class="label">On the call</p>
+          <ol class="steps">
+            <li>You tell me about your business and what is not working.</li>
+            <li>I tell you honestly whether I am the right fit, and what it would cost.</li>
+            <li>You leave with a clear next step, even if it is not with me.</li>
+          </ol>
+          <div class="call-foot">
+            <p>Nothing to prepare. Half an idea is plenty.</p>
+            <a class="btn btn-call" href="https://calendly.com/anappidea/30min" target="_blank" rel="noopener noreferrer">Book a free call<span class="sr-only"> (opens in a new tab)</span><span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <p class="write">Prefer to write? Send a few sentences to <a href="mailto:hello@anappidea.llc">hello@anappidea.llc</a>, or <a href="https://www.anappidea.llc/contact">use the form</a>. I read everything and reply within 1–2 business days.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot shell">
+    <div class="wrap">
+      <p>An App Idea LLC · Websites, apps, and AI for small businesses · Denver, Colorado</p>
+      <p><a href="mailto:hello@anappidea.llc">hello@anappidea.llc</a> · anappidea.llc</p>
+    </div>
+  </footer>
+
+  <svg class="traces" id="traces" aria-hidden="true" focusable="false"></svg>
+</div>
+
+<!-- ════════════════════════ THE ROOM (first-visit intro) ════════════════════════
+     A modal dialog over the finished page. Without JS it is display:none. -->
+<div class="room" id="room" role="dialog" aria-modal="true" aria-labelledby="room-title" aria-describedby="room-desc" tabindex="-1">
+  <h2 id="room-title" class="sr-only">Is it plugged in?</h2>
+  <p id="room-desc" class="sr-only">A short intro, about 15 seconds. Pull the light cord, then plug the lamp in. Or skip to the site.</p>
+
+  <div class="room-bg" aria-hidden="true">
+    <div class="wall"></div><div class="baseboard"></div><div class="floor"></div>
+    <div class="dev-glow"></div>
+  </div>
+  <div class="pool" aria-hidden="true"></div>
+
+  <div class="outlet" aria-hidden="true">
+    <span class="hl-ring"></span>
+    <svg viewBox="0 0 48 76" focusable="false">
+      <rect class="o-plate" x="2" y="2" width="44" height="72" rx="6"/>
+      <circle class="o-screw" cx="24" cy="10" r="2.2"/>
+      <circle class="o-screw" cx="24" cy="66" r="2.2"/>
+      <rect class="o-face" x="11" y="21" width="26" height="34" rx="8"/>
+      <rect class="o-slot" x="17" y="29" width="3" height="10" rx="1"/>
+      <rect class="o-slot" x="28" y="29" width="3" height="10" rx="1"/>
+      <path class="o-slot" d="M21.5 49 a2.5 2.5 0 0 1 5 0 v2 h-5 z"/>
+    </svg>
+    <span class="socket"></span>
+  </div>
+
+  <svg class="ropes" aria-hidden="true" focusable="false">
+    <g class="cable-g">
+      <path class="cable-run" d=""/><!-- along the ceiling into the rose -->
+      <path class="cable" d=""/>
+      <path class="cable-hi" d=""/>
+      <path class="pulse glow" d="" pathLength="1"/>
+      <path class="pulse core" d="" pathLength="1"/>
+    </g>
+    <path class="cord" d=""/>
+  </svg>
+
+  <div class="fixture" aria-hidden="true">
+    <svg width="120" height="14" viewBox="0 0 120 14" focusable="false">
+      <path class="fx-rose" d="M34 0 H86 V3 Q84 12 72 13 H48 Q36 12 34 3 Z"/>
+    </svg>
+    <span class="flex"></span>
+    <div class="lamp">
+      <svg width="120" height="80" viewBox="0 0 120 80" focusable="false">
+        <defs>
+          <radialGradient id="glow-grad">
+            <stop offset="0" stop-color="oklch(95% 0.1 88)" stop-opacity="0.95"/>
+            <stop offset="0.35" stop-color="oklch(88% 0.13 80)" stop-opacity="0.35"/>
+            <stop offset="1" stop-color="oklch(80% 0.12 75)" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle class="bulb-glow" cx="60" cy="53" r="62" fill="url(#glow-grad)"/>
+        <!-- socket + pull switch on a short arm, out past the glass, so the
+             cord hangs clear of it (the cord leaves the switch at 85.5, 18) -->
+        <rect class="fx-metal" x="51" y="0" width="18" height="25" rx="3"/>
+        <line class="fx-ring" x1="52" y1="7" x2="68" y2="7"/>
+        <line class="fx-ring" x1="52" y1="18" x2="68" y2="18"/>
+        <rect class="fx-metal" x="68" y="9" width="13" height="5" rx="1"/>
+        <rect class="fx-metal" x="80" y="6" width="11" height="12" rx="2"/>
+        <!-- glass, shine, filament -->
+        <path class="bulb-glass" d="M54 25 C54 31 38 37 38 53 A22 22 0 0 0 82 53 C82 37 66 31 66 25 Z"/>
+        <path class="bulb-shine" d="M44 47 Q45 39 51 35"/>
+        <path class="bulb-fil" d="M56.5 26 L56.5 48 M63.5 26 L63.5 48 M56.5 48 q0.9 -3.4 1.75 0 q0.9 3.4 1.75 0 q0.9 -3.4 1.75 0 q0.9 3.4 1.75 0"/>
+      </svg>
+      <span class="pin"></span>
+    </div>
+  </div>
+
+  <span class="bead-slot" aria-hidden="true"></span>
+  <span class="plug-slot" aria-hidden="true"></span>
+  <span class="cable-anchor" aria-hidden="true"></span>
+
+  <div class="bubble" aria-hidden="true">
+    <svg width="10" height="10" focusable="false">
+      <defs>
+        <pattern id="halftone" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+          <circle cx="3" cy="3" r="1.25" fill="oklch(72% 0.13 72)"/>
+        </pattern>
+        <radialGradient id="dot-fade" cx="1" cy="0" r="0.75">
+          <stop offset="0" stop-color="#fff"/><stop offset="0.55" stop-color="#fff" stop-opacity="0.6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </radialGradient>
+        <mask id="dot-mask" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="url(#dot-fade)"/></mask>
+        <clipPath id="bubble-clip"><path class="b-clip" d=""/></clipPath>
+      </defs>
+      <path class="b-body" d=""/>
+      <rect class="b-dots" x="0" y="0" width="0" height="0" clip-path="url(#bubble-clip)" mask="url(#dot-mask)"/>
+      <path class="b-line" d=""/>
+    </svg>
+    <p class="bubble-text"></p>
+  </div>
+
+  <div class="device" aria-hidden="true">
+    <div class="egg">
+      <div class="bezel">
+        <div class="lcd">
+          <canvas class="sprite" width="32" height="32"></canvas>
+          <p class="lcd-text"></p>
+        </div>
+      </div>
+      <div class="keys"><i></i><i></i><i></i></div>
+    </div>
+  </div>
+
+  <canvas class="fx" aria-hidden="true"></canvas>
+
+  <!-- Focusable controls, in tab order: Skip → bead → plug → Plug it in -->
+  <button class="skip" type="button" id="skip">Skip to the site</button>
+  <button class="bead" type="button" id="bead" aria-label="Pull the light cord">
+    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <defs>
+        <radialGradient id="bead-grad" cx="0.36" cy="0.3" r="0.8">
+          <stop offset="0" stop-color="oklch(86% 0.1 82)"/>
+          <stop offset="0.45" stop-color="oklch(68% 0.11 70)"/>
+          <stop offset="1" stop-color="oklch(42% 0.08 55)"/>
+        </radialGradient>
+      </defs>
+      <rect x="28.5" y="7" width="7" height="7" rx="1.5" fill="oklch(66% 0.08 78)" stroke="oklch(36% 0.04 60)" stroke-width="0.8"/>
+      <path d="M32 12.5 C41 12.5 44.5 21 44.5 32 C44.5 45 39.5 52.5 32 52.5 C24.5 52.5 19.5 45 19.5 32 C19.5 21 23 12.5 32 12.5 Z" fill="url(#bead-grad)" stroke="oklch(30% 0.04 55)" stroke-width="1"/>
+      <path d="M21.2 22.5 H42.8 M20.6 42 H43.4" stroke="oklch(36% 0.06 55 / 0.5)" stroke-width="1.2"/>
+      <ellipse cx="27" cy="24" rx="3" ry="6" fill="oklch(100% 0 0 / 0.22)"/>
+    </svg>
+  </button>
+  <p class="hint" aria-hidden="true">Pull the cord</p>
+  <button class="plug" type="button" id="plug" aria-label="Plug the lamp in" tabindex="-1">
+    <span class="hl-ring"></span>
+    <svg viewBox="0 0 56 56" aria-hidden="true" focusable="false">
+      <rect class="p-prong" x="20" y="-3" width="4" height="13" rx="1"/>
+      <rect class="p-prong" x="32" y="-3" width="4" height="13" rx="1"/>
+      <rect class="p-body" x="13" y="9" width="30" height="31" rx="7"/>
+      <rect class="p-face" x="17" y="13" width="22" height="5" rx="2.5"/>
+      <path d="M17 24 H39 M17 28 H39 M17 32 H39" stroke="oklch(58% 0.012 80)" stroke-width="1"/>
+      <path class="p-relief" d="M22.5 40 H33.5 L31.5 47.5 H24.5 Z"/>
+    </svg>
+  </button>
+  <button class="btn plugin-btn" type="button" id="plugin-btn" hidden>Plug it in</button>
+
+  <div class="sr-only" aria-live="polite" id="live"></div>
+</div>
+
+<!-- Mini-you, docked after the boot. -->
+<div class="badge-wrap" id="badge-wrap">
+  <div class="badge-card" id="badge-card" hidden>
+    <p>Need a hand? <a href="https://calendly.com/anappidea/30min" target="_blank" rel="noopener noreferrer">Book a free call<span class="sr-only"> (opens in a new tab)</span></a></p>
+    <button class="card-x" type="button" id="card-x" aria-label="Close">×</button>
+  </div>
+  <button class="badge" type="button" id="badge" aria-expanded="false" aria-controls="badge-card" aria-label="Mini Demaceo: need a hand?">
+    <canvas width="24" height="24" aria-hidden="true"></canvas>
+  </button>
+  <button class="badge-x" type="button" id="badge-x" aria-label="Dismiss the mini helper">×</button>
+</div>
+
+<!-- Prototype controls: for judging the idea only, not part of the design. -->
+<aside class="proto" id="proto" aria-label="Prototype controls" hidden>
+  <details>
+    <summary>Prototype</summary>
+    <div class="proto-body">
+      <p class="proto-state" id="proto-state"></p>
+      <button type="button" id="replay">Replay intro</button>
+    </div>
+  </details>
+</aside>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 1 · SETUP
+     ═════════════════════════════════════════════════════════════════════ */
+  const root = document.documentElement;
+  const $ = (s, el = document) => el.querySelector(s);
+  const site = $('#site'), h1 = $('#h1'), traceSvg = $('#traces');
+  const room = $('#room');
+  const skipBtn = $('#skip'), bead = $('#bead'), plugBtn = $('#plug'), pluginBtn = $('#plugin-btn');
+  const live = $('#live'), hint = $('.hint', room);
+  const fixture = $('.fixture', room), pinEl = $('.pin', room);
+  const beadSlot = $('.bead-slot', room), plugSlot = $('.plug-slot', room), anchorEl = $('.cable-anchor', room);
+  const socketEl = $('.socket', room), floorEl = $('.floor', room);
+  const cordPath = $('.cord', room), cablePath = $('.cable', room), cableHi = $('.cable-hi', room), cableRun = $('.cable-run', room);
+  const pulseGlow = $('.pulse.glow', room), pulseCore = $('.pulse.core', room);
+  const bubble = $('.bubble', room), bubbleSvg = $('svg', bubble), bubbleText = $('.bubble-text', bubble);
+  const device = $('.device', room), spriteCv = $('.sprite', room), lcdText = $('.lcd-text', room);
+  const fxCv = $('.fx', room), fx = fxCv.getContext('2d');
+
+  const FLAG = 'aai-intro-seen', BADGE_OFF = 'aai-badge-dismissed';
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+    del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+  };
+
+  const mqReduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const mqFine = matchMedia('(pointer: fine)');
+  let reduce = mqReduce.matches;
+
+  // Story copy (the visitor's inner monologue, then mini-you).
+  const BUBBLES = ['It was working yesterday…', 'Why isn’t this working?', 'This should be working.'];
+  const BUBBLE_ROT = [-2, 2.5, -1.25];
+  const LINES = [
+    { text: 'Happens to everyone.', pose: 'wave', hold: 1200 },
+    { text: 'Look down. It’s not plugged in.', pose: 'point', hold: 2600, hl: true },
+    { text: 'Go on, you’ve got this.', pose: 'idle' },
+  ];
+  const CHEER = 'There you go. That one was all you.';
+
+  // Timers for the story, cleared on skip / replay.
+  const timers = new Set();
+  function later(ms, fn) { const id = setTimeout(() => { timers.delete(id); fn(); }, ms); timers.add(id); return id; }
+  function clearTimers() { timers.forEach(clearTimeout); timers.clear(); }
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+  // Intro state: 'off' | 'dark' | 'plugged' | 'boot'
+  let state = 'off';
+  let pulls = 0, deviceShown = false, plugged = false, lastRun = '';
+  let released = false;     // late in the boot: the page takes input again (JS 10)
+  let traceDirty = false;   // a resize during the boot: re-route the traces at finish
+  let bubbleIdx = -1;       // the bubble on screen, re-laid out on resize
+
+  function announce(text) {
+    const p = document.createElement('p');
+    p.textContent = text;
+    live.appendChild(p);
+    while (live.childElementCount > 3) live.firstElementChild.remove();
+  }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 2 · CIRCUIT TRACES
+     Built from the real section boxes (relative to .site). Steps follow
+     the boot order: 0 header → 1 headline → 2 portrait → 3 intro →
+     4 problem + stats → 5 what ships → 6 quote band → 7 offers → 8 call.
+     Desktop: a bus down each gutter, jogging 45° between sections, with a
+     spur + via into each section. Phones: one trace 12px from the left.
+     ═════════════════════════════════════════════════════════════════════ */
+  const STEP_SEL = ['.topbar', '.hero-copy', '.portrait', '.intro-block', '.problem', '.ships', '.band', '.offers', '.conversation'];
+  let traceMeta = { stepY: [] };
+
+  function rel(el, sr) {
+    const r = el.getBoundingClientRect();
+    return { l: r.left - sr.left, t: r.top - sr.top, r: r.right - sr.left, b: r.bottom - sr.top, w: r.width, h: r.height };
+  }
+  const f1 = (v) => Math.round(v * 2) / 2;
+
+  function buildTraces(drawn) {
+    root.classList.add('measuring');
+    const sr = site.getBoundingClientRect();
+    const W = Math.round(sr.width), H = Math.round(site.scrollHeight);
+    const phone = W < 700;
+    const bar = rel($('.topbar'), sr), cw = rel($('.topbar .wrap'), sr);
+    const cl = cw.l, cr = cw.r;
+    const P = [], pads = [];
+    const add = (d, step) => P.push({ d, step });
+    const via = (x, y, step, sq) => pads.push({ x: f1(x), y: f1(y), step, sq: !!sq });
+
+    const xL = phone ? 12 : Math.max(14, Math.round(cl - 36));
+    const xR = W - xL;
+    const spurL = phone ? 23 : cl - 14;
+    const yb = Math.round(bar.b);
+    const ox = Math.round(phone ? W * 0.6 : W / 2);
+    const k = 12;                      // 45° corner size
+
+    // Step 0: power comes in at the top centre (where the bulb hung) and
+    // branches along the top bar's bottom edge to the gutters.
+    add(`M${ox},0 V${yb} H${xL + k} L${xL},${yb + k}`, 0);
+    via(ox, yb, 0);
+    if (!phone) {
+      add(`M${ox},${yb} H${xR - k} L${xR},${yb + k}`, 0);
+      // two short test-point stubs off the branch
+      for (const dx of [-170, 170]) { add(`M${ox + dx},${yb} V${yb + 16}`, 0); via(ox + dx, yb + 16, 0, true); }
+    }
+
+    // A bus that walks down a gutter. Between spurs it jogs 8px with a 45°
+    // kink (desktop), so it reads as a routed trace, not a rule.
+    function bus(side) {
+      const s = { x: side === 'L' ? xL : xR, y: yb + k, side, lane: 0 };
+      s.to = (y, step, spurTo, opts = {}) => {
+        if (y <= s.y + 6) return false;
+        let d = `M${s.x},${s.y}`;
+        if (!phone && y - s.y > 90) {
+          const dir = side === 'L' ? 1 : -1;
+          const nx = s.x + (s.lane ? -8 : 8) * dir;
+          const ym = Math.round(s.y + (y - s.y) * 0.45);
+          d += ` V${ym} L${nx},${ym + 8}`;
+          s.x = nx; s.lane = 1 - s.lane;
+        }
+        d += ` V${y}`;
+        if (spurTo != null) d += ` H${spurTo}`;
+        add(d, step);
+        if (spurTo != null) via(spurTo + (opts.sq ? (side === 'L' ? -4 : 4) : 0), y, step, opts.sq);
+        s.y = y;
+        return true;
+      };
+      return s;
+    }
+    const L = bus('L'), R = phone ? null : bus('R');
+    const stepY = [yb];
+
+    const heroCopy = rel($('#h1'), sr);
+    const yH = Math.round(heroCopy.t + 22);
+    L.to(yH, 1, spurL); stepY[1] = yH;
+
+    const img = rel($('.portrait img'), sr);
+    const portraitRight = img.r > cr - 4 && !phone;
+    if (portraitRight) {
+      // frame the portrait's top corners, fed from the right bus
+      const yp = Math.round(img.t - 9);
+      R.to(yp, 2, Math.round(img.r - 26));
+      add(`M${Math.round(img.l + 26)},${yp} H${Math.round(img.l - 9)} V${Math.round(img.t + 26)}`, 2);
+      via(img.l - 9, img.t + 26, 2, true);
+      R.y = yp;
+      stepY[2] = yp;
+    } else {
+      const yp = Math.round(img.t + img.h / 2);
+      L.to(yp, 2, spurL); stepY[2] = yp;
+    }
+
+    const intro = rel($('.intro-block p'), sr);
+    const yI = Math.round(intro.t + 16);
+    L.to(yI, 3, spurL); stepY[3] = yI;
+
+    const ph = rel($('#problem-h'), sr);
+    const yP = Math.round(ph.t + 18);
+    L.to(yP, 4, spurL); stepY[4] = yP;
+    if (R) {
+      const ev = rel($('.evidence'), sr);
+      if (ev.r > cr - 4) R.to(Math.round(ev.t + 1), 4, Math.round(ev.r + 13));
+    }
+    // Wide gutters get a second, parallel trace for texture.
+    if (!phone && cl >= 100) {
+      add(`M${xL - 13},${yb + 30} V${yP - 40}`, 1); via(xL - 13, yb + 30, 1); via(xL - 13, yP - 40, 1);
+      add(`M${xR + 13},${yb + 30} V${Math.round(img.b)}`, 2); via(xR + 13, yb + 30, 2); via(xR + 13, img.b, 2);
+    }
+
+    const sh = rel($('#ships-h'), sr), stats = rel($('.stats'), sr);
+    const yS = Math.round(sh.t + 16);
+    L.to(yS, 5, spurL); stepY[5] = yS;
+    if (R && stats.r > cr - 4) R.to(Math.round(stats.t + 34), 5, Math.round(stats.r + 13));
+
+    const band = rel($('.band'), sr), quote = rel($('.band blockquote p'), sr);
+    const yQ = Math.round(quote.t + 16);
+    L.to(yQ, 6, spurL); stepY[6] = yQ;
+    if (R) R.to(Math.round(band.b - 40), 6, null);
+
+    const oh = rel($('#offers-h'), sr);
+    const yO = Math.round(oh.t + 16);
+    L.to(yO, 7, spurL); stepY[7] = yO;
+    if (R) R.to(yO + 60, 7, null);
+
+    const call = rel($('.call'), sr);
+    const yC = Math.round(call.t + 46);
+    L.to(yC, 8, Math.round(call.l - 2), { sq: true }); stepY[8] = yC;
+    if (R) R.to(yC, 8, Math.round(call.r + 2), { sq: true });
+
+    traceMeta = { stepY, W, H };
+    root.classList.remove('measuring');
+
+    // Markup, twice: once in the page colour, once clipped to the ink band
+    // in the bright accent (so the traces read on the dark quote band).
+    const off = drawn ? '' : ' off';
+    const paths = P.map((p) => `<path class="t${off}" data-step="${p.step}" pathLength="1" d="${p.d}"/>`).join('');
+    const padsSvg = pads.map((p) => p.sq
+      ? `<rect class="pad sq${off}" data-step="${p.step}" x="${p.x - 3.5}" y="${p.y - 3.5}" width="7" height="7"/>`
+      : `<circle class="pad${drawn ? ' lit' : ' off'}" data-step="${p.step}" cx="${p.x}" cy="${p.y}" r="${phone ? 2.75 : 3.5}"/>`).join('');
+    traceSvg.setAttribute('width', W);
+    traceSvg.setAttribute('height', H);
+    traceSvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    traceSvg.innerHTML =
+      `<defs><clipPath id="band-clip"><rect x="0" y="${band.t}" width="${W}" height="${band.h}"/></clipPath></defs>` +
+      `<g class="main">${paths}${padsSvg}</g><g class="ink" clip-path="url(#band-clip)">${paths}${padsSvg}</g>`;
+    root.classList.add('has-traces');
+  }
+
+  // Trace timers are separate from the story's: the boot must finish
+  // drawing even after the dialog has closed.
+  const traceTimers = new Set();
+  function tlater(ms, fn) { const id = setTimeout(() => { traceTimers.delete(id); fn(); }, ms); traceTimers.add(id); }
+  function clearTraceTimers() { traceTimers.forEach(clearTimeout); traceTimers.clear(); }
+
+  // Draw one step's traces now (over `dur` ms); its vias flash on arrival.
+  function drawStep(step, dur) {
+    const els = traceSvg.querySelectorAll(`[data-step="${step}"]`);
+    els.forEach((el) => {
+      if (el.tagName === 'path') {
+        el.style.transition = reduce ? 'none' : `stroke-dashoffset ${dur}ms cubic-bezier(0.45, 0, 0.25, 1), opacity 1.2s ease`;
+        el.classList.add('live');
+        el.classList.remove('off');
+      }
+    });
+    const arrive = () => {
+      els.forEach((el) => {
+        if (el.tagName === 'path') el.classList.remove('live');
+        else { el.classList.remove('off'); el.classList.add('lit'); if (!reduce) el.classList.add('flash'); }
+      });
+    };
+    if (reduce || !dur) arrive(); else tlater(dur, arrive);
+  }
+  function showAllTraces() {
+    clearTraceTimers();
+    traceSvg.querySelectorAll('.off').forEach((el) => { el.style.transition = 'none'; el.classList.remove('off'); });
+    traceSvg.querySelectorAll('.pad').forEach((el) => el.classList.add('lit'));
+  }
+
+  // Sections below the fold: their content is already final; their traces
+  // draw when they scroll into view.
+  let traceIO = null;
+  function drawOnEnter(steps) {
+    if (traceIO) traceIO.disconnect();
+    if (!steps.length || !('IntersectionObserver' in window)) { showAllTraces(); return; }
+    traceIO = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        traceIO.unobserve(e.target);
+        drawStep(+e.target.dataset.step, 700);
+      }
+    }, { rootMargin: '0px 0px -12% 0px' });
+    steps.forEach((s) => traceIO.observe($(STEP_SEL[s])));
+  }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 3 · SPRITE
+     A 32×32 pixel founder from the portrait: rust cap, warm brown skin,
+     short dark beard, big smile, black tee. 10 colours. Frames are built
+     from a base + overlays (' ' = keep) and pre-rendered to ImageData.
+     ═════════════════════════════════════════════════════════════════════ */
+  const PAL = {
+    k: '#1d140f', r: '#b8562c', R: '#8b3a1b', o: '#d9804b', s: '#a96d45',
+    S: '#82502f', w: '#f8f3ea', m: '#5e1e17', t: '#2a2624', T: '#4d4642',
+  };
+  const d = (n) => '.'.repeat(n);
+  // Head: rows 0–24. Shadow side is the viewer's right (one 'S' column).
+  const HEAD = [
+    d(32),
+    d(15) + 'RR' + d(15),                                // cap button
+    d(11) + 'kkkkkkkkkk' + d(11),                        // low crown (5 rows)
+    d(9) + 'kk' + 'oorrrrrrRR' + 'kk' + d(9),
+    d(8) + 'k' + 'oorrrrrrrrrrRR' + 'k' + d(8),
+    d(8) + 'k' + 'orrrrrrrrrrrRR' + 'k' + d(8),
+    d(8) + 'k' + 'rrrrrrrrrrrrRR' + 'k' + d(8),
+    d(7) + 'k' + 'oooooooooooooooo' + 'k' + d(7),        // bill: lit top,
+    d(7) + 'k' + 'RRRRRRRRRRRRRRRR' + 'k' + d(7),        // dark underside,
+    d(7) + 'kR' + 'SSSSSSSSSSSSSS' + 'Rk' + d(7),        // tips curl down; brow shadow
+    d(8) + 'k' + 'skkksssssskkkS' + 'k' + d(8),         // brows
+    d(7) + 'k' + 'sssssssssssssSSS' + 'k' + d(7),       // ears
+    d(7) + 'k' + 'ssskksssssskksSS' + 'k' + d(7),       // eyes (2×2)
+    d(7) + 'k' + 'ssskksssssskksSS' + 'k' + d(7),
+    d(8) + 'k' + 'ssssssSSsssssS' + 'k' + d(8),         // nose
+    d(8) + 'k' + 'ssssSkkkkSsssS' + 'k' + d(8),         // thin mustache
+    d(8) + 'k' + 'sssssssssssssS' + 'k' + d(8),
+    d(8) + 'k' + 'sskwwwwwwwwksS' + 'k' + d(8),         // the big smile
+    d(8) + 'k' + 'SssmwwwwwwmssS' + 'k' + d(8),
+    d(8) + 'k' + 'SSssmmmmmmssSS' + 'k' + d(8),
+    d(9) + 'k' + 'SSsssSSsssSS' + 'k' + d(9),           // stubble jaw + light goatee
+    d(10) + 'k' + 'SSSSSSSSSS' + 'k' + d(10),
+    d(11) + 'kkkkkkkkkk' + d(11),
+    d(13) + 'kSssSk' + d(13),                           // neck
+    d(13) + 'kSssSk' + d(13),
+  ];
+  const TORSO = [
+    d(8) + 'k' + 'tttt' + 'k' + 'SSSS' + 'k' + 'tttt' + 'k' + d(8),
+    d(6) + 'k' + 'tTTtttt' + 'kkkk' + 'ttttTTt' + 'k' + d(6),
+    d(7) + 'k' + 'tTttttttttttttTt' + 'k' + d(7),
+    d(8) + 'k' + 'tttttttttttttt' + 'k' + d(8),
+    d(8) + 'k' + 'tttttttttttttt' + 'k' + d(8),
+    d(8) + 'k' + 'tttttttttttttt' + 'k' + d(8),
+    d(8) + 'k' + 'tttttttttttttt' + 'k' + d(8),
+  ];
+  const BASE = HEAD.concat(TORSO);
+  const mirror = (o) => ({ x: 32 - o.x - o.rows[0].length, y: o.y, rows: o.rows.map((r) => r.split('').reverse().join('')) });
+  const shiftY = (o, dy) => ({ x: o.x, y: o.y + dy, rows: o.rows });
+  const ARM_DOWN_L = { x: 5, y: 26, rows: [' ktT ', 'ktTtk', 'kTttk', 'kSssk', 'kssSk', 'ksssk'] };
+  const ARM_DOWN_R = mirror(ARM_DOWN_L);
+  const ARM_UP = ['   kssk  ', '   kSsk  ', '   kssk  ', '  kssk   ', '  kssk   ', '  kSsk   ',
+    '  kttk   ', '  kttk   ', '  kTtk   ', ' ktttk   ', 'ttttTk   ', 'tttTk    '];
+  const WAVE_A = { x: 22, y: 9, rows: ['  k k k  ', '  kskskk ', '  ksssSk ', '   kssk  ', '   kSsk  '].concat(ARM_UP) };
+  const WAVE_B = { x: 22, y: 9, rows: ['   k k k ', '   kskskk', '   ksssSk', '    kssk ', '   kSsk  '].concat(ARM_UP) };
+  const CHEER_R = { x: 22, y: 3, rows: ['    kkkk ', '   ksssSk', '   ksSssk', '   kssSSk', '    kkkk ',
+    '    kssk ', '    kSsk ', '   kssk  ', '   kssk  ', '   kSsk  ', '   kssk  ', '  kssk   ', '  kSsk   ',
+    '  kssk   ', '  kssk   ', '  kttk   ', '  kttk   ', '  kTtk   ', ' ktttk   ', 'ttttTk   ', 'tttTk    '] };
+  // Point-down: the sleeve leaves the shoulder, the forearm runs down and
+  // out at 45°, and a fist ends in one index finger pointing straight down
+  // (rows 30–31), the fist kept clear of the canvas edge.
+  const POINT_R = { x: 20, y: 25, rows: [
+    '    k      ',
+    '           ',
+    '   Ttsk    ',
+    '   kksskk  ',
+    '     ksssk ',
+    '      ksSk ',
+    '       ksk ',
+  ] };
+  // Overlays on the eyes (rows 10–14, columns 9–22).
+  const HAPPY = { x: 9, y: 12, rows: ['sskksssssskksS', 'sksskssssksskS'] };          // ^ ^
+  const LOOK_DOWN = { x: 9, y: 10, rows: ['sssssssssssssS', 'skkksssssskkkS',          // brows drop 1px,
+    'sssssssssssssS', 'sskksssssskksS', 'sskkssSSsskksS'] };                            // pupils down 1px
+  function compose(base, overlays, dy = 0) {
+    const g = base.map((r) => r.split(''));
+    for (const o of overlays) {
+      o.rows.forEach((row, j) => {
+        for (let i = 0; i < row.length; i++) {
+          if (row[i] === ' ') continue;
+          const x = o.x + i, y = o.y + j;
+          if (x >= 0 && x < 32 && y >= 0 && y < 32) g[y][x] = row[i];
+        }
+      });
+    }
+    const rows = g.map((r) => r.join(''));
+    return dy ? Array(dy).fill(d(32)).concat(rows.slice(0, 32 - dy)) : rows;
+  }
+  const FRAMES = {
+    idle: [compose(BASE, [ARM_DOWN_L, ARM_DOWN_R]), compose(BASE, [ARM_DOWN_L, ARM_DOWN_R], 1)],
+    wave: [compose(BASE, [ARM_DOWN_L, WAVE_A]), compose(BASE, [ARM_DOWN_L, WAVE_B])],
+    point: [compose(BASE, [ARM_DOWN_L, POINT_R, LOOK_DOWN])],
+    pointL: [compose(BASE, [ARM_DOWN_R, mirror(POINT_R), LOOK_DOWN])],
+    cheer: [compose(BASE, [mirror(CHEER_R), CHEER_R, HAPPY]), compose(BASE, [mirror(shiftY(CHEER_R, 1)), shiftY(CHEER_R, 1), HAPPY])],
+  };
+  const FRAME_MS = { idle: 520, wave: 300, point: 9999, pointL: 9999, cheer: 260 };
+
+  const rgb = (hex) => [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)];
+  function toImageData(ctx, rows, x0 = 0, y0 = 0, w = 32, h = 32) {
+    const img = ctx.createImageData(w, h);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const ch = rows[y + y0][x + x0];
+      if (ch === '.') continue;
+      const [r, g, b] = rgb(PAL[ch]);
+      const i = (y * w + x) * 4;
+      img.data[i] = r; img.data[i + 1] = g; img.data[i + 2] = b; img.data[i + 3] = 255;
+    }
+    return img;
+  }
+  const sctx = spriteCv.getContext('2d');
+  const IMG = {};
+  for (const k of Object.keys(FRAMES)) IMG[k] = FRAMES[k].map((f) => toImageData(sctx, f));
+  let pose = 'idle', poseFrame = 0, poseT = 0;
+  function setPose(p) {
+    if (p === 'point' && pointLeft) p = 'pointL';
+    pose = p; poseFrame = 0; poseT = performance.now();
+    sctx.putImageData(IMG[pose][0], 0, 0);
+  }
+  function tickSprite(now) {
+    if (reduce || !deviceShown) return;
+    const fr = IMG[pose];
+    if (fr.length < 2 || now - poseT < FRAME_MS[pose]) return;
+    poseT = now; poseFrame = (poseFrame + 1) % fr.length;
+    sctx.putImageData(fr[poseFrame], 0, 0);
+  }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 4 · ROOM MEASURE
+     The only place the room reads layout: on open and on resize.
+     ═════════════════════════════════════════════════════════════════════ */
+  let vw = 0, vh = 0, dpr = 1, pointLeft = false, roseX = 0;
+  const pin = { x: 0, y: 0 }, rest = { x: 0, y: 0 };
+  const sock = { x: 0, y: 0 }, anchor = { x: 0, y: -14 };
+  let floorY = 0, floorC = 0, floorP = 0, plugRestX = 0;
+  const center = (el) => { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; };
+
+  // Where the cord ties onto the bead, and the bead centre, in the button.
+  const BEAD_TIE_X = 32, BEAD_TIE_Y = 8, BEAD_Y = 32;
+  // The plug button: body centre (28, 25), cable attach (28, 47). Lying on
+  // its side it reaches ~50px from the attach point (prong tips).
+  const PLUG_AX = 28, PLUG_AY = 47, PLUG_BODY = 22, PLUG_LIE = 50;
+
+  function measureRoom() {
+    vw = room.clientWidth; vh = room.clientHeight;
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    fxCv.width = Math.round(vw * dpr); fxCv.height = Math.round(vh * dpr);
+    fx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const p = center(pinEl), s = center(beadSlot);
+    roseX = center(fixture).x;
+    pin.x = p.x; pin.y = p.y;
+    rest.x = p.x; rest.y = s.y - (BEAD_Y - BEAD_TIE_Y);
+    L = rest.y - pin.y;
+    maxSway = vw < 700 ? 12 : 24;
+    floorY = floorEl.getBoundingClientRect().top;
+    floorC = floorY + (vw < 700 ? 13 : 18);      // where things lie on the floor
+    floorP = floorC - 13;                         // the plug's attach point when lying
+    const so = center(socketEl); sock.x = so.x; sock.y = so.y;
+    anchor.x = center(anchorEl).x;
+    plugRestX = center(plugSlot).x;
+    // The cable's run along the ceiling, from the rose to where it drops.
+    // It meets the hanging cable where that is vertical (just below y=0).
+    const dir = Math.sign(anchor.x - roseX) || 1;
+    cableRun.setAttribute('d', `M${roseX.toFixed(1)},3 H${(anchor.x - dir * 14).toFixed(1)} Q${anchor.x.toFixed(1)},3 ${anchor.x.toFixed(1)},17`);
+    // Integer sprite scale that fits the LCD.
+    const lcdW = $('.lcd', room).clientWidth;
+    const sc = clamp(Math.floor((lcdW * 0.66) / 32), 2, 3);
+    spriteCv.style.width = spriteCv.style.height = (32 * sc) + 'px';
+    // Mini-you points toward the plug and outlet (their midpoint).
+    const dv = device.getBoundingClientRect();
+    pointLeft = (plugRestX + sock.x) / 2 < dv.left + dv.width / 2;
+    // Phones stack "Plug it in" on top of the device: CSS needs its height.
+    room.style.setProperty('--dev-h', Math.round(dv.height) + 'px');
+  }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 5 · ROPES / PHYSICS
+     The cord is v1's verlet rope (pinned at the pull switch, heavier bead,
+     a stretch spring for the spring-back, a soft sideways wall). The lamp
+     cable is a second verlet rope from off-screen at the ceiling to the
+     plug, with a floor it lies on. Fixed 1/120s steps, dt clamped.
+     ═════════════════════════════════════════════════════════════════════ */
+  const ROPE = { spacing: 26, iterations: 14, gravity: 4800, dampX: 0.99, dampY: 0.978, beadInvMass: 0.3, step: 1 / 120 };
+  let n = 0, seg = 0, L = 0, maxSway = 24;
+  let stretch = 1, stretchV = 0, stretchMin = 1, sPrev = 0;
+  let X, Y, PX, PY, FX, INV;
+  let kin = null;          // kinematic target for the bead (drag / tug)
+
+  function buildCord() {
+    n = Math.max(5, Math.round(L / ROPE.spacing) + 1);
+    seg = L / (n - 1);
+    X = new Float64Array(n); Y = new Float64Array(n);
+    PX = new Float64Array(n); PY = new Float64Array(n);
+    FX = new Float64Array(n); INV = new Float64Array(n);
+    stretch = 1; stretchV = 0; stretchMin = 1; sPrev = 0;
+    for (let i = 0; i < n; i++) {
+      X[i] = PX[i] = pin.x;
+      Y[i] = PY[i] = pin.y + i * seg;
+      INV[i] = i === 0 ? 0 : (i === n - 1 ? ROPE.beadInvMass : 1);
+    }
+    asleep = false; calm = 0; kin = null;
+  }
+  const STRETCH_K = 500, STRETCH_C = 25, REBOUND = 0.15;
+  const swayLimit = (dd) => Math.min(maxSway, Math.max(0, dd) * 0.12);
+
+  function cordStep(dt) {
+    const g = ROPE.gravity * dt * dt, dt2 = dt * dt, last = n - 1;
+    for (let i = 1; i < n; i++) {
+      if (i === last && kin) continue;
+      const vx = (X[i] - PX[i]) * ROPE.dampX, vy = (Y[i] - PY[i]) * ROPE.dampY;
+      PX[i] = X[i]; PY[i] = Y[i];
+      X[i] += vx + FX[i] * dt2; Y[i] += vy + g; FX[i] = 0;
+    }
+    if (kin) {
+      PX[last] = X[last]; PY[last] = Y[last];
+      X[last] = kin.x; Y[last] = kin.y;
+      stretch = Math.max(1, Math.hypot(kin.x - pin.x, kin.y - pin.y) / L);
+      stretchV = 0;
+    } else if (stretch !== 1 || stretchV) {
+      stretchV += (-STRETCH_K * (stretch - 1) - STRETCH_C * stretchV) * dt;
+      stretch += stretchV * dt;
+      if (stretch < stretchMin) { stretch = stretchMin; stretchV = Math.max(0, stretchV); }
+      if (Math.abs(stretch - 1) < 1e-5 && Math.abs(stretchV) < 1e-4) { stretch = 1; stretchV = 0; }
+    }
+    const s = seg * stretch;
+    if (sPrev && s !== sPrev) {        // stretch moves the whole cord (no yo-yo)
+      const grow = s / sPrev - 1;
+      for (let i = 1; i < n; i++) {
+        if (i === last && kin) continue;
+        const dy = (Y[i] - pin.y) * grow; Y[i] += dy; PY[i] += dy;
+      }
+    }
+    sPrev = s;
+    for (let it = 0; it < ROPE.iterations; it++) {
+      for (let i = 0; i < last; i++) {
+        const j = i + 1, w1 = INV[i], w2 = (j === last && kin) ? 0 : INV[j], w = w1 + w2;
+        if (!w) continue;
+        const dx = X[j] - X[i], dy = Y[j] - Y[i];
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1e-6;
+        const diff = (dist - s) / dist / w;
+        X[i] += dx * diff * w1; Y[i] += dy * diff * w1;
+        X[j] -= dx * diff * w2; Y[j] -= dy * diff * w2;
+      }
+    }
+    for (let i = 1; i < n; i++) {      // tether + soft sideways wall
+      if (i === last && kin) continue;
+      const dx = X[i] - pin.x, dy = Y[i] - pin.y, dist = Math.sqrt(dx * dx + dy * dy), max = i * s;
+      if (dist > max) { X[i] = pin.x + dx * max / dist; Y[i] = pin.y + dy * max / dist; }
+      const lim = swayLimit(Y[i] - pin.y), off = X[i] - pin.x;
+      const over = off > lim ? off - lim : (off < -lim ? off + lim : 0);
+      if (over) {
+        X[i] -= over * 0.5;
+        const v = X[i] - PX[i];
+        if (v * over > 0) PX[i] = X[i] - v * 0.5;
+        const hard = lim * 1.2 + 2;
+        if (Math.abs(X[i] - pin.x) > hard) { X[i] = pin.x + Math.sign(over) * hard; PX[i] = X[i]; }
+      }
+    }
+  }
+  function cordEnergy() {
+    let e = 0;
+    for (let i = 1; i < n; i++) { const vx = X[i] - PX[i], vy = Y[i] - PY[i]; e += vx * vx + vy * vy; }
+    return e;
+  }
+
+  // Catmull-Rom through the nodes → one cubic-Bézier path.
+  function smoothPath(xs, ys, m) {
+    let dd = 'M' + xs[0].toFixed(1) + ',' + ys[0].toFixed(1);
+    for (let i = 0; i < m - 1; i++) {
+      const i0 = i > 0 ? i - 1 : 0, i3 = i + 2 < m ? i + 2 : m - 1;
+      const c1x = xs[i] + (xs[i + 1] - xs[i0]) / 6, c1y = ys[i] + (ys[i + 1] - ys[i0]) / 6;
+      const c2x = xs[i + 1] - (xs[i3] - xs[i]) / 6, c2y = ys[i + 1] - (ys[i3] - ys[i]) / 6;
+      dd += 'C' + c1x.toFixed(1) + ',' + c1y.toFixed(1) + ' ' + c2x.toFixed(1) + ',' + c2y.toFixed(1) + ' ' + xs[i + 1].toFixed(1) + ',' + ys[i + 1].toFixed(1);
+    }
+    return dd;
+  }
+  let lastCordD = '';
+  function renderCord(xs, ys) {
+    const m = xs.length, dd = smoothPath(xs, ys, m);
+    if (dd !== lastCordD) { cordPath.setAttribute('d', dd); lastCordD = dd; }
+    const kx = xs[m - 1], ky = ys[m - 1];
+    const ang = Math.atan2(kx - xs[m - 2], ky - ys[m - 2]) * -180 / Math.PI;
+    bead.style.transform = `translate3d(${(kx - BEAD_TIE_X).toFixed(1)}px, ${(ky - BEAD_TIE_Y).toFixed(1)}px, 0) rotate(${ang.toFixed(2)}deg)`;
+  }
+  function renderCordStraight(tx = rest.x, ty = rest.y) { renderCord([pin.x, (pin.x + tx) / 2, tx], [pin.y, (pin.y + ty) / 2, ty]); }
+
+  // Idle drift: when the cord settles the sim sleeps and the cord just
+  // breathes (a closed-form sine, ~1.5px at the bead) at ~15fps.
+  let asleep = false, sleptAt = 0, lastIdle = 0, calm = 0, DX, DY;
+  function renderDrift(now) {
+    const t = now / 1000, ramp = Math.min(1, (now - sleptAt) / 1200), amp = (maxSway > 20 ? 1.6 : 1.1) * ramp;
+    for (let i = 0; i < n; i++) {
+      const u = i / (n - 1);
+      X[i] += (pin.x - X[i]) * 0.03;
+      DX[i] = X[i] + amp * u * (Math.sin(t * 0.9 + u * 2.4) * 0.7 + Math.sin(t * 0.37 + 1.3) * 0.3);
+      DY[i] = Y[i];
+    }
+    renderCord(DX, DY);
+  }
+  function sleepCord(now) { asleep = true; sleptAt = now; DX = Float64Array.from(X); DY = Float64Array.from(Y); }
+  function wakeCord() {
+    if (!asleep) return;
+    asleep = false;
+    for (let i = 1; i < n; i++) X[i] = PX[i] = DX[i];
+  }
+
+  // ── The lamp cable ──────────────────────────────────────────────────
+  const CAB = { spacing: 24, iterations: 12, gravity: 3200, damp: 0.986, plugInv: 0.35, step: 1 / 120 };
+  let cn = 0, cseg = 0, CX, CY, CPX, CPY, CINV;
+  let cKin = null, cAwake = false, cCalm = 0, plugAng = -90, tween = null;
+
+  function buildCable() {
+    const endX = plugged ? sock.x : plugRestX, endY = plugged ? sock.y + PLUG_BODY : floorP;
+    const run1 = floorC - anchor.y, run2 = Math.abs(endX - anchor.x), slack = 30;
+    const Lc = run1 + run2 + slack;
+    cn = Math.max(8, Math.round(Lc / CAB.spacing) + 1);
+    cseg = Lc / (cn - 1);
+    CX = new Float64Array(cn); CY = new Float64Array(cn); CPX = new Float64Array(cn); CPY = new Float64Array(cn); CINV = new Float64Array(cn);
+    const dir = Math.sign(endX - anchor.x) || 1;
+    for (let i = 0; i < cn; i++) {
+      const sdist = i * cseg;
+      let x, y;
+      if (sdist <= run1) { x = anchor.x; y = anchor.y + sdist; }
+      else { x = anchor.x + dir * Math.min(run2, (sdist - run1) * run2 / (run2 + slack)); y = floorC; }
+      CX[i] = CPX[i] = x; CY[i] = CPY[i] = y;
+      CINV[i] = i === 0 ? 0 : (i === cn - 1 ? CAB.plugInv : 1);
+    }
+    CX[cn - 1] = CPX[cn - 1] = endX; CY[cn - 1] = CPY[cn - 1] = endY;
+    cKin = plugged ? { x: sock.x, y: sock.y + PLUG_BODY } : null;
+    plugAng = plugged ? 0 : (dir > 0 ? 90 : -90);
+    // Settle it before the first paint.
+    for (let i = 0; i < 360; i++) cableStep(CAB.step);
+    cAwake = false; cCalm = 0;
+  }
+  function cableStep(dt) {
+    const g = CAB.gravity * dt * dt, last = cn - 1;
+    for (let i = 1; i < cn; i++) {
+      if (i === last && cKin) continue;
+      const vx = (CX[i] - CPX[i]) * CAB.damp, vy = (CY[i] - CPY[i]) * CAB.damp;
+      CPX[i] = CX[i]; CPY[i] = CY[i];
+      CX[i] += vx; CY[i] += vy + g;
+    }
+    if (cKin) { CPX[last] = CX[last]; CPY[last] = CY[last]; CX[last] = cKin.x; CY[last] = cKin.y; }
+    for (let it = 0; it < CAB.iterations; it++) {
+      for (let i = 0; i < last; i++) {
+        const j = i + 1, w1 = CINV[i], w2 = (j === last && cKin) ? 0 : CINV[j], w = w1 + w2;
+        if (!w) continue;
+        const dx = CX[j] - CX[i], dy = CY[j] - CY[i];
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1e-6;
+        if (dist <= cseg) continue;          // a cable can slacken, never stretch
+        const diff = (dist - cseg) / dist / w;
+        CX[i] += dx * diff * w1; CY[i] += dy * diff * w1;
+        CX[j] -= dx * diff * w2; CY[j] -= dy * diff * w2;
+      }
+    }
+    // The floor: things lie on it, and friction stops them sliding. A loose
+    // plug keeps its whole lying length (PLUG_LIE) inside the room.
+    for (let i = 1; i < cn; i++) {
+      if (i === last && cKin) continue;
+      const f = i === last ? floorP : floorC;
+      if (CY[i] >= f) {
+        CY[i] = f; CPY[i] = f;
+        CPX[i] = CX[i] - (CX[i] - CPX[i]) * 0.55;
+      }
+      const m = i === last ? PLUG_LIE : 3;
+      if (CX[i] < m) { CX[i] = m; } else if (CX[i] > vw - m) { CX[i] = vw - m; }
+    }
+  }
+  function cableEnergy() {
+    let e = 0;
+    for (let i = 1; i < cn; i++) { const vx = CX[i] - CPX[i], vy = CY[i] - CPY[i]; e += vx * vx + vy * vy; }
+    return e;
+  }
+  let lastCableD = '';
+  function renderCable(dt) {
+    const last = cn - 1;
+    const dd = smoothPath(CX, CY, cn);
+    if (dd !== lastCableD) {
+      cablePath.setAttribute('d', dd); cableHi.setAttribute('d', dd);
+      lastCableD = dd;
+    }
+    // The plug orients along its cable: prongs point away from it.
+    let target;
+    if (plugged) target = 0;
+    else {
+      const j = Math.max(0, last - 2);
+      const dx = CX[j] - CX[last], dy = CY[j] - CY[last];
+      const lying = !cKin && CY[last] >= floorP - 0.5;
+      target = lying ? (dx > 0 ? -90 : 90) : Math.atan2(-dx, dy) * 180 / Math.PI;
+    }
+    let delta = ((target - plugAng + 540) % 360) - 180;
+    plugAng += reduce ? delta : delta * Math.min(1, (dt || 0.016) * 16);
+    plugBtn.style.transform = `translate3d(${(CX[last] - PLUG_AX).toFixed(1)}px, ${(CY[last] - PLUG_AY).toFixed(1)}px, 0) rotate(${plugAng.toFixed(1)}deg)`;
+  }
+  // Reduced motion: no rope physics. The cable is drawn from the ceiling
+  // down the wall, along the floor, to wherever the plug is.
+  function renderCableStatic(px, py) {
+    const last = cn - 1;
+    CX[last] = px; CY[last] = py;
+    let dd;
+    if (py >= floorP - 1) dd = `M${anchor.x},${anchor.y} V${floorC - 30} Q${anchor.x},${floorC} ${anchor.x + Math.sign(px - anchor.x) * 30},${floorC} L${px},${floorC} L${px},${py}`;
+    else dd = `M${anchor.x},${anchor.y} V${Math.max(anchor.y + 20, py - 120)} Q${anchor.x},${py + 60} ${px},${py}`;
+    cablePath.setAttribute('d', dd); cableHi.setAttribute('d', dd);
+    plugAng = plugged ? 0 : (py >= floorP - 1 ? (anchor.x > px ? -90 : 90) : 0);
+    plugBtn.style.transform = `translate3d(${(px - PLUG_AX).toFixed(1)}px, ${(py - PLUG_AY).toFixed(1)}px, 0) rotate(${plugAng}deg)`;
+  }
+  function wakeCable() { cAwake = true; cCalm = 0; ensureLoop(); }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 6 · SPARKS
+     Canvas particles: a short warm burst at the rose (10–20 particles,
+     gravity, <400ms) on each failed pull, and a small arc at the outlet.
+     ═════════════════════════════════════════════════════════════════════ */
+  const sparks = [];
+  let sparksDrawn = false;
+  function burst(x, y, count, opts = {}) {
+    if (reduce) return;
+    for (let i = 0; i < count; i++) {
+      const a = (opts.up ? -Math.PI / 2 : Math.PI / 2) + (Math.random() - 0.5) * (opts.spread || 2.6);
+      const sp = (opts.speed || 260) * (0.45 + Math.random() * 0.75);
+      sparks.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 0, max: 0.2 + Math.random() * 0.17, hot: Math.random() < 0.5, blue: !!opts.blue && Math.random() < 0.6 });
+    }
+    ensureLoop();
+  }
+  function tickSparks(dt) {
+    if (!sparks.length) { if (sparksDrawn) { fx.clearRect(0, 0, vw, vh); sparksDrawn = false; } return; }
+    fx.clearRect(0, 0, vw, vh);
+    fx.lineCap = 'round';
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const p = sparks[i];
+      p.life += dt;
+      if (p.life >= p.max) { sparks.splice(i, 1); continue; }
+      p.vy += 1500 * dt; p.vx *= 0.985;
+      const ox = p.x, oy = p.y;
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      const a = 1 - p.life / p.max;
+      fx.strokeStyle = p.blue ? `rgba(215,235,255,${a})` : (p.hot ? `rgba(255,246,214,${a})` : `rgba(255,196,104,${a})`);
+      fx.lineWidth = p.hot ? 1.8 : 1.3;
+      fx.beginPath(); fx.moveTo(ox - p.vx * 0.012, oy - p.vy * 0.012); fx.lineTo(p.x, p.y); fx.stroke();
+    }
+    sparksDrawn = true;
+  }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 7 · CORD PULL (v1's interaction)
+     Drag the bead down past 40px, flick it, click/tap, or Enter/Space.
+     Every pull fails (it isn't plugged in): sparks, a flicker, a bubble.
+     ═════════════════════════════════════════════════════════════════════ */
+  let drag = null, tug = null, suppressBeadClick = false, tugTimer = 0;
+  // Skip gets first focus (and its bright ring) on open. A drag on the
+  // bead or plug never moves focus by itself, so on a phone that ring
+  // would outshine the story for the whole intro. On any pointer press in
+  // the room, park focus on the dialog itself (no ring; still in the trap).
+  function releaseSkipFocus() {
+    if (document.activeElement === skipBtn) room.focus({ preventScroll: true });
+  }
+  const PULL_MAX = 120, PULL_FIRE = 40, TUG_MS = 120, TUG_DEPTH = 46;
+
+  function releaseBead() {
+    kin = null;
+    stretchMin = 1 - REBOUND * (stretch - 1);
+    if (reduce) { renderCordStraight(); return; }
+    ensureLoop();
+  }
+  function pullOnce() {
+    if (tugTimer) return;
+    if (reduce) { onPull(); return; }
+    wakeCord();
+    tug = { t0: performance.now() };
+    ensureLoop();
+    tugTimer = setTimeout(() => { tugTimer = 0; tug = null; releaseBead(); onPull(); }, TUG_MS);
+  }
+  const FLICK_WINDOW = 80, FLICK_SPEED = 0.5, FLICK_MIN = 12;
+  function releaseSpeed(dg, e) {
+    let t0 = e.timeStamp, y0 = e.clientY;
+    for (let i = dg.samples.length - 1; i >= 0; i--) {
+      const [t, y] = dg.samples[i];
+      if (e.timeStamp - t > FLICK_WINDOW) break;
+      t0 = t; y0 = y;
+    }
+    return e.timeStamp > t0 ? (e.clientY - y0) / (e.timeStamp - t0) : 0;
+  }
+  bead.addEventListener('pointerdown', (e) => {
+    if (state !== 'dark') return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    try { bead.setPointerCapture(e.pointerId); } catch (err) {}
+    releaseSkipFocus();
+    drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, dy: 0, moved: 0, samples: [[e.timeStamp, e.clientY]] };
+    wakeCord();
+    kin = { x: rest.x, y: rest.y };
+    ensureLoop();
+  });
+  bead.addEventListener('pointermove', (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+    drag.moved = Math.max(drag.moved, Math.hypot(dx, dy));
+    const py = dy > 0 ? Math.min(PULL_MAX, dy < 90 ? dy : 90 + (dy - 90) * 0.4) : Math.max(-12, dy * 0.3);
+    kin = { x: rest.x + clamp(dx * 0.5, -22, 22), y: rest.y + py };
+    drag.dy = py;
+    drag.samples.push([e.timeStamp, e.clientY]);
+    if (drag.samples.length > 24) drag.samples.shift();
+    if (reduce) renderCordStraight(kin.x, kin.y);
+  });
+  function endBeadDrag(e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    const dg = drag; drag = null;
+    try { bead.releasePointerCapture(e.pointerId); } catch (err) {}
+    suppressBeadClick = true;
+    setTimeout(() => { suppressBeadClick = false; }, 450);
+    if (e.type === 'pointercancel') { releaseBead(); return; }
+    if (dg.moved < 6) { kin = null; pullOnce(); return; }
+    const flick = dg.dy >= FLICK_MIN && releaseSpeed(dg, e) > FLICK_SPEED;
+    releaseBead();
+    if (dg.dy >= PULL_FIRE || flick) onPull();
+  }
+  bead.addEventListener('pointerup', endBeadDrag);
+  bead.addEventListener('pointercancel', endBeadDrag);
+  bead.addEventListener('click', () => {
+    if (suppressBeadClick) { suppressBeadClick = false; return; }
+    if (state === 'dark') pullOnce();
+  });
+
+  // Fine pointers: brushing through the cord nudges it (once per crossing).
+  let lastPX = null;
+  window.addEventListener('pointermove', (e) => {
+    if (state !== 'dark' || !mqFine.matches || drag || reduce || !n) { lastPX = e.clientX; return; }
+    const vx = lastPX == null ? 0 : e.clientX - lastPX;
+    lastPX = e.clientX;
+    if (!vx || e.clientY < pin.y + 30 || e.clientY > rest.y) return;
+    const i = clamp(Math.round((e.clientY - pin.y) / seg), 1, n - 1);
+    const xs = asleep ? DX : X;
+    if ((e.clientX - vx - xs[i]) * (e.clientX - xs[i]) > 0) return;
+    wakeCord();
+    const imp = clamp(vx * 0.06, -1.25, 1.25);
+    for (let j = Math.max(1, i - 3); j <= Math.min(n - 1, i + 3); j++) PX[j] -= imp * (1 - Math.abs(j - i) * 0.25);
+    ensureLoop();
+  }, { passive: true });
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 8 · PLUG DRAG
+     The plug follows the pointer (pointer capture); its cable drags along.
+     Within 60px of the outlet it snaps in with a 2px seat. Released far
+     away, it falls back to the floor. Enter/Space (or "Plug it in")
+     animates it in.
+     ═════════════════════════════════════════════════════════════════════ */
+  const SNAP = 60;
+  let pdrag = null, suppressPlugClick = false;
+  function maxReach(x, y) {
+    // Keep the plug inside the room and within the cable's length.
+    const total = (cn - 1) * cseg * 0.97;
+    let px = clamp(x, 20, vw - 20), py = clamp(y, 30, floorP);
+    const dx = px - anchor.x, dy = py - anchor.y, dist = Math.hypot(dx, dy);
+    if (dist > total) { px = anchor.x + dx * total / dist; py = anchor.y + dy * total / dist; }
+    return { x: px, y: py };
+  }
+  // (x, y) = the pointer. The plug's BODY centre goes under it: the cable
+  // attach point sits PLUG_BODY "below" the body along the plug's current
+  // tilt, so the target is re-derived each frame as the tilt eases.
+  let held = null;
+  function heldTarget() {
+    const a = plugAng * Math.PI / 180;
+    return maxReach(held.x - PLUG_BODY * Math.sin(a), held.y + PLUG_BODY * Math.cos(a));
+  }
+  function holdPlugAt(x, y) {
+    held = { x, y };
+    if (reduce) { const p = maxReach(x, y + PLUG_BODY); cKin = p; renderCableStatic(p.x, p.y); }
+    else { cKin = heldTarget(); wakeCable(); }
+  }
+  plugBtn.addEventListener('pointerdown', (e) => {
+    if (plugged || (state !== 'dark')) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    try { plugBtn.setPointerCapture(e.pointerId); } catch (err) {}
+    releaseSkipFocus();
+    pdrag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, moved: 0 };
+    tween = null;
+  });
+  plugBtn.addEventListener('pointermove', (e) => {
+    if (!pdrag || e.pointerId !== pdrag.id) return;
+    pdrag.moved = Math.max(pdrag.moved, Math.hypot(e.clientX - pdrag.sx, e.clientY - pdrag.sy));
+    if (pdrag.moved < 4) return;
+    holdPlugAt(e.clientX, e.clientY);
+    if (Math.hypot(e.clientX - sock.x, e.clientY - sock.y) < SNAP) {
+      try { plugBtn.releasePointerCapture(e.pointerId); } catch (err) {}
+      pdrag = null; held = null; suppressPlugClick = true; setTimeout(() => { suppressPlugClick = false; }, 450);
+      seatPlug();
+    }
+  });
+  function endPlugDrag(e) {
+    if (!pdrag || e.pointerId !== pdrag.id) return;
+    const moved = pdrag.moved; pdrag = null; held = null;
+    try { plugBtn.releasePointerCapture(e.pointerId); } catch (err) {}
+    if (moved < 4) return;               // a tap: the click handler plugs it in
+    suppressPlugClick = true; setTimeout(() => { suppressPlugClick = false; }, 450);
+    cKin = null;                          // let go: it falls to the floor
+    if (reduce) renderCableStatic(CX[cn - 1], floorP); else wakeCable();
+  }
+  plugBtn.addEventListener('pointerup', endPlugDrag);
+  plugBtn.addEventListener('pointercancel', endPlugDrag);
+  plugBtn.addEventListener('click', () => {
+    if (suppressPlugClick) { suppressPlugClick = false; return; }
+    plugItIn();
+  });
+  pluginBtn.addEventListener('click', () => plugItIn());
+
+  // Keyboard / one-tap: carry the plug up and into the outlet.
+  function plugItIn() {
+    if (plugged || state !== 'dark' || tween) return;
+    if (reduce) { seatPlug(); return; }
+    const last = cn - 1;
+    tween = { t0: performance.now(), dur: 650, x0: CX[last], y0: CY[last], x1: sock.x, y1: sock.y + PLUG_BODY };
+    wakeCable();
+  }
+  function tickTween(now) {
+    if (!tween) return;
+    const t = Math.min(1, (now - tween.t0) / tween.dur);
+    const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    const lift = Math.sin(Math.PI * t) * 46;
+    cKin = { x: tween.x0 + (tween.x1 - tween.x0) * e, y: tween.y0 + (tween.y1 - tween.y0) * e - lift };
+    if (t >= 1) { tween = null; seatPlug(); }
+  }
+  function seatPlug() {
+    if (plugged) return;
+    plugged = true; tween = null;
+    cKin = { x: sock.x, y: sock.y + PLUG_BODY };
+    plugBtn.classList.add('seated');
+    plugBtn.setAttribute('aria-disabled', 'true');
+    pluginBtn.setAttribute('aria-disabled', 'true');
+    try { navigator.vibrate && navigator.vibrate(15); } catch (e) {}
+    if (reduce) renderCableStatic(sock.x, sock.y + PLUG_BODY); else wakeCable();
+    onPlugged();
+  }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 9 · STORY BEATS
+     Bubble (beats 1–3), mini-you on the device (beat 4), the cheer (5).
+     ═════════════════════════════════════════════════════════════════════ */
+  function onPull() {
+    if (state !== 'dark') return;
+    pulls++;
+    room.classList.add('pulled');
+    burst(roseX, 8, 16, { speed: 280 });          // at the ceiling rose
+    if (!reduce) {
+      fixture.classList.remove('flick'); void fixture.offsetWidth; fixture.classList.add('flick');
+    }
+    showBubble(Math.min(pulls, BUBBLES.length) - 1);
+    if (pulls === 1) later(1200, () => showDevice());
+  }
+
+  // The bubble is one SVG path around the measured text box.
+  function bubblePath(w, h, tail) {
+    const r = Math.min(h / 2, 30);
+    const { x0, x1, tx, ty } = tail;
+    return `M${r},0 H${w - r} Q${w},0 ${w},${r} V${h - r} Q${w},${h} ${w - r},${h} ` +
+      `H${x1} Q${x1 - 2},${h + (ty - h) * 0.45} ${tx},${ty} Q${x0 + 3},${h + (ty - h) * 0.35} ${x0},${h} ` +
+      `H${r} Q0,${h} 0,${h - r} V${r} Q0,0 ${r},0 Z`;
+  }
+  // Lay the balloon out around the text as it wraps at this width. Layout
+  // reads happen here only: once per bubble, and again on resize.
+  function layoutBubble(i) {
+    // Shrink-wrap the box to its actual lines: `max-content` + balance
+    // leaves the box at the unwrapped width, with a gap on the right.
+    bubbleText.style.width = bubbleText.style.maxWidth = '';
+    bubble.style.transform = 'none';       // measure unrotated
+    const cs = getComputedStyle(bubbleText);
+    const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+    const rg = document.createRange();
+    rg.selectNodeContents(bubbleText);
+    const rs = [...rg.getClientRects()];
+    if (rs.length) {
+      const lineW = Math.max(...rs.map((r) => r.right)) - Math.min(...rs.map((r) => r.left));
+      // A word wider than the max (narrow phones) widens the box rather
+      // than spilling over the outline: hence maxWidth none.
+      bubbleText.style.maxWidth = 'none';
+      bubbleText.style.width = Math.ceil(lineW + padX + 1) + 'px';
+    }
+    // The path can never be narrower than the text.
+    const w = Math.ceil(Math.max(bubbleText.scrollWidth, bubbleText.offsetWidth)), h = Math.ceil(bubbleText.offsetHeight);
+    bubble.style.transform = '';
+    const small = vw < 700, short = small && vh <= 480;
+    const m = 4, T = short ? 22 : (small ? 30 : 42);
+    const x0 = Math.round(w * 0.26), x1 = x0 + (small ? 18 : 24);
+    const tail = { x0, x1, tx: x0 - (small ? 4 : 10), ty: h + T };
+    const dd = bubblePath(w, h, tail);
+    bubbleSvg.setAttribute('width', w + 2 * m + 10);
+    bubbleSvg.setAttribute('height', h + T + 2 * m + 10);
+    bubbleSvg.setAttribute('viewBox', `${-m} ${-m} ${w + 2 * m + 10} ${h + T + 2 * m + 10}`);
+    $('.b-body', bubble).setAttribute('d', dd);
+    $('.b-line', bubble).setAttribute('d', dd);
+    $('.b-clip', bubble).setAttribute('d', dd);
+    const dots = $('.b-dots', bubble);
+    dots.setAttribute('width', w); dots.setAttribute('height', h);
+    bubbleText.style.transform = `translate(${m}px, ${m}px)`;
+    bubble.style.setProperty('--rot', BUBBLE_ROT[i] + 'deg');
+    bubble.style.transformOrigin = `${tail.tx + m}px ${tail.ty + m}px`;
+  }
+  function showBubble(i) {
+    bubbleIdx = i;
+    bubbleText.textContent = BUBBLES[i];
+    announce(BUBBLES[i]);
+    bubble.classList.remove('pop', 'out');
+    layoutBubble(i);
+    void bubble.offsetWidth;
+    bubble.classList.add('show', 'pop');
+  }
+
+  function showDevice() {
+    if (deviceShown || state === 'off') return;
+    deviceShown = true;
+    room.classList.add('has-device');
+    plugBtn.tabIndex = 0;
+    pluginBtn.hidden = false;
+    if (plugged) return;                       // they beat mini-you to it
+    setPose('wave');
+    let i = 0;
+    const next = () => {
+      if (plugged || state !== 'dark') return;
+      const line = LINES[i];
+      setPose(line.pose);
+      if (line.hl) room.classList.add('hl');
+      typeLine(line.text, () => { if (line.hold && ++i < LINES.length) later(line.hold, next); });
+    };
+    later(reduce ? 0 : 650, next);
+  }
+
+  let typeTimer = 0;
+  function typeLine(text, done) {
+    clearTimeout(typeTimer);
+    announce(text);
+    if (reduce) { lcdText.textContent = text; lcdText.classList.remove('typing'); done && done(); return; }
+    let k = 0;
+    lcdText.textContent = '';
+    lcdText.classList.add('typing');
+    const step = () => {
+      lcdText.textContent = text.slice(0, ++k);
+      if (k < text.length) typeTimer = setTimeout(step, 30);
+      else { lcdText.classList.remove('typing'); done && done(); }
+    };
+    step();
+  }
+
+  function onPlugged() {
+    state = 'plugged';
+    room.classList.remove('hl');
+    bubble.classList.remove('pop');
+    bubble.classList.add('out');
+    store.set(FLAG, '1');
+    lastRun = 'completed';
+    clearTimers();
+    if (!deviceShown) { deviceShown = true; room.classList.add('has-device'); pluginBtn.hidden = false; }
+    setPose('cheer');
+    typeLine(CHEER);
+    later(reduce ? 300 : 520, boot);
+  }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 10 · BOOT SEQUENCE (~2.9s)
+       0ms   arc at the outlet; a pulse runs up the cable, along the
+             ceiling and into the rose. Focus moves to the dialog itself;
+             Skip stays up (and clickable) until 1300.
+       400   the bulb warms (one tiny flicker); a warm pool spreads
+       700   the room opens from the bulb into the page; traces draw from
+             the top centre, section by section, each part fading up
+       1300  the bulb, cord + Skip fade; the page is RELEASED: it scrolls
+             and takes clicks/keys while the last of the room fades
+       1500  mini-you docks into the corner badge
+       2900  the dialog closes for good (focus goes to the h1 unless the
+             visitor has already moved it onto the page)
+     Reduced motion: a 200ms crossfade with the traces already drawn.
+     ═════════════════════════════════════════════════════════════════════ */
+  function boot() {
+    state = 'boot';
+    room.classList.add('booting');
+    // "Plug it in" (or the plug) is about to vanish: park focus on the
+    // dialog so no ring sits on an invisible control. Skip keeps it.
+    if (document.activeElement !== skipBtn) room.focus({ preventScroll: true });
+    if (reduce) {
+      fixture.classList.add('warm');
+      room.classList.add('lit');
+      showAllTraces();
+      site.querySelectorAll('.fx-sec').forEach((s) => s.classList.add('on'));
+      room.style.transition = 'opacity 200ms linear';
+      room.style.opacity = '0';
+      showBadge(false);
+      later(210, () => finish());
+      return;
+    }
+    burst(sock.x, sock.y, 14, { speed: 200, spread: 6.2, blue: true });
+    runPulse();
+    later(400, () => { fixture.classList.add('warm'); room.classList.add('lit'); });
+    later(700, () => { room.classList.add('dissolve'); bootTraces(); });
+    later(1300, () => { room.classList.add('fade-top'); release(); });
+    later(1500, dock);
+    later(2900, () => finish());
+  }
+
+  function runPulse() {
+    // One path rose → ceiling run → down the hanging cable → plug; the
+    // pulse runs it backwards, so power visibly arrives at the fixture.
+    let k = 0;
+    while (k < cn - 2 && CY[k] <= 17) k++;          // first node below the run's corner
+    const dd = cableRun.getAttribute('d') + ' ' + smoothPath(CX.slice(k), CY.slice(k), cn - k).replace(/^M/, 'L');
+    for (const p of [pulseGlow, pulseCore]) {
+      p.setAttribute('d', dd);
+      p.style.strokeDasharray = '0.2 2';
+      p.animate([{ strokeDashoffset: -1, opacity: 1 }, { strokeDashoffset: 0.2, opacity: 1 }],
+        { duration: 520, easing: 'cubic-bezier(0.35, 0, 0.65, 1)', fill: 'none' });
+    }
+  }
+
+  // Draw the traces for the sections in the first viewport, in order;
+  // everything below the fold is put in its final state now.
+  function bootTraces() {
+    const scrollTop = window.scrollY, vhPage = window.innerHeight;
+    const { stepY } = traceMeta;
+    const secs = [...site.querySelectorAll('.fx-sec')];
+    const below = [];
+    let t = 0;
+    for (let s = 0; s < STEP_SEL.length; s++) {
+      const visible = stepY[s] != null && stepY[s] - scrollTop < vhPage;
+      const els = secs.filter((el) => +el.dataset.step === s);
+      if (!visible) {
+        els.forEach((el) => el.classList.add('on', 'now'));
+        below.push(s);
+        continue;
+      }
+      const dur = s === 0 ? 560 : 360;
+      tlater(t, () => drawStep(s, dur));
+      tlater(t + dur * 0.55, () => els.forEach((el) => el.classList.add('on')));
+      t += dur - 70;
+    }
+    drawOnEnter(below);
+  }
+
+  function dock() {
+    const wrap = $('#badge-wrap');
+    if (store.get(BADGE_OFF)) { device.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: 'forwards' }); return; }
+    wrap.classList.add('show');
+    wrap.style.visibility = 'hidden';
+    const b = $('#badge').getBoundingClientRect(), dv = device.getBoundingClientRect();
+    if (!b.width) {                       // badge hidden on short viewports (CSS 10)
+      device.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: 'forwards' });
+      wrap.style.visibility = '';
+      showBadge(false);
+      return;
+    }
+    const s = b.width / dv.width;
+    const dx = (b.left + b.width / 2) - (dv.left + dv.width / 2), dy = (b.top + b.height / 2) - (dv.top + dv.height / 2);
+    setPose('idle');
+    device.animate([
+      { transform: 'none', opacity: 1, borderRadius: '0' },
+      { transform: `translate(${dx}px, ${dy}px) scale(${s})`, opacity: 0.9 },
+    ], { duration: 650, easing: 'cubic-bezier(0.5, 0, 0.2, 1)', fill: 'forwards' });
+    later(600, () => { wrap.style.visibility = ''; showBadge(true); device.style.opacity = '0'; });
+  }
+
+  // Late in the boot: the room is almost gone, so hand the page back.
+  // Scroll unlocks, the page takes input, and focus (if it was in the room)
+  // moves to the h1. The dialog goes inert; only its fade is left.
+  function release() {
+    if (released) return;
+    released = true;
+    const hadFocus = room.contains(document.activeElement) || document.activeElement === document.body;
+    root.classList.add('released');
+    site.inert = false;
+    room.inert = true;
+    if (hadFocus) h1.focus({ preventScroll: true });
+  }
+
+  // End state, from the boot or from Skip.
+  function finish(skipped) {
+    if (state === 'off') return;
+    clearTimers();
+    clearTimeout(typeTimer);
+    if (traceDirty) {
+      // The viewport changed mid-boot: the traces being drawn were routed
+      // for the old layout. Re-route them, fully drawn.
+      traceDirty = false;
+      clearTraceTimers();
+      if (traceIO) traceIO.disconnect();
+      buildTraces(true);
+    }
+    if (skipped) {
+      lastRun = 'skipped';
+      showAllTraces();
+      site.querySelectorAll('.fx-sec').forEach((s) => s.classList.add('on', 'now'));
+      if (traceIO) traceIO.disconnect();
+      showBadge(false);
+    } else {
+      site.querySelectorAll('.fx-sec').forEach((s) => s.classList.add('on'));
+    }
+    store.set(FLAG, '1');
+    state = 'off';
+    stopLoop();
+    sparks.length = 0;
+    release();
+    root.classList.remove('intro', 'released');
+    // Don't pull focus back if the visitor already moved on to the page.
+    const ae = document.activeElement;
+    if (!site.contains(ae) && !badgeWrap.contains(ae)) h1.focus({ preventScroll: true });
+    updateProto();
+  }
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 11 · LOOP
+     One rAF loop for both ropes, the sparks, the plug tween and the
+     sprite. The cord sleeps into a cheap 15fps drift; the cable sleeps
+     when calm. It stops entirely when the intro closes. No layout reads.
+     ═════════════════════════════════════════════════════════════════════ */
+  let raf = 0, idleTimer = 0, lastT = 0, acc = 0, cAcc = 0;
+  const loopOn = () => state !== 'off' && !document.hidden;
+  function ensureLoop() {
+    if (idleTimer) { clearTimeout(idleTimer); idleTimer = 0; }
+    if (loopOn() && !raf) { lastT = performance.now(); raf = requestAnimationFrame(frame); }
+  }
+  function stopLoop() { if (raf) cancelAnimationFrame(raf); raf = 0; clearTimeout(idleTimer); idleTimer = 0; }
+
+  function frame(now) {
+    raf = 0;
+    if (!loopOn()) return;
+    const dt = Math.min(0.05, (now - lastT) / 1000);
+    lastT = now;
+
+    // Cord
+    if (!reduce && n) {
+      if (asleep && (kin || tug)) wakeCord();
+      if (asleep) {
+        if (now - lastIdle > 66) { renderDrift(now); lastIdle = now; }
+      } else {
+        if (tug) {
+          const p = Math.min(1, (now - tug.t0) / TUG_MS);
+          kin = { x: rest.x, y: rest.y + TUG_DEPTH * (1 - (1 - p) * (1 - p)) };
+        }
+        acc += dt;
+        let steps = 0;
+        while (acc >= ROPE.step && steps < 6) { cordStep(ROPE.step); acc -= ROPE.step; steps++; }
+        if (steps === 6) acc = 0;
+        renderCord(X, Y);
+        if (!kin && !tug && stretch === 1 && cordEnergy() < n * 0.0004) calm += dt; else calm = 0;
+        if (calm > 0.6) { calm = 0; sleepCord(now); }
+      }
+    }
+
+    // Cable + plug
+    if (cn && !reduce) {
+      tickTween(now);
+      if (held) cKin = heldTarget();
+      if (cAwake || tween) {
+        cAcc += dt;
+        let steps = 0;
+        while (cAcc >= CAB.step && steps < 6) { cableStep(CAB.step); cAcc -= CAB.step; steps++; }
+        if (steps === 6) cAcc = 0;
+        renderCable(dt);
+        if (!tween && !pdrag && cableEnergy() < cn * 0.0003 && Math.abs(plugAng - Math.round(plugAng)) < 0.5) cCalm += dt; else cCalm = 0;
+        if (cCalm > 0.5) { cAwake = false; cCalm = 0; }
+      }
+    }
+
+    tickSparks(dt);
+    tickSprite(now);
+    // Something in this frame (e.g. seatPlug → wakeCable → ensureLoop)
+    // may already have scheduled the next one: never start a second chain.
+    if (raf || !loopOn()) return;
+    // Nothing moving but the drift and the sprite: tick ~15×/s, not 60.
+    const idle = (reduce || asleep) && !cAwake && !tween && !sparks.length && !kin && !tug;
+    if (idle) idleTimer = setTimeout(() => { idleTimer = 0; if (loopOn() && !raf) raf = requestAnimationFrame(frame); }, 55);
+    else raf = requestAnimationFrame(frame);
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) ensureLoop(); });
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 12 · DIALOG: open, focus trap, Esc / Skip
+     ═════════════════════════════════════════════════════════════════════ */
+  function focusables() {
+    // During the boot only Skip is live, and only until it fades.
+    if (state === 'boot') return room.classList.contains('fade-top') ? [] : [skipBtn];
+    return [...room.querySelectorAll('button, [href]')].filter((el) =>
+      !el.hidden && el.tabIndex >= 0 && el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden');
+  }
+  document.addEventListener('keydown', (e) => {
+    if (state === 'off') return;
+    if (e.key === 'Escape') { e.preventDefault(); skip(); return; }
+    if (e.key !== 'Tab' || released) return;   // released: the page's own tab order
+    const f = focusables();
+    if (!f.length) { e.preventDefault(); return; }
+    const i = f.indexOf(document.activeElement);
+    e.preventDefault();
+    const next = e.shiftKey ? (i <= 0 ? f.length - 1 : i - 1) : (i === -1 || i === f.length - 1 ? 0 : i + 1);
+    f[next].focus();
+  });
+  function skip() {
+    if (state === 'off') return;
+    lastRun = 'skipped';
+    room.classList.remove('has-device');
+    finish(true);
+  }
+  skipBtn.addEventListener('click', skip);
+
+  function openRoom() {
+    // reset everything the last run touched
+    clearTimers(); clearTraceTimers(); clearTimeout(typeTimer);
+    state = 'dark'; pulls = 0; deviceShown = false; plugged = false; tween = null; pdrag = null; drag = null; kin = null;
+    held = null; released = false; traceDirty = false; bubbleIdx = -1;
+    root.classList.remove('released');
+    bubbleText.removeAttribute('style');
+    room.className = 'room';
+    room.removeAttribute('style');
+    room.inert = false;
+    fixture.className = 'fixture';
+    bubble.className = 'bubble';
+    lcdText.textContent = ''; live.textContent = '';
+    plugBtn.classList.remove('seated');
+    plugBtn.tabIndex = -1;
+    plugBtn.removeAttribute('aria-disabled');
+    pluginBtn.hidden = true; pluginBtn.removeAttribute('aria-disabled');
+    device.getAnimations().forEach((a) => a.cancel());
+    device.style.opacity = '';
+    hideBadge();
+    root.classList.add('intro');
+    site.inert = true;
+    site.querySelectorAll('.fx-sec').forEach((s) => s.classList.remove('on', 'now'));
+    window.scrollTo(0, 0);
+    measureRoom();
+    buildCord();
+    buildCable();
+    if (reduce) { renderCordStraight(); renderCableStatic(CX[cn - 1], CY[cn - 1]); }
+    else { renderCord(X, Y); renderCable(1); }
+    setPose('idle');
+    buildTraces(false);
+    room.classList.add('ready');          // the props are placed: show them
+    skipBtn.focus();
+    ensureLoop();
+  }
+
+  let resizeQueued = false;
+  window.addEventListener('resize', () => {
+    if (resizeQueued) return;
+    resizeQueued = true;
+    requestAnimationFrame(() => {
+      resizeQueued = false;
+      if (state === 'dark' || state === 'plugged') {
+        measureRoom(); buildCord(); buildCable();
+        if (reduce) { renderCordStraight(); renderCableStatic(CX[cn - 1], CY[cn - 1]); } else { renderCord(X, Y); renderCable(1); ensureLoop(); }
+        if (state === 'dark' && bubbleIdx >= 0 && bubble.classList.contains('show')) layoutBubble(bubbleIdx);
+      }
+      // Traces: not drawn yet → re-route undrawn; drawn → re-route drawn;
+      // mid-draw (the boot) → re-route once the boot is over (finish).
+      if (state === 'off') buildTraces(true);
+      else if (state === 'boot') traceDirty = true;
+      else buildTraces(false);
+    });
+  }, { passive: true });
+  mqReduce.addEventListener('change', () => {
+    reduce = mqReduce.matches;
+    if (state === 'off') return;
+    if (reduce) { kin = null; tug = null; renderCordStraight(); renderCableStatic(CX[cn - 1], CY[cn - 1]); }
+    else { buildCord(); buildCable(); renderCord(X, Y); renderCable(1); ensureLoop(); }
+  });
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 13 · BADGE
+     The docked mini-you. Tap for a one-line LCD card with the booking
+     link; × dismisses it (remembered). The sprite blinks between its two
+     idle frames on a slow interval, not the rAF loop.
+     ═════════════════════════════════════════════════════════════════════ */
+  const badgeWrap = $('#badge-wrap'), badgeBtn = $('#badge'), badgeCard = $('#badge-card');
+  const bctx = $('canvas', badgeBtn).getContext('2d');
+  const BADGE_IMG = FRAMES.idle.map((f) => toImageData(bctx, f, 4, 1, 24, 24));
+  let badgeTimer = 0, badgeFrame = 0;
+  function showBadge(animated) {
+    if (store.get(BADGE_OFF)) return;
+    badgeWrap.style.visibility = '';      // a skip mid-dock must not leave it hidden
+    badgeWrap.classList.add('show');
+    badgeWrap.classList.toggle('pop', !!animated && !reduce);
+    bctx.putImageData(BADGE_IMG[0], 0, 0);
+    clearInterval(badgeTimer);
+    if (!reduce) badgeTimer = setInterval(() => { badgeFrame = 1 - badgeFrame; bctx.putImageData(BADGE_IMG[badgeFrame], 0, 0); }, 700);
+  }
+  function hideBadge() {
+    clearInterval(badgeTimer);
+    badgeWrap.classList.remove('show', 'pop');
+    badgeWrap.style.visibility = '';
+    badgeCard.hidden = true; badgeBtn.setAttribute('aria-expanded', 'false');
+  }
+  badgeBtn.addEventListener('click', () => {
+    const open = badgeCard.hidden;
+    badgeCard.hidden = !open;
+    badgeBtn.setAttribute('aria-expanded', String(open));
+    if (open) $('a', badgeCard).focus();
+  });
+  $('#card-x').addEventListener('click', () => { badgeCard.hidden = true; badgeBtn.setAttribute('aria-expanded', 'false'); badgeBtn.focus(); });
+  $('#badge-x').addEventListener('click', () => { store.set(BADGE_OFF, '1'); hideBadge(); h1.focus({ preventScroll: true }); updateProto(); });
+  badgeWrap.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !badgeCard.hidden) { badgeCard.hidden = true; badgeBtn.setAttribute('aria-expanded', 'false'); badgeBtn.focus(); }
+  });
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 14 · PROTOTYPE CONTROLS
+     ═════════════════════════════════════════════════════════════════════ */
+  const proto = $('#proto');
+  function updateProto() {
+    const seen = store.get(FLAG) ? 'set' : 'not set';
+    $('#proto-state').innerHTML = `Seen flag: <b>${seen}</b><br>Last intro: <b>${lastRun || 'none this visit'}</b>`;
+  }
+  $('#replay').addEventListener('click', () => {
+    store.del(FLAG); store.del(BADGE_OFF);
+    $('details', proto).open = false;
+    openRoom();
+  });
+
+  /* ═════════════════════════════════════════════════════════════════════
+     JS 15 · INIT
+     ═════════════════════════════════════════════════════════════════════ */
+  proto.hidden = false;
+  if (root.classList.contains('intro')) {
+    openRoom();
+  } else {
+    lastRun = location.hash === '#skip-intro' ? 'skipped by URL' : 'returning visit';
+    buildTraces(true);
+    showBadge(false);
+  }
+  updateProto();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => {
+    // Fonts change the section boxes: re-route the traces.
+    if (state === 'dark') { buildTraces(false); measureRoom(); }
+    else if (state === 'off') buildTraces(true);
+  });
+  window.__plugin = { get state() { return state; }, get pulls() { return pulls; }, get plugged() { return plugged; } };
+})();
+</script>
+</body>
+</html>
