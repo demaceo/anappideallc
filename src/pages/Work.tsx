@@ -12,7 +12,6 @@ import { StoryChapter, StoryNext } from '../components/StoryChapter/StoryChapter
 import { STORY_PROOF } from '../data/story'
 import { NextStep } from '../components/NextStep/NextStep'
 import {
-  LogoStlmnt,
   LogoPinpoint,
   LogoPayback,
   LogoRentHarbor,
@@ -32,8 +31,7 @@ import {
 // eyebrow, and a study with no matching index rendered `undefined` as a
 // component and crashed the page. That exact failure is recorded in Home.tsx's
 // SERVICE_ICONS comment; ProjectDetail.tsx keys by slug for the same reason.
-const PROJECT_LOGOS: Record<string, typeof LogoStlmnt> = {
-  'stlmnt-settlement-tracker': LogoStlmnt,
+const PROJECT_LOGOS: Record<string, typeof LogoPinpoint> = {
   'pinpoint-civic-engagement': LogoPinpoint,
   'payback-consumer-intelligence': LogoPayback,
   'rentharbor-property-management': LogoRentHarbor,
@@ -47,7 +45,6 @@ const PROJECT_LOGOS: Record<string, typeof LogoStlmnt> = {
   'portfolio': LogoPortfolio,
 }
 const STUDY_LABELS: Record<string, string> = {
-  'stlmnt-settlement-tracker': 'Settlements',
   'pinpoint-civic-engagement': 'Civic',
   'payback-consumer-intelligence': 'Privacy',
   'rentharbor-property-management': 'PropTech',
@@ -61,7 +58,7 @@ const STUDY_LABELS: Record<string, string> = {
   'portfolio': 'Portfolio',
 }
 
-// Order: the five mission apps first, in the order the proof chapter tells
+// Order: the four mission apps first, in the order the proof chapter tells
 // them; then client work; then the studio's own products. Array.prototype.sort
 // is stable, so ties keep data order.
 const PROOF_RANK = new Map(STORY_PROOF.map((p, i) => [p.slug, i]))

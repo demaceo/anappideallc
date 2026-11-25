@@ -5,7 +5,6 @@
 //     project's own detail page, when the case study doesn't ship a more
 //     tuned `theme.accent` override (see case-studies.ts `CaseStudyTheme`).
 export const PROJECT_COLORS: Record<string, string> = {
-  'stlmnt-settlement-tracker': '#1f6b3b',
   'pinpoint-civic-engagement': '#8A1C1C',
   'payback-consumer-intelligence': '#1a3a5c',
   'rentharbor-property-management': '#2563EB',

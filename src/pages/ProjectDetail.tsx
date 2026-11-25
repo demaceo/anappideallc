@@ -8,7 +8,6 @@ import { NextStep } from '../components/NextStep/NextStep'
 import { Marquee } from '../components/Marquee/Marquee'
 import { readableOn, fillForSmallText } from '../lib/color'
 import {
-  LogoStlmnt,
   LogoPinpoint,
   LogoPayback,
   LogoRentHarbor,
@@ -21,10 +20,8 @@ import {
   LogoTimeless,
   LogoPortfolio,
 } from '../components/icons'
-import { StlmntUnderTheHood } from '../components/StlmntUnderTheHood/StlmntUnderTheHood'
 
 const SLUG_TO_LOGO: Record<string, React.ComponentType<{ size?: number; color?: string; strokeWidth?: number }>> = {
-  'stlmnt-settlement-tracker': LogoStlmnt,
   'pinpoint-civic-engagement': LogoPinpoint,
   'payback-consumer-intelligence': LogoPayback,
   'rentharbor-property-management': LogoRentHarbor,
@@ -230,23 +227,6 @@ export default function ProjectDetail() {
           </ol>
         </section>
 
-        {/* Under the hood — a refactored STLMNT admin visualization, on-theme */}
-        {project.slug === 'stlmnt-settlement-tracker' && (
-          <div className="project-section">
-            <div className="section-header">
-              <span className="section-num">Under the hood</span>
-              <h2>The claims pipeline</h2>
-              <div className="section-rule" />
-            </div>
-            <p className="project-section-body">
-              STLMNT's admin dashboard tracks every claim through its lifecycle — saved, filed,
-              confirmed, approved, paid, with rejected as a terminal state. Here is that
-              claims-by-status visualization, refactored from the app for the web and wearing
-              STLMNT's own Editorial Ink palette.
-            </p>
-            <StlmntUnderTheHood />
-          </div>
-        )}
 
         {/* Tech stack, as a ticker like Home's. */}
         <section className="cs-stack" aria-labelledby="cs-stack">

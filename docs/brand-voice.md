@@ -238,7 +238,7 @@ About → Work → Services → Process → Why not AI → Contact). The copy li
 - **The promise:** *Built for you. Handed to you.* I build it, then teach you
   to run it (the Own It package): updating the site, reading analytics,
   checking site health, using AI safely.
-- **The proof:** STLMNT, Pinpoint, Payback, RentHarbor, Unmasked Coaching. Each
+- **The proof:** Pinpoint, Payback, RentHarbor, Unmasked Coaching. Each
   gets people access to something that should already be theirs.
 - **Lines to reuse:** *Your business is the job. The tech shouldn't be a second
   one.* · *Built for you. Handed to you.* · *If not me, then who?* (closing

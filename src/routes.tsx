@@ -72,7 +72,6 @@ export const PRERENDER_PATHS = [
   '/',
   '/about',
   '/work',
-  '/work/stlmnt-settlement-tracker',
   '/work/pinpoint-civic-engagement',
   '/work/payback-consumer-intelligence',
   '/work/rentharbor-property-management',
