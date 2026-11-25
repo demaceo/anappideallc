@@ -112,7 +112,7 @@ native `<title>`/`<meta>` hoisting.
 Each app the studio has shipped has its own **Privacy Policy** and **Terms of
 Service** under `src/pages/legal/`, served at `/legal/<app>/privacy` and
 `/legal/<app>/terms`. All of them share the `LegalPage` layout component and the
-same numbered-section styling. Apps currently covered: **STLMNT**, **Pinpoint**,
+same numbered-section styling. Apps currently covered: **Pinpoint**,
 **Payback**, **DrayagePro**, **Yap**, **Zoori**, and **Feng Shui**. The
 [`/support`](https://www.anappidea.llc/support) page links to each of these and
 doubles as the per-app legal index that App Store review expects.

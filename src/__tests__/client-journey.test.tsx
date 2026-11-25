@@ -18,7 +18,7 @@ function renderRoute(path: string) {
  * button or the footer to act.
  */
 describe('Every decision page closes with a next step', () => {
-  it.each(['/about', '/work', '/services', '/process', '/why-not-ai', '/work/stlmnt-settlement-tracker'])(
+  it.each(['/about', '/work', '/services', '/process', '/why-not-ai', '/work/pinpoint-civic-engagement'])(
     'offers booking and the message form at the end of %s',
     (path) => {
       const { unmount } = renderRoute(path)
@@ -40,9 +40,9 @@ describe('Every decision page closes with a next step', () => {
   )
 
   it('names the project on a case study', () => {
-    renderRoute('/work/stlmnt-settlement-tracker')
+    renderRoute('/work/pinpoint-civic-engagement')
     expect(
-      screen.getByRole('heading', { name: /building something like stlmnt\?/i }),
+      screen.getByRole('heading', { name: /building something like the pinpoint app\?/i }),
     ).toBeInTheDocument()
   })
 

@@ -20,9 +20,9 @@ export const META: Record<string, { title: string; description: string; path: st
     path: '/about',
   },
   '/work': {
-    title: `Work: 12 Shipped Apps & Web Products | ${SITE.name}`,
+    title: `Work: 11 Shipped Apps & Web Products | ${SITE.name}`,
     description:
-      '12 products shipped: STLMNT (settlement tracker), The Pinpoint App (civic tech), Payback (privacy analytics), Feng Shui (spatial AI), The Yap App (translation), Zoori, HITLDI, and more. React Native, TypeScript, full-stack.',
+      '11 products shipped: The Pinpoint App (civic tech), Payback (privacy analytics), Feng Shui (spatial AI), The Yap App (translation), Zoori, HITLDI, and more. React Native, TypeScript, full-stack.',
     path: '/work',
   },
   '/services': {
@@ -64,7 +64,7 @@ export const META: Record<string, { title: string; description: string; path: st
   '/legal': {
     title: `Legal: Privacy Policy & Terms for Every App | ${SITE.name}`,
     description:
-      'Privacy Policy and Terms of Service for every app published by An App Idea LLC: The Yap App, Payback Ôwn, Pinpoint, DrayagePro TMS, Zoori, Feng Shui, and STLMNT.',
+      'Privacy Policy and Terms of Service for every app published by An App Idea LLC: The Yap App, Payback Ôwn, Pinpoint, DrayagePro TMS, Zoori, and Feng Shui.',
     path: '/legal',
   },
   '/legal/yap': {
@@ -102,18 +102,6 @@ export const META: Record<string, { title: string; description: string; path: st
     description:
       'Privacy Policy and Terms of Service for Feng Shui, the spatial analysis app by An App Idea LLC.',
     path: '/legal/fengshui',
-  },
-  '/legal/stlmnt': {
-    title: `Legal — STLMNT | ${SITE.name}`,
-    description:
-      'Privacy Policy and Terms of Service for STLMNT, the class action settlement tracker by An App Idea LLC.',
-    path: '/legal/stlmnt',
-  },
-  '/work/stlmnt-settlement-tracker': {
-    title: `STLMNT — Class Action Settlement Tracker | ${SITE.name}`,
-    description:
-      'Case study: STLMNT, a privacy-first class action settlement tracker built with Expo and Firebase — a curated catalog, eligibility self-check, KMS-encrypted claim autofill, on-device receipts, and copy-to-clipboard claim assist (never auto-filing).',
-    path: '/work/stlmnt-settlement-tracker',
   },
   '/work/pinpoint-civic-engagement': {
     title: `The Pinpoint App — Civic Engagement Platform | ${SITE.name}`,
@@ -264,18 +252,6 @@ export const META: Record<string, { title: string; description: string; path: st
     description:
       'Terms of Service for the Feng Shui app (iOS). AI-generated analysis is for informational/entertainment purposes only. Governing law: Colorado. Published by An App Idea LLC.',
     path: '/legal/fengshui/terms',
-  },
-  '/legal/stlmnt/privacy': {
-    title: `Privacy Policy — STLMNT | ${SITE.name}`,
-    description:
-      'Privacy Policy for STLMNT, the class action settlement tracker (iOS & Android). Covers your account, optional autofill profile, claims, and receipts. Sensitive fields are KMS-encrypted; no bank, SSN, or card numbers — ever; receipts stay on-device. Operated by An App Idea LLC.',
-    path: '/legal/stlmnt/privacy',
-  },
-  '/legal/stlmnt/terms': {
-    title: `Terms of Service — STLMNT | ${SITE.name}`,
-    description:
-      'Terms of Service for STLMNT (iOS & Android). STLMNT is not a legal service and never files claims for you — you submit every claim yourself on the official site. Covers eligibility, accuracy disclaimers, payouts, and governing law (Colorado). Operated by An App Idea LLC.',
-    path: '/legal/stlmnt/terms',
   },
 }
 

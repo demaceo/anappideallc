@@ -31,13 +31,12 @@ export const ACCUMULATION: Tri[] = (() => {
   return out
 })()
 
-// ─── Thread (Work): one line through five nodes, one per mission app ───
+// ─── Thread (Work): one line through four nodes, one per mission app ───
 export const THREAD_NODES: readonly Pt[] = [
-  [80, 84],
-  [312, 132],
-  [104, 214],
-  [298, 274],
-  [196, 340],
+  [88, 92],
+  [308, 156],
+  [100, 250],
+  [272, 334],
 ]
 export const THREAD_PATH = `M${THREAD_NODES.map(([x, y]) => `${x} ${y}`).join(' L')}`
 

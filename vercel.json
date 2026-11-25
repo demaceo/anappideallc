@@ -9,6 +9,16 @@
       "source": "/portfolio",
       "destination": "/work",
       "permanent": true
+    },
+    {
+      "source": "/work/stlmnt-settlement-tracker",
+      "destination": "/work",
+      "permanent": true
+    },
+    {
+      "source": "/legal/stlmnt/:path*",
+      "destination": "/legal",
+      "permanent": true
     }
   ],
   "headers": [

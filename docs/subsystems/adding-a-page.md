@@ -2,13 +2,17 @@
 title: Adding a page
 type: subsystem
 created: 2026-11-11
-updated: 2026-11-11
+updated: 2026-11-25
 sources:
   - code: src/routes.tsx
   - code: src/lib/seo.ts
   - code: src/components/FooterNav/FooterNav.tsx
   - code: scripts/prerender.mjs
-verified_at: 893f69f
+  - code: src/data/case-studies.ts
+  - code: src/data/story.ts
+  - code: src/motion/scenes/geometry.ts
+  - code: vercel.json
+verified_at: d46f820
 ---
 
 # Adding a page
@@ -30,3 +34,29 @@ A new route needs four edits, all for the same path:
 
 > ⚠️ `npm run build` rewrites `public/sitemap.xml`, including today's `lastmod`
 > on every URL. That file is committed, so expect it in the diff.
+
+## Adding or removing a case study
+
+A `/work/<slug>` page comes from an entry in `caseStudies`
+(`src/data/case-studies.ts`); `ProjectDetail` renders it. The slug is also a key
+in several slug-keyed maps that are not derived from that array:
+`PRERENDER_PATHS` and `META` (above), `PROJECT_COLORS`
+(`src/data/project-colors.ts`), and the logo/label maps in `src/pages/Work.tsx`
+and `src/pages/ProjectDetail.tsx`.
+
+> ⚠️ If the slug is one of the mission apps in `STORY_PROOF` (`src/data/story.ts`),
+> removing the case study fails `story.test.tsx` ("points every proof app at a
+> real case study"). Taking an app out of the proof also changes the count the
+> story copy states (the `bridge` line), and the Work thread scene draws one node
+> per mission app: `THREAD_NODES` (`src/motion/scenes/geometry.ts`) and the
+> glyphs in `src/components/scenes/ThreadScene.tsx` must keep the same length and
+> order as `STORY_PROOF`. The last node is the accent tile.
+
+## Removing a page
+
+Undo the four edits above, and for a legal page also its entry in `legalApps`
+(`src/data/legal-apps.ts`), which drives the `/legal` index and `/legal/<app>`.
+
+> ⚠️ A removed URL that was ever live is still in search indexes and old links.
+> Add a permanent redirect to the nearest surviving page in `vercel.json`
+> `redirects`; otherwise it becomes a 404.

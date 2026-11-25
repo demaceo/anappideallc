@@ -2,10 +2,9 @@ import { Scene, SceneGrid } from '../Scene/Scene'
 import { THREAD_NODES, THREAD_PATH } from '../../motion/scenes/geometry'
 
 // Work, chapter 3: "the same thread runs through it."
-// Finished state: one line through five framed nodes (one per mission app:
-// a receipt, a pin, a phone, a house, a door), the last in chartreuse.
+// Finished state: one line through four framed nodes (one per mission app:
+// a pin, a phone, a house, a door), the last in chartreuse.
 const GLYPHS = [
-  'M-10 -14 L10 -14 L10 14 L-10 14 Z M-5 -6 L5 -6 M-5 0 L5 0 M-5 6 L2 6', // STLMNT: a receipt
   'M0 14 L-10 -2 A11 11 0 1 1 10 -2 Z', // Pinpoint: a map pin
   'M-8 -15 L8 -15 L8 15 L-8 15 Z M-3 10 L3 10', // Payback: a phone
   'M-12 0 L0 -12 L12 0 L12 13 L-12 13 Z M-4 13 L-4 4 L4 4 L4 13', // RentHarbor: a house
