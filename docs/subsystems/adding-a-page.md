@@ -11,7 +11,8 @@ sources:
   - code: src/data/case-studies.ts
   - code: src/data/story.ts
   - code: src/motion/scenes/geometry.ts
-verified_at: 502f1ba
+  - code: vercel.json
+verified_at: d46f820
 ---
 
 # Adding a page
@@ -50,3 +51,12 @@ and `src/pages/ProjectDetail.tsx`.
 > per mission app: `THREAD_NODES` (`src/motion/scenes/geometry.ts`) and the
 > glyphs in `src/components/scenes/ThreadScene.tsx` must keep the same length and
 > order as `STORY_PROOF`. The last node is the accent tile.
+
+## Removing a page
+
+Undo the four edits above, and for a legal page also its entry in `legalApps`
+(`src/data/legal-apps.ts`), which drives the `/legal` index and `/legal/<app>`.
+
+> ⚠️ A removed URL that was ever live is still in search indexes and old links.
+> Add a permanent redirect to the nearest surviving page in `vercel.json`
+> `redirects`; otherwise it becomes a 404.
