@@ -57,13 +57,6 @@ export const legalApps: LegalApp[] = [
     privacy: '/legal/fengshui/privacy',
     terms: '/legal/fengshui/terms',
   },
-  {
-    slug: 'stlmnt',
-    name: 'STLMNT',
-    blurb: 'A privacy-first tracker for class action settlement claims.',
-    privacy: '/legal/stlmnt/privacy',
-    terms: '/legal/stlmnt/terms',
-  },
 ]
 
 export const getLegalAppBySlug = (slug: string) =>

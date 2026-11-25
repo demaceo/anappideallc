@@ -169,12 +169,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://anappidea.llc/legal/stlmnt</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://anappidea.llc/legal/drayagepro/privacy</loc>
     <lastmod>2026-11-25</lastmod>
     <changefreq>monthly</changefreq>
@@ -248,18 +242,6 @@
   </url>
   <url>
     <loc>https://anappidea.llc/legal/fengshui/terms</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://anappidea.llc/legal/stlmnt/privacy</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://anappidea.llc/legal/stlmnt/terms</loc>
     <lastmod>2026-11-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

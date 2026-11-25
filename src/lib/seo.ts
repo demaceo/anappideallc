@@ -64,7 +64,7 @@ export const META: Record<string, { title: string; description: string; path: st
   '/legal': {
     title: `Legal: Privacy Policy & Terms for Every App | ${SITE.name}`,
     description:
-      'Privacy Policy and Terms of Service for every app published by An App Idea LLC: The Yap App, Payback Ôwn, Pinpoint, DrayagePro TMS, Zoori, Feng Shui, and STLMNT.',
+      'Privacy Policy and Terms of Service for every app published by An App Idea LLC: The Yap App, Payback Ôwn, Pinpoint, DrayagePro TMS, Zoori, and Feng Shui.',
     path: '/legal',
   },
   '/legal/yap': {
@@ -102,12 +102,6 @@ export const META: Record<string, { title: string; description: string; path: st
     description:
       'Privacy Policy and Terms of Service for Feng Shui, the spatial analysis app by An App Idea LLC.',
     path: '/legal/fengshui',
-  },
-  '/legal/stlmnt': {
-    title: `Legal — STLMNT | ${SITE.name}`,
-    description:
-      'Privacy Policy and Terms of Service for STLMNT, the class action settlement tracker by An App Idea LLC.',
-    path: '/legal/stlmnt',
   },
   '/work/pinpoint-civic-engagement': {
     title: `The Pinpoint App — Civic Engagement Platform | ${SITE.name}`,
@@ -258,18 +252,6 @@ export const META: Record<string, { title: string; description: string; path: st
     description:
       'Terms of Service for the Feng Shui app (iOS). AI-generated analysis is for informational/entertainment purposes only. Governing law: Colorado. Published by An App Idea LLC.',
     path: '/legal/fengshui/terms',
-  },
-  '/legal/stlmnt/privacy': {
-    title: `Privacy Policy — STLMNT | ${SITE.name}`,
-    description:
-      'Privacy Policy for STLMNT, the class action settlement tracker (iOS & Android). Covers your account, optional autofill profile, claims, and receipts. Sensitive fields are KMS-encrypted; no bank, SSN, or card numbers — ever; receipts stay on-device. Operated by An App Idea LLC.',
-    path: '/legal/stlmnt/privacy',
-  },
-  '/legal/stlmnt/terms': {
-    title: `Terms of Service — STLMNT | ${SITE.name}`,
-    description:
-      'Terms of Service for STLMNT (iOS & Android). STLMNT is not a legal service and never files claims for you — you submit every claim yourself on the official site. Covers eligibility, accuracy disclaimers, payouts, and governing law (Colorado). Operated by An App Idea LLC.',
-    path: '/legal/stlmnt/terms',
   },
 }
 

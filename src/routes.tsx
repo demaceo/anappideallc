@@ -53,8 +53,6 @@ const PAGES: [path: string, file: string][] = [
   ['legal/zoori/terms', './pages/legal/ZooriTerms.tsx'],
   ['legal/fengshui/privacy', './pages/legal/FengshuiPrivacy.tsx'],
   ['legal/fengshui/terms', './pages/legal/FengshuiTerms.tsx'],
-  ['legal/stlmnt/privacy', './pages/legal/StlmntPrivacy.tsx'],
-  ['legal/stlmnt/terms', './pages/legal/StlmntTerms.tsx'],
 ]
 
 export const routes: RouteObject[] = [
@@ -97,7 +95,6 @@ export const PRERENDER_PATHS = [
   '/legal/drayagepro',
   '/legal/zoori',
   '/legal/fengshui',
-  '/legal/stlmnt',
   '/legal/drayagepro/privacy',
   '/legal/drayagepro/terms',
   '/legal/pinpoint/privacy',
@@ -111,6 +108,4 @@ export const PRERENDER_PATHS = [
   '/legal/zoori/terms',
   '/legal/fengshui/privacy',
   '/legal/fengshui/terms',
-  '/legal/stlmnt/privacy',
-  '/legal/stlmnt/terms',
 ]
